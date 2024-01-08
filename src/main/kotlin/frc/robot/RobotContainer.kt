@@ -1,7 +1,6 @@
 package frc.robot
 
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.commands.ExampleCommand
 import frc.robot.subsystems.ExampleSubsystem
 
 /**
@@ -13,7 +12,6 @@ import frc.robot.subsystems.ExampleSubsystem
 class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private val exampleSubsystem = ExampleSubsystem()
-    private val autoCommand = ExampleCommand(exampleSubsystem)
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -35,9 +33,4 @@ class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    val autonomousCommand: Command
-        get() {
-            // An ExampleCommand will run in autonomous
-            return autoCommand
-        }
 }

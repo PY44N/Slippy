@@ -1,14 +1,14 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1-beta-3"
+    id "edu.wpi.first.GradleRIO" version "2024.1.1-beta-4"
     id "org.jetbrains.kotlin.jvm" version "1.6.10"
     id "org.jetbrains.dokka" version "1.7.20"
     id "com.peterabeles.gversion" version "1.10"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
