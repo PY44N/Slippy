@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
 
@@ -17,7 +18,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  */
 class Robot : LoggedRobot() {
     private var autonomousCommand: Command? = null
-    private var robotContainer: RobotContainer? = null
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -31,26 +31,32 @@ class Robot : LoggedRobot() {
         Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA)
         Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE)
         Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH)
-        if (isReal()) {
-//            Logger.addDataReceiver(WPILOGWriter("/U")) // Log to a USB stick
-//            Logger.addDataReceiver(NT4Publisher()) // Publish data to NetworkTables
-//            PowerDistribution(1, ModuleType.kRev) // Enables power distribution logging
-        } else {
-            val logPath = LogFileUtil.findReplayLog()
-            Logger.setReplaySource(WPILOGReader(logPath))
-            Logger.addDataReceiver(
-                WPILOGWriter(
-                    LogFileUtil.addPathSuffix(
-                        logPath,
-                        "_sim"
-                    )
-                )
-            )
+        when (BuildConstants.DIRTY) {
+            0 -> Logger.recordMetadata("GitDirty", "All changes committed")
+            1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
+            else -> Logger.recordMetadata("GitDirty", "Unknown")
         }
+        when (Constants.currentMode) {
+            Constants.Mode.REAL -> {
+                // Running on a real robot, log to a USB stick ("/U/logs")
+                Logger.addDataReceiver(WPILOGWriter())
+                Logger.addDataReceiver(NT4Publisher())
+            }
+
+            Constants.Mode.SIM ->
+                // Running a physics simulator, log to NT
+                Logger.addDataReceiver(NT4Publisher())
+
+            Constants.Mode.REPLAY -> {
+                // Replaying a log, set up replay source
+                setUseTiming(false) // Run as fast as possible
+                val logPath = LogFileUtil.findReplayLog()
+                Logger.setReplaySource(WPILOGReader(logPath))
+                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
+            }
+        }
+
         Logger.start()
-
-
-        robotContainer = RobotContainer()
     }
 
     /**

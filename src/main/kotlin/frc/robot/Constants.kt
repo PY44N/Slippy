@@ -9,9 +9,15 @@ package frc.robot
  * It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-class Constants {
-    companion object {
-        // Put constant values inside the companion object to make them globally accessible.
-        // ex. val motorPort: Int = 0
+object Constants {
+    val currentMode: Mode = Mode.REAL
+
+    enum class Mode {
+        /** Running on a real robot.  */
+        REAL,
+        /** Running a physics simulator.  */
+        SIM,
+        /** Replaying from a log file.  */
+        REPLAY
     }
 }
