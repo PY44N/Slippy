@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import swervelib.motors.SparkMaxSwerve
 
 
 /**
@@ -126,5 +127,7 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during test mode.
      */
-    override fun testPeriodic() { }
+    override fun testPeriodic() {
+        
+    }
 }
