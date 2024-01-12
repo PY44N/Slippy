@@ -1,5 +1,9 @@
 package frc.robot
 
+import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the [Robot]
@@ -8,7 +12,9 @@ package frc.robot
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
-
+    val leftJoystick: CommandJoystick = CommandJoystick(0)
+    val rightJoystick: CommandJoystick = CommandJoystick(1)
+    val xboxController: CommandXboxController = CommandXboxController(2)
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
