@@ -1,9 +1,12 @@
 package frc.robot
 
+import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.constants.MotorConstants
 import frc.robot.subsystems.SwerveSystem
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -132,10 +135,12 @@ class Robot : LoggedRobot() {
         CommandScheduler.getInstance().cancelAll()
     }
 
+    //  val encoder = CANcoder(MotorConstants.backLeftEncoder)
+
     /**
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-
+//        SmartDashboard.putNumber("Back Left Angle", encoder.position.value)
     }
 }

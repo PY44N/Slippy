@@ -10,4 +10,9 @@ object MotorConstants {
     const val frontRightTwist = 12
     const val backLeftTwist = 9
     const val backRightTwist = 11
+
+    const val frontLeftEncoder = 2
+    const val frontRightEncoder = 4
+    const val backLeftEncoder = 1
+    const val backRightEncoder = 3
 }
