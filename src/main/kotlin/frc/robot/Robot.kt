@@ -1,7 +1,10 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.subsystems.SwerveSystem
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -68,23 +71,28 @@ class Robot : LoggedRobot() {
      * This runs after the mode specific periodic functions, but before
      * LiveWindow and SmartDashboard integrated updating.
      */
+    val driveJoy = Joystick(0)
+    val twistJoy = Joystick(1)
+
     override fun robotPeriodic() {
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run()
+
+        SwerveSystem.drive(Translation2d(driveJoy.x, driveJoy.y), twistJoy.x, true)
     }
 
     /**
      * This function is called once each time the robot enters Disabled mode.
      */
-    override fun disabledInit() { }
+    override fun disabledInit() {}
 
     /**
      * This function is called periodically when disabled.
      */
-    override fun disabledPeriodic() { }
+    override fun disabledPeriodic() {}
 
     /**
      * This autonomous runs the autonomous command selected by your [RobotContainer] class.
@@ -97,7 +105,7 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during autonomous.
      */
-    override fun autonomousPeriodic() { }
+    override fun autonomousPeriodic() {}
 
     /**
      * This function is called once when teleop is enabled.
@@ -114,7 +122,7 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during operator control.
      */
-    override fun teleopPeriodic() { }
+    override fun teleopPeriodic() {}
 
     /**
      * This function is called once when test mode is enabled.
@@ -128,6 +136,6 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-        
+
     }
 }

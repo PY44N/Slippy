@@ -2,15 +2,15 @@ package swervelib.motors;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAnalogSensor;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkAnalogSensor;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.function.Supplier;
 import swervelib.encoders.SwerveAbsoluteEncoder;
@@ -37,7 +37,7 @@ public class SparkMaxSwerve extends SwerveMotor
   /**
    * Closed-loop PID controller.
    */
-  public  SparkMaxPIDController pid;
+  public  SparkPIDController pid;
   /**
    * Factory default already occurred.
    */
@@ -218,7 +218,7 @@ public class SparkMaxSwerve extends SwerveMotor
               positionConversionFactor);
         } else
         {
-          return ((SparkMaxAnalogSensor) absoluteEncoder.getAbsoluteEncoder()).setPositionConversionFactor(
+          return ((SparkAnalogSensor) absoluteEncoder.getAbsoluteEncoder()).setPositionConversionFactor(
               positionConversionFactor);
         }
       });
@@ -229,7 +229,7 @@ public class SparkMaxSwerve extends SwerveMotor
               positionConversionFactor / 60);
         } else
         {
-          return ((SparkMaxAnalogSensor) absoluteEncoder.getAbsoluteEncoder()).setVelocityConversionFactor(
+          return ((SparkAnalogSensor) absoluteEncoder.getAbsoluteEncoder()).setVelocityConversionFactor(
               positionConversionFactor / 60);
         }
       });
