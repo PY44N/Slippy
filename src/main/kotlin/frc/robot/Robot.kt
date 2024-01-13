@@ -117,8 +117,8 @@ class Robot : LoggedRobot() {
      */
     override fun teleopPeriodic() {
         RobotContainer.swerveDrive.drive(
-            Translation2d(RobotContainer.xboxController.leftX, RobotContainer.xboxController.leftY),
-            RobotContainer.xboxController.rightX,
+            Translation2d(RobotContainer.leftJoystick.x, RobotContainer.leftJoystick.y),
+            RobotContainer.rightJoystick.x,
             true
         )
     }

@@ -20,7 +20,7 @@ class SwerveSystem(directory: File) : SubsystemBase() {
     init {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
         try {
-            swerveDrive = SwerveParser(directory).createSwerveDrive(10.0)
+            swerveDrive = SwerveParser(directory).createSwerveDrive(1.0)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
