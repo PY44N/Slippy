@@ -1,17 +1,14 @@
 package frc.robot
 
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.subsystems.SwerveSystem
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
-import swervelib.motors.SparkMaxSwerve
 
 
 /**
@@ -35,32 +32,32 @@ class Robot : LoggedRobot() {
         Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA)
         Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE)
         Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH)
+
         when (BuildConstants.DIRTY) {
             0 -> Logger.recordMetadata("GitDirty", "All changes committed")
             1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
             else -> Logger.recordMetadata("GitDirty", "Unknown")
         }
-        when (Constants.currentMode) {
-            Constants.Mode.REAL -> {
-                // Running on a real robot, log to a USB stick ("/U/logs")
-                Logger.addDataReceiver(WPILOGWriter())
-                Logger.addDataReceiver(NT4Publisher())
-            }
 
-            Constants.Mode.SIM ->
-                // Running a physics simulator, log to NT
-                Logger.addDataReceiver(NT4Publisher())
-
-            Constants.Mode.REPLAY -> {
-                // Replaying a log, set up replay source
-                setUseTiming(false) // Run as fast as possible
-                val logPath = LogFileUtil.findReplayLog()
-                Logger.setReplaySource(WPILOGReader(logPath))
-                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
-            }
-        }
-
-        Logger.start()
+//        when (Constants.currentMode) {
+//            Constants.Mode.REAL -> {
+//                // Running on a real robot, log to a USB stick ("/U/logs")
+//                Logger.addDataReceiver(WPILOGWriter())
+//                Logger.addDataReceiver(NT4Publisher())
+//            }
+//            Constants.Mode.SIM ->
+//                // Running a physics simulator, log to NT
+//                Logger.addDataReceiver(NT4Publisher())
+//            Constants.Mode.REPLAY -> {
+//                // Replaying a log, set up replay source
+//                setUseTiming(false) // Run as fast as possible
+//                val logPath = LogFileUtil.findReplayLog()
+//                Logger.setReplaySource(WPILOGReader(logPath))
+//                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
+//            }
+//        }
+//
+//        Logger.start()
     }
 
     /**
@@ -71,8 +68,6 @@ class Robot : LoggedRobot() {
      * This runs after the mode specific periodic functions, but before
      * LiveWindow and SmartDashboard integrated updating.
      */
-    val driveJoy = Joystick(0)
-    val twistJoy = Joystick(1)
 
     override fun robotPeriodic() {
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
@@ -80,8 +75,6 @@ class Robot : LoggedRobot() {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run()
-
-        SwerveSystem.drive(Translation2d(driveJoy.x, driveJoy.y), twistJoy.x, true)
     }
 
     /**
@@ -122,7 +115,13 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during operator control.
      */
-    override fun teleopPeriodic() {}
+    override fun teleopPeriodic() {
+        RobotContainer.swerveDrive.drive(
+            Translation2d(RobotContainer.xboxController.leftX, RobotContainer.xboxController.leftY),
+            RobotContainer.xboxController.rightX,
+            true
+        )
+    }
 
     /**
      * This function is called once when test mode is enabled.

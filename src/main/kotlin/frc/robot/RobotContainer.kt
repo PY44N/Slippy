@@ -1,10 +1,13 @@
 package frc.robot
 
+import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.subsystems.SwerveDriveSystem
+import frc.robot.subsystems.SwerveSystem
 import swervelib.SwerveDrive
+import java.io.File
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -14,8 +17,7 @@ import swervelib.SwerveDrive
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
-    val swerveDrive: SwerveDriveSystem = SwerveDriveSystem()
-    
+    val swerveDrive: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
 
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
