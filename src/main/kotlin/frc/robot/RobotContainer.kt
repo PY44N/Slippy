@@ -3,6 +3,8 @@ package frc.robot
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.subsystems.SwerveDriveSystem
+import swervelib.SwerveDrive
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -12,14 +14,28 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
+    val swerveDrive: SwerveDriveSystem = SwerveDriveSystem()
+    
+
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
 
     /**
-     * The container for the robot.  Contains subsystems, OI devices, and commands.
+     * The container for the robot.  Contains subsystems, IO devices, and commands.
      */
     init {
+        when (Constants.currentMode) {
+            Constants.Mode.REAL -> {
+
+            }
+            Constants.Mode.SIM -> {
+
+            }
+            Constants.Mode.REPLAY -> {
+
+
+            }            }
         // Configure the button bindings
         configureButtonBindings()
     }
@@ -29,7 +45,9 @@ object RobotContainer {
      * instantiating a [GenericHID] or one of its subclasses ([ ] or [XboxController]), and then passing it to a
      * [edu.wpi.first.wpilibj2.command.button.JoystickButton].
      */
-    private fun configureButtonBindings() {}
+    private fun configureButtonBindings() {
+
+    }
 
     /**
      * Use this to pass the autonomous command to the main [Robot] class.
