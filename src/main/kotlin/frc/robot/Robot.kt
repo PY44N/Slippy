@@ -3,12 +3,9 @@ package frc.robot
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
-import org.littletonrobotics.junction.wpilog.WPILOGReader
-import org.littletonrobotics.junction.wpilog.WPILOGWriter
 
 
 /**
@@ -39,25 +36,30 @@ class Robot : LoggedRobot() {
             else -> Logger.recordMetadata("GitDirty", "Unknown")
         }
 
-//        when (Constants.currentMode) {
-//            Constants.Mode.REAL -> {
-//                // Running on a real robot, log to a USB stick ("/U/logs")
+        when (Constants.currentMode) {
+            Constants.Mode.REAL -> {
+                // Running on a real robot, log to a USB stick ("/U/logs")
 //                Logger.addDataReceiver(WPILOGWriter())
-//                Logger.addDataReceiver(NT4Publisher())
-//            }
-//            Constants.Mode.SIM ->
-//                // Running a physics simulator, log to NT
-//                Logger.addDataReceiver(NT4Publisher())
-//            Constants.Mode.REPLAY -> {
-//                // Replaying a log, set up replay source
-//                setUseTiming(false) // Run as fast as possible
+                Logger.addDataReceiver(NT4Publisher())
+            }
+
+            Constants.Mode.SIM -> {
+                // Running a physics simulator, log to NT
+                Logger.addDataReceiver(NT4Publisher())
+            }
+
+            Constants.Mode.REPLAY -> {
+                // Replaying a log, set up replay source
+                setUseTiming(false) // Run as fast as possible
 //                val logPath = LogFileUtil.findReplayLog()
 //                Logger.setReplaySource(WPILOGReader(logPath))
 //                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
-//            }
-//        }
-//
-//        Logger.start()
+            }
+        }
+
+        Logger.start()
+
+        RobotContainer.speedUp += 1
     }
 
     /**
@@ -116,9 +118,12 @@ class Robot : LoggedRobot() {
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
-        RobotContainer.swerveDrive.drive(
-            Translation2d(RobotContainer.leftJoystick.x, RobotContainer.leftJoystick.y),
-            RobotContainer.rightJoystick.x,
+        RobotContainer.swerveSystem.drive(
+            Translation2d(
+                RobotContainer.leftJoystick.x * RobotContainer.leftJoystick.throttle,
+                RobotContainer.leftJoystick.y * RobotContainer.leftJoystick.throttle
+            ),
+            RobotContainer.leftJoystick.twist * RobotContainer.leftJoystick.throttle,
             true
         )
     }

@@ -5,7 +5,7 @@ import frc.robot.RobotContainer
 
 class TeleopSwerveDriveCommand : Command() {
     init {
-        addRequirements(RobotContainer.swerveDrive)
+        addRequirements(RobotContainer.swerveSystem)
     }
 
     override fun execute() {

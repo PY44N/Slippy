@@ -1,12 +1,9 @@
 package frc.robot
 
 import edu.wpi.first.wpilibj.Filesystem
-import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.subsystems.SwerveDriveSystem
 import frc.robot.subsystems.SwerveSystem
-import swervelib.SwerveDrive
 import java.io.File
 
 /**
@@ -17,11 +14,13 @@ import java.io.File
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
-    val swerveDrive: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+    val swerveSystem: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
 
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
+
+    var speedUp = 1
 
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
@@ -31,13 +30,16 @@ object RobotContainer {
             Constants.Mode.REAL -> {
 
             }
+
             Constants.Mode.SIM -> {
 
             }
+
             Constants.Mode.REPLAY -> {
 
 
-            }            }
+            }
+        }
         // Configure the button bindings
         configureButtonBindings()
     }
