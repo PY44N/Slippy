@@ -1,11 +1,14 @@
 package frc.robot
 
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.event.EventLoop
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
+import kotlin.math.abs
 
 
 /**
@@ -118,12 +121,14 @@ class Robot : LoggedRobot() {
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
+        println("X: ${RobotContainer.leftJoystick.x} Y: ${RobotContainer.leftJoystick.y} Twist: ${RobotContainer.leftJoystick.twist}")
+
         RobotContainer.swerveSystem.drive(
             Translation2d(
-                RobotContainer.leftJoystick.x * RobotContainer.leftJoystick.throttle,
-                RobotContainer.leftJoystick.y * RobotContainer.leftJoystick.throttle
+                (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x else 0.0) * RobotContainer.leftJoystick.throttle,
+                (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y else 0.0) * RobotContainer.leftJoystick.throttle
             ),
-            RobotContainer.leftJoystick.twist * RobotContainer.leftJoystick.throttle,
+            (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist else 0.0) * RobotContainer.leftJoystick.throttle,
             true
         )
     }
@@ -134,12 +139,19 @@ class Robot : LoggedRobot() {
     override fun testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
+//        RobotContainer.swerveSystem.drive(Translation2d(0.25, 0.0), 0.0, true)
     }
 
     /**
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
+//        if (RobotContainer.leftJoystick.button(1).asBoolean) {
+            println("1: ${RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.position % 360} " +
+                    "2: ${RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.position % 360} " +
+                    "3: ${RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.position % 360} " +
+                    "4: ${RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.position % 360} ")
+//        }
 
     }
 }
