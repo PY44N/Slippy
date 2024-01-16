@@ -147,10 +147,10 @@ class Robot : LoggedRobot() {
      */
     override fun testPeriodic() {
 //        if (RobotContainer.leftJoystick.button(1).asBoolean) {
-            println("1: ${RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.position % 360} " +
-                    "2: ${RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.position % 360} " +
-                    "3: ${RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.position % 360} " +
-                    "4: ${RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.position % 360} ")
+            println("1: +${RobotContainer.swerveSystem.swerveDrive.modules[0].getAbsolutePosition()} " +
+                    "2: ${RobotContainer.swerveSystem.swerveDrive.modules[1].getAbsolutePosition()} " +
+                    "3: ${RobotContainer.swerveSystem.swerveDrive.modules[2].getAbsolutePosition()} " +
+                    "4: ${RobotContainer.swerveSystem.swerveDrive.modules[3].getAbsolutePosition()} ")
 //        }
 
     }
