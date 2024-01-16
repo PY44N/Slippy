@@ -129,7 +129,7 @@ class Robot : LoggedRobot() {
                 (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y else 0.0) * RobotContainer.leftJoystick.throttle
             ),
             (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist else 0.0) * RobotContainer.leftJoystick.throttle,
-            true
+            false
         )
     }
 
