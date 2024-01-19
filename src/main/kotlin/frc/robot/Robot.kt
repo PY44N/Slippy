@@ -126,18 +126,18 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("JoyY", RobotContainer.leftJoystick.y)
         SmartDashboard.putNumber("JoyTwist", RobotContainer.leftJoystick.twist)
 
-//        RobotContainer.swerveSystem.drive(
-//            Translation2d(
-//                (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x * DriveConstants.maxSpeed * -1.0 else 0.0),
-//                (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y * DriveConstants.maxSpeed * -1.0 else 0.0)
-//            ),
-//            (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist else 0.0),
-//            false
-//        )
         RobotContainer.swerveSystem.drive(
-            Translation2d(1.0, 0.0), 0.0,
+            Translation2d(
+                (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x * DriveConstants.maxSpeed else 0.0),
+                (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y * DriveConstants.maxSpeed else 0.0)
+            ),
+            (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist * -1.0 else 0.0),
             false
         )
+//        RobotContainer.swerveSystem.drive(
+//            Translation2d(0.0, 0.0), 1.0,
+//            false
+//        )
     }
 
     /**
