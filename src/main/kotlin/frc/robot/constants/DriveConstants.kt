@@ -1,6 +1,6 @@
 package frc.robot.constants
 
-object MotorConstants {
+object DriveConstants {
     const val frontLeftDrive: Int = 6
     const val frontRightDrive: Int = 8
     const val backLeftDrive: Int = 5
@@ -10,4 +10,6 @@ object MotorConstants {
     const val frontRightTwist: Int = 12
     const val backLeftTwist: Int = 9
     const val backRightTwist: Int = 11
+
+    const val maxSpeed: Double = 5.0 // please find the real value
 }

@@ -6,8 +6,8 @@
     "angle": 20
   },
   "conversionFactor": {
-    "angle": 900,
-    "drive": 0.4
+    "angle": 360.0,
+    "drive": 0.045777493
   },
   "rampRate": {
     "drive": 0.25,

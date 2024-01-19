@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.event.EventLoop
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.constants.DriveConstants
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
@@ -121,14 +122,20 @@ class Robot : LoggedRobot() {
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
-        println("X: ${RobotContainer.leftJoystick.x} Y: ${RobotContainer.leftJoystick.y} Twist: ${RobotContainer.leftJoystick.twist}")
+        SmartDashboard.putNumber("JoyX", RobotContainer.leftJoystick.x)
+        SmartDashboard.putNumber("JoyY", RobotContainer.leftJoystick.y)
+        SmartDashboard.putNumber("JoyTwist", RobotContainer.leftJoystick.twist)
 
+//        RobotContainer.swerveSystem.drive(
+//            Translation2d(
+//                (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x * DriveConstants.maxSpeed * -1.0 else 0.0),
+//                (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y * DriveConstants.maxSpeed * -1.0 else 0.0)
+//            ),
+//            (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist else 0.0),
+//            false
+//        )
         RobotContainer.swerveSystem.drive(
-            Translation2d(
-                (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x else 0.0) * RobotContainer.leftJoystick.throttle,
-                (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y else 0.0) * RobotContainer.leftJoystick.throttle
-            ),
-            (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist else 0.0) * RobotContainer.leftJoystick.throttle,
+            Translation2d(1.0, 0.0), 0.0,
             false
         )
     }
@@ -146,12 +153,15 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-//        if (RobotContainer.leftJoystick.button(1).asBoolean) {
-            println("1: +${RobotContainer.swerveSystem.swerveDrive.modules[0].getAbsolutePosition()} " +
-                    "2: ${RobotContainer.swerveSystem.swerveDrive.modules[1].getAbsolutePosition()} " +
-                    "3: ${RobotContainer.swerveSystem.swerveDrive.modules[2].getAbsolutePosition()} " +
-                    "4: ${RobotContainer.swerveSystem.swerveDrive.modules[3].getAbsolutePosition()} ")
-//        }
+        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(1.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(1.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(1.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(1.0)
+
+        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(0.0)
 
     }
 }
