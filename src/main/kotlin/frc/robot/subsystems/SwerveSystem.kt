@@ -23,7 +23,7 @@ class SwerveSystem(directory: File) : SubsystemBase() {
             throw RuntimeException(e)
         }
         swerveDrive.setHeadingCorrection(false)
-            AutoBuilder.configureHolonomic(
+        AutoBuilder.configureHolonomic(
             swerveDrive::getPose,
             swerveDrive::resetOdometry, 
             swerveDrive::getRobotVelocity,
@@ -31,7 +31,7 @@ class SwerveSystem(directory: File) : SubsystemBase() {
             PathPlannerLibConstants.pathPlannerConfig,
             this::getAlliance,
             this,
-            )
+        )
     }
 
     fun drive(translation: Translation2d, rotation: Double, fieldRelative: Boolean) {
