@@ -11,5 +11,6 @@ object DriveConstants {
     const val backLeftTwist: Int = 9
     const val backRightTwist: Int = 11
 
+    const val robotRadius: Double = .5 // this is a random number (should be center to (furthest) point of wheel contact)
     const val maxSpeed: Double = 5.0 // please find the real value
 }

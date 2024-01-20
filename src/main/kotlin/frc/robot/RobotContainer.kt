@@ -3,6 +3,8 @@ package frc.robot
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.SwerveSystem
 import java.io.File
 
@@ -22,6 +24,7 @@ object RobotContainer {
 
     var speedUp = 1
 
+    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
      */
@@ -42,6 +45,8 @@ object RobotContainer {
         }
         // Configure the button bindings
         configureButtonBindings()
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
@@ -53,6 +58,10 @@ object RobotContainer {
 
     }
 
+
+    fun getAutonomousCommand() : Command {
+        
+    }
     /**
      * Use this to pass the autonomous command to the main [Robot] class.
      *
