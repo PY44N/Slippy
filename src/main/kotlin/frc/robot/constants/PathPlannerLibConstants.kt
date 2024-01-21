@@ -12,8 +12,8 @@ object PathPlannerLibConstants {
     var pathPlannerConfig = HolonomicPathFollowerConfig(
         translationPID,
         rotationPID,
-        DriveConstants.maxSpeed,
-        DriveConstants.robotRadius,
+        DriveConstants.MAX_SPEED,
+        DriveConstants.ROBOT_RADIUS,
         replanningConfig,
     )
 }

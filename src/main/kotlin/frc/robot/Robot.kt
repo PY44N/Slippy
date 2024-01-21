@@ -1,7 +1,8 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj.event.EventLoop
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
@@ -19,6 +20,8 @@ import kotlin.math.abs
  * project.
  */
 class Robot : LoggedRobot() {
+
+//    private val canCoder: CANcoder = CANcoder(1)
     private var autonomousCommand: Command? = null
 
     /**
@@ -63,8 +66,16 @@ class Robot : LoggedRobot() {
 
         Logger.start()
 
-        RobotContainer.speedUp += 1
+//        RobotContainer.speedUp += 1
+
+//        val toApply = CANcoderConfiguration()
+
+
+        /* User can change the configs if they want, or leave it empty for factory-default */
+//        canCoder.getConfigurator().apply(toApply)
     }
+
+
 
     /**
      * This function is called every robot packet, no matter the mode. Use this for items like
@@ -116,6 +127,7 @@ class Robot : LoggedRobot() {
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         autonomousCommand?.cancel()
+
     }
 
     /**
@@ -126,18 +138,21 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("JoyY", RobotContainer.leftJoystick.y)
         SmartDashboard.putNumber("JoyTwist", RobotContainer.leftJoystick.twist)
 
-        RobotContainer.swerveSystem.drive(
-            Translation2d(
-                (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x * DriveConstants.maxSpeed else 0.0),
-                (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y * DriveConstants.maxSpeed else 0.0)
-            ),
-            (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist * -1.0 else 0.0),
-            false
-        )
-//        RobotContainer.swerveSystem.drive(
-//            Translation2d(0.0, 0.0), 1.0,
-//            false
-//        )
+         RobotContainer.swerveSystem.drive(
+             Translation2d(
+                 (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x * DriveConstants.MAX_SPEED else 0.0),
+                 (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y * DriveConstants.MAX_SPEED else 0.0)
+             ),
+             (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist * -1.0 else 0.0),
+             false
+         )
+
+        val desiredState =
+            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
+
+//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
+
+//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
     }
 
     /**
@@ -153,15 +168,15 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(1.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(1.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(1.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(1.0)
+         RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
+         RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
+         RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
+         RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
 
-        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(0.0)
+         RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
+         RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
+         RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
+         RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
 
     }
 }

@@ -13,16 +13,21 @@ import com.pathplanner.lib.auto.AutoBuilder
 import java.io.File
 
 class SwerveSystem(directory: File) : SubsystemBase() {
-    val swerveDrive: SwerveDrive
+    public val swerveDrive: SwerveDrive
 
     init {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
+
         try {
-            swerveDrive = SwerveParser(directory).createSwerveDrive(DriveConstants.maxSpeed)
+            swerveDrive = SwerveParser(directory).createSwerveDrive(DriveConstants.MAX_SPEED)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
+
         swerveDrive.setHeadingCorrection(false)
+        swerveDrive.setMotorIdleMode(false)
+        swerveDrive.pushOffsetsToControllers()
+
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose,
             swerveDrive::resetOdometry, 
