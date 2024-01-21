@@ -134,18 +134,26 @@ class Robot : LoggedRobot() {
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
-        SmartDashboard.putNumber("JoyX", RobotContainer.leftJoystick.x)
-        SmartDashboard.putNumber("JoyY", RobotContainer.leftJoystick.y)
-        SmartDashboard.putNumber("JoyTwist", RobotContainer.leftJoystick.twist)
+        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
+        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
+        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
 
          RobotContainer.swerveSystem.drive(
              Translation2d(
-                 (if (abs(RobotContainer.leftJoystick.x) > 0.05) RobotContainer.leftJoystick.x * DriveConstants.MAX_SPEED else 0.0),
-                 (if (abs(RobotContainer.leftJoystick.y) > 0.05) RobotContainer.leftJoystick.y * DriveConstants.MAX_SPEED else 0.0)
+                 (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
+                     val inSpeed = if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
+                     (inSpeed) * DriveConstants.MAX_SPEED
+                 } else 0.0),
+                 (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
+                     val inSpeed = if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
+                     (-inSpeed) * DriveConstants.MAX_SPEED
+                 } else 0.0)
              ),
-             (if (abs(RobotContainer.leftJoystick.twist) > 0.08) RobotContainer.leftJoystick.twist * -1.0 else 0.0),
-             false
+             (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
+             true
          )
+
+
 
         val desiredState =
             SwerveModuleState(0.0, Rotation2d(0.0, 0.0))

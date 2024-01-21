@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.commands.ResetSwerveFieldForward
 import frc.robot.subsystems.SwerveSystem
 import java.io.File
 
@@ -57,7 +58,7 @@ object RobotContainer {
      * [edu.wpi.first.wpilibj2.command.button.JoystickButton].
      */
     private fun configureButtonBindings() {
-
+        rightJoystick.button(2).onTrue(ResetSwerveFieldForward())
     }
 
     /**
