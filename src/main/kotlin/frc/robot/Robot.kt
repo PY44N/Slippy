@@ -66,8 +66,7 @@ class Robot : LoggedRobot() {
 
         Logger.start()
 
-//        RobotContainer.speedUp += 1
-
+        RobotContainer
 //        val toApply = CANcoderConfiguration()
 
 
@@ -137,22 +136,22 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
         SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
 
-        RobotContainer.swerveSystem.drive(
-            Translation2d(
-                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
-                    val inSpeed =
-                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-                    (inSpeed) * DriveConstants.MAX_SPEED
-                } else 0.0),
-                (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
-                    val inSpeed =
-                        if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
-                    (-inSpeed) * DriveConstants.MAX_SPEED
-                } else 0.0)
-            ),
-            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
-            true
-        )
+//        RobotContainer.swerveSystem.drive(
+//            Translation2d(
+//                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
+//                    val inSpeed =
+//                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
+//                    (inSpeed) * DriveConstants.MAX_SPEED
+//                } else 0.0),
+//                (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
+//                    val inSpeed =
+//                        if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
+//                    (-inSpeed) * DriveConstants.MAX_SPEED
+//                } else 0.0)
+//            ),
+//            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
+//            true
+//        )
 
 
         val desiredState =
