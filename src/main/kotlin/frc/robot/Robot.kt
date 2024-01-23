@@ -185,6 +185,5 @@ class Robot : LoggedRobot() {
          RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
          RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
          RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
-
     }
 }
