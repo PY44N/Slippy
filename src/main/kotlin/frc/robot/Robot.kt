@@ -21,7 +21,7 @@ import kotlin.math.abs
  */
 class Robot : LoggedRobot() {
 
-//    private val canCoder: CANcoder = CANcoder(1)
+    //    private val canCoder: CANcoder = CANcoder(1)
     private var autonomousCommand: Command? = null
 
     /**
@@ -74,7 +74,6 @@ class Robot : LoggedRobot() {
         /* User can change the configs if they want, or leave it empty for factory-default */
 //        canCoder.getConfigurator().apply(toApply)
     }
-
 
 
     /**
@@ -138,21 +137,22 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
         SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
 
-         RobotContainer.swerveSystem.drive(
-             Translation2d(
-                 (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
-                     val inSpeed = if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-                     (inSpeed) * DriveConstants.MAX_SPEED
-                 } else 0.0),
-                 (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
-                     val inSpeed = if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
-                     (-inSpeed) * DriveConstants.MAX_SPEED
-                 } else 0.0)
-             ),
-             (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
-             true
-         )
-
+        RobotContainer.swerveSystem.drive(
+            Translation2d(
+                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
+                    val inSpeed =
+                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
+                    (inSpeed) * DriveConstants.MAX_SPEED
+                } else 0.0),
+                (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
+                    val inSpeed =
+                        if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
+                    (-inSpeed) * DriveConstants.MAX_SPEED
+                } else 0.0)
+            ),
+            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
+            true
+        )
 
 
         val desiredState =
@@ -176,14 +176,14 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-         RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
-         RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
-         RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
-         RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
 
-         RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
-         RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
-         RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
-         RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
     }
 }

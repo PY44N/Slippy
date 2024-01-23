@@ -3,7 +3,6 @@ package frc.robot.constants
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig
 import com.pathplanner.lib.util.PIDConstants
 import com.pathplanner.lib.util.ReplanningConfig
-import frc.robot.constants.DriveConstants
 
 object PathPlannerLibConstants {
     var replanningConfig = ReplanningConfig()

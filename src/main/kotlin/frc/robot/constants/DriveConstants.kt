@@ -11,6 +11,7 @@ object DriveConstants {
     const val BACK_LEFT_TWIST: Int = 9
     const val BACK_RIGHT_TWIST: Int = 11
 
-    const val ROBOT_RADIUS: Double = 0.5 // this is a random number (should be center to (furthest) point of wheel contact)
+    const val ROBOT_RADIUS: Double =
+        0.5 // this is a random number (should be center to (furthest) point of wheel contact)
     const val MAX_SPEED: Double = 3.0 // please find the real value
 }
