@@ -2,27 +2,31 @@ package frc.robot.subsystems
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
-import frc.robot.constants.YAGSLConstants
 import swervelib.SwerveDrive
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.util.DualPigeon2Swerve
-import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
-import java.io.File
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.kinematics.SwerveModulePosition
+import frc.robot.constants.DriveConstants
 
-class SwerveSystem(imu: DualPigeon2Swerve) : SubsystemBase() {
+class SwerveSystem() : SubsystemBase() {
 
-    val swerveDrive: SwerveDrive
+    val gyro = DriveConstants.imu
+
+    val swerveDrive =  SwerveDrive(
+        DriveConstants.driveConfig,
+        DriveConstants.controllerConfig,
+        DriveConstants.MAX_SPEED,
+    )
 
     init {
-
-
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
 
         swerveDrive.setHeadingCorrection(false)
