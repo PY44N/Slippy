@@ -49,12 +49,10 @@ class Robot : LoggedRobot() {
 //                Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
-
             Constants.Mode.SIM -> {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(NT4Publisher())
             }
-
             Constants.Mode.REPLAY -> {
                 // Replaying a log, set up replay source
                 setUseTiming(false) // Run as fast as possible
@@ -67,9 +65,6 @@ class Robot : LoggedRobot() {
         Logger.start()
 
         RobotContainer
-//        val toApply = CANcoderConfiguration()
-
-
         /* User can change the configs if they want, or leave it empty for factory-default */
 //        canCoder.getConfigurator().apply(toApply)
     }
@@ -108,6 +103,7 @@ class Robot : LoggedRobot() {
     override fun autonomousInit() {
         // Schedule the autonomous command (example)
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
+        autonomousCommand?.schedule()
     }
 
     /**
@@ -125,17 +121,12 @@ class Robot : LoggedRobot() {
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         autonomousCommand?.cancel()
-
     }
 
     /**
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
-        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
-        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
-        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
-
 //        RobotContainer.swerveSystem.drive(
 //            Translation2d(
 //                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
@@ -152,14 +143,6 @@ class Robot : LoggedRobot() {
 //            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
 //            true
 //        )
-
-
-        val desiredState =
-            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
-
-//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
-
-//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
     }
 
     /**
@@ -168,16 +151,12 @@ class Robot : LoggedRobot() {
     override fun testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
-//        RobotContainer.swerveSystem.drive(Translation2d(0.25, 0.0), 0.0, true)
     }
-
-    //  val encoder = CANcoder(MotorConstants.backLeftEncoder)
 
     /**
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-//        SmartDashboard.putNumber("Back Left Angle", encoder.position.value)
         RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
         RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
         RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
