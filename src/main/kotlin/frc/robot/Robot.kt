@@ -1,16 +1,10 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.SwerveModuleState
-import frc.robot.constants.DriveConstants
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
-import kotlin.math.abs
 
 
 /**
@@ -49,10 +43,12 @@ class Robot : LoggedRobot() {
 //                Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.SIM -> {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.REPLAY -> {
                 // Replaying a log, set up replay source
                 setUseTiming(false) // Run as fast as possible
@@ -90,7 +86,9 @@ class Robot : LoggedRobot() {
     /**
      * This function is called once each time the robot enters Disabled mode.
      */
-    override fun disabledInit() {}
+    override fun disabledInit() {
+        CommandScheduler.getInstance().cancelAll()
+    }
 
     /**
      * This function is called periodically when disabled.
@@ -121,6 +119,7 @@ class Robot : LoggedRobot() {
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         autonomousCommand?.cancel()
+        RobotContainer.teleopSwerveDriveCommand.schedule()
     }
 
     /**

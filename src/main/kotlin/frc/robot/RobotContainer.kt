@@ -28,6 +28,7 @@ object RobotContainer {
     val xboxController: CommandXboxController = CommandXboxController(2)
 
     val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
+    lateinit var teleopSwerveDriveCommand: Command;
 
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
@@ -59,7 +60,7 @@ object RobotContainer {
      * [edu.wpi.first.wpilibj2.command.button.JoystickButton].
      */
     private fun configureButtonBindings() {
-        swerveSystem.defaultCommand = Commands.run(
+        teleopSwerveDriveCommand = Commands.run(
             { swerveSystem.drive(Translation2d(leftJoystick.x, leftJoystick.y), leftJoystick.twist, true) },
             swerveSystem
         )
