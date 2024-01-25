@@ -10,7 +10,8 @@ import edu.wpi.first.math.geometry.Translation3d
 import swervelib.imu.SwerveIMU
 import java.util.*
 
-class DualPigeon2Swerve(canidNormal: Int, canidReverse: Int, canbusName: String, var offset: Rotation3d) : SwerveIMU() {
+class DualPigeon2Swerve(canidNormal: Int, canidReverse: Int, canbusName: String, private var offset: Rotation3d) :
+    SwerveIMU() {
     val normalPigeon: Pigeon2 = Pigeon2(canidNormal, canbusName)
     val reversePigeon: Pigeon2 = Pigeon2(canidReverse, canbusName)
 
@@ -32,6 +33,7 @@ class DualPigeon2Swerve(canidNormal: Int, canidReverse: Int, canbusName: String,
     override fun setOffset(offset: Rotation3d) {
         this.offset = offset;
     }
+
     private fun getSingleRotation(imu: Pigeon2): Rotation3d {
         val w: StatusSignal<Double> = imu.quatW
         val x: StatusSignal<Double> = imu.quatX
@@ -46,6 +48,7 @@ class DualPigeon2Swerve(canidNormal: Int, canidReverse: Int, canbusName: String,
             )
         )
     }
+
     override fun getRawRotation3d(): Rotation3d {
         return getSingleRotation(normalPigeon).minus(getSingleRotation(reversePigeon)).div(2.0)
     }
