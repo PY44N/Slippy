@@ -8,33 +8,36 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
 import swervelib.SwerveDrive
-import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
-import java.io.File
 
-class SwerveSystem(directory: File) : SubsystemBase() {
-    public val swerveDrive: SwerveDrive
+class SwerveSystem : SubsystemBase() {
+
+    val gyro = DriveConstants.IMU
+
+    val swerveDrive = SwerveDrive(
+        DriveConstants.DRIVE_CONFIG,
+        DriveConstants.CONTRROLLER_CONFIG,
+        DriveConstants.MAX_SPEED,
+    )
 
     init {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
-
-        try {
-            swerveDrive = SwerveParser(directory).createSwerveDrive(DriveConstants.MAX_SPEED)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
 
         swerveDrive.setHeadingCorrection(false)
         swerveDrive.setMotorIdleMode(false)
         swerveDrive.pushOffsetsToControllers()
 
+        setupPathPlanner()
+    }
+
+    fun setupPathPlanner() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose,
             swerveDrive::resetOdometry,
             swerveDrive::getRobotVelocity,
             this::autoDrive,
             PathPlannerLibConstants.pathPlannerConfig,
-            this::getAlliance,
+            this::isRed,
             this,
         )
     }
@@ -47,10 +50,6 @@ class SwerveSystem(directory: File) : SubsystemBase() {
         swerveDrive.drive(velocity)
     }
 
-    fun getAlliance(): Boolean {
-        val alliance = DriverStation.getAlliance()
-        if (alliance.isPresent)
-            return alliance.get() == DriverStation.Alliance.Red
-        return false
-    }
+    fun isRed(): Boolean =
+        DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 }

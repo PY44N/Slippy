@@ -1,5 +1,6 @@
 package frc.robot
 
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -120,24 +121,7 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during operator control.
      */
-    override fun teleopPeriodic() {
-//        RobotContainer.swerveSystem.drive(
-//            Translation2d(
-//                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
-//                    val inSpeed =
-//                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-//                    (inSpeed) * DriveConstants.MAX_SPEED
-//                } else 0.0),
-//                (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
-//                    val inSpeed =
-//                        if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
-//                    (-inSpeed) * DriveConstants.MAX_SPEED
-//                } else 0.0)
-//            ),
-//            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
-//            true
-//        )
-    }
+    override fun teleopPeriodic() {}
 
     /**
      * This function is called once when test mode is enabled.

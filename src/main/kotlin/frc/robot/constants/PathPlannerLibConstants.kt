@@ -12,7 +12,7 @@ object PathPlannerLibConstants {
         translationPID,
         rotationPID,
         DriveConstants.MAX_SPEED,
-        DriveConstants.ROBOT_RADIUS,
+        DriveConstants.DRIVE_CONFIG.driveBaseRadiusMeters,
         replanningConfig,
     )
 }

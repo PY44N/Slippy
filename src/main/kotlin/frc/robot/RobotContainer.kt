@@ -3,15 +3,14 @@ package frc.robot
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.Filesystem
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.ResetSwerveFieldForward
 import frc.robot.subsystems.SwerveSystem
-import java.io.File
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -27,10 +26,10 @@ object RobotContainer {
 
     val swerveSystem: SwerveSystem;
 
-    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
-
     lateinit var teleopSwerveDriveCommand: Command
     val autonomousCommand: Command = Commands.run({})
+
+    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
@@ -38,22 +37,23 @@ object RobotContainer {
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
-                swerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+                swerveSystem = SwerveSystem()
 
             }
             Constants.Mode.SIM -> {
                 // change these later
-                swerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+                swerveSystem = SwerveSystem()
             }
             Constants.Mode.REPLAY -> {
                 // change these later
-                swerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+                swerveSystem = SwerveSystem()
             }
         }
         // Configure the button bindings
         configureButtonBindings()
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
