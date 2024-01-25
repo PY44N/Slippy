@@ -21,14 +21,15 @@ import java.io.File
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
-    val swerveSystem: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
-
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
 
+    val swerveSystem: SwerveSystem;
+
     val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
-    lateinit var teleopSwerveDriveCommand: Command;
+
+    lateinit var teleopSwerveDriveCommand: Command
     val autonomousCommand: Command = Commands.run({})
 
     /**
@@ -36,9 +37,18 @@ object RobotContainer {
      */
     init {
         when (Constants.currentMode) {
-            Constants.Mode.REAL -> {}
-            Constants.Mode.SIM -> {}
-            Constants.Mode.REPLAY -> {}
+            Constants.Mode.REAL -> {
+                swerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+
+            }
+            Constants.Mode.SIM -> {
+                // change these later
+                swerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+            }
+            Constants.Mode.REPLAY -> {
+                // change these later
+                swerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "swerve/neo"))
+            }
         }
         // Configure the button bindings
         configureButtonBindings()
