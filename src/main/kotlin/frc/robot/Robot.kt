@@ -1,6 +1,5 @@
 package frc.robot
 
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -14,10 +13,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher
  * project.
  */
 class Robot : LoggedRobot() {
-
-    //    private val canCoder: CANcoder = CANcoder(1)
-    private var autonomousCommand: Command? = null
-
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -101,7 +96,7 @@ class Robot : LoggedRobot() {
     override fun autonomousInit() {
         // Schedule the autonomous command (example)
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
-        autonomousCommand?.schedule()
+        RobotContainer.autonomousCommand.schedule()
     }
 
     /**
@@ -118,7 +113,7 @@ class Robot : LoggedRobot() {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
-        autonomousCommand?.cancel()
+        RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveDriveCommand.schedule()
     }
 
