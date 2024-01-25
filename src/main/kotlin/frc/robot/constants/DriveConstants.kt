@@ -81,10 +81,10 @@ object DriveConstants {
 
     const val angleJoyStickRadiusDeadband = 0.5
     // TODO: make parametric
-    val conversionFactors = MotorConfigDouble(6.75, 12.8)
+    val conversionFactors = MotorConfigDouble(0.045777493, 16.8)
 
-    val drivePID = PIDFConfig(0.0020645, 0.0)
-    val twistPID = PIDFConfig(0.01, 0.0)
+    val drivePID = PIDFConfig(0.00023, 0.0000002, 1.0)
+    val twistPID = PIDFConfig(0.004, 1.5)
     val headingPID = PIDFConfig(.4, .01)
 
     val flDrive = SparkMaxSwerve(FRONT_LEFT_DRIVE, true)
@@ -176,7 +176,7 @@ object DriveConstants {
     val driveConfig = SwerveDriveConfiguration(
         arrayOf(flModuleConfig, frModuleConfig, brModuleConfig, blModuleConfig),
         imu,
-        true,
+        false,
         driveFeedForward,
         moduleCharacteristics,
     )

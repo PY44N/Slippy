@@ -33,13 +33,17 @@ class SwerveSystem() : SubsystemBase() {
         swerveDrive.setMotorIdleMode(false)
         swerveDrive.pushOffsetsToControllers()
 
+        setupPathPlanner()
+    }
+
+    fun setupPathPlanner() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose,
             swerveDrive::resetOdometry,
             swerveDrive::getRobotVelocity,
             this::autoDrive,
             PathPlannerLibConstants.pathPlannerConfig,
-            this::getAlliance,
+            this::isRed,
             this,
         )
     }
@@ -52,7 +56,7 @@ class SwerveSystem() : SubsystemBase() {
         swerveDrive.drive(velocity)
     }
 
-    fun getAlliance() : Boolean {
+    fun isRed() : Boolean { // default blue
         var alliance = DriverStation.getAlliance()
         if (alliance.isPresent())
             return alliance.get() == DriverStation.Alliance.Red
