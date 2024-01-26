@@ -2,15 +2,15 @@ package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj.Filesystem
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.ResetSwerveFieldForward
 import frc.robot.subsystems.SwerveSystem
+import frc.robot.subsystems.SwerveSystemIO
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -37,16 +37,18 @@ object RobotContainer {
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
-                swerveSystem = SwerveSystem()
+                swerveSystem = SwerveSystem(SwerveSystemIO())
 
             }
+
             Constants.Mode.SIM -> {
                 // change these later
-                swerveSystem = SwerveSystem()
+                swerveSystem = SwerveSystem(SwerveSystemIO())
             }
+
             Constants.Mode.REPLAY -> {
                 // change these later
-                swerveSystem = SwerveSystem()
+                swerveSystem = SwerveSystem(SwerveSystemIO())
             }
         }
         // Configure the button bindings
