@@ -1,20 +1,18 @@
 package frc.robot.subsystems
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
 import swervelib.SwerveDrive
-import edu.wpi.first.math.geometry.Translation2d
-import frc.robot.util.DualPigeon2Swerve
 import swervelib.telemetry.SwerveDriveTelemetry
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Rotation3d
-import edu.wpi.first.math.kinematics.SwerveModulePosition
-import frc.robot.constants.DriveConstants
+
 
 class SwerveSystem() : SubsystemBase() {
 
@@ -61,5 +59,17 @@ class SwerveSystem() : SubsystemBase() {
         if (alliance.isPresent())
             return alliance.get() == DriverStation.Alliance.Red
         return false
+    }
+
+    fun getAutonomousCommand(pathName: String?, setOdomToStart: Boolean): Command {
+        // Load the path you want to follow using its name in the GUI
+        val path = PathPlannerPath.fromPathFile(pathName)
+
+        if (setOdomToStart) {
+            resetOdometry(Pose2d(path.getPoint(0).position, getHeading()))
+        }
+
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path)
     }
 }
