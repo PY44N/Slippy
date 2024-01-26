@@ -29,7 +29,7 @@ object RobotContainer {
     lateinit var teleopSwerveDriveCommand: Command
     val autonomousCommand: Command = Commands.run({})
 
-    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
+    val autoChooser: SendableChooser<Command>
 
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
@@ -49,6 +49,7 @@ object RobotContainer {
                 swerveSystem = SwerveSystem()
             }
         }
+        autoChooser = AutoBuilder.buildAutoChooser()
         // Configure the button bindings
         configureButtonBindings()
 

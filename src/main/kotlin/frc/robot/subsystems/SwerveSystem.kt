@@ -26,7 +26,14 @@ class SwerveSystem : SubsystemBase() {
         swerveDrive.setHeadingCorrection(false)
         swerveDrive.setMotorIdleMode(false)
         swerveDrive.pushOffsetsToControllers()
-
+        swerveDrive.modules[0].driveMotor.setInverted(false)
+        swerveDrive.modules[0].angleMotor.setInverted(true)
+        swerveDrive.modules[1].driveMotor.setInverted(false)
+        swerveDrive.modules[1].angleMotor.setInverted(true)
+        swerveDrive.modules[2].driveMotor.setInverted(true)
+        swerveDrive.modules[2].angleMotor.setInverted(true)
+        swerveDrive.modules[3].driveMotor.setInverted(true)
+        swerveDrive.modules[3].angleMotor.setInverted(true)
         setupPathPlanner()
     }
 

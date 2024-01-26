@@ -23,8 +23,6 @@ object DriveConstants {
     const val BACK_RIGHT_TWIST_ID: Int = 11
     const val BACK_LEFT_TWIST_ID: Int = 9
 
-    const val ROBOT_RADIUS: Double =
-        0.5 // this is a random number (should be center to (furthest) point of wheel contact)
     const val MAX_SPEED = 4.7
 
     const val FRONT_LEFT_ENCODER_ID: Int = 2
@@ -91,22 +89,23 @@ object DriveConstants {
     val FRONT_LEFT_DRIVE_MOTOR = SparkMaxSwerve(FRONT_LEFT_DRIVE_ID, true)
     val FRONT_LEFT_TWIST_MOTOR = SparkMaxSwerve(FRONT_LEFT_TWIST_ID, false)
     val FRONT_LEFT_ENCODER = CANCoderSwerve(FRONT_LEFT_ENCODER_ID)
-    const val FRONT_LEFT_ANGLE_OFFSET = -114.609
+    const val FRONT_LEFT_ANGLE_OFFSET = 63.193359375
 
     val FRONT_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(FRONT_RIGHT_DRIVE_ID, true)
     val FRONT_RIGHT_TWIST_MOTOR = SparkMaxSwerve(FRONT_RIGHT_TWIST_ID, false)
     val FRONT_RIGHT_ENCODER = CANCoderSwerve(FRONT_RIGHT_ENCODER_ID)
-    const val FRONT_RIGHT_ANGLE_OFFSET = -50.977
+    const val FRONT_RIGHT_ANGLE_OFFSET = 86.63661193847656
 
     val BACK_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(BACK_RIGHT_DRIVE_ID, true)
     val BACK_RIGHT_TWIST_MOTOR = SparkMaxSwerve(BACK_RIGHT_TWIST_ID, false)
     val BACK_RIGHT_ENCODER = CANCoderSwerve(BACK_RIGHT_ENCODER_ID)
-    const val BACK_RIGHT_ANGLE_OFFSET = -18.281
+    const val BACK_RIGHT_ANGLE_OFFSET = 234.6
+
 
     val BACK_LEFT_DRIVE_MOTOR = SparkMaxSwerve(BACK_LEFT_DRIVE_ID, true)
     val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(BACK_LEFT_TWIST_ID, false)
     val BACK_LEFT_ENCODER = CANCoderSwerve(BACK_LEFT_ENCODER_ID)
-    const val BACK_LEFT_ANGLE_OFFSET = 6.504
+    const val BACK_LEFT_ANGLE_OFFSET = 45.0
 
     val MODULE_CHARACTERISTICS = SwerveModulePhysicalCharacteristics(
         CONVERSION_FACTORS,

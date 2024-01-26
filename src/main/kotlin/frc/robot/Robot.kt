@@ -1,10 +1,13 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
+import swervelib.SwerveModule
 
 
 /**
@@ -135,14 +138,9 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
-
-        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[0].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
     }
 }
