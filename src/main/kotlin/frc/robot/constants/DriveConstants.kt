@@ -6,65 +6,63 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import frc.robot.util.DualPigeon2Swerve
-import swervelib.SwerveController
-import swervelib.SwerveModule
 import swervelib.encoders.CANCoderSwerve
 import swervelib.motors.SparkMaxSwerve
-import swervelib.parser.PIDFConfig
-import swervelib.parser.SwerveControllerConfiguration
-import swervelib.parser.SwerveDriveConfiguration
-import swervelib.parser.SwerveModuleConfiguration
-import swervelib.parser.SwerveModulePhysicalCharacteristics
+import swervelib.parser.*
 import swervelib.parser.json.MotorConfigDouble
 
 object DriveConstants {
     // TODO: make these ids not bad (1-4 clockwise)
-    const val FRONT_LEFT_DRIVE: Int = 6
-    const val FRONT_RIGHT_DRIVE: Int = 8
-    const val BACK_RIGHT_DRIVE: Int = 7
-    const val BACK_LEFT_DRIVE: Int = 5
+    const val FRONT_LEFT_DRIVE_ID: Int = 6
+    const val FRONT_RIGHT_DRIVE_ID: Int = 8
+    const val BACK_RIGHT_DRIVE_ID: Int = 7
+    const val BACK_LEFT_DRIVE_ID: Int = 5
 
-    const val FRONT_LEFT_TWIST: Int = 10
-    const val FRONT_RIGHT_TWIST: Int = 12
-    const val BACK_RIGHT_TWIST: Int = 11
-    const val BACK_LEFT_TWIST: Int = 9
+    const val FRONT_LEFT_TWIST_ID: Int = 10
+    const val FRONT_RIGHT_TWIST_ID: Int = 12
+    const val BACK_RIGHT_TWIST_ID: Int = 11
+    const val BACK_LEFT_TWIST_ID: Int = 9
 
-    const val FRONT_LEFT_ENCODER: Int = 2
-    const val FRONT_RIGHT_ENCODER: Int = 4
-    const val BACK_RIGHT_ENCODER: Int = 3
-    const val BACK_LEFT_ENCODER: Int = 1
+    const val FRONT_LEFT_ENCODER_ID: Int = 2
+    const val FRONT_RIGHT_ENCODER_ID: Int = 4
+    const val BACK_RIGHT_ENCODER_ID: Int = 3
+    const val BACK_LEFT_ENCODER_ID: Int = 1
 
-    const val MAX_SPEED = 14.5 // please find the real value
+    const val MAX_SPEED = 4.7
 
-    const val NORMAL_PIGEON = 30
-    const val REVERSE_PIGEON = 31
+    const val NORMAL_PIGEON_ID = 30
+    const val REVERSE_PIGEON_ID = 31
 
-    val imu = DualPigeon2Swerve(
-        NORMAL_PIGEON,
-        REVERSE_PIGEON,
+    val IMU = DualPigeon2Swerve(
+        NORMAL_PIGEON_ID,
+        REVERSE_PIGEON_ID,
         "",
         Rotation3d(), // idk what this should be
     )
 
     // these are random
     // module positions (center of robot to center of wheel)
-    const val MODULE_X_OFFSET = 12.5
-    const val MODULE_Y_OFFSET = 12.5
+    const val MODULE_X_OFFSET = 12.375
+    const val MODULE_Y_OFFSET = 12.375
 
-    val kinematics = SwerveDriveKinematics(
-        Translation2d( // Front Left
+    val KINEMATICS = SwerveDriveKinematics(
+        Translation2d(
+            // Front Left
             Units.inchesToMeters(MODULE_X_OFFSET),
             Units.inchesToMeters(MODULE_Y_OFFSET),
         ),
-        Translation2d( // Front Right
+        Translation2d(
+            // Front Right
             Units.inchesToMeters(MODULE_X_OFFSET),
             Units.inchesToMeters(-MODULE_Y_OFFSET),
         ),
-        Translation2d( // Back Left
+        Translation2d(
+            // Back Left
             Units.inchesToMeters(-MODULE_X_OFFSET),
             Units.inchesToMeters(MODULE_Y_OFFSET),
         ),
-        Translation2d( // Back Right
+        Translation2d(
+            // Back Right
             Units.inchesToMeters(-MODULE_X_OFFSET),
             Units.inchesToMeters(-MODULE_Y_OFFSET),
         ),
@@ -72,119 +70,124 @@ object DriveConstants {
 
 
     // idk if these are right
-    const val wheelGripCoefficientOfFriction = 1.19
-    const val optimalVoltage = 12.0
-    const val driveMotorCurrentLimit = 40
-    const val twistMotorCurrentLimit = 20
-    const val driveMotorRampRate = 0.25
-    const val twistMotorRampRate = 0.25
+    const val WHEEL_GRIP_COEFFICIENT_OF_FRICTION = 1.19
+    const val OPTIMAL_VOLTAGE = 12.0
+    const val DRIVE_MOTOR_CURRENT_LIMIT = 40
+    const val TWIST_MOTOR_CURRENT_LIMIT = 20
+    const val DRIVE_MOTOR_RAMP_RATE = 0.25
+    const val TWIST_MOTOR_RAMP_RATE = 0.25
 
-    const val angleJoyStickRadiusDeadband = 0.5
+    const val ANGLE_JOYSTICK_RADIUS_DEADBAND = 0.5
+
     // TODO: make parametric
-    val conversionFactors = MotorConfigDouble(0.045777493, 16.8)
+    val CONVERSION_FACTORS = MotorConfigDouble(0.045777493, 16.8)
 
-    val drivePID = PIDFConfig(0.00023, 0.0000002, 1.0)
-    val twistPID = PIDFConfig(0.004, 1.5)
-    val headingPID = PIDFConfig(.4, .01)
+    val DRIVE_PID = PIDFConfig(0.00023, 0.0000002, 1.0)
+    val TWIST_PID = PIDFConfig(0.004, 1.5)
+    val HEADING_PID = PIDFConfig(.4, .01)
 
-    val flDrive = SparkMaxSwerve(FRONT_LEFT_DRIVE, true)
-    val flTwist = SparkMaxSwerve(FRONT_LEFT_TWIST, false)
-    val flEncoder = CANCoderSwerve(FRONT_LEFT_ENCODER)
-    const val flAngleOffset = -114.609
-    val frDrive = SparkMaxSwerve(FRONT_RIGHT_DRIVE, true)
-    val frTwist = SparkMaxSwerve(FRONT_RIGHT_TWIST, false)
-    val frEncoder = CANCoderSwerve(FRONT_RIGHT_ENCODER)
-    const val frAngleOffset = -50.977
-    val brDrive = SparkMaxSwerve(BACK_RIGHT_DRIVE, true)
-    val brTwist = SparkMaxSwerve(BACK_RIGHT_TWIST, false)
-    val brEncoder = CANCoderSwerve(BACK_RIGHT_ENCODER)
-    const val brAngleOffset = -18.281
-    val blDrive = SparkMaxSwerve(BACK_LEFT_DRIVE, true)
-    val blTwist = SparkMaxSwerve(BACK_LEFT_TWIST, false)
-    val blEncoder = CANCoderSwerve(BACK_LEFT_ENCODER)
-    const val blAngleOffset = 6.504
+    val FRONT_LEFT_DRIVE_MOTOR = SparkMaxSwerve(FRONT_LEFT_DRIVE_ID, true)
+    val FRONT_LEFT_TWIST_MOTOR = SparkMaxSwerve(FRONT_LEFT_TWIST_ID, false)
+    val FRONT_LEFT_ENCODER = CANCoderSwerve(FRONT_LEFT_ENCODER_ID)
+    const val FRONT_LEFT_ANGLE_OFFSET = -114.609
 
-    val moduleCharacteristics = SwerveModulePhysicalCharacteristics(
-        conversionFactors,
-        wheelGripCoefficientOfFriction,
-        optimalVoltage,
-        driveMotorCurrentLimit,
-        twistMotorCurrentLimit,
-        driveMotorRampRate,
-        twistMotorRampRate,
+    val FRONT_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(FRONT_RIGHT_DRIVE_ID, true)
+    val FRONT_RIGHT_TWIST_MOTOR = SparkMaxSwerve(FRONT_RIGHT_TWIST_ID, false)
+    val FRONT_RIGHT_ENCODER = CANCoderSwerve(FRONT_RIGHT_ENCODER_ID)
+    const val FRONT_RIGHT_ANGLE_OFFSET = -50.977
+
+    val BACK_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(BACK_RIGHT_DRIVE_ID, true)
+    val BACK_RIGHT_TWIST_MOTOR = SparkMaxSwerve(BACK_RIGHT_TWIST_ID, false)
+    val BACK_RIGHT_ENCODER = CANCoderSwerve(BACK_RIGHT_ENCODER_ID)
+    const val BACK_RIGHT_ANGLE_OFFSET = -18.281
+
+    val BACK_LEFT_DRIVE_MOTOR = SparkMaxSwerve(BACK_LEFT_DRIVE_ID, true)
+    val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(BACK_LEFT_TWIST_ID, false)
+    val BACK_LEFT_ENCODER = CANCoderSwerve(BACK_LEFT_ENCODER_ID)
+    const val BACK_LEFT_ANGLE_OFFSET = 6.504
+
+    val MODULE_CHARACTERISTICS = SwerveModulePhysicalCharacteristics(
+        CONVERSION_FACTORS,
+        WHEEL_GRIP_COEFFICIENT_OF_FRICTION,
+        OPTIMAL_VOLTAGE,
+        DRIVE_MOTOR_CURRENT_LIMIT,
+        TWIST_MOTOR_CURRENT_LIMIT,
+        DRIVE_MOTOR_RAMP_RATE,
+        TWIST_MOTOR_RAMP_RATE,
     )
 
     // not sure that the signs are right
-    val flModuleConfig = SwerveModuleConfiguration(
-        flDrive,
-        flTwist,
-        conversionFactors,
-        flEncoder,
-        flAngleOffset,
+    val FRONT_LEFT_MODULE_CONFIG = SwerveModuleConfiguration(
+        FRONT_LEFT_DRIVE_MOTOR,
+        FRONT_LEFT_TWIST_MOTOR,
+        CONVERSION_FACTORS,
+        FRONT_LEFT_ENCODER,
+        FRONT_LEFT_ANGLE_OFFSET,
         MODULE_X_OFFSET,
         MODULE_Y_OFFSET,
-        twistPID,
-        drivePID,
-        moduleCharacteristics,
+        TWIST_PID,
+        DRIVE_PID,
+        MODULE_CHARACTERISTICS,
         "Front Left Swerve Module"
     )
 
-    val frModuleConfig = SwerveModuleConfiguration(
-        frDrive,
-        frTwist,
-        conversionFactors,
-        frEncoder,
-        frAngleOffset,
+    val FRONT_RIGHT_MODULE_CONFIG = SwerveModuleConfiguration(
+        FRONT_RIGHT_DRIVE_MOTOR,
+        FRONT_RIGHT_TWIST_MOTOR,
+        CONVERSION_FACTORS,
+        FRONT_RIGHT_ENCODER,
+        FRONT_RIGHT_ANGLE_OFFSET,
         MODULE_X_OFFSET,
         -MODULE_Y_OFFSET,
-        twistPID,
-        drivePID,
-        moduleCharacteristics,
+        TWIST_PID,
+        DRIVE_PID,
+        MODULE_CHARACTERISTICS,
         "Front Right Swerve Module"
     )
 
-    val brModuleConfig = SwerveModuleConfiguration(
-        brDrive,
-        brTwist,
-        conversionFactors,
-        brEncoder,
-        brAngleOffset,
+    val BACK_RIGHT_MODULE_CONFIG = SwerveModuleConfiguration(
+        BACK_RIGHT_DRIVE_MOTOR,
+        BACK_RIGHT_TWIST_MOTOR,
+        CONVERSION_FACTORS,
+        BACK_RIGHT_ENCODER,
+        BACK_RIGHT_ANGLE_OFFSET,
         -MODULE_X_OFFSET,
         -MODULE_Y_OFFSET,
-        twistPID,
-        drivePID,
-        moduleCharacteristics,
+        TWIST_PID,
+        DRIVE_PID,
+        MODULE_CHARACTERISTICS,
         "Back Right Swerve Module"
     )
 
-    val blModuleConfig = SwerveModuleConfiguration(
-        blDrive,
-        blTwist,
-        conversionFactors,
-        blEncoder,
-        blAngleOffset,
+    val BACK_LEFT_MODULE_CONFIG = SwerveModuleConfiguration(
+        BACK_LEFT_DRIVE_MOTOR,
+        BACK_LEFT_TWIST_MOTOR,
+        CONVERSION_FACTORS,
+        BACK_LEFT_ENCODER,
+        BACK_LEFT_ANGLE_OFFSET,
         -MODULE_X_OFFSET,
         MODULE_Y_OFFSET,
-        twistPID,
-        drivePID,
-        moduleCharacteristics,
+        TWIST_PID,
+        DRIVE_PID,
+        MODULE_CHARACTERISTICS,
         "Back Left Swerve Module"
     )
-    // random numbers
-    val driveFeedForward = SimpleMotorFeedforward(0.0,0.0)
 
-    val driveConfig = SwerveDriveConfiguration(
-        arrayOf(flModuleConfig, frModuleConfig, brModuleConfig, blModuleConfig),
-        imu,
+    // random numbers
+    val DRIVE_FEED_FORWARD = SimpleMotorFeedforward(0.0, 0.0)
+
+    val DRIVE_CONFIG = SwerveDriveConfiguration(
+        arrayOf(FRONT_LEFT_MODULE_CONFIG, FRONT_RIGHT_MODULE_CONFIG, BACK_RIGHT_MODULE_CONFIG, BACK_LEFT_MODULE_CONFIG),
+        IMU,
         false,
-        driveFeedForward,
-        moduleCharacteristics,
+        DRIVE_FEED_FORWARD,
+        MODULE_CHARACTERISTICS,
     )
 
-    val controllerConfig = SwerveControllerConfiguration(
-        driveConfig,
-        headingPID,
-        angleJoyStickRadiusDeadband,
+    val CONTRROLLER_CONFIG = SwerveControllerConfiguration(
+        DRIVE_CONFIG,
+        HEADING_PID,
+        ANGLE_JOYSTICK_RADIUS_DEADBAND,
         MAX_SPEED,
     )
 }

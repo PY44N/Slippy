@@ -13,14 +13,13 @@ import frc.robot.constants.PathPlannerLibConstants
 import swervelib.SwerveDrive
 import swervelib.telemetry.SwerveDriveTelemetry
 
-
 class SwerveSystem() : SubsystemBase() {
 
-    val gyro = DriveConstants.imu
+    val gyro = DriveConstants.IMU
 
-    val swerveDrive =  SwerveDrive(
-        DriveConstants.driveConfig,
-        DriveConstants.controllerConfig,
+    val swerveDrive = SwerveDrive(
+        DriveConstants.DRIVE_CONFIG,
+        DriveConstants.CONTRROLLER_CONFIG,
         DriveConstants.MAX_SPEED,
     )
 
@@ -54,7 +53,7 @@ class SwerveSystem() : SubsystemBase() {
         swerveDrive.drive(velocity)
     }
 
-    fun isRed() : Boolean { // default blue
+    fun isRed(): Boolean { // default blue
         var alliance = DriverStation.getAlliance()
         if (alliance.isPresent())
             return alliance.get() == DriverStation.Alliance.Red
