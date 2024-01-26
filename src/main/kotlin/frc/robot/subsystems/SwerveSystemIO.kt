@@ -4,11 +4,10 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import frc.robot.RobotContainer
 import org.littletonrobotics.junction.LogTable
 import org.littletonrobotics.junction.inputs.LoggableInputs
 
-class SwerveSystemIO {
+interface SwerveSystemIO {
     object SwerveSystemIOInputs : LoggableInputs {
         var robotAccel: Translation3d = Translation3d()
         var robotVelocity: ChassisSpeeds = ChassisSpeeds()
@@ -51,24 +50,5 @@ class SwerveSystemIO {
         }
     }
 
-    fun updateInputs(inputs: SwerveSystemIOInputs) {
-        inputs.robotAccel = RobotContainer.swerveSystem.swerveDrive.accel.orElse(Translation3d())
-        inputs.robotVelocity = RobotContainer.swerveSystem.swerveDrive.robotVelocity
-        inputs.gyroRotation = RobotContainer.swerveSystem.swerveDrive.gyroRotation3d
-        inputs.robotPose = RobotContainer.swerveSystem.swerveDrive.pose
-
-        for (i in 0..4) {
-            inputs.drivePositions[i] =
-                RobotContainer.swerveSystem.swerveDrive.modules[i].driveMotor.position
-            inputs.driveVelocities[i] =
-                RobotContainer.swerveSystem.swerveDrive.modules[i].driveMotor.velocity
-
-            inputs.turnAbsolutePositions[i] =
-                RobotContainer.swerveSystem.swerveDrive.modules[i].absolutePosition
-            inputs.turnPositions[i] =
-                RobotContainer.swerveSystem.swerveDrive.modules[i].relativePosition
-            inputs.turnVelocities[i] =
-                RobotContainer.swerveSystem.swerveDrive.modules[i].angleMotor.velocity
-        }
-    }
+    fun updateInputs(inputs: SwerveSystemIOInputs) {}
 }
