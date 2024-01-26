@@ -19,7 +19,7 @@ class SwerveSystem() : SubsystemBase() {
 
     val swerveDrive = SwerveDrive(
         DriveConstants.DRIVE_CONFIG,
-        DriveConstants.CONTRROLLER_CONFIG,
+        DriveConstants.CONTROLLER_CONFIG,
         DriveConstants.MAX_SPEED,
     )
 
@@ -58,17 +58,5 @@ class SwerveSystem() : SubsystemBase() {
         if (alliance.isPresent())
             return alliance.get() == DriverStation.Alliance.Red
         return false
-    }
-
-    fun getAutonomousCommand(pathName: String?, setOdomToStart: Boolean): Command {
-        // Load the path you want to follow using its name in the GUI
-        val path = PathPlannerPath.fromPathFile(pathName)
-
-        if (setOdomToStart) {
-            resetOdometry(Pose2d(path.getPoint(0).position, getHeading()))
-        }
-
-        // Create a path following command using AutoBuilder. This will also trigger event markers.
-        return AutoBuilder.followPath(path)
     }
 }

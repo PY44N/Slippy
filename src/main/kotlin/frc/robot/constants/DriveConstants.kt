@@ -184,7 +184,7 @@ object DriveConstants {
         MODULE_CHARACTERISTICS,
     )
 
-    val CONTRROLLER_CONFIG = SwerveControllerConfiguration(
+    val CONTROLLER_CONFIG = SwerveControllerConfiguration(
         DRIVE_CONFIG,
         HEADING_PID,
         ANGLE_JOYSTICK_RADIUS_DEADBAND,
