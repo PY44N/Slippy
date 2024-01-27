@@ -3,16 +3,17 @@ package frc.robot.constants
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig
 import com.pathplanner.lib.util.PIDConstants
 import com.pathplanner.lib.util.ReplanningConfig
+import frc.robot.RobotContainer
 
 object PathPlannerLibConstants {
-    var replanningConfig = ReplanningConfig()
-    var translationPID = PIDConstants(0.0, 0.0)
-    var rotationPID = PIDConstants(0.0, 0.0)
-    var pathPlannerConfig = HolonomicPathFollowerConfig(
+    val replanningConfig = ReplanningConfig()
+    val translationPID = PIDConstants(0.0, 0.0)
+    val rotationPID = PIDConstants(0.0, 0.0)
+    val pathPlannerConfig = HolonomicPathFollowerConfig(
         translationPID,
         rotationPID,
         DriveConstants.MAX_SPEED,
-        DriveConstants.DRIVE_CONFIG.driveBaseRadiusMeters,
+        RobotContainer.swerveSystem.swerveDrive.swerveDriveConfiguration.driveBaseRadiusMeters,
         replanningConfig,
     )
 }
