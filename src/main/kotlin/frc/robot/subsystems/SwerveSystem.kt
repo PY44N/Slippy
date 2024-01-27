@@ -129,8 +129,6 @@ class SwerveSystem(private val io: SwerveSystemIO) : SubsystemBase() {
             moduleCharacteristics,
         )
 
-
-
         swerveDrive = SwerveDrive(
             driveConfig,
             SwerveControllerConfiguration(

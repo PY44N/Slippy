@@ -1,16 +1,5 @@
 package frc.robot.constants
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward
-import edu.wpi.first.math.geometry.Rotation3d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.util.Units
-import frc.robot.util.DualPigeon2Swerve
-import swervelib.encoders.CANCoderSwerve
-import swervelib.motors.SparkMaxSwerve
-import swervelib.parser.*
-import swervelib.parser.json.MotorConfigDouble
-
 object DriveConstants {
     // TODO: make these ids not bad (1-4 clockwise)
     const val FRONT_LEFT_DRIVE_ID: Int = 6
