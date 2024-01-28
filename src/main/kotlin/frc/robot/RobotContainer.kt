@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.ResetSwerveFieldForward
 import frc.robot.subsystems.SwerveSystem
 import frc.robot.subsystems.SwerveSystemIOReal
+import frc.robot.subsystems.SwerveSystemIOSim
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -38,17 +39,14 @@ object RobotContainer {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(SwerveSystemIOReal())
-
             }
-
             Constants.Mode.SIM -> {
                 // change these later
-                swerveSystem = SwerveSystem(SwerveSystemIOReal())
+                swerveSystem = SwerveSystem(SwerveSystemIOSim())
             }
-
             Constants.Mode.REPLAY -> {
                 // change these later
-                swerveSystem = SwerveSystem(SwerveSystemIOReal())
+                swerveSystem = SwerveSystem(SwerveSystemIOSim())
             }
         }
         autoChooser = AutoBuilder.buildAutoChooser()
