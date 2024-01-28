@@ -25,10 +25,7 @@ object RobotContainer {
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
 
-    var speedUp = 1
-
     val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
-
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
      */

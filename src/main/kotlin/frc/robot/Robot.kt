@@ -1,16 +1,17 @@
 package frc.robot
 
+import kotlin.math.abs
+
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.constants.DriveConstants
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
-import kotlin.math.abs
 
 
 /**
@@ -65,14 +66,9 @@ class Robot : LoggedRobot() {
         }
 
         Logger.start()
-
-//        RobotContainer.speedUp += 1
-
-//        val toApply = CANcoderConfiguration()
-
-
         /* User can change the configs if they want, or leave it empty for factory-default */
 //        canCoder.getConfigurator().apply(toApply)
+        RobotContainer
     }
 
 
@@ -109,6 +105,7 @@ class Robot : LoggedRobot() {
     override fun autonomousInit() {
         // Schedule the autonomous command (example)
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
+        autonomousCommand?.schedule()
     }
 
     /**
@@ -176,5 +173,16 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
+        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
+
+        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
+
+//        SmartDashboard.putNumber("Back Left Angle", encoder.position.value)
     }
 }
