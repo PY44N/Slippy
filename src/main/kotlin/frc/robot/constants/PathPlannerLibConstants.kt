@@ -10,15 +10,15 @@ object PathPlannerLibConstants {
     // TODO: tune
     var translationPID = PIDConstants(5.0, 0.0, 0.0)
     var rotationPID = PIDConstants(
-        DriveConstants.HEADING_PID.p,
-        DriveConstants.HEADING_PID.i,
-        DriveConstants.HEADING_PID.d,
+        YAGSLConfig.controllerConfig.headingPIDF.p,
+        YAGSLConfig.controllerConfig.headingPIDF.i,
+        YAGSLConfig.controllerConfig.headingPIDF.d,
         )
     var pathPlannerConfig = HolonomicPathFollowerConfig(
         translationPID,
         rotationPID,
-        DriveConstants.MAX_SPEED,
-        DriveConstants.DRIVE_CONFIG.driveBaseRadiusMeters,
+        YAGSLConfig.maxSpeedMPS,
+        YAGSLConfig.driveConfig.driveBaseRadiusMeters,
         replanningConfig,
     )
 }

@@ -8,10 +8,10 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import frc.robot.constants.DriveConstants
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
+import frc.robot.constants.YAGSLConfig
 
 
 /**
@@ -139,12 +139,12 @@ class Robot : LoggedRobot() {
                 (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
                     val inSpeed =
                         if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-                    (inSpeed) * DriveConstants.MAX_SPEED
+                    (inSpeed) * YAGSLConfig.maxSpeedMPS
                 } else 0.0),
                 (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
                     val inSpeed =
                         if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
-                    (-inSpeed) * DriveConstants.MAX_SPEED
+                    (-inSpeed) * YAGSLConfig.maxSpeedMPS
                 } else 0.0)
             ),
             (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
