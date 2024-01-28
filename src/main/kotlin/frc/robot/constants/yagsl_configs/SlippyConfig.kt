@@ -1,4 +1,4 @@
-package frc.robot.constants
+package frc.robot.constants.yagsl_configs
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward
 import edu.wpi.first.math.geometry.Rotation3d
@@ -11,8 +11,7 @@ import swervelib.motors.SparkMaxSwerve
 import swervelib.parser.*
 import swervelib.parser.json.MotorConfigDouble
 
-object DriveConstants {
-    // TODO: make these ids not bad (1-4 clockwise)
+object SlippyConfig {
     const val FRONT_LEFT_DRIVE_ID: Int = 6
     const val FRONT_RIGHT_DRIVE_ID: Int = 8
     const val BACK_RIGHT_DRIVE_ID: Int = 7
@@ -37,11 +36,8 @@ object DriveConstants {
         NORMAL_PIGEON_ID,
         REVERSE_PIGEON_ID,
         "",
-        Rotation3d(), // idk what this should be
+        Rotation3d(),
     )
-
-    // these are random
-    // module positions (center of robot to center of wheel)
     const val MODULE_X_OFFSET = 12.375
     const val MODULE_Y_OFFSET = 12.375
 
@@ -69,7 +65,6 @@ object DriveConstants {
     )
 
 
-    // idk if these are right
     const val WHEEL_GRIP_COEFFICIENT_OF_FRICTION = 1.19
     const val OPTIMAL_VOLTAGE = 12.0
     const val DRIVE_MOTOR_CURRENT_LIMIT = 40
@@ -79,7 +74,6 @@ object DriveConstants {
 
     const val ANGLE_JOYSTICK_RADIUS_DEADBAND = 0.5
 
-    // TODO: make parametric
     val CONVERSION_FACTORS = MotorConfigDouble(0.045777493, 16.8)
 
     val DRIVE_PID = PIDFConfig(0.00023, 0.0000002, 1.0)
@@ -116,7 +110,6 @@ object DriveConstants {
         TWIST_MOTOR_RAMP_RATE,
     )
 
-    // not sure that the signs are right
     val FRONT_LEFT_MODULE_CONFIG = SwerveModuleConfiguration(
         FRONT_LEFT_DRIVE_MOTOR,
         FRONT_LEFT_TWIST_MOTOR,
@@ -173,7 +166,6 @@ object DriveConstants {
         "Back Left Swerve Module"
     )
 
-    // random numbers
     val DRIVE_FEED_FORWARD = SimpleMotorFeedforward(0.0, 0.0)
 
     val DRIVE_CONFIG = SwerveDriveConfiguration(
