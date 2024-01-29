@@ -48,10 +48,11 @@ class SwerveSystem(private val io: SwerveSystemIO) : SubsystemBase() {
 //            ),
 //        )
 
-        val conversionFactors = MotorConfigDouble(0.045777493, 16.8)
+        val conversionFactors =
+            MotorConfigDouble(DriveConstants.CONVERSION_FACTOR_ANGLE, DriveConstants.CONVERSION_FACTOR_DRIVE)
 
-        val drivePID = PIDFConfig(0.00023, 0.0000002, 1.0)
-        val twistPID = PIDFConfig(0.004, 1.5)
+        val drivePID = DriveConstants.DRIVE_PID
+        val twistPID = DriveConstants.TWIST_PID
 
         val moduleCharacteristics = SwerveModulePhysicalCharacteristics(
             conversionFactors,

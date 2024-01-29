@@ -40,10 +40,12 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(SwerveSystemIOReal())
             }
+
             Constants.Mode.SIM -> {
                 // change these later
                 swerveSystem = SwerveSystem(SwerveSystemIOSim())
             }
+
             Constants.Mode.REPLAY -> {
                 // change these later
                 swerveSystem = SwerveSystem(SwerveSystemIOSim())

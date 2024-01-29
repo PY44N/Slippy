@@ -1,5 +1,7 @@
 package frc.robot.constants
 
+import swervelib.parser.PIDFConfig
+
 object DriveConstants {
     // TODO: make these ids not bad (1-4 clockwise)
     const val FRONT_LEFT_DRIVE_ID: Int = 6
@@ -26,6 +28,12 @@ object DriveConstants {
     // module positions (center of robot to center of wheel)
     const val MODULE_X_OFFSET: Double = 12.375
     const val MODULE_Y_OFFSET: Double = 12.375
+
+    const val CONVERSION_FACTOR_ANGLE: Double = 0.045777493
+    const val CONVERSION_FACTOR_DRIVE: Double = 16.8
+
+    val DRIVE_PID: PIDFConfig = PIDFConfig(0.00023,  0.0000002, 1.0, 0.0)
+    val TWIST_PID: PIDFConfig = PIDFConfig(0.004, 0.0, 1.5, 0.0)
 
     // idk if these are right
     const val WHEEL_GRIP_COEFFICIENT_OF_FRICTION: Double = 1.19
