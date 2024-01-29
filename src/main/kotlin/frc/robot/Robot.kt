@@ -139,14 +139,14 @@ class Robot : LoggedRobot() {
 
         RobotContainer.swerveSystem.drive(
             Translation2d(
-                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
-                    val inSpeed =
-                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-                    (inSpeed) * DriveConstants.MAX_SPEED
-                } else 0.0),
                 (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
                     val inSpeed =
                         if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
+                    (-inSpeed) * DriveConstants.MAX_SPEED
+                } else 0.0),
+                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
+                    val inSpeed =
+                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
                     (-inSpeed) * DriveConstants.MAX_SPEED
                 } else 0.0)
             ),
