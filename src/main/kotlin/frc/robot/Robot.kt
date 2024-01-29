@@ -150,7 +150,7 @@ class Robot : LoggedRobot() {
                     (-inSpeed) * DriveConstants.MAX_SPEED
                 } else 0.0)
             ),
-            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
+            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist else 0.0),
             true
         )
 
