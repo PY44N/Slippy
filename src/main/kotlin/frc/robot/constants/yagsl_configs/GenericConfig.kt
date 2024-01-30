@@ -31,19 +31,30 @@ class YAGSLConfig(
     val twistRampRate: Double,
 
     val flDrive: SwerveMotor,
+    val flDriveInverted: Boolean,
     val flTwist: SwerveMotor,
+    val flTwistInverted: Boolean,
     val flEncoder: SwerveAbsoluteEncoder,
     val flOffset: Double,
+
     val frDrive: SwerveMotor,
+    val frDriveInverted: Boolean,
     val frTwist: SwerveMotor,
+    val frTwistInverted: Boolean,
     val frEncoder: SwerveAbsoluteEncoder,
     val frOffset: Double,
+
     val brDrive: SwerveMotor,
+    val brDriveInverted: Boolean,
     val brTwist: SwerveMotor,
+    val brTwistInverted: Boolean,
     val brEncoder: SwerveAbsoluteEncoder,
     val brOffset: Double,
+
     val blDrive: SwerveMotor,
+    val blDriveInverted: Boolean,
     val blTwist: SwerveMotor,
+    val blTwistInverted: Boolean,
     val blEncoder: SwerveAbsoluteEncoder,
     val blOffset: Double,
 

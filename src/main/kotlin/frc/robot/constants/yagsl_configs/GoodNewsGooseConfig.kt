@@ -6,59 +6,37 @@ import frc.robot.util.DualPigeon2Swerve
 import swervelib.encoders.CANCoderSwerve
 import swervelib.imu.Pigeon2Swerve
 import swervelib.motors.SparkMaxSwerve
+import swervelib.motors.TalonFXSwerve
 import swervelib.parser.PIDFConfig
 import swervelib.parser.json.MotorConfigDouble
 
 object GoodNewsGooseConfig {
-    const val FRONT_LEFT_DRIVE_ID: Int = 5
-    const val FRONT_RIGHT_DRIVE_ID: Int = 2
-    const val BACK_RIGHT_DRIVE_ID: Int = 3
-    const val BACK_LEFT_DRIVE_ID: Int = 4
-
-    const val FRONT_LEFT_TWIST_ID: Int = 10
-    const val FRONT_RIGHT_TWIST_ID: Int = 12
-    const val BACK_RIGHT_TWIST_ID: Int = 11
-    const val BACK_LEFT_TWIST_ID: Int = 9
-
-    const val FRONT_LEFT_ENCODER_ID: Int = 13
-    const val FRONT_RIGHT_ENCODER_ID: Int = 10
-    const val BACK_RIGHT_ENCODER_ID: Int = 11
-    const val BACK_LEFT_ENCODER_ID: Int = 12
-
-    const val PIGEON_ID = 30
-
     val imu = Pigeon2Swerve(
-        PIGEON_ID,
+        30,
         "",
     )
-    //under is not done
+    val HEADING_PID = PIDFConfig(0.0,0.0)
 
-    const val DRIVE_MOTOR_RAMP_RATE = 0.25
-    const val TWIST_MOTOR_RAMP_RATE = 0.25
-
-    const val ANGLE_JOYSTICK_RADIUS_DEADBAND = 0.5
-
-    val CONVERSION_FACTORS = MotorConfigDouble(0.045777493, 16.8)
+    val CONVERSION_FACTORS = MotorConfigDouble(16.8, 0.045777493)
 
     val DRIVE_PID = PIDFConfig(0.00023, 0.0000002, 1.0)
     val TWIST_PID = PIDFConfig(0.004, 1.5)
-    val HEADING_PID = PIDFConfig(.4, .01)
 
-    val FRONT_LEFT_DRIVE_MOTOR = SparkMaxSwerve(FRONT_LEFT_DRIVE_ID, true)
-    val FRONT_LEFT_TWIST_MOTOR = SparkMaxSwerve(FRONT_LEFT_TWIST_ID, false)
-    val FRONT_LEFT_ENCODER = CANCoderSwerve(FRONT_LEFT_ENCODER_ID)
+    val FRONT_LEFT_DRIVE_MOTOR = TalonFXSwerve(5, true)
+    val FRONT_LEFT_TWIST_MOTOR = SparkMaxSwerve(10, false)
+    val FRONT_LEFT_ENCODER = CANCoderSwerve(13)
 
-    val FRONT_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(FRONT_RIGHT_DRIVE_ID, true)
-    val FRONT_RIGHT_TWIST_MOTOR = SparkMaxSwerve(FRONT_RIGHT_TWIST_ID, false)
-    val FRONT_RIGHT_ENCODER = CANCoderSwerve(FRONT_RIGHT_ENCODER_ID)
+    val FRONT_RIGHT_DRIVE_MOTOR = TalonFXSwerve(2, true)
+    val FRONT_RIGHT_TWIST_MOTOR = SparkMaxSwerve(12, false)
+    val FRONT_RIGHT_ENCODER = CANCoderSwerve(10)
 
-    val BACK_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(BACK_RIGHT_DRIVE_ID, true)
-    val BACK_RIGHT_TWIST_MOTOR = SparkMaxSwerve(BACK_RIGHT_TWIST_ID, false)
-    val BACK_RIGHT_ENCODER = CANCoderSwerve(BACK_RIGHT_ENCODER_ID)
+    val BACK_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(3, true)
+    val BACK_RIGHT_TWIST_MOTOR = SparkMaxSwerve(11, false)
+    val BACK_RIGHT_ENCODER = CANCoderSwerve(11)
 
-    val BACK_LEFT_DRIVE_MOTOR = SparkMaxSwerve(BACK_LEFT_DRIVE_ID, true)
-    val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(BACK_LEFT_TWIST_ID, false)
-    val BACK_LEFT_ENCODER = CANCoderSwerve(BACK_LEFT_ENCODER_ID)
+    val BACK_LEFT_DRIVE_MOTOR = SparkMaxSwerve(4, true)
+    val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(9, false)
+    val BACK_LEFT_ENCODER = CANCoderSwerve(12)
 
     val DRIVE_FEED_FORWARD = SimpleMotorFeedforward(0.0, 0.0)
 
@@ -66,7 +44,7 @@ object GoodNewsGooseConfig {
         imu,
         false,
         .5,
-        4.7,
+        4.20,
         12.375,
         12.375,
         CONVERSION_FACTORS,
@@ -77,21 +55,29 @@ object GoodNewsGooseConfig {
         .25,
         .25,
         FRONT_LEFT_DRIVE_MOTOR,
+        true,
         FRONT_LEFT_TWIST_MOTOR,
+        true,
         FRONT_LEFT_ENCODER,
-        -114.609,
+        296.630859375,
         FRONT_RIGHT_DRIVE_MOTOR,
+        false,
         FRONT_RIGHT_TWIST_MOTOR,
+        true,
         FRONT_RIGHT_ENCODER,
-        -50.977,
+        146.25,
         BACK_RIGHT_DRIVE_MOTOR,
+        true,
         BACK_RIGHT_TWIST_MOTOR,
+        true,
         BACK_RIGHT_ENCODER,
-        -18.281,
+        199.86328125,
         BACK_LEFT_DRIVE_MOTOR,
+        true,
         BACK_LEFT_TWIST_MOTOR,
+        true,
         BACK_LEFT_ENCODER,
-        6.504,
+        142.91015625,
         DRIVE_PID,
         TWIST_PID,
         HEADING_PID,
