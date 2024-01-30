@@ -64,8 +64,6 @@ object SlippyConfig {
     val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(BACK_LEFT_TWIST_ID, false)
     val BACK_LEFT_ENCODER = CANCoderSwerve(BACK_LEFT_ENCODER_ID)
 
-    val DRIVE_FEED_FORWARD = SimpleMotorFeedforward(0.0, 0.0)
-
     val slippy = YAGSLConfig(
         imu,
         false,
@@ -107,6 +105,5 @@ object SlippyConfig {
         DRIVE_PID,
         TWIST_PID,
         HEADING_PID,
-        DRIVE_FEED_FORWARD,
     )
 }

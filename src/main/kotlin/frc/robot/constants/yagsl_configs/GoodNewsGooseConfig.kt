@@ -38,9 +38,7 @@ object GoodNewsGooseConfig {
     val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(9, false)
     val BACK_LEFT_ENCODER = CANCoderSwerve(12)
 
-    val DRIVE_FEED_FORWARD = SimpleMotorFeedforward(0.0, 0.0)
-
-    val slippy = YAGSLConfig(
+    val goodNewsGoose = YAGSLConfig(
         imu,
         false,
         .5,
@@ -81,6 +79,5 @@ object GoodNewsGooseConfig {
         DRIVE_PID,
         TWIST_PID,
         HEADING_PID,
-        DRIVE_FEED_FORWARD,
     )
 }   

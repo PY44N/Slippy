@@ -61,9 +61,20 @@ class YAGSLConfig(
     val drivePID: PIDFConfig,
     val twistPID: PIDFConfig,
     val headingPID: PIDFConfig,
-    val driveFeedForward: SimpleMotorFeedforward,
 
     ) {
+    init {
+        flDrive.setInverted(flDriveInverted)
+        flTwist.setInverted(flTwistInverted)
+        frDrive.setInverted(frDriveInverted)
+        frTwist.setInverted(frTwistInverted)
+        brDrive.setInverted(brDriveInverted)
+        brTwist.setInverted(brTwistInverted)
+        blDrive.setInverted(blDriveInverted)
+        blTwist.setInverted(blTwistInverted)
+    }
+
+
     val kinematics = SwerveDriveKinematics(
         Translation2d(
             // Front Left
@@ -153,7 +164,7 @@ class YAGSLConfig(
         arrayOf(flConfig, frConfig, brConfig, blConfig),
         imu,
         false,
-        driveFeedForward,
+        swervelib.math.SwerveMath.createDriveFeedforward(optimalVoltage, maxSpeedMPS, wheelFriction),
         moduleCharacteristics,
     )
 
