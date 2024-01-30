@@ -15,7 +15,8 @@ object GoodNewsGooseConfig {
     const val BACK_RIGHT_DRIVE_ID: Int = 3
     const val BACK_LEFT_DRIVE_ID: Int = 4
 
-    const val FRONT_LEFT_TWIST_ID: Int = 10 //where    const val FRONT_RIGHT_TWIST_ID: Int = 12
+    const val FRONT_LEFT_TWIST_ID: Int = 10
+    const val FRONT_RIGHT_TWIST_ID: Int = 12
     const val BACK_RIGHT_TWIST_ID: Int = 11
     const val BACK_LEFT_TWIST_ID: Int = 9
 
@@ -95,4 +96,5 @@ object GoodNewsGooseConfig {
         TWIST_PID,
         HEADING_PID,
         DRIVE_FEED_FORWARD,
-}
+    )
+}   
