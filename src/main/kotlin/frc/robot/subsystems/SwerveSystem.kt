@@ -18,6 +18,7 @@ import java.io.File
 
 class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
     private val autoConstraints: PathConstraints
+
     constructor(config: YAGSLConfig) : this(
         swerveDrive = SwerveDrive(
             config.driveConfig,
@@ -25,18 +26,18 @@ class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
             config.maxSpeedMPS,
         )
     )
+
     constructor(config: File, maxSpeedMPS: Double) : this(
         swerveDrive = try {
             SwerveParser(config).createSwerveDrive(maxSpeedMPS)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             throw RuntimeException(e)
         }
     )
 
     init {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
-        
+
         swerveDrive.setHeadingCorrection(false)
         swerveDrive.setMotorIdleMode(false)
         swerveDrive.pushOffsetsToControllers()
@@ -85,6 +86,7 @@ class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
             this,
         )
     }
+
     fun driveToPose(pose: Pose2d): Command {
         return AutoBuilder.pathfindToPose(
             pose,

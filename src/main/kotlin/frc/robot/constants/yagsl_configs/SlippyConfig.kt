@@ -1,14 +1,10 @@
 package frc.robot.constants.yagsl_configs
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward
 import edu.wpi.first.math.geometry.Rotation3d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.util.Units
 import frc.robot.util.DualPigeon2Swerve
 import swervelib.encoders.CANCoderSwerve
 import swervelib.motors.SparkMaxSwerve
-import swervelib.parser.*
+import swervelib.parser.PIDFConfig
 import swervelib.parser.json.MotorConfigDouble
 
 object SlippyConfig {

@@ -1,17 +1,12 @@
 package frc.robot.constants.yagsl_configs
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import swervelib.encoders.SwerveAbsoluteEncoder
 import swervelib.imu.SwerveIMU
 import swervelib.motors.SwerveMotor
-import swervelib.parser.PIDFConfig
-import swervelib.parser.SwerveControllerConfiguration
-import swervelib.parser.SwerveDriveConfiguration
-import swervelib.parser.SwerveModuleConfiguration
-import swervelib.parser.SwerveModulePhysicalCharacteristics
+import swervelib.parser.*
 import swervelib.parser.json.MotorConfigDouble
 
 class YAGSLConfig(

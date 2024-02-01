@@ -1,17 +1,15 @@
 package frc.robot
 
-import kotlin.math.abs
-
-import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.constants.YAGSLConfig
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
-import frc.robot.constants.YAGSLConfig
+import kotlin.math.abs
 
 
 /**
@@ -123,6 +121,7 @@ class Robot : LoggedRobot() {
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         autonomousCommand?.cancel()
+        RobotContainer.teleopSwerveCommand.schedule()
 
     }
 
@@ -130,30 +129,6 @@ class Robot : LoggedRobot() {
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
-        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
-        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
-        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
-
-        RobotContainer.swerveSystem.drive(
-            Translation2d(
-                (if (abs(RobotContainer.rightJoystick.x) > 0.15) {
-                    val inSpeed =
-                        if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-                    (inSpeed) * YAGSLConfig.maxSpeedMPS
-                } else 0.0),
-                (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
-                    val inSpeed =
-                        if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
-                    (-inSpeed) * YAGSLConfig.maxSpeedMPS
-                } else 0.0)
-            ),
-            (if (abs(RobotContainer.rightJoystick.twist) > 0.15) -RobotContainer.rightJoystick.twist * -1.0 else 0.0),
-            true
-        )
-
-
-        val desiredState =
-            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
 
 //        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
 

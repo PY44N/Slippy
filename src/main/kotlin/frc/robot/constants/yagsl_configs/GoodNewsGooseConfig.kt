@@ -1,8 +1,5 @@
 package frc.robot.constants.yagsl_configs
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward
-import edu.wpi.first.math.geometry.Rotation3d
-import frc.robot.util.DualPigeon2Swerve
 import swervelib.encoders.CANCoderSwerve
 import swervelib.imu.Pigeon2Swerve
 import swervelib.motors.SparkMaxSwerve
@@ -15,7 +12,7 @@ object GoodNewsGooseConfig {
         30,
         "",
     )
-    val HEADING_PID = PIDFConfig(0.0,0.0)
+    val HEADING_PID = PIDFConfig(0.0, 0.0)
 
     val CONVERSION_FACTORS = MotorConfigDouble(16.8, 0.045777493)
 
