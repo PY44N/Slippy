@@ -1,15 +1,12 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.constants.YAGSLConfig
+import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
-import kotlin.math.abs
+import org.littletonrobotics.junction.wpilog.WPILOGReader
+import org.littletonrobotics.junction.wpilog.WPILOGWriter
 
 
 /**
@@ -19,10 +16,6 @@ import kotlin.math.abs
  * project.
  */
 class Robot : LoggedRobot() {
-
-    //    private val canCoder: CANcoder = CANcoder(1)
-    private var autonomousCommand: Command? = null
-
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -46,7 +39,7 @@ class Robot : LoggedRobot() {
             Constants.Mode.REAL -> {
                 // Running on a real robot, log to a USB stick ("/U/logs")
 //                Logger.addDataReceiver(WPILOGWriter())
-                Logger.addDataReceiver(NT4Publisher())
+//                Logger.addDataReceiver(NT4Publisher())
             }
 
             Constants.Mode.SIM -> {
@@ -57,16 +50,17 @@ class Robot : LoggedRobot() {
             Constants.Mode.REPLAY -> {
                 // Replaying a log, set up replay source
                 setUseTiming(false) // Run as fast as possible
-//                val logPath = LogFileUtil.findReplayLog()
-//                Logger.setReplaySource(WPILOGReader(logPath))
-//                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
+                val logPath = LogFileUtil.findReplayLog()
+                Logger.setReplaySource(WPILOGReader(logPath))
+                Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
             }
         }
 
         Logger.start()
+
+        RobotContainer
         /* User can change the configs if they want, or leave it empty for factory-default */
 //        canCoder.getConfigurator().apply(toApply)
-        RobotContainer
     }
 
 
@@ -90,7 +84,9 @@ class Robot : LoggedRobot() {
     /**
      * This function is called once each time the robot enters Disabled mode.
      */
-    override fun disabledInit() {}
+    override fun disabledInit() {
+        CommandScheduler.getInstance().cancelAll()
+    }
 
     /**
      * This function is called periodically when disabled.
@@ -103,7 +99,7 @@ class Robot : LoggedRobot() {
     override fun autonomousInit() {
         // Schedule the autonomous command (example)
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
-        autonomousCommand?.schedule()
+        RobotContainer.autonomousCommand.schedule()
     }
 
     /**
@@ -120,20 +116,14 @@ class Robot : LoggedRobot() {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
-        autonomousCommand?.cancel()
+        RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
-
     }
 
     /**
      * This function is called periodically during operator control.
      */
-    override fun teleopPeriodic() {
-
-//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
-
-//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
-    }
+    override fun teleopPeriodic() {}
 
     /**
      * This function is called once when test mode is enabled.
@@ -141,23 +131,15 @@ class Robot : LoggedRobot() {
     override fun testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
-//        RobotContainer.swerveSystem.drive(Translation2d(0.25, 0.0), 0.0, true)
     }
 
     /**
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
-
-        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
-
-//        SmartDashboard.putNumber("Back Left Angle", encoder.position.value)
+        RobotContainer.swerveSystem.swerveDrive.modules[0].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
     }
 }
