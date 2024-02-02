@@ -21,19 +21,19 @@ object GoodNewsGooseConfig {
 
     val FRONT_LEFT_DRIVE_MOTOR = TalonFXSwerve(5, true)
     val FRONT_LEFT_TWIST_MOTOR = SparkMaxSwerve(10, false)
-    val FRONT_LEFT_ENCODER = CANCoderSwerve(13)
+    val FRONT_LEFT_ENCODER = CANCoderSwerve(13, "")
 
     val FRONT_RIGHT_DRIVE_MOTOR = TalonFXSwerve(2, true)
     val FRONT_RIGHT_TWIST_MOTOR = SparkMaxSwerve(12, false)
-    val FRONT_RIGHT_ENCODER = CANCoderSwerve(10)
+    val FRONT_RIGHT_ENCODER = CANCoderSwerve(10, "")
 
     val BACK_RIGHT_DRIVE_MOTOR = SparkMaxSwerve(3, true)
     val BACK_RIGHT_TWIST_MOTOR = SparkMaxSwerve(11, false)
-    val BACK_RIGHT_ENCODER = CANCoderSwerve(11)
+    val BACK_RIGHT_ENCODER = CANCoderSwerve(11, "")
 
     val BACK_LEFT_DRIVE_MOTOR = SparkMaxSwerve(4, true)
     val BACK_LEFT_TWIST_MOTOR = SparkMaxSwerve(9, false)
-    val BACK_LEFT_ENCODER = CANCoderSwerve(12)
+    val BACK_LEFT_ENCODER = CANCoderSwerve(12, "")
 
     val goodNewsGoose = YAGSLConfig(
         imu,
