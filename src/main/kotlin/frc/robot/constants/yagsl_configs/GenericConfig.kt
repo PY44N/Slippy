@@ -82,14 +82,14 @@ class YAGSLConfig(
             Units.inchesToMeters(-moduleYOffset),
         ),
         Translation2d(
-            // Back Right
+            // Back Left
             Units.inchesToMeters(-moduleXOffset),
-            Units.inchesToMeters(-moduleYOffset),
+            Units.inchesToMeters(moduleYOffset),
         ),
         Translation2d(
             // Back Right
             Units.inchesToMeters(-moduleXOffset),
-            Units.inchesToMeters(moduleYOffset),
+            Units.inchesToMeters(-moduleYOffset),
         ),
     )
     val moduleCharacteristics = SwerveModulePhysicalCharacteristics(
@@ -98,8 +98,8 @@ class YAGSLConfig(
         optimalVoltage,
         driveCurrentLimit,
         twistCurrentLimit,
-        SlippyConfig.DRIVE_MOTOR_RAMP_RATE,
-        SlippyConfig.TWIST_MOTOR_RAMP_RATE,
+        driveRampRate,
+        twistRampRate,
     )
 
     val flConfig = SwerveModuleConfiguration(
@@ -128,19 +128,6 @@ class YAGSLConfig(
         moduleCharacteristics,
         "Front Right Swerve Module"
     )
-    val brConfig = SwerveModuleConfiguration(
-        brDrive,
-        brTwist,
-        conversionFactors,
-        brEncoder,
-        brOffset,
-        -moduleXOffset,
-        -moduleYOffset,
-        twistPID,
-        drivePID,
-        moduleCharacteristics,
-        "Back Right Swerve Module"
-    )
     val blConfig = SwerveModuleConfiguration(
         blDrive,
         blTwist,
@@ -152,11 +139,24 @@ class YAGSLConfig(
         twistPID,
         drivePID,
         moduleCharacteristics,
+        "Back Right Swerve Module"
+    )
+    val brConfig = SwerveModuleConfiguration(
+        brDrive,
+        brTwist,
+        conversionFactors,
+        brEncoder,
+        brOffset,
+        -moduleXOffset,
+        -moduleYOffset,
+        twistPID,
+        drivePID,
+        moduleCharacteristics,
         "Back Left Swerve Module"
     )
 
     val driveConfig = SwerveDriveConfiguration(
-        arrayOf(flConfig, frConfig, brConfig, blConfig),
+        arrayOf(flConfig, frConfig, blConfig, brConfig),
         imu,
         false,
         swervelib.math.SwerveMath.createDriveFeedforward(optimalVoltage, maxSpeedMPS, wheelFriction),

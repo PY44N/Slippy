@@ -3,6 +3,7 @@ package frc.robot.constants
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig
 import com.pathplanner.lib.util.PIDConstants
 import com.pathplanner.lib.util.ReplanningConfig
+import frc.robot.constants.yagsl_configs.YAGSLConfig
 
 object PathPlannerLibConstants {
     // TODO: figure out if we need to change anything here
