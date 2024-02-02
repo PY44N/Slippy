@@ -29,7 +29,7 @@ object RobotContainer {
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
 
-    val swerveSystem: SwerveSystem;
+    val swerveSystem: SwerveSystem
 
     lateinit var teleopSwerveDriveCommand: Command
     val autonomousCommand: Command = Commands.run({})
@@ -44,12 +44,10 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
             }
-
             Constants.Mode.SIM -> {
                 // change these later
                 swerveSystem = SwerveSystem(SwerveSystemIOSim(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
             }
-
             Constants.Mode.REPLAY -> {
                 // change these later
                 swerveSystem = SwerveSystem(SwerveSystemIOSim(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
@@ -60,7 +58,6 @@ object RobotContainer {
         configureButtonBindings()
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
-        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
