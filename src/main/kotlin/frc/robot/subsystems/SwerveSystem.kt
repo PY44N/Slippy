@@ -186,4 +186,11 @@ class SwerveSystem(private val io: SwerveSystemIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs(inputs)
     }
+
+    fun getAlliance(): Boolean {
+        val alliance = DriverStation.getAlliance()
+        if (alliance.isPresent)
+            return alliance.get() == DriverStation.Alliance.Red
+        return false
+    }
 }

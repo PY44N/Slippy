@@ -1,5 +1,8 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -38,7 +41,7 @@ class Robot : LoggedRobot() {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
                 // Running on a real robot, log to a USB stick ("/U/logs")
-                Logger.addDataReceiver(WPILOGWriter())
+//                Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
 
@@ -123,7 +126,19 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during operator control.
      */
-    override fun teleopPeriodic() {}
+    override fun teleopPeriodic() {
+        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
+        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
+        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
+
+
+        val desiredState =
+            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
+
+//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
+
+//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
+    }
 
     /**
      * This function is called once when test mode is enabled.
@@ -141,5 +156,15 @@ class Robot : LoggedRobot() {
         RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
         RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
         RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
+
+        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
+
+        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
     }
 }

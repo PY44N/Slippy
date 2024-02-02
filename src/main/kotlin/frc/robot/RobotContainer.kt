@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.ResetSwerveFieldForward
+import frc.robot.constants.DriveConstants
 import frc.robot.subsystems.SwerveSystem
 import frc.robot.subsystems.SwerveSystemIOReal
 import frc.robot.subsystems.SwerveSystemIOSim
+import kotlin.math.abs
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -66,7 +68,24 @@ object RobotContainer {
      */
     private fun configureButtonBindings() {
         teleopSwerveDriveCommand = Commands.run(
-            { swerveSystem.drive(Translation2d(leftJoystick.x, leftJoystick.y), leftJoystick.twist, true) },
+            {
+                swerveSystem.drive(
+                    Translation2d(
+                        (if (abs(rightJoystick.y) > 0.15) {
+                            val inSpeed =
+                                if (rightJoystick.y < 0.0) rightJoystick.y + .15 else rightJoystick.y - .15
+                            (-inSpeed) * DriveConstants.MAX_SPEED
+                        } else 0.0),
+                        (if (abs(rightJoystick.x) > 0.15) {
+                            val inSpeed =
+                                if (rightJoystick.x < 0.0) rightJoystick.x + .15 else rightJoystick.x - .15
+                            (-inSpeed) * DriveConstants.MAX_SPEED
+                        } else 0.0)
+                    ),
+                    (if (abs(rightJoystick.twist) > 0.15) -rightJoystick.twist else 0.0),
+                    true
+                )
+            },
             swerveSystem
         )
         rightJoystick.button(2).onTrue(ResetSwerveFieldForward())

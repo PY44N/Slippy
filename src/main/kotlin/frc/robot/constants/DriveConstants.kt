@@ -32,7 +32,7 @@ object DriveConstants {
     const val CONVERSION_FACTOR_ANGLE: Double = 0.045777493
     const val CONVERSION_FACTOR_DRIVE: Double = 16.8
 
-    val DRIVE_PID: PIDFConfig = PIDFConfig(0.00023,  0.0000002, 1.0, 0.0)
+    val DRIVE_PID: PIDFConfig = PIDFConfig(0.00023, 0.0000002, 1.0, 0.0)
     val TWIST_PID: PIDFConfig = PIDFConfig(0.004, 0.0, 1.5, 0.0)
 
     // idk if these are right
