@@ -2,11 +2,13 @@ package frc.robot.subsystems
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
+import org.littletonrobotics.junction.Logger
 import swervelib.SwerveDrive
 import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
@@ -199,6 +201,11 @@ class SwerveSystem(private val io: SwerveSystemIO, directory: File) : SubsystemB
 
     override fun periodic() {
         io.updateInputs(inputs)
+        Logger.recordOutput("RobotAccel", swerveDrive.accel.orElse(Translation3d(0.0, 0.0, 0.0)))
+        Logger.recordOutput("RobotVelocity", swerveDrive.fieldVelocity)
+        Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d)
+        Logger.recordOutput("RobotPose", swerveDrive.pose)
+//        Logger.recordOutput()
     }
 
     fun getAlliance(): Boolean {
