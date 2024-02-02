@@ -9,18 +9,15 @@ object PathPlannerLibConstants {
     // TODO: figure out if we need to change anything here
     var replanningConfig = ReplanningConfig()
 
-    // TODO: tune
+    // TODO: tune; values are bad
     var translationPID = PIDConstants(5.0, 0.0, 0.0)
-    var rotationPID = PIDConstants(
-        YAGSLConfig.controllerConfig.headingPIDF.p,
-        YAGSLConfig.controllerConfig.headingPIDF.i,
-        YAGSLConfig.controllerConfig.headingPIDF.d,
+    var rotationPID = PIDConstants(0.0
     )
     var pathPlannerConfig = HolonomicPathFollowerConfig(
         translationPID,
         rotationPID,
-        YAGSLConfig.maxSpeedMPS,
-        YAGSLConfig.driveConfig.driveBaseRadiusMeters,
+        4.2,
+        1.0,
         replanningConfig,
     )
 }

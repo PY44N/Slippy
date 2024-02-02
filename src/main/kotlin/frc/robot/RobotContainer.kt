@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.ResetSwerveFieldForward
-import frc.robot.constants.YAGSLConfig
+//import frc.robot.constants.YAGSLConfig
 import frc.robot.subsystems.SwerveSystem
 import java.io.File
 
@@ -21,8 +21,8 @@ import java.io.File
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 object RobotContainer {
-//    val swerveSystem: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose"), 4.5)
-    val swerveSystem: SwerveSystem = SwerveSystem(YAGSLConfig)
+    val swerveSystem: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose"), 4.5)
+//    val swerveSystem: SwerveSystem = SwerveSystem(YAGSLConfig)
 
     private val leftJoystick: CommandJoystick = CommandJoystick(0)
     private val rightJoystick: CommandJoystick = CommandJoystick(1)
