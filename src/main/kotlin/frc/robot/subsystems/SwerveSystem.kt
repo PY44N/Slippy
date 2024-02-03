@@ -49,7 +49,7 @@ class SwerveSystem(private val io: SwerveSystemIO, directory: File) : SubsystemB
                 DriveConstants.ROBOT_RADIUS,
                 PathPlannerLibConstants.replanningConfig,
             ),
-            this::getAlliance,
+            this::isRed,
             this,
         )
     }
@@ -63,21 +63,13 @@ class SwerveSystem(private val io: SwerveSystemIO, directory: File) : SubsystemB
     }
 
     fun isRed(): Boolean =
-        DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+        DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red
 
     override fun periodic() {
         io.updateInputs(inputs)
         Logger.recordOutput("RobotAccel", swerveDrive.accel.orElse(Translation3d(0.0, 0.0, 0.0)))
         Logger.recordOutput("RobotVelocity", swerveDrive.fieldVelocity)
-        Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d)
+        Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d.angle)
         Logger.recordOutput("RobotPose", swerveDrive.pose)
-//        Logger.recordOutput()
-    }
-
-    fun getAlliance(): Boolean {
-        val alliance = DriverStation.getAlliance()
-        if (alliance.isPresent)
-            return alliance.get() == DriverStation.Alliance.Red
-        return false
     }
 }

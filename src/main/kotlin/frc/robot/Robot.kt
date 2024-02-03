@@ -8,7 +8,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
 
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -41,12 +40,10 @@ class Robot : LoggedRobot() {
 //                Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
-
             Constants.Mode.SIM -> {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(NT4Publisher())
             }
-
             Constants.Mode.REPLAY -> {
                 // Replaying a log, set up replay source
                 setUseTiming(false) // Run as fast as possible
