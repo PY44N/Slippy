@@ -1,5 +1,6 @@
 package frc.robot
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.util.ShooterCalibrator
@@ -147,7 +148,9 @@ class Robot : LoggedRobot() {
         val calibrator = ShooterCalibrator("/u/shooter_calibrator/test1.csv");
         calibrator.writeOut(shots)
         val readShots = calibrator.readCsv();
-
+        readShots.forEach {
+            println(it.toCSV())
+        }
     }
 
     /**
