@@ -1,16 +1,12 @@
 package frc.robot.subsystems
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.math.kinematics.ChassisSpeeds
 import org.littletonrobotics.junction.LogTable
 import org.littletonrobotics.junction.inputs.LoggableInputs
 
 interface SwerveSystemIO {
     object SwerveSystemIOInputs : LoggableInputs {
-//        var robotAccel: Translation3d = Translation3d()
+        //        var robotAccel: Translation3d = Translation3d()
 //        var robotVelocity: ChassisSpeeds = ChassisSpeeds()
 //        var gyroRotation: Rotation3d = Rotation3d()
 //        var robotPose: Pose2d = Pose2d()

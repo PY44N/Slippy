@@ -25,9 +25,9 @@ import kotlin.math.abs
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
-    val leftJoystick: CommandJoystick = CommandJoystick(0)
-    val rightJoystick: CommandJoystick = CommandJoystick(1)
-    val xboxController: CommandXboxController = CommandXboxController(2)
+    private val leftJoystick: CommandJoystick = CommandJoystick(0)
+    private val rightJoystick: CommandJoystick = CommandJoystick(1)
+    private val xboxController: CommandXboxController = CommandXboxController(2)
 
     val swerveSystem: SwerveSystem
 
@@ -44,10 +44,12 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
             }
+
             Constants.Mode.SIM -> {
                 // change these later
                 swerveSystem = SwerveSystem(SwerveSystemIOSim(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
             }
+
             Constants.Mode.REPLAY -> {
                 // change these later
                 swerveSystem = SwerveSystem(SwerveSystemIOSim(), File(Filesystem.getDeployDirectory(), "swerve/neo"))

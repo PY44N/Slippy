@@ -28,6 +28,7 @@ object DriveConstants {
     // module positions (center of robot to center of wheel)
     const val MODULE_X_OFFSET: Double = 12.375
     const val MODULE_Y_OFFSET: Double = 12.375
+    const val ROBOT_RADIUS: Double = 17.500
 
     const val CONVERSION_FACTOR_ANGLE: Double = 0.045777493
     const val CONVERSION_FACTOR_DRIVE: Double = 16.8

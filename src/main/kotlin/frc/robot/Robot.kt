@@ -1,8 +1,5 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -34,7 +31,7 @@ class Robot : LoggedRobot() {
 
         when (BuildConstants.DIRTY) {
             0 -> Logger.recordMetadata("GitDirty", "All changes committed")
-            1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
+            1 -> Logger.recordMetadata("GitDirty", "Uncommitted changes")
             else -> Logger.recordMetadata("GitDirty", "Unknown")
         }
 
@@ -126,19 +123,7 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during operator control.
      */
-    override fun teleopPeriodic() {
-        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
-        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
-        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
-
-
-        val desiredState =
-            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
-
-//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
-
-//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
-    }
+    override fun teleopPeriodic() {}
 
     /**
      * This function is called once when test mode is enabled.
