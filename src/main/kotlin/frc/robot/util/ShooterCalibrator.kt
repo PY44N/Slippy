@@ -62,7 +62,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         val speakerDistance = sqrt(d[0].pow(2) + d[1].pow(2))
         val inverseDistance = 1.0/speakerDistance
         val parallelVelocity = inverseDistance * (d[0] * v.vxMetersPerSecond + d[1] * v.vyMetersPerSecond)
-
+        val speakerRobotAngle
         lastShot = Shot(
             speakerDistance,
             parallelVelocity,
