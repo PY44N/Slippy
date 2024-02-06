@@ -40,10 +40,12 @@ class Robot : LoggedRobot() {
 //                Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.SIM -> {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.REPLAY -> {
                 // Replaying a log, set up replay source
                 setUseTiming(false) // Run as fast as possible
@@ -76,6 +78,8 @@ class Robot : LoggedRobot() {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run()
+//        if (LimelightHelpers.getTV("limelight-left"))
+//            RobotContainer.swerveSystem.swerveDrive.addVisionMeasurement(LimelightHelpers.getBotPose2d("limelight-left"), Timer.getFPGATimestamp())
     }
 
     /**
@@ -83,6 +87,7 @@ class Robot : LoggedRobot() {
      */
     override fun disabledInit() {
         CommandScheduler.getInstance().cancelAll()
+        RobotContainer.swerveSystem.swerveDrive.lockPose()
     }
 
     /**
@@ -133,20 +138,5 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during test mode.
      */
-    override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
-
-        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
-
-        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
-    }
+    override fun testPeriodic() {}
 }

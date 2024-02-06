@@ -20,6 +20,8 @@ class SwerveSystem(private val io: SwerveSystemIO, directory: File) : SubsystemB
 
     val swerveDrive: SwerveDrive
 
+    var inputRotation: Double = 0.0
+
     init {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
 
@@ -55,6 +57,7 @@ class SwerveSystem(private val io: SwerveSystemIO, directory: File) : SubsystemB
     }
 
     fun drive(translation: Translation2d, rotation: Double, fieldRelative: Boolean) {
+        inputRotation = rotation
         swerveDrive.drive(translation, rotation, fieldRelative, false)
     }
 
@@ -67,6 +70,7 @@ class SwerveSystem(private val io: SwerveSystemIO, directory: File) : SubsystemB
 
     override fun periodic() {
         io.updateInputs(inputs)
+        Logger.processInputs("SwerveSystem", inputs)
         Logger.recordOutput("RobotAccel", swerveDrive.accel.orElse(Translation3d(0.0, 0.0, 0.0)))
         Logger.recordOutput("RobotVelocity", swerveDrive.fieldVelocity)
         Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d.angle)

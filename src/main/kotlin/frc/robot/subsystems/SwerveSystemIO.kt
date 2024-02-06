@@ -6,34 +6,12 @@ import org.littletonrobotics.junction.inputs.LoggableInputs
 
 interface SwerveSystemIO {
     object SwerveSystemIOInputs : LoggableInputs {
-        //        var robotAccel: Translation3d = Translation3d()
-//        var robotVelocity: ChassisSpeeds = ChassisSpeeds()
-//        var gyroRotation: Rotation3d = Rotation3d()
-//        var robotPose: Pose2d = Pose2d()
-//
-//        var drivePositions: DoubleArray = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
-//        var driveVelocities: DoubleArray = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
-//
-//        var turnAbsolutePositions: DoubleArray = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
-//        var turnPositions: DoubleArray = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
-//        var turnVelocities: DoubleArray = doubleArrayOf(0.0, 0.0, 0.0, 0.0)
-        var inputVelocity: Translation2d = Translation2d()
-        var inputRotation: Double = 0.0
+        var givenTranslation: Translation2d = Translation2d()
+        var givenRotation: Double = 0.0
 
         override fun toLog(table: LogTable) {
-//            table.put("robotAccel", robotAccel)
-//            table.put("robotVelocity", robotVelocity)
-//            table.put("gyroRotation", gyroRotation)
-//            table.put("robotPose", robotPose)
-//
-//            table.put("drivePositions", drivePositions)
-//            table.put("driveVelocities", driveVelocities)
-//
-//            table.put("turnAbsolutePositions", turnAbsolutePositions)
-//            table.put("turnPositions", turnPositions)
-//            table.put("turnVelocities", turnVelocities)
-            table.put("inputVelocity", inputVelocity)
-            table.put("inputRotation", inputRotation)
+            table.put("givenTranslation", givenTranslation)
+            table.put("givenRotation", givenRotation)
         }
 
         override fun fromLog(table: LogTable) {
@@ -48,8 +26,8 @@ interface SwerveSystemIO {
 //            turnAbsolutePositions = table.get("turnAbsolutePositions", turnAbsolutePositions)
 //            turnPositions = table.get("turnPositions", turnPositions)
 //            turnVelocities = table.get("turnVelocities", turnVelocities)
-            inputVelocity = table.get("inputVelocity", inputVelocity)[0]
-            inputRotation = table.get("inputRotation", inputRotation)
+            givenTranslation = table.get("inputVelocity", givenTranslation)[0]
+            givenRotation = table.get("inputRotation", givenRotation)
         }
     }
 

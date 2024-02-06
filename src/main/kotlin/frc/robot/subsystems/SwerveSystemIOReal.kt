@@ -1,25 +1,12 @@
 package frc.robot.subsystems
 
+import frc.robot.RobotContainer
+import swervelib.SwerveController
+
 class SwerveSystemIOReal : SwerveSystemIO {
     override fun updateInputs(inputs: SwerveSystemIO.SwerveSystemIOInputs) {
-//        inputs.inputVelocity
-//        inputs.robotAccel = RobotContainer.swerveSystem.swerveDrive.accel.orElse(Translation3d())
-//        inputs.robotVelocity = RobotContainer.swerveSystem.swerveDrive.robotVelocity
-//        inputs.gyroRotation = RobotContainer.swerveSystem.swerveDrive.gyroRotation3d
-//        inputs.robotPose = RobotContainer.swerveSystem.swerveDrive.pose
-//
-//        for (i in 0..4) {
-//            inputs.drivePositions[i] =
-//                RobotContainer.swerveSystem.swerveDrive.modules[i].driveMotor.position
-//            inputs.driveVelocities[i] =
-//                RobotContainer.swerveSystem.swerveDrive.modules[i].driveMotor.velocity
-//
-//            inputs.turnAbsolutePositions[i] =
-//                RobotContainer.swerveSystem.swerveDrive.modules[i].absolutePosition
-//            inputs.turnPositions[i] =
-//                RobotContainer.swerveSystem.swerveDrive.modules[i].relativePosition
-//            inputs.turnVelocities[i] =
-//                RobotContainer.swerveSystem.swerveDrive.modules[i].angleMotor.velocity
-//        }
+        inputs.givenTranslation =
+            SwerveController.getTranslation2d(RobotContainer.swerveSystem.swerveDrive.robotVelocity)
+        inputs.givenRotation = RobotContainer.swerveSystem.inputRotation
     }
 }
