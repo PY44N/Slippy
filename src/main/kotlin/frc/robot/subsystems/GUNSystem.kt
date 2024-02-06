@@ -3,20 +3,18 @@ package frc.robot.subsystems
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
-class IntakeShooterSystem : SubsystemBase() {
+class GUNSystem : SubsystemBase() {
 
-    fun setDesiredPosition(angle: Rotation2d, distance: Double) {
-
-    }
-
-    fun setDesiredSpeedRPM(left: Double, right: Double) {
+    fun goToPosition(angle: Rotation2d, elevatorHeight: Double) {
 
     }
 
-    fun setDesiredSpeedPower(left: Double, right: Double) {
+    fun setSpeed(left: Double, right: Double) {
     }
 
-    fun setDesiredPositionProportion(percent: Double) {
+    fun shoot(angle: Rotation2d, elevatorHeight: Double, leftPower: Double, rightPower: Double) {
+        goToPosition(angle, elevatorHeight)
+        setSpeed(leftPower, rightPower)
     }
 
     override fun periodic() {

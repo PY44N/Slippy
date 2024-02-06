@@ -1,10 +1,7 @@
 package frc.robot
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.util.ShooterCalibrator
-import frc.robot.util.Shot
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
@@ -140,17 +137,12 @@ class Robot : LoggedRobot() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
 //        RobotContainer.swerveSystem.drive(Translation2d(0.25, 0.0), 0.0, true)
-        val shots = listOf(
-            Shot(1.0,2.0,132.0, .43),
-            Shot(12.0,12.0,132.0, .43),
-            Shot(1.0,3.0,12.0, 1.43),
-            )
-        val calibrator = ShooterCalibrator("/u/shooter_calibrator/test1.csv");
-        calibrator.writeOut(shots)
-        val readShots = calibrator.readCsv();
-        readShots.forEach {
-            println(it.toCSV())
-        }
+//        val calibrator = ShooterCalibrator("/u/shooter_calibrator/test1.csv");
+//        calibrator.writeOut(shots)
+//        val readShots = calibrator.readCsv();
+//        readShots.forEach {
+//            println(it.toCSV())
+//        }
     }
 
     /**
