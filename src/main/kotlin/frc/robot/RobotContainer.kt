@@ -21,7 +21,8 @@ import java.io.File
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 object RobotContainer {
-    val swerveSystem: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose"), 4.5)
+    val swerveSystem: SwerveSystem =
+        SwerveSystem(File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose"), 4.5)
 //    val swerveSystem: SwerveSystem = SwerveSystem(YAGSLConfig)
 
     private val leftJoystick: CommandJoystick = CommandJoystick(0)
