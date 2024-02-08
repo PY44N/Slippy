@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 class GUNSystem : SubsystemBase() {
 
-    fun goToPosition(angle: Rotation2d, elevatorHeight: Double) {
+    fun goToPosition(angle: Double, elevatorHeight: Double) {
 
     }
 
     fun setSpeed(left: Double, right: Double) {
     }
 
-    fun shoot(angle: Rotation2d, elevatorHeight: Double, leftPower: Double, rightPower: Double) {
+    fun shoot(angle: Double, elevatorHeight: Double, leftPower: Double, rightPower: Double) {
         goToPosition(angle, elevatorHeight)
         setSpeed(leftPower, rightPower)
     }

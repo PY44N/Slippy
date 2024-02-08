@@ -9,12 +9,16 @@ import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.constants.FieldConstants
 import frc.robot.constants.PathPlannerLibConstants
 import frc.robot.constants.yagsl_configs.YAGSLConfig
 import swervelib.SwerveDrive
 import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
 import java.io.File
+import kotlin.math.PI
+import kotlin.math.atan
+import kotlin.math.atan2
 
 class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
     private val autoConstraints: PathConstraints
@@ -48,22 +52,18 @@ class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
         )
     }
 
-    fun setupPathPlanner() {
-        AutoBuilder.configureHolonomic(
-            swerveDrive::getPose,
-            swerveDrive::resetOdometry,
-            swerveDrive::getRobotVelocity,
-            this::autoDrive,
-            PathPlannerLibConstants.pathPlannerConfig,
-            this::isRed,
-            this,
-        )
-    }
-
     fun drive(translation: Translation2d, rotation: Double, fieldRelative: Boolean) {
         swerveDrive.drive(translation, rotation, fieldRelative, false)
     }
 
+    fun driveSpeakerOriented(translation: Translation2d, angleOffset: Double) {
+        val p = swerveDrive.pose
+        val speakerAngle =
+            atan2(FieldConstants.SPEAKER_CENTER_Y - p.y,
+                    FieldConstants.SPEAKER_CENTER_X - p.x) + angleOffset * PI
+        // figure out sign and stuff
+        swerveDrive.drive(translation, speakerAngle, true, false)
+    }
     fun autoDrive(velocity: ChassisSpeeds) {
         swerveDrive.drive(velocity)
     }
@@ -75,7 +75,7 @@ class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
         return false
     }
 
-    private fun setupAuto() {
+    private fun setupPathPlanner() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose,
             swerveDrive::resetOdometry,

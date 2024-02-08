@@ -2,6 +2,7 @@ package frc.robot.util
 
 import edu.wpi.first.math.Vector
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.units.Angle
 import frc.robot.RobotContainer
 import frc.robot.constants.FieldConstants
 import frc.robot.subsystems.GUNSystem
@@ -20,17 +21,18 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         val header = reader.readLine()
         return reader.lineSequence()
             .filter { it.isNotBlank() }
-            .map {
-                val list = it.split(",", ignoreCase = false, limit = 8)
+            .map { line ->
+                val list = line.split(",", ignoreCase = false, limit = 9).map{it.trim().toDouble()}
                 Shot(
-                    list[0].trim().toDouble(),
-                    list[1].trim().toDouble(),
-                    list[2].trim().toDouble(),
-                    list[3].trim().toDouble(),
-                    list[4].trim().toDouble(),
-                    list[5].trim().toDouble(),
-                    list[6].trim().toDouble(),
-                    list[7].trim().toDouble(),
+                    list[0],
+                    list[1],
+                    list[2],
+                    list[3],
+                    list[4],
+                    list[5],
+                    list[6],
+                    list[7],
+                    list[8],
                     )
             }.toList()
     }
@@ -38,7 +40,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
     fun OutputStream.writeCsv(shots: List<Shot>) {
         val writer = bufferedWriter()
         if (!File(directory).exists()) {
-            writer.write(""""speakerDistance", "parallelVelocity", "perpendicularVelocity", "robotSpeakerRelativeAngle", "shooterAngle", "elevatorHeight", "leftPower", "rightPower"""")
+            writer.write(""""x", "y", "vx", "vy", "robotAngle", "shooterAngle", "elevatorHeight", "leftPower", "rightPower"""")
             writer.newLine()
         }
         shots.forEach {
@@ -54,21 +56,23 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         }
     }
 
-    fun shoot(angle: Rotation2d, elevatorHeight: Double, leftPower: Double, rightPower: Double) {
-        gun.shoot(angle, elevatorHeight, leftPower, rightPower)
+    fun shoot(shooterAngle: Double, elevatorHeight: Double, leftPower: Double, rightPower: Double) {
+        gun.shoot(shooterAngle, elevatorHeight, leftPower, rightPower)
         val botPose = RobotContainer.swerveSystem.swerveDrive.pose
         val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
-        val d = arrayOf(FieldConstants.SPEAKER_CENTER_X - botPose.x, FieldConstants.SPEAKER_CENTER_Y - botPose.y)
-        val speakerDistance = sqrt(d[0].pow(2) + d[1].pow(2))
-        val inverseDistance = 1.0/speakerDistance
-        val parallelVelocity = inverseDistance * (d[0] * v.vxMetersPerSecond + d[1] * v.vyMetersPerSecond)
-        val speakerRobotAngle
         lastShot = Shot(
-            speakerDistance,
-            parallelVelocity,
-            ,
-            ,
-
+            botPose.x,
+            botPose.y,
+            v.vxMetersPerSecond,
+            v.vyMetersPerSecond,
+            botPose.rotation.radians,
+            shooterAngle,
+            elevatorHeight,
+            leftPower,
+            rightPower,
         )
+    }
+    fun addLastShot() {
+
     }
 }
