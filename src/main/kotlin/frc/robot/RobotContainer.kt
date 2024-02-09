@@ -14,7 +14,6 @@ import frc.robot.subsystems.SwerveSystem
 import frc.robot.subsystems.SwerveSystemIOReal
 import java.io.File
 import kotlin.math.abs
-import frc.robot.constants.yagsl_configs.GoodNewsGooseConfig
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -41,17 +40,26 @@ object RobotContainer {
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
-                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy"))
+                swerveSystem = SwerveSystem(
+                    SwerveSystemIOReal(),
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose")
+                )
             }
 
             Constants.Mode.SIM -> {
                 // change these later
-                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy"))
+                swerveSystem = SwerveSystem(
+                    SwerveSystemIOReal(),
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose")
+                )
             }
 
             Constants.Mode.REPLAY -> {
                 // change these later
-                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy"))
+                swerveSystem = SwerveSystem(
+                    SwerveSystemIOReal(),
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose ")
+                )
             }
         }
         autoChooser = AutoBuilder.buildAutoChooser()

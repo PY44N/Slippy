@@ -25,9 +25,22 @@
   },
   "NetworkTables Info": {
     "AdvantageScope@1": {
+      "open": true
+    },
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
       "Publishers": {
-        "open": false
-      }
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
     },
     "visible": true
   }

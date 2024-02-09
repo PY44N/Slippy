@@ -1,9 +1,6 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import limelightlib.LimelightHelpers
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -81,18 +78,18 @@ class Robot : LoggedRobot() {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run()
-        val left = "limelight-left"
-        val right = "limelight-right"
-
-        val leftPose = LimelightHelpers.getBotPose2d(left)
-        val rightPose = LimelightHelpers.getBotPose2d(right)
-        if (LimelightHelpers.getTV(left) && LimelightHelpers.getTV(right))
-            RobotContainer.swerveSystem.swerveDrive.addVisionMeasurement(
-                Pose2d(
-                    leftPose.translation.plus(rightPose.translation).div(2.0),
-                    leftPose.rotation.plus(rightPose.rotation).div(2.0)
-                ), Timer.getFPGATimestamp()
-            )
+//        val left = "limelight-left"
+//        val right = "limelight-right"
+//
+//        val leftPose = LimelightHelpers.getBotPose2d(left)
+//        val rightPose = LimelightHelpers.getBotPose2d(right)
+//        if (LimelightHelpers.getTV(left) && LimelightHelpers.getTV(right))
+//            RobotContainer.swerveSystem.swerveDrive.addVisionMeasurement(
+//                Pose2d(
+//                    leftPose.translation.plus(rightPose.translation).div(2.0),
+//                    leftPose.rotation.plus(rightPose.rotation).div(2.0)
+//                ), Timer.getFPGATimestamp()
+//            )
     }
 
     /**
@@ -101,7 +98,7 @@ class Robot : LoggedRobot() {
     override fun disabledInit() {
         CommandScheduler.getInstance().cancelAll()
         RobotContainer.swerveSystem.swerveDrive.lockPose()
-}
+    }
 
     /**
      * This function is called periodically when disabled.
