@@ -41,7 +41,7 @@ class Robot : LoggedRobot() {
             Constants.Mode.REAL -> {
                 // Running on a real robot, log to a USB stick ("/U/logs")
 //                Logger.addDataReceiver(WPILOGWriter())
-                Logger.addDataReceiver(NT4Publisher())
+//                Logger.addDataReceiver(NT4Publisher())
             }
 
             Constants.Mode.SIM -> {
@@ -101,7 +101,7 @@ class Robot : LoggedRobot() {
     override fun disabledInit() {
         CommandScheduler.getInstance().cancelAll()
         RobotContainer.swerveSystem.swerveDrive.lockPose()
-    }
+}
 
     /**
      * This function is called periodically when disabled.
@@ -132,7 +132,7 @@ class Robot : LoggedRobot() {
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         RobotContainer.autonomousCommand.cancel()
-        RobotContainer.teleopSwerveDriveCommand.schedule()
+        RobotContainer.teleopSwerveCommand.schedule()
     }
 
     /**
@@ -151,5 +151,10 @@ class Robot : LoggedRobot() {
     /**
      * This function is called periodically during test mode.
      */
-    override fun testPeriodic() {}
+    override fun testPeriodic() {
+        RobotContainer.swerveSystem.swerveDrive.modules[0].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
+        RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
+    }
 }

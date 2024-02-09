@@ -14,6 +14,7 @@ import frc.robot.subsystems.SwerveSystem
 import frc.robot.subsystems.SwerveSystemIOReal
 import java.io.File
 import kotlin.math.abs
+import frc.robot.constants.yagsl_configs.GoodNewsGooseConfig
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,7 +30,7 @@ object RobotContainer {
 
     val swerveSystem: SwerveSystem
 
-    lateinit var teleopSwerveDriveCommand: Command
+    lateinit var teleopSwerveCommand: Command
     val autonomousCommand: Command = Commands.run({})
 
     val autoChooser: SendableChooser<Command>
@@ -40,17 +41,17 @@ object RobotContainer {
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
-                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
+                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy"))
             }
 
             Constants.Mode.SIM -> {
                 // change these later
-                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
+                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy"))
             }
 
             Constants.Mode.REPLAY -> {
                 // change these later
-                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "swerve/neo"))
+                swerveSystem = SwerveSystem(SwerveSystemIOReal(), File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy"))
             }
         }
         autoChooser = AutoBuilder.buildAutoChooser()
@@ -66,7 +67,7 @@ object RobotContainer {
      * [edu.wpi.first.wpilibj2.command.button.JoystickButton].
      */
     private fun configureButtonBindings() {
-        teleopSwerveDriveCommand = Commands.run(
+        teleopSwerveCommand = Commands.run(
             {
                 swerveSystem.drive(
                     Translation2d(
