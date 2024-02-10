@@ -58,7 +58,7 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
         )
     }
 
-    fun setupPathPlanner() {
+    private fun setupPathPlanner() {
         AutoBuilder.configureHolonomic(
             swerveDrive::getPose,
             swerveDrive::resetOdometry,

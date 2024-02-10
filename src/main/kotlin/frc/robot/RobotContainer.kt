@@ -56,7 +56,7 @@ object RobotContainer {
                 // change these later
                 swerveSystem = SwerveSystem(
                     SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy ")
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
                 )
             }
         }
