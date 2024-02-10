@@ -1,8 +1,5 @@
 package frc.robot.constants.yagsl_configs
 
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.util.Units
 import swervelib.encoders.SwerveAbsoluteEncoder
 import swervelib.imu.SwerveIMU
 import swervelib.motors.SwerveMotor
@@ -30,6 +27,7 @@ class YAGSLConfig(
     val flTwist: SwerveMotor,
     val flTwistInverted: Boolean,
     val flEncoder: SwerveAbsoluteEncoder,
+    val flEncoderInverted: Boolean,
     val flOffset: Double,
 
     val frDrive: SwerveMotor,
@@ -37,6 +35,7 @@ class YAGSLConfig(
     val frTwist: SwerveMotor,
     val frTwistInverted: Boolean,
     val frEncoder: SwerveAbsoluteEncoder,
+    val frEncoderInverted: Boolean,
     val frOffset: Double,
 
     val brDrive: SwerveMotor,
@@ -44,6 +43,7 @@ class YAGSLConfig(
     val brTwist: SwerveMotor,
     val brTwistInverted: Boolean,
     val brEncoder: SwerveAbsoluteEncoder,
+    val brEncoderInverted: Boolean,
     val brOffset: Double,
 
     val blDrive: SwerveMotor,
@@ -51,6 +51,7 @@ class YAGSLConfig(
     val blTwist: SwerveMotor,
     val blTwistInverted: Boolean,
     val blEncoder: SwerveAbsoluteEncoder,
+    val blEncoderInverted: Boolean,
     val blOffset: Double,
 
     val drivePID: PIDFConfig,
@@ -58,48 +59,15 @@ class YAGSLConfig(
     val headingPID: PIDFConfig,
 
     ) {
-    init {
-        flDrive.setInverted(flDriveInverted)
-        flTwist.setInverted(flTwistInverted)
-        frDrive.setInverted(frDriveInverted)
-        frTwist.setInverted(frTwistInverted)
-        brDrive.setInverted(brDriveInverted)
-        brTwist.setInverted(brTwistInverted)
-        blDrive.setInverted(blDriveInverted)
-        blTwist.setInverted(blTwistInverted)
-    }
 
-
-    val kinematics = SwerveDriveKinematics(
-        Translation2d(
-            // Front Left
-            Units.inchesToMeters(moduleXOffset),
-            Units.inchesToMeters(moduleYOffset),
-        ),
-        Translation2d(
-            // Front Right
-            Units.inchesToMeters(moduleXOffset),
-            Units.inchesToMeters(-moduleYOffset),
-        ),
-        Translation2d(
-            // Back Right
-            Units.inchesToMeters(-moduleXOffset),
-            Units.inchesToMeters(-moduleYOffset),
-        ),
-        Translation2d(
-            // Back Right
-            Units.inchesToMeters(-moduleXOffset),
-            Units.inchesToMeters(moduleYOffset),
-        ),
-    )
     val moduleCharacteristics = SwerveModulePhysicalCharacteristics(
         conversionFactors,
         wheelFriction,
         optimalVoltage,
         driveCurrentLimit,
         twistCurrentLimit,
-        SlippyConfig.DRIVE_MOTOR_RAMP_RATE,
-        SlippyConfig.TWIST_MOTOR_RAMP_RATE,
+        driveRampRate,
+        twistRampRate,
     )
 
     val flConfig = SwerveModuleConfiguration(
@@ -108,11 +76,14 @@ class YAGSLConfig(
         conversionFactors,
         flEncoder,
         flOffset,
-        moduleXOffset,
+        -moduleXOffset,
         moduleYOffset,
         twistPID,
         drivePID,
         moduleCharacteristics,
+        flEncoderInverted,
+        flDriveInverted,
+        flTwistInverted,
         "Front Left Swerve Module"
     )
     val frConfig = SwerveModuleConfiguration(
@@ -122,24 +93,14 @@ class YAGSLConfig(
         frEncoder,
         frOffset,
         moduleXOffset,
-        -moduleYOffset,
+        moduleYOffset,
         twistPID,
         drivePID,
         moduleCharacteristics,
+        frEncoderInverted,
+        frDriveInverted,
+        frTwistInverted,
         "Front Right Swerve Module"
-    )
-    val brConfig = SwerveModuleConfiguration(
-        brDrive,
-        brTwist,
-        conversionFactors,
-        brEncoder,
-        brOffset,
-        -moduleXOffset,
-        -moduleYOffset,
-        twistPID,
-        drivePID,
-        moduleCharacteristics,
-        "Back Right Swerve Module"
     )
     val blConfig = SwerveModuleConfiguration(
         blDrive,
@@ -148,17 +109,36 @@ class YAGSLConfig(
         blEncoder,
         blOffset,
         -moduleXOffset,
-        moduleYOffset,
+        -moduleYOffset,
         twistPID,
         drivePID,
         moduleCharacteristics,
+        blEncoderInverted,
+        blDriveInverted,
+        blTwistInverted,
         "Back Left Swerve Module"
+    )
+    val brConfig = SwerveModuleConfiguration(
+        brDrive,
+        brTwist,
+        conversionFactors,
+        brEncoder,
+        brOffset,
+        moduleXOffset,
+        -moduleYOffset,
+        twistPID,
+        drivePID,
+        moduleCharacteristics,
+        brEncoderInverted,
+        brDriveInverted,
+        brTwistInverted,
+        "Back Right Swerve Module"
     )
 
     val driveConfig = SwerveDriveConfiguration(
-        arrayOf(flConfig, frConfig, brConfig, blConfig),
+        arrayOf(flConfig, frConfig, blConfig, brConfig),
         imu,
-        false,
+        invertedIMU,
         swervelib.math.SwerveMath.createDriveFeedforward(optimalVoltage, maxSpeedMPS, wheelFriction),
         moduleCharacteristics,
     )
