@@ -42,31 +42,29 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(
                     SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose")
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
                 )
             }
-
             Constants.Mode.SIM -> {
                 // change these later
                 swerveSystem = SwerveSystem(
                     SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose")
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
                 )
             }
-
             Constants.Mode.REPLAY -> {
                 // change these later
                 swerveSystem = SwerveSystem(
                     SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose ")
+                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy ")
                 )
             }
         }
         autoChooser = AutoBuilder.buildAutoChooser()
+        SmartDashboard.putData("Auto Chooser", autoChooser)
+
         // Configure the button bindings
         configureButtonBindings()
-
-        SmartDashboard.putData("Auto Chooser", autoChooser)
     }
 
     /**
