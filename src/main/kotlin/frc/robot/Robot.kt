@@ -6,7 +6,6 @@ import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -117,6 +116,7 @@ class Robot : LoggedRobot() {
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         autonomousCommand?.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
+        RobotContainer.teleopElevateCommand.schedule()
 
     }
 
