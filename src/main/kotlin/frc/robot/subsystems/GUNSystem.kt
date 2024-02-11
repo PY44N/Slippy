@@ -16,7 +16,8 @@ import com.revrobotics.CANSparkBase.ControlType.kSmartMotion
 enum class GUNPosition {
     AMP,
     SPEAKER,
-    INTAKE
+    INTAKE,
+    STOW,
 }
 
 class GUNSystem() : SubsystemBase() {
@@ -101,10 +102,12 @@ class GUNSystem() : SubsystemBase() {
     }
 
     fun setDesiredPosition(position: Double) {
+        positionSetPoint = position
         positionPID.setReference(position, kSmartMotion)
     }
 
     fun setDesiredRotation(angle: Double) {
+        rotationSetPoint = angle
         rotationPID.setReference(angle, kSmartMotion)
     }
 
@@ -263,73 +266,60 @@ class GUNSystem() : SubsystemBase() {
         */
         when(targetPosition) {
             GUNPosition.AMP -> {
-                if(rotationSetPoint != AMP_ANGLE) {
-                    rotationSetPoint = AMP_ANGLE
-                    rotationPID.setReference(rotationSetPoint, CANSparkBase.ControlType.kSmartMotion)
-                }
+                if(rotationSetPoint != AMP_ANGLE)
+                    setDesiredRotation(AMP_ANGLE)
                 if(positionSetPoint != AMP_POSITION) {
-                    if(getPosition() > CROSSBAR_TOP) {
+                    if(isDefinitelyAboveCrossbar || getPosition() > CROSSBAR_TOP) {
                         isDefinitelyAboveCrossbar = true
-                        positionSetPoint = AMP_POSITION
-                        positionPID.setReference(positionSetPoint, CANSparkBase.ControlType.kSmartMotion)
+                        setDesiredPosition(AMP_POSITION)
                     }
-                    else if (getRotation() > MIN_SAFE_ANGLE) {
-                        positionSetPoint = AMP_POSITION
-                        positionPID.setReference(positionSetPoint, CANSparkBase.ControlType.kSmartMotion)
-                    }
+                    else if (getRotation() > MIN_SAFE_ANGLE)
+                        setDesiredPosition(AMP_POSITION)
                 }
             }
             GUNPosition.INTAKE -> {
                 isDefinitelyAboveCrossbar = false
                 if(rotationSetPoint != INTAKE_ANGLE) {
-                    if(getPosition() < CROSSBAR_BOTTOM) {
-                        rotationSetPoint = INTAKE_ANGLE
-                        rotationPID.setReference(rotationSetPoint, kSmartMotion)
-                    }
-                    else if(rotationSetPoint != TARGET_SAFE_ANGLE) {
-                        rotationSetPoint = TARGET_SAFE_ANGLE
-                        rotationPID.setReference(rotationSetPoint, kSmartMotion)
-                    }
+                    if(getPosition() < CROSSBAR_BOTTOM)
+                        setDesiredRotation(INTAKE_ANGLE)
+                    else if(rotationSetPoint != TARGET_SAFE_ANGLE)
+                        setDesiredRotation(TARGET_SAFE_ANGLE)
                 }
                 if(positionSetPoint != INTAKE_POSITION) {
-                    if(getRotation() > MIN_SAFE_ANGLE) {
-                        positionSetPoint = INTAKE_POSITION
-                        positionPID.setReference(positionSetPoint, kSmartMotion)
-                    }
-                    else if(positionSetPoint != CROSSBAR_TOP) {
-                        positionSetPoint = CROSSBAR_TOP
-                        positionPID.setReference(positionSetPoint, kSmartMotion)
-                    }
+                    if(getRotation() > MIN_SAFE_ANGLE)
+                        setDesiredPosition(INTAKE_POSITION)
+                    else if(positionSetPoint != CROSSBAR_TOP)
+                        setDesiredPosition(CROSSBAR_TOP)
                 }
             }
             GUNPosition.SPEAKER -> {
-                if(isDefinitelyAboveCrossbar) {
-                    if(rotationSetPoint != shootingAngle) {
-                        rotationSetPoint = shootingAngle
-                        setDesiredRotation(rotationSetPoint)
-                    }
-                }
                 if(rotationSetPoint != shootingAngle) {
-                    if(positionSetPoint != SPEAKER_POSITION) {
-                        val currentPosition = getPosition()
-                        if (getPosition() < CROSSBAR_BOTTOM) {
-                            rotationSetPoint = TARGET_SAFE_ANGLE
-                            rotationPID.setReference(rotationSetPoint, kSmartMotion)
-                        } else if (rotationSetPoint != TARGET_SAFE_ANGLE) {
-                            rotationSetPoint = TARGET_SAFE_ANGLE
-                            rotationPID.setReference(rotationSetPoint, kSmartMotion)
-                        }
-                    }
+                    if(isDefinitelyAboveCrossbar || getPosition() > CROSSBAR_TOP) {
+                        isDefinitelyAboveCrossbar = true
+                        setDesiredRotation(shootingAngle) // maybe no
+                    } else if (rotationSetPoint != TARGET_SAFE_ANGLE)
+                        setDesiredRotation(TARGET_SAFE_ANGLE)
                 }
-                if(positionSetPoint != INTAKE_POSITION) {
-                    if(getRotation() > MIN_SAFE_ANGLE) {
-                        positionSetPoint = INTAKE_POSITION
-                        positionPID.setReference(positionSetPoint, kSmartMotion)
-                    }
-                    else if(positionSetPoint != CROSSBAR_TOP) {
-                        positionSetPoint = CROSSBAR_TOP
-                        positionPID.setReference(positionSetPoint, kSmartMotion)
-                    }
+                if(positionSetPoint != SPEAKER_POSITION) {
+                    if(isDefinitelyAboveCrossbar || getRotation() > MIN_SAFE_ANGLE)
+                        setDesiredPosition(SPEAKER_POSITION)
+                    else
+                        setDesiredPosition(CROSSBAR_BOTTOM)
+                }
+            }
+            GUNPosition.STOW -> {
+                if(rotationSetPoint != STOW_ANGLE) {
+                    if(isDefinitelyAboveCrossbar || getPosition() > CROSSBAR_TOP) {
+                        isDefinitelyAboveCrossbar = true
+                        setDesiredRotation(STOW_ANGLE) // maybe no
+                    } else if (rotationSetPoint != TARGET_SAFE_ANGLE)
+                        setDesiredRotation(TARGET_SAFE_ANGLE)
+                }
+                if(positionSetPoint != STOW_POSITION) {
+                    if(isDefinitelyAboveCrossbar || getRotation() > MIN_SAFE_ANGLE)
+                        setDesiredPosition(STOW_POSITION)
+                    else
+                        setDesiredPosition(CROSSBAR_BOTTOM)
                 }
             }
         }
@@ -364,6 +354,8 @@ class GUNSystem() : SubsystemBase() {
         var INTAKE_ANGLE: Double = TODO()
         var CROSSBAR_BOTTOM: Double = TODO()
         var CROSSBAR_TOP: Double = TODO()
+        var STOW_POSITION: Double = TODO()
+        var STOW_ANGLE: Double = TODO()
 
         private const val SMART_MOTION_SLOT = 0
 
