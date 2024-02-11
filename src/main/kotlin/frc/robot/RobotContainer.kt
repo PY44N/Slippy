@@ -23,8 +23,8 @@ import kotlin.math.abs
  */
 object RobotContainer {
     // The robot's subsystems and commands are defined here...
-    private val leftJoystick: CommandJoystick = CommandJoystick(0)
-    private val rightJoystick: CommandJoystick = CommandJoystick(1)
+    val leftJoystick: CommandJoystick = CommandJoystick(0)
+    val rightJoystick: CommandJoystick = CommandJoystick(1)
     private val xboxController: CommandXboxController = CommandXboxController(2)
 
     val swerveSystem: SwerveSystem

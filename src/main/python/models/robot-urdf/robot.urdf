@@ -1,0 +1,221 @@
+<robot name="onshape">
+<link name="back_plate">
+<visual>
+<origin xyz="-0.27946314688390500036 0.080122349421482996767 0.30708643740834667968" rpy="1.5707963267948972241 -4.4392898328505145536e-29 1.986798540846724224e-16" />
+<geometry>
+<mesh filename="package:///pinion_mount_plate.stl"/>
+</geometry>
+<material name="pinion_mount_plate_material">
+<color rgba="0.98039215686274505668 0.71372549019607844922 0.0039215686274509803377 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.27946314688390500036 0.080122349421482996767 0.30708643740834667968" rpy="1.5707963267948972241 -4.4392898328505145536e-29 1.986798540846724224e-16" />
+<geometry>
+<mesh filename="package:///pinion_mount_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-0.24771314688390527747 -0.24747071711193288635 0.15748602989519722151" rpy="1.5707963267948983344 -3.9735970816934637322e-16 2.0091301179847640916e-30" />
+<geometry>
+<mesh filename="package:///drivemotorplate.stl"/>
+</geometry>
+<material name="drivemotorplate_material">
+<color rgba="0.76862745098039220171 0.88627450980392152857 0.95294117647058818044 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.24771314688390527747 -0.24747071711193288635 0.15748602989519722151" rpy="1.5707963267948983344 -3.9735970816934637322e-16 2.0091301179847640916e-30" />
+<geometry>
+<mesh filename="package:///drivemotorplate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904936258747e-05 0.07603404057407378569 -0.18438032377469543155" rpy="0 -0 0" />
+<geometry>
+<mesh filename="package:///front_plate.stl"/>
+</geometry>
+<material name="front_plate_material">
+<color rgba="0.64705882352941179736 0.64705882352941179736 0.64705882352941179736 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904936258747e-05 0.07603404057407378569 -0.18438032377469543155" rpy="0 -0 0" />
+<geometry>
+<mesh filename="package:///front_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-0.0064131468839051571779 -0.45860688536203020327 -0.045524743653723005743" rpy="-0.82370367220084905746 -1.9372986195904753629e-42 2.4651903290113170952e-32" />
+<geometry>
+<mesh filename="package:///trunk_mount_plate.stl"/>
+</geometry>
+<material name="trunk_mount_plate_material">
+<color rgba="0.91764705882352937127 0.91764705882352937127 0.91764705882352937127 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.0064131468839051571779 -0.45860688536203020327 -0.045524743653723005743" rpy="-0.82370367220084905746 -1.9372986195904753629e-42 2.4651903290113170952e-32" />
+<geometry>
+<mesh filename="package:///trunk_mount_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-0.0064131468839051511063 0.21879338010305660056 -0.40913300447793127246" rpy="0.4903774135897936981 -1.9057258678230787773e-42 2.4651903290153414493e-32" />
+<geometry>
+<mesh filename="package:///trunk_mount_plate.stl"/>
+</geometry>
+<material name="trunk_mount_plate_material">
+<color rgba="0.91764705882352937127 0.91764705882352937127 0.91764705882352937127 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.0064131468839051511063 0.21879338010305660056 -0.40913300447793127246" rpy="0.4903774135897936981 -1.9057258678230787773e-42 2.4651903290153414493e-32" />
+<geometry>
+<mesh filename="package:///trunk_mount_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904936177432e-05 0.28400583271445289935 -0.28868142743722186028" rpy="0.17453292519943355843 -0 0" />
+<geometry>
+<mesh filename="package:///top_gusset.stl"/>
+</geometry>
+<material name="top_gusset_material">
+<color rgba="0.97254901960784312376 0.52941176470588235947 0.0039215686274509803377 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904936177432e-05 0.28400583271445289935 -0.28868142743722186028" rpy="0.17453292519943355843 -0 0" />
+<geometry>
+<mesh filename="package:///top_gusset.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904936258747e-05 0.30782030796782916537 0.20264234323464791476" rpy="3.141592653589793116 -0 0" />
+<geometry>
+<mesh filename="package:///back_plate.stl"/>
+</geometry>
+<material name="back_plate_material">
+<color rgba="0.2313725490196078538 0.38039215686274507888 0.7058823529411765163 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904936258747e-05 0.30782030796782916537 0.20264234323464791476" rpy="3.141592653589793116 -0 0" />
+<geometry>
+<mesh filename="package:///back_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904990861879e-05 0.87593556539063310851 0.19662583193723223718" rpy="-0 -1.570796326794896336 0" />
+<geometry>
+<mesh filename="package:///bottom_elevator_top_gusset.stl"/>
+</geometry>
+<material name="bottom_elevator_top_gusset_material">
+<color rgba="0.2313725490196078538 0.38039215686274507888 0.7058823529411765163 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904990861879e-05 0.87593556539063310851 0.19662583193723223718" rpy="-0 -1.570796326794896336 0" />
+<geometry>
+<mesh filename="package:///bottom_elevator_top_gusset.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904936245194e-05 -0.33168015796168576204 -0.38431903578006154643" rpy="-1.0438582299999994429 -0 0" />
+<geometry>
+<mesh filename="package:///top_gusset.stl"/>
+</geometry>
+<material name="top_gusset_material">
+<color rgba="0.97254901960784312376 0.52941176470588235947 0.0039215686274509803377 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904936245194e-05 -0.33168015796168576204 -0.38431903578006154643" rpy="-1.0438582299999994429 -0 0" />
+<geometry>
+<mesh filename="package:///top_gusset.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904936258747e-05 -0.29076196103157087025 -0.18334733828143817691" rpy="0 -0 0" />
+<geometry>
+<mesh filename="package:///back_plate.stl"/>
+</geometry>
+<material name="back_plate_material">
+<color rgba="0.2313725490196078538 0.38039215686274507888 0.7058823529411765163 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904936258747e-05 -0.29076196103157087025 -0.18334733828143817691" rpy="0 -0 0" />
+<geometry>
+<mesh filename="package:///back_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-0.24771314688390522196 -0.23621206160404073504 0.16113179346599124098" rpy="-1.570796326794896558 -3.9735970816938808424e-16 3.944304526105040635e-31" />
+<geometry>
+<mesh filename="package:///drivemotorplate.stl"/>
+</geometry>
+<material name="drivemotorplate_material">
+<color rgba="0.76862745098039220171 0.88627450980392152857 0.95294117647058818044 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.24771314688390522196 -0.23621206160404073504 0.16113179346599124098" rpy="-1.570796326794896558 -3.9735970816938808424e-16 3.944304526105040635e-31" />
+<geometry>
+<mesh filename="package:///drivemotorplate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-0.057213146883904761331 0.78449154476818461212 0.14973866948552433387" rpy="-3.3306690738754696213e-16 -1.570796326794896558 0" />
+<geometry>
+<mesh filename="package:///bottom_elevator_bottom_gusset.stl"/>
+</geometry>
+<material name="bottom_elevator_bottom_gusset_material">
+<color rgba="0.91764705882352937127 0.91764705882352937127 0.91764705882352937127 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.057213146883904761331 0.78449154476818461212 0.14973866948552433387" rpy="-3.3306690738754696213e-16 -1.570796326794896558 0" />
+<geometry>
+<mesh filename="package:///bottom_elevator_bottom_gusset.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.3146883904936218089e-05 -0.44912050105545187062 0.16985355024891657383" rpy="-3.1415926535897926719 -0 0" />
+<geometry>
+<mesh filename="package:///front_plate.stl"/>
+</geometry>
+<material name="front_plate_material">
+<color rgba="0.64705882352941179736 0.64705882352941179736 0.64705882352941179736 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.3146883904936218089e-05 -0.44912050105545187062 0.16985355024891657383" rpy="-3.1415926535897926719 -0 0" />
+<geometry>
+<mesh filename="package:///front_plate.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-0.27946314688390505587 0.12616614429329062186 0.024267569117446596838" rpy="-1.5707963267948439334 1.2767564783189627592e-15 -8.8817841970011911867e-16" />
+<geometry>
+<mesh filename="package:///pinion_mount_plate.stl"/>
+</geometry>
+<material name="pinion_mount_plate_material">
+<color rgba="0.98039215686274505668 0.71372549019607844922 0.0039215686274509803377 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.27946314688390505587 0.12616614429329062186 0.024267569117446596838" rpy="-1.5707963267948439334 1.2767564783189627592e-15 -8.8817841970011911867e-16" />
+<geometry>
+<mesh filename="package:///pinion_mount_plate.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="-0.0032381468839050957242 0.008395850875750980255 0.12032566333372587963" rpy="0 0 0"/>
+<mass value="0.64853005774865024602" />
+<inertia ixx="0.020786321639025988339" ixy="-6.0066110459652579554e-18"  ixz="-2.6481279532527602656e-18" iyy="0.0055208287178632811654" iyz="0.0021700847095264090558" izz="0.015269851313371640353" />
+</inertial>
+</link>
+
+
+</robot>
