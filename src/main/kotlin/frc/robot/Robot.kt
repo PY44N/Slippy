@@ -58,9 +58,9 @@ class Robot : LoggedRobot() {
             }
         }
 
-        Logger.start()
+//        RobotContainer
 
-        RobotContainer
+//        Logger.start()
         /* User can change the configs if they want, or leave it empty for factory-default */
 //        canCoder.getConfigurator().apply(toApply)
     }

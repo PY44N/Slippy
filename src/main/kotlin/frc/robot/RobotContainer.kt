@@ -80,7 +80,7 @@ object RobotContainer {
                         (if (abs(rightJoystick.y) > 0.15) -rightJoystick.y * DriveConstants.MAX_SPEED else 0.0),
                         (if (abs(rightJoystick.x) > 0.15) -rightJoystick.x * DriveConstants.MAX_SPEED else 0.0)
                     ),
-                    (if (abs(rightJoystick.twist) > 0.15) -rightJoystick.twist else 0.0),
+                    (if (abs(rightJoystick.twist) > 0.15) -rightJoystick.twist * DriveConstants.MAX_ANGLE_SPEED else 0.0),
                     true
                 )
             },

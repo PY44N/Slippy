@@ -16,6 +16,8 @@ object DriveConstants {
 
     const val MAX_SPEED: Double = 4.7
 
+    const val MAX_ANGLE_SPEED: Double = 4.0
+
     const val FRONT_LEFT_ENCODER_ID: Int = 2
     const val FRONT_RIGHT_ENCODER_ID: Int = 4
     const val BACK_RIGHT_ENCODER_ID: Int = 3
