@@ -6,35 +6,23 @@ import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
 class Robot : LoggedRobot() {
 
-    //    private val canCoder: CANcoder = CANcoder(1)
     private var autonomousCommand: Command? = null
 
-    /**
-     * This function is run when the robot is first started up and should be used for any
-     * initialization code.
-     */
     override fun robotInit() {
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        // autonomous chooser on the dashboard.
-        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME)
-        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE)
-        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA)
-        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE)
-        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH)
 
-        when (BuildConstants.DIRTY) {
-            0 -> Logger.recordMetadata("GitDirty", "All changes committed")
-            1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
-            else -> Logger.recordMetadata("GitDirty", "Unknown")
-        }
+//        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME)
+//        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE)
+//        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA)
+//        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE)
+//        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH)
+//
+//        when (BuildConstants.DIRTY) {
+//            0 -> Logger.recordMetadata("GitDirty", "All changes committed")
+//            1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
+//            else -> Logger.recordMetadata("GitDirty", "Unknown")
+//        }
 
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
@@ -81,33 +69,18 @@ class Robot : LoggedRobot() {
         CommandScheduler.getInstance().run()
     }
 
-    /**
-     * This function is called once each time the robot enters Disabled mode.
-     */
     override fun disabledInit() {}
 
-    /**
-     * This function is called periodically when disabled.
-     */
     override fun disabledPeriodic() {}
 
-    /**
-     * This autonomous runs the autonomous command selected by your [RobotContainer] class.
-     */
     override fun autonomousInit() {
         // Schedule the autonomous command (example)
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
         autonomousCommand?.schedule()
     }
 
-    /**
-     * This function is called periodically during autonomous.
-     */
     override fun autonomousPeriodic() {}
 
-    /**
-     * This function is called once when teleop is enabled.
-     */
     override fun teleopInit() {
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
@@ -120,9 +93,6 @@ class Robot : LoggedRobot() {
 
     }
 
-    /**
-     * This function is called periodically during operator control.
-     */
     override fun teleopPeriodic() {
 
 //        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
@@ -130,9 +100,6 @@ class Robot : LoggedRobot() {
 //        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
     }
 
-    /**
-     * This function is called once when test mode is enabled.
-     */
     override fun testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
@@ -145,20 +112,5 @@ class Robot : LoggedRobot() {
 //        }
     }
 
-    /**
-     * This function is called periodically during test mode.
-     */
-    override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].driveMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].driveMotor.set(.2)
-
-        RobotContainer.swerveSystem.swerveDrive.modules[0].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].angleMotor.set(.2)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].angleMotor.set(.2)
-
-//        SmartDashboard.putNumber("Back Left Angle", encoder.position.value)
-    }
+    override fun testPeriodic() {}
 }
