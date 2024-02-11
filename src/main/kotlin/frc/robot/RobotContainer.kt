@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.commands.TeleopSwerveDriveCommand
 import frc.robot.constants.DriveConstants
 import frc.robot.subsystems.SwerveSystem
 import frc.robot.subsystems.SwerveSystemIOReal
@@ -73,19 +74,21 @@ object RobotContainer {
      * [edu.wpi.first.wpilibj2.command.button.JoystickButton].
      */
     private fun configureButtonBindings() {
-        teleopSwerveCommand = Commands.run(
-            {
-                swerveSystem.drive(
-                    Translation2d(
-                        (if (abs(rightJoystick.y) > 0.15) -rightJoystick.y * DriveConstants.MAX_SPEED else 0.0),
-                        (if (abs(rightJoystick.x) > 0.15) -rightJoystick.x * DriveConstants.MAX_SPEED else 0.0)
-                    ),
-                    (if (abs(rightJoystick.twist) > 0.15) -rightJoystick.twist * DriveConstants.MAX_ANGLE_SPEED else 0.0),
-                    true
-                )
-            },
-            swerveSystem
-        )
+//        teleopSwerveCommand = Commands.run(
+//            {
+//                swerveSystem.drive(
+//                    Translation2d(
+//                        (if (abs(rightJoystick.y) > 0.15) -rightJoystick.y * DriveConstants.MAX_SPEED else 0.0),
+//                        (if (abs(rightJoystick.x) > 0.15) -rightJoystick.x * DriveConstants.MAX_SPEED else 0.0)
+//                    ),
+//                    (if (abs(rightJoystick.twist) > 0.15) -rightJoystick.twist * DriveConstants.MAX_ANGLE_SPEED else 0.0),
+//                    true
+//                )
+//            },
+//            swerveSystem
+//        )
+        teleopSwerveCommand = TeleopSwerveDriveCommand()
+        teleopSwerveCommand.schedule()
         rightJoystick.button(2).onTrue(Commands.run({ swerveSystem.swerveDrive.zeroGyro() }))
     }
 }

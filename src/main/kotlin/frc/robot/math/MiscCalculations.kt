@@ -22,13 +22,19 @@ object MiscCalculations {
      *
      * @return The deadzoned value.
      */
-    fun calculateDeadzone(input: Double, deadzoneValue: Double): Double = if (abs(input) > deadzoneValue) {
-        (input + if (input > 0.0) {
-            -deadzoneValue
-        } else {
-            deadzoneValue
-        }) / (deadzoneValue)
-    } else 0.0
+    fun calculateDeadzone(input: Double, deadzoneValue: Double): Double {
+        if (abs(input) > deadzoneValue) {
+            if (input > 0) {
+                return (input - deadzoneValue) * (1 / (1 - deadzoneValue))
+            }
+            else {
+                return (input + deadzoneValue) * (1 / (1 - deadzoneValue))
+            }
+        }
+        else {
+            return 0.0
+        }
+    }
 
     /**
      * A function to get the current time in milliseconds

@@ -16,9 +16,16 @@ class TeleopSwerveDriveCommand : Command() {
         val deadzoneX=.15
         val deadzoneY=.15
         val deadzoneTwist=.15
-        val twoJoysticks=false
+        val twoJoysticks=true
 
-        val twist = if (twoJoysticks) {-RobotContainer.leftJoystick.y} else {RobotContainer.rightJoystick.twist}
+        val twist = if (twoJoysticks) {-RobotContainer.leftJoystick.x} else {RobotContainer.rightJoystick.twist}
+
+//        println(twist)
+
+        //Milan: trust me bro this'll work totally definitely please don't question it
+        val throttle = ((RobotContainer.rightJoystick.throttle * -1) + 1) / 2
+
+//        println(throttle)
 
         RobotContainer.swerveSystem.drive(
                 Translation2d(
@@ -32,10 +39,10 @@ class TeleopSwerveDriveCommand : Command() {
                                     if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
                             (-inSpeed) * DriveConstants.MAX_SPEED
                         } else 0.0)**/
-                        calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneX) * DriveConstants.MAX_SPEED,
-                        (-calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneY)) * DriveConstants.MAX_SPEED
+                        -calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
+                        -calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneY) * DriveConstants.MAX_SPEED * throttle
                 ),
-                calculateDeadzone(twist, deadzoneTwist),
+                calculateDeadzone(twist, deadzoneTwist) * throttle * DriveConstants.MAX_ANGLE_SPEED,
                 true
         )
     }
