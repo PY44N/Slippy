@@ -22,7 +22,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         return reader.lineSequence()
             .filter { it.isNotBlank() }
             .map { line ->
-                val list = line.split(",", ignoreCase = false, limit = 9).map{it.trim().toDouble()}
+                val list = line.split(",", ignoreCase = false, limit = 8).map{it.trim().toDouble()}
                 Shot(
                     list[0],
                     list[1],
@@ -32,7 +32,6 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
                     list[5],
                     list[6],
                     list[7],
-                    list[8],
                     )
             }.toList()
     }
@@ -56,8 +55,8 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         }
     }
 
-    fun shoot(shooterAngle: Double, elevatorHeight: Double, leftPower: Double, rightPower: Double) {
-        gun.shoot(shooterAngle, elevatorHeight, leftPower, rightPower)
+    fun shoot(shooterAngle: Double, leftPower: Double, rightPower: Double) {
+        gun.shoot(shooterAngle,  leftPower, rightPower)
         val botPose = RobotContainer.swerveSystem.swerveDrive.pose
         val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
         lastShot = Shot(
@@ -67,7 +66,6 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
             v.vyMetersPerSecond,
             botPose.rotation.radians,
             shooterAngle,
-            elevatorHeight,
             leftPower,
             rightPower,
         )

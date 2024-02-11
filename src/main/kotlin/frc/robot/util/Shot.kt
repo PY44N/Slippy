@@ -12,12 +12,11 @@ data class Shot(
     val vy: Double,
     val robotAngle: Double,
     val shooterAngle: Double,
-    val elevatorHeight: Double,
     val leftPower: Double,
     val rightPower: Double,
 ) {
     fun toCSV(): String {
-        return "${x}, ${y}, ${vx}, ${vy}, ${robotAngle}, ${shooterAngle}, ${elevatorHeight}, ${leftPower}, ${rightPower}"
+        return "${x}, ${y}, ${vx}, ${vy}, ${robotAngle}, ${shooterAngle}, ${leftPower}, ${rightPower}"
     }
 }
 
@@ -27,7 +26,6 @@ data class PolarShot(
     val leftPower: Double,
     val rightPower: Double,
     val shooterAngle: Double,
-    val elevatorHeight: Double,
     val vInward: Double,
     val vTangent: Double,
 ) {
@@ -44,7 +42,6 @@ data class PolarShot(
             shot.leftPower,
             shot.rightPower,
             shot.shooterAngle,
-            shot.elevatorHeight,
             perpendicularVelocity,
             parallelVelocity,
         )
