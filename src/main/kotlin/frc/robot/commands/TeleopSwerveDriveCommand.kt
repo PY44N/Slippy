@@ -3,6 +3,7 @@ package frc.robot.commands
 import MiscCalculations.calculateDeadzone
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.Robot
 import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
 
@@ -26,6 +27,14 @@ class TeleopSwerveDriveCommand : Command() {
         val throttle = ((RobotContainer.rightJoystick.throttle * -1) + 1) / 2
 
 //        println(throttle)
+
+        if (RobotContainer.rightJoystick.button(2).asBoolean) {
+//            println("pressed reset")
+            RobotContainer.swerveSystem.swerveDrive.zeroGyro()
+        }
+//        else {
+//            println("not pressed reset")
+//        }
 
         RobotContainer.swerveSystem.drive(
                 Translation2d(

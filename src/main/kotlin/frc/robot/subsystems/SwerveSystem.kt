@@ -56,6 +56,8 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
             swerveDrive.maximumVelocity, 4.0,
             swerveDrive.maximumAngularVelocity, Units.degreesToRadians(720.0)
         )
+
+        swerveDrive.setHeadingCorrection(true)
     }
 
     private fun setupPathPlanner() {
@@ -82,7 +84,9 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
 
     fun drive(translation: Translation2d, rotation: Double, fieldRelative: Boolean) {
         inputRotation = rotation
-        swerveDrive.drive(translation, rotation, fieldRelative, false)
+//        swerveDrive.drive(translation, rotation, fieldRelative, false)
+        swerveDrive.drive(translation, rotation, true, false)
+
     }
 
     fun autoDrive(velocity: ChassisSpeeds) {

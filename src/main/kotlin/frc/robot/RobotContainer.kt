@@ -64,6 +64,9 @@ object RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser()
         SmartDashboard.putData("Auto Chooser", autoChooser)
 
+        teleopSwerveCommand = TeleopSwerveDriveCommand()
+        teleopSwerveCommand.schedule()
+
         // Configure the button bindings
         configureButtonBindings()
     }
@@ -87,8 +90,7 @@ object RobotContainer {
 //            },
 //            swerveSystem
 //        )
-        teleopSwerveCommand = TeleopSwerveDriveCommand()
-        teleopSwerveCommand.schedule()
-        rightJoystick.button(2).onTrue(Commands.run({ swerveSystem.swerveDrive.zeroGyro() }))
+
+//        rightJoystick.button(2).onTrue(Commands.run({ swerveSystem.swerveDrive.zeroGyro() }))
     }
 }
