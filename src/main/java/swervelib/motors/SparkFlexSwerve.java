@@ -40,11 +40,11 @@ public class SparkFlexSwerve extends SwerveMotor {
     /**
      * An {@link Alert} for if there is an error configuring the motor.
      */
-    private Alert failureConfiguring;
+    private final Alert failureConfiguring;
     /**
      * An {@link Alert} for if the absolute encoder's offset is set in the json instead of the hardware client.
      */
-    private Alert absoluteEncoderOffsetWarning;
+    private final Alert absoluteEncoderOffsetWarning;
 
     /**
      * Initialize the swerve motor.
