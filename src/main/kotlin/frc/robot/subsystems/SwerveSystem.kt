@@ -4,12 +4,14 @@ import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathConstraints
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig
 import com.pathplanner.lib.util.PIDConstants
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.DriveConstants
@@ -20,12 +22,18 @@ import swervelib.SwerveDrive
 import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
 import java.io.File
+import kotlin.math.abs
 
 class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive) : SubsystemBase() {
     private val inputs: SwerveSystemIO.SwerveSystemIOInputs = SwerveSystemIO.SwerveSystemIOInputs
 
     var inputRotation: Double = 0.0
     private val autoConstraints: PathConstraints
+
+    private val xPID: PIDController = PIDController(.1, 0.0, 0.01)
+    private val yPID: PIDController = PIDController(.1, 0.0, 0.01)
+
+    private val PIDDeadzone = .005;
 
     constructor(io: SwerveSystemIO, config: YAGSLConfig) : this(
         io,
@@ -46,9 +54,11 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
     )
 
     init {
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.NONE
 
-        swerveDrive.setHeadingCorrection(false)
+//        swerveDrive.setHeadingCorrection(false)
+        swerveDrive.chassisVelocityCorrection = true
+        swerveDrive.setHeadingCorrection(true)
         swerveDrive.setMotorIdleMode(false)
         swerveDrive.pushOffsetsToControllers()
         setupPathPlanner()
@@ -57,7 +67,6 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
             swerveDrive.maximumAngularVelocity, Units.degreesToRadians(720.0)
         )
 
-        swerveDrive.setHeadingCorrection(true)
     }
 
     private fun setupPathPlanner() {
@@ -84,6 +93,24 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
 
     fun drive(translation: Translation2d, rotation: Double, fieldRelative: Boolean) {
         inputRotation = rotation
+
+        var translation = translation;
+
+        xPID.setpoint = translation.x
+        yPID.setpoint = translation.y
+
+        val xPIDOut = xPID.calculate(swerveDrive.robotVelocity.vxMetersPerSecond);
+        val yPIDOut = yPID.calculate(swerveDrive.robotVelocity.vyMetersPerSecond);
+
+        SmartDashboard.putNumber("xPID", xPIDOut)
+        SmartDashboard.putNumber("yPID", yPIDOut)
+
+        if (abs(xPIDOut) > PIDDeadzone || abs(yPIDOut) > PIDDeadzone) {
+            if (abs(translation.x) > .05 && abs(translation.y) > .05 && abs(rotation) > .1) {
+                translation = Translation2d(translation.x + xPIDOut, translation.y + yPIDOut);
+            }
+        }
+
 //        swerveDrive.drive(translation, rotation, fieldRelative, false)
         swerveDrive.drive(translation, rotation, true, false)
 
