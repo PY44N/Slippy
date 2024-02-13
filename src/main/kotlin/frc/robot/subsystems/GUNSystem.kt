@@ -321,6 +321,5 @@ class GUNSystem : SubsystemBase() {
 //        }
     }
 
-    override fun simulationPeriodic() {
-    }
+    override fun simulationPeriodic() {}
 }
