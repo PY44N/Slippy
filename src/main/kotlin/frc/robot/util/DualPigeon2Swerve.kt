@@ -31,7 +31,7 @@ class DualPigeon2Swerve(canIDNormal: Int, canIDReverse: Int, canbusName: String,
     }
 
     override fun setOffset(offset: Rotation3d) {
-        this.offset = offset;
+        this.offset = offset
     }
 
     private fun getSingleRotation(imu: Pigeon2): Rotation3d {
@@ -54,7 +54,7 @@ class DualPigeon2Swerve(canIDNormal: Int, canIDReverse: Int, canbusName: String,
     }
 
     override fun getRotation3d(): Rotation3d {
-        return getRawRotation3d().minus(offset)
+        return rawRotation3d.minus(offset)
     }
 
     private fun getSingleAccel(imu: Pigeon2): Optional<Translation3d> {

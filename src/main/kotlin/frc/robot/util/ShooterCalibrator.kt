@@ -1,17 +1,11 @@
 package frc.robot.util
 
-import edu.wpi.first.math.Vector
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.units.Angle
 import frc.robot.RobotContainer
-import frc.robot.constants.FieldConstants
 import frc.robot.subsystems.GUNSystem
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
-import kotlin.math.sqrt
-import kotlin.math.pow
 
 class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
     var lastShot: Shot? = null
@@ -22,7 +16,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         return reader.lineSequence()
             .filter { it.isNotBlank() }
             .map { line ->
-                val list = line.split(",", ignoreCase = false, limit = 8).map{it.trim().toDouble()}
+                val list = line.split(",", ignoreCase = false, limit = 8).map { it.trim().toDouble() }
                 Shot(
                     list[0],
                     list[1],
@@ -32,7 +26,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
                     list[5],
                     list[6],
                     list[7],
-                    )
+                )
             }.toList()
     }
 
@@ -56,7 +50,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
     }
 
     fun shoot(shooterAngle: Double, leftPower: Double, rightPower: Double) {
-        gun.shoot(shooterAngle,  leftPower, rightPower)
+        gun.shoot(shooterAngle, leftPower, rightPower)
         val botPose = RobotContainer.swerveSystem.swerveDrive.pose
         val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
         lastShot = Shot(
@@ -70,6 +64,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
             rightPower,
         )
     }
+
     fun addLastShot() {
 
     }

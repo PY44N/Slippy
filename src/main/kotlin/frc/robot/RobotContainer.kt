@@ -22,8 +22,10 @@ import java.io.File
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 object RobotContainer {
-    val swerveSystem: SwerveSystem = SwerveSystem(File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose"), 4.5)
-//    val swerveSystem: SwerveSystem = SwerveSystem(YAGSLConfig)
+    val swerveSystem: SwerveSystem =
+        SwerveSystem(File(Filesystem.getDeployDirectory(), "yagsl_configs/good_news_goose"), 4.5)
+
+    //    val swerveSystem: SwerveSystem = SwerveSystem(YAGSLConfig)
     val gunSystem = GUNSystem()
 
     private val leftJoystick: CommandJoystick = CommandJoystick(0)
@@ -32,6 +34,8 @@ object RobotContainer {
 
     lateinit var teleopSwerveCommand: Command
     lateinit var teleopElevateCommand: Command
+    lateinit var teleopRotateCommand: Command
+
     val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
     /**
@@ -55,7 +59,7 @@ object RobotContainer {
         // Configure the button bindings
         configureButtonBindings()
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("Auto Chooser", autoChooser)
     }
 
     /**
@@ -75,6 +79,7 @@ object RobotContainer {
         teleopElevateCommand = Commands.run({
             gunSystem.elevate(xboxController.leftY)
         })
+        teleopRotateCommand = Commands.run({ gunSystem.rotate(xboxController.rightY) })
     }
 
     /**

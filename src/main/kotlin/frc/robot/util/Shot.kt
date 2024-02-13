@@ -29,13 +29,13 @@ data class PolarShot(
     val vInward: Double,
     val vTangent: Double,
 ) {
-    fun toPolar(shot: Shot) : PolarShot {
+    fun toPolar(shot: Shot): PolarShot {
         val d = arrayOf(FieldConstants.SPEAKER_CENTER_X - shot.x, FieldConstants.SPEAKER_CENTER_Y - shot.y)
         val speakerDistance = sqrt(d[0].pow(2) + d[1].pow(2))
-        val inverseDistance = 1.0/speakerDistance
+        val inverseDistance = 1.0 / speakerDistance
         val perpendicularVelocity = inverseDistance * (d[0] * shot.vx + d[1] * shot.vy)
-        val parallelVelocity = inverseDistance * (d[0]*shot.vx - d[1] * shot.vy)
-        val angle = atan(d[1]/d[0]) - shot.robotAngle
+        val parallelVelocity = inverseDistance * (d[0] * shot.vx - d[1] * shot.vy)
+        val angle = atan(d[1] / d[0]) - shot.robotAngle
         return PolarShot(
             speakerDistance,
             angle,

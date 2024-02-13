@@ -17,7 +17,6 @@ import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
 import java.io.File
 import kotlin.math.PI
-import kotlin.math.atan
 import kotlin.math.atan2
 
 class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
@@ -59,11 +58,14 @@ class SwerveSystem(val swerveDrive: SwerveDrive) : SubsystemBase() {
     fun driveSpeakerOriented(translation: Translation2d, angleOffset: Double) {
         val p = swerveDrive.pose
         val speakerAngle =
-            atan2(FieldConstants.SPEAKER_CENTER_Y - p.y,
-                    FieldConstants.SPEAKER_CENTER_X - p.x) + angleOffset * PI
+            atan2(
+                FieldConstants.SPEAKER_CENTER_Y - p.y,
+                FieldConstants.SPEAKER_CENTER_X - p.x
+            ) + angleOffset * PI
         // figure out sign and stuff
         swerveDrive.drive(translation, speakerAngle, true, false)
     }
+
     fun autoDrive(velocity: ChassisSpeeds) {
         swerveDrive.drive(velocity)
     }

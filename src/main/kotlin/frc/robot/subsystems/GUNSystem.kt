@@ -2,16 +2,11 @@ package frc.robot.subsystems
 
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
-import com.revrobotics.SparkLimitSwitch.Type.kNormallyOpen
 import com.revrobotics.CANSparkMax
 import com.revrobotics.SparkAbsoluteEncoder
-import com.revrobotics.SparkPIDController
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import com.revrobotics.SparkLimitSwitch.Type.kNormallyOpen
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import com.revrobotics.CANSparkBase.ControlType.kSmartMotion
+import frc.robot.constants.GUNConstants
 
 enum class GUNPosition {
     AMP,
@@ -20,29 +15,29 @@ enum class GUNPosition {
     STOW,
 }
 
-class GUNSystem() : SubsystemBase() {
+class GUNSystem : SubsystemBase() {
     private val elevatorMotor = CANSparkMax(11, CANSparkLowLevel.MotorType.kBrushless)
     private val leftRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val rightRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
-    private val positionEncoder = elevatorMotor.getAlternateEncoder(POSITION_GEAR_RATIO)
+    private val positionEncoder = elevatorMotor.getAlternateEncoder(GUNConstants.POSITION_GEAR_RATIO)
 
     private val mainRotationMotor = rightRotationMotor // remember to make other one follow this
     private val followerRotationMotor = leftRotationMotor
 
     private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
 
-    private val leftShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
-    private val rightShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
+//    private val leftShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
+//    private val rightShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
 
     private val positionPID = elevatorMotor.pidController
     private val rotationPID = mainRotationMotor.pidController
 
     var targetPosition = GUNPosition.SPEAKER
-    var rotationSetPoint = TARGET_SAFE_ANGLE
-    var positionSetPoint = SPEAKER_POSITION
-    var rotationOffset: Double
-    var currentDistance: Double
-    var shootingAngle = TARGET_SAFE_ANGLE
+
+    //    var rotationSetPoint = GUNConstants.TARGET_SAFE_ANGLE
+//    var positionSetPoint = GUNConstants.SPEAKER_POSITION
+//
+//    var shootingAngle = GUNConstants.TARGET_SAFE_ANGLE
     var isDefinitelyAboveCrossbar = false
 
     init {
@@ -54,8 +49,8 @@ class GUNSystem() : SubsystemBase() {
 
         mainRotationMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
         mainRotationMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        elevatorMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false);
-        elevatorMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false);
+        elevatorMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
+        elevatorMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
 
         followerRotationMotor.follow(mainRotationMotor, true)
 
@@ -63,30 +58,27 @@ class GUNSystem() : SubsystemBase() {
         followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
 
-        positionPID = elevatorMotor.pidController
-        rotationPID = mainRotationMotor.pidController
+        positionPID.setP(GUNConstants.positionKP)
+        positionPID.setI(GUNConstants.positionKI)
+        positionPID.setD(GUNConstants.positionKD)
+        positionPID.setIZone(GUNConstants.positionIz)
+        positionPID.setFF(GUNConstants.positionFF)
+        positionPID.setOutputRange(GUNConstants.positionMin, GUNConstants.positionMax)
+        positionPID.setSmartMotionMaxVelocity(GUNConstants.positionMaxRPM, GUNConstants.SMART_MOTION_SLOT)
+        positionPID.setSmartMotionMinOutputVelocity(GUNConstants.positionMinRPM, GUNConstants.SMART_MOTION_SLOT)
+        positionPID.setSmartMotionMaxAccel(GUNConstants.positionMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
+        positionPID.setSmartMotionAllowedClosedLoopError(GUNConstants.positionMaxError, GUNConstants.SMART_MOTION_SLOT)
 
-        positionPID.setP(positionKP)
-        positionPID.setI(positionKI)
-        positionPID.setD(positionKD)
-        positionPID.setIZone(positionIz)
-        positionPID.setFF(positionFF)
-        positionPID.setOutputRange(positionMin, positionMax)
-        positionPID.setSmartMotionMaxVelocity(positionMaxRPM, SMART_MOTION_SLOT)
-        positionPID.setSmartMotionMinOutputVelocity(positionMinRPM, SMART_MOTION_SLOT)
-        positionPID.setSmartMotionMaxAccel(positionMaxAcceleration, SMART_MOTION_SLOT)
-        positionPID.setSmartMotionAllowedClosedLoopError(positionMaxError, SMART_MOTION_SLOT)
-
-        rotationPID.setP(rotationKP)
-        rotationPID.setI(rotationKI)
-        rotationPID.setD(rotationKD)
-        rotationPID.setIZone(rotationIz)
-        rotationPID.setFF(rotationFF)
-        rotationPID.setOutputRange(rotationMin, rotationMax)
-        rotationPID.setSmartMotionMaxVelocity(rotationMaxRPM, SMART_MOTION_SLOT)
-        rotationPID.setSmartMotionMinOutputVelocity(rotationMinRPM, SMART_MOTION_SLOT)
-        rotationPID.setSmartMotionMaxAccel(rotationMaxAcceleration, SMART_MOTION_SLOT)
-        rotationPID.setSmartMotionAllowedClosedLoopError(rotationMaxError, SMART_MOTION_SLOT)
+        rotationPID.setP(GUNConstants.rotationKP)
+        rotationPID.setI(GUNConstants.rotationKI)
+        rotationPID.setD(GUNConstants.rotationKD)
+        rotationPID.setIZone(GUNConstants.rotationIz)
+        rotationPID.setFF(GUNConstants.rotationFF)
+        rotationPID.setOutputRange(GUNConstants.rotationMin, GUNConstants.rotationMax)
+        rotationPID.setSmartMotionMaxVelocity(GUNConstants.rotationMaxRPM, GUNConstants.SMART_MOTION_SLOT)
+        rotationPID.setSmartMotionMinOutputVelocity(GUNConstants.rotationMinRPM, GUNConstants.SMART_MOTION_SLOT)
+        rotationPID.setSmartMotionMaxAccel(GUNConstants.rotationMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
+        rotationPID.setSmartMotionAllowedClosedLoopError(GUNConstants.rotationMaxError, GUNConstants.SMART_MOTION_SLOT)
     }
 
     fun setZeroPosition() {
@@ -101,25 +93,25 @@ class GUNSystem() : SubsystemBase() {
         targetPosition = GUNPosition.AMP
     }
 
-    fun setDesiredPosition(position: Double) {
-        positionSetPoint = position
-        positionPID.setReference(position, kSmartMotion)
-    }
+//    fun setDesiredPosition(position: Double) {
+//        positionSetPoint = position
+//        positionPID.setReference(position, kSmartMotion)
+//    }
+//
+//    fun setDesiredRotation(angle: Double) {
+//        rotationSetPoint = angle + GUNConstants.rotationOffset
+//        rotationPID.setReference(angle, kSmartMotion)
+//    }
+//
+//    fun goToShoot(angle: Double) {
+//        shootingAngle = angle
+//        targetPosition = GUNPosition.SPEAKER
+//    }
 
-    fun setDesiredRotation(angle: Double) {
-        rotationSetPoint = angle
-        rotationPID.setReference(angle, kSmartMotion)
-    }
-
-    fun goToShoot(angle: Double) {
-        shootingAngle = angle
-        targetPosition = GUNPosition.SPEAKER
-    }
-
-    fun setSpeed(left: Double, right: Double) {
-        leftShooter.set(left)
-        rightShooter.set(right)
-    }
+//    fun setSpeed(left: Double, right: Double) {
+//        leftShooter.set(left)
+//        rightShooter.set(right)
+//    }
 
     fun getRotation(): Double {
         return rotationEncoder.position
@@ -129,14 +121,18 @@ class GUNSystem() : SubsystemBase() {
         return positionEncoder.position
     }
 
-    fun shoot(angle: Double, leftPower: Double, rightPower: Double) {
-        goToShoot(angle)
-        setSpeed(leftPower, rightPower)
+//    fun shoot(angle: Double, leftPower: Double, rightPower: Double) {
+//        goToShoot(angle)
+//        setSpeed(leftPower, rightPower)
+//    }
+
+
+    fun elevate(speed: Double) {
+        elevatorMotor.set(speed)
     }
 
-
-    fun elevate(speed : Double) {
-        elevatorMotor.set(speed)
+    fun rotate(speed: Double) {
+        mainRotationMotor.set(speed)
     }
 
     override fun periodic() {
@@ -264,125 +260,67 @@ class GUNSystem() : SubsystemBase() {
         SmartDashboard.putNumber("Rotation Position", pos)
         SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
         */
-        when(targetPosition) {
-            GUNPosition.AMP -> {
-                if(rotationSetPoint != AMP_ANGLE)
-                    setDesiredRotation(AMP_ANGLE)
-                if(positionSetPoint != AMP_POSITION) {
-                    if(isDefinitelyAboveCrossbar || getPosition() > CROSSBAR_TOP) {
-                        isDefinitelyAboveCrossbar = true
-                        setDesiredPosition(AMP_POSITION)
-                    }
-                    else if (getRotation() > MIN_SAFE_ANGLE)
-                        setDesiredPosition(AMP_POSITION)
-                }
-            }
-            GUNPosition.INTAKE -> {
-                isDefinitelyAboveCrossbar = false
-                if(rotationSetPoint != INTAKE_ANGLE) {
-                    if(getPosition() < CROSSBAR_BOTTOM)
-                        setDesiredRotation(INTAKE_ANGLE)
-                    else if(rotationSetPoint != TARGET_SAFE_ANGLE)
-                        setDesiredRotation(TARGET_SAFE_ANGLE)
-                }
-                if(positionSetPoint != INTAKE_POSITION) {
-                    if(getRotation() > MIN_SAFE_ANGLE)
-                        setDesiredPosition(INTAKE_POSITION)
-                    else if(positionSetPoint != CROSSBAR_TOP)
-                        setDesiredPosition(CROSSBAR_TOP)
-                }
-            }
-            GUNPosition.SPEAKER -> {
-                if(rotationSetPoint != shootingAngle) {
-                    if(isDefinitelyAboveCrossbar || getPosition() > CROSSBAR_TOP) {
-                        isDefinitelyAboveCrossbar = true
-                        setDesiredRotation(shootingAngle) // maybe no
-                    } else if (rotationSetPoint != TARGET_SAFE_ANGLE)
-                        setDesiredRotation(TARGET_SAFE_ANGLE)
-                }
-                if(positionSetPoint != SPEAKER_POSITION) {
-                    if(isDefinitelyAboveCrossbar || getRotation() > MIN_SAFE_ANGLE)
-                        setDesiredPosition(SPEAKER_POSITION)
-                    else
-                        setDesiredPosition(CROSSBAR_BOTTOM)
-                }
-            }
-            GUNPosition.STOW -> {
-                if(rotationSetPoint != STOW_ANGLE) {
-                    if(isDefinitelyAboveCrossbar || getPosition() > CROSSBAR_TOP) {
-                        isDefinitelyAboveCrossbar = true
-                        setDesiredRotation(STOW_ANGLE) // maybe no
-                    } else if (rotationSetPoint != TARGET_SAFE_ANGLE)
-                        setDesiredRotation(TARGET_SAFE_ANGLE)
-                }
-                if(positionSetPoint != STOW_POSITION) {
-                    if(isDefinitelyAboveCrossbar || getRotation() > MIN_SAFE_ANGLE)
-                        setDesiredPosition(STOW_POSITION)
-                    else
-                        setDesiredPosition(CROSSBAR_BOTTOM)
-                }
-            }
-        }
+//        when(targetPosition) {
+//            GUNPosition.AMP -> {
+//                if(rotationSetPoint != GUNConstants.AMP_ANGLE)
+//                    setDesiredRotation(GUNConstants.AMP_ANGLE)
+//                if(positionSetPoint != GUNConstants.AMP_POSITION) {
+//                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+//                        isDefinitelyAboveCrossbar = true
+//                        setDesiredPosition(GUNConstants.AMP_POSITION)
+//                    }
+//                    else if (getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+//                        setDesiredPosition(GUNConstants.AMP_POSITION)
+//                }
+//            }
+//            GUNPosition.INTAKE -> {
+//                isDefinitelyAboveCrossbar = false
+//                if(rotationSetPoint != GUNConstants.INTAKE_ANGLE) {
+//                    if(getPosition() < GUNConstants.CROSSBAR_BOTTOM)
+//                        setDesiredRotation(GUNConstants.INTAKE_ANGLE)
+//                    else if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+//                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+//                }
+//                if(positionSetPoint != GUNConstants.INTAKE_POSITION) {
+//                    if(getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+//                        setDesiredPosition(GUNConstants.INTAKE_POSITION)
+//                    else if(positionSetPoint != GUNConstants.CROSSBAR_TOP)
+//                        setDesiredPosition(GUNConstants.CROSSBAR_TOP)
+//                }
+//            }
+//            GUNPosition.SPEAKER -> {
+//                if(rotationSetPoint != shootingAngle) {
+//                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+//                        isDefinitelyAboveCrossbar = true
+//                        setDesiredRotation(shootingAngle) // maybe no
+//                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+//                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+//                }
+//                if(positionSetPoint != GUNConstants.SPEAKER_POSITION) {
+//                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+//                        setDesiredPosition(GUNConstants.SPEAKER_POSITION)
+//                    else
+//                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
+//                }
+//            }
+//            GUNPosition.STOW -> {
+//                if(rotationSetPoint != GUNConstants.STOW_ANGLE) {
+//                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+//                        isDefinitelyAboveCrossbar = true
+//                        setDesiredRotation(GUNConstants.STOW_ANGLE) // maybe no
+//                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+//                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+//                }
+//                if(positionSetPoint != GUNConstants.STOW_POSITION) {
+//                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+//                        setDesiredPosition(GUNConstants.STOW_POSITION)
+//                    else
+//                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
+//                }
+//            }
+//        }
     }
 
     override fun simulationPeriodic() {
-    }
-
-    companion object {
-        // someone rename these
-        const val POSITION_GEAR_RATIO = 15
-        const val ROTATION_GEAR_RATIO = 100
-        const val MAX_PIVOT_HEIGHT_M = 0.64446
-        const val MIN_PIVOT_HEIGHT_M = 0.348701
-        const val THING_LENGTH_M = 0.6133
-        const val MOVER_GEAR_RADIUS_M = 0.0127
-        val gearCircumfrence = 2 * PI * MOVER_GEAR_RADIUS_M
-        private const val ELEVATOR_ANGLE = 28.8309683
-        val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
-        val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
-        var MIN_SAFE_ANGLE: Double = TODO()
-        var TARGET_SAFE_ANGLE: Double = TODO()
-        var MIN_SAFE_DISTANCE: Double = TODO()
-        var ABS_MIN_ANGLE: Double = TODO()
-        var ABS_MAX_ANGLE: Double = TODO()
-        var TOP_M: Double = TODO()
-        var BOTTOM_M: Double = TODO()
-        var SPEAKER_POSITION: Double = TODO()
-        var AMP_POSITION: Double = TODO()
-        var AMP_ANGLE: Double = TODO()
-        var INTAKE_POSITION: Double = TODO()
-        var INTAKE_ANGLE: Double = TODO()
-        var CROSSBAR_BOTTOM: Double = TODO()
-        var CROSSBAR_TOP: Double = TODO()
-        var STOW_POSITION: Double = TODO()
-        var STOW_ANGLE: Double = TODO()
-
-        private const val SMART_MOTION_SLOT = 0
-
-        // TUNE!!!!!
-        private var positionKP = 5e-5
-        private var positionKI = 1e-6
-        private var positionKD = 0.0
-        private var positionIz = 0.0
-        private var positionFF = 0.000156
-        private var positionMax = 1.0
-        private var positionMin = -1.0
-        private var positionMinRPM = 10.0
-        private var positionMaxRPM = 5700.0
-        private var positionMaxAcceleration = 1500.0
-        private var positionMaxError = 5.0
-
-        // TUNE!!!!!
-        private var rotationKP = 5e-5
-        private var rotationKI = 1e-6
-        private var rotationKD = 0.0
-        private var rotationIz = 0.0
-        private var rotationFF = 0.000156
-        private var rotationMin = -1.0
-        private var rotationMax = 1.0
-        private var rotationMinRPM = 10.0
-        private var rotationMaxRPM = 5700.0
-        private var rotationMaxAcceleration = 1500.0
-        private var rotationMaxError = 5.0
     }
 }
