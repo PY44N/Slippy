@@ -8,10 +8,11 @@ object GUNConstants {
     // someone rename these
     const val POSITION_GEAR_RATIO = 15
     const val ROTATION_GEAR_RATIO = 100
-    const val MAX_PIVOT_HEIGHT_M = 0.64446
-    const val MIN_PIVOT_HEIGHT_M = 0.348701
+    const val MAX_PIVOT_HEIGHT_M = 0.8
+    const val MIN_PIVOT_HEIGHT_M = 0.0
     const val THING_LENGTH_M = 0.6133
     const val MOVER_GEAR_RADIUS_M = 0.0127
+    const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2 * PI
     val gearCircumfrence = 2 * PI * MOVER_GEAR_RADIUS_M
     const val ELEVATOR_ANGLE = 28.8309683
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)

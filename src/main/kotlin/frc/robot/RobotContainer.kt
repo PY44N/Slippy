@@ -28,11 +28,8 @@ object RobotContainer {
     lateinit var teleopElevateCommand: Command
     lateinit var teleopRotateCommand: Command
 
-    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
+//    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
-    /**
-     * The container for the robot.  Contains subsystems, IO devices, and commands.
-     */
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
@@ -56,14 +53,12 @@ object RobotContainer {
                 )
             }
         }
-        SmartDashboard.putData("Auto Chooser", autoChooser)
+//        SmartDashboard.putData("Auto Chooser", autoChooser)
 
         teleopSwerveCommand = TeleopSwerveDriveCommand()
         teleopSwerveCommand.schedule()
 
         configureButtonBindings()
-
-        SmartDashboard.putData("Auto Chooser", autoChooser)
     }
 
     private fun configureButtonBindings() {
@@ -71,5 +66,8 @@ object RobotContainer {
             gunSystem.elevate(xboxController.leftY)
         })
         teleopRotateCommand = Commands.run({ gunSystem.rotate(xboxController.rightY) })
+        xboxController.a().onTrue(Commands.runOnce({
+            gunSystem.setZeroPosition()
+        }))
     }
 }

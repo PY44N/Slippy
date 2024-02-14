@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import com.revrobotics.SparkAbsoluteEncoder
-import com.revrobotics.SparkLimitSwitch.Type.kNormallyOpen
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.GUNConstants
 
@@ -16,13 +16,13 @@ enum class GUNPosition {
 }
 
 class GUNSystem : SubsystemBase() {
-    private val elevatorMotor = CANSparkMax(11, CANSparkLowLevel.MotorType.kBrushless)
-    private val leftRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
-    private val rightRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
+    private val elevatorMotor = CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless)
+//    private val leftRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
+//    private val rightRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(GUNConstants.POSITION_GEAR_RATIO)
 
-    private val mainRotationMotor = rightRotationMotor // remember to make other one follow this
-    private val followerRotationMotor = leftRotationMotor
+    private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
+    private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
 
     private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
 
@@ -41,16 +41,17 @@ class GUNSystem : SubsystemBase() {
     var isDefinitelyAboveCrossbar = false
 
     init {
-        leftRotationMotor.restoreFactoryDefaults()
-        rightRotationMotor.restoreFactoryDefaults()
+        elevatorMotor.restoreFactoryDefaults()
+        mainRotationMotor.restoreFactoryDefaults()
+        followerRotationMotor.restoreFactoryDefaults()
 
-        elevatorMotor.inverted = false
+        elevatorMotor.inverted = true
         mainRotationMotor.inverted = false
 
-        mainRotationMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        mainRotationMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        elevatorMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        elevatorMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
+//        mainRotationMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
+//        mainRotationMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
+//        elevatorMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
+//        elevatorMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
 
         followerRotationMotor.follow(mainRotationMotor, true)
 
@@ -82,7 +83,7 @@ class GUNSystem : SubsystemBase() {
     }
 
     fun setZeroPosition() {
-
+        positionEncoder.setPosition(0.0)
     }
 
     fun goToIntake() {
@@ -118,7 +119,7 @@ class GUNSystem : SubsystemBase() {
     }
 
     fun getPosition(): Double {
-        return positionEncoder.position
+        return -positionEncoder.position * GUNConstants.MOVER_GEAR_CIRCUMFERENCE_M
     }
 
 //    fun shoot(angle: Double, leftPower: Double, rightPower: Double) {
@@ -136,6 +137,8 @@ class GUNSystem : SubsystemBase() {
     }
 
     override fun periodic() {
+        SmartDashboard.putNumber("elevator position", getPosition())
+        SmartDashboard.putNumber("pivot rotation", getRotation())
         /*
         val inputElevatorP = SmartDashboard.getNumber("Elevator P Gain", 0.0);
         val inputElevatorI = SmartDashboard.getNumber("Elevator I Gain", 0.0);

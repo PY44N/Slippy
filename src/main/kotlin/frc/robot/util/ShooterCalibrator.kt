@@ -50,7 +50,7 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
     }
 
     fun shoot(shooterAngle: Double, leftPower: Double, rightPower: Double) {
-        gun.shoot(shooterAngle, leftPower, rightPower)
+//        gun.shoot(shooterAngle, leftPower, rightPower)
         val botPose = RobotContainer.swerveSystem.swerveDrive.pose
         val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
         lastShot = Shot(
