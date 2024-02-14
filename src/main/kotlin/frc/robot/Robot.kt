@@ -96,6 +96,7 @@ class Robot : LoggedRobot() {
         RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
         RobotContainer.teleopElevateCommand.schedule()
+        RobotContainer.teleopRotateCommand.schedule()
     }
 
     override fun teleopPeriodic() {

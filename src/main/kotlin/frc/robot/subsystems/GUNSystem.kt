@@ -24,7 +24,7 @@ class GUNSystem : SubsystemBase() {
     private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
 
-    private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
+//    private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
 
 //    private val leftShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
 //    private val rightShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
@@ -55,8 +55,8 @@ class GUNSystem : SubsystemBase() {
 
         followerRotationMotor.follow(mainRotationMotor, true)
 
-        mainRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+//        mainRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+//        followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
 
         positionPID.setP(GUNConstants.positionKP)
@@ -115,7 +115,8 @@ class GUNSystem : SubsystemBase() {
 //    }
 
     fun getRotation(): Double {
-        return rotationEncoder.position
+        return 69.0
+//        return rotationEncoder.position
     }
 
     fun getPosition(): Double {
@@ -129,11 +130,12 @@ class GUNSystem : SubsystemBase() {
 
 
     fun elevate(speed: Double) {
-        elevatorMotor.set(speed)
+        elevatorMotor.set(-speed)
     }
 
     fun rotate(speed: Double) {
-        mainRotationMotor.set(speed)
+        SmartDashboard.putNumber("rotation speed",  speed)
+        SmartDashboard.putString("thing", mainRotationMotor.set(speed).toString())
     }
 
     override fun periodic() {

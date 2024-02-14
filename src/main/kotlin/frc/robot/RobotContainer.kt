@@ -65,7 +65,9 @@ object RobotContainer {
         teleopElevateCommand = Commands.run({
             gunSystem.elevate(xboxController.leftY)
         })
-        teleopRotateCommand = Commands.run({ gunSystem.rotate(xboxController.rightY) })
+        teleopRotateCommand = Commands.run({
+            gunSystem.rotate(xboxController.rightY) }
+        )
         xboxController.a().onTrue(Commands.runOnce({
             gunSystem.setZeroPosition()
         }))
