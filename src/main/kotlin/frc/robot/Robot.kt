@@ -1,5 +1,7 @@
 package frc.robot
 
+import com.revrobotics.CANSparkLowLevel
+import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.PowerDistribution
@@ -109,12 +111,8 @@ class Robot : LoggedRobot() {
     override fun testInit() {
         CommandScheduler.getInstance().cancelAll()
     }
-    
     override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
+
 //        RobotContainer.swerveSystem.drive(Translation2d(0.25, 0.0), 0.0, true)
 //        val calibrator = ShooterCalibrator("/u/shooter_calibrator/test1.csv");
 //        calibrator.writeOut(shots)

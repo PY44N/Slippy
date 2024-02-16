@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import com.revrobotics.SparkAbsoluteEncoder
+import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.GUNConstants
@@ -13,18 +14,18 @@ enum class GUNPosition {
     SPEAKER,
     INTAKE,
     STOW,
+    TRAP,
+    CALIBRATE,
 }
 
 class GUNSystem : SubsystemBase() {
     private val elevatorMotor = CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless)
-//    private val leftRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
-//    private val rightRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(GUNConstants.POSITION_GEAR_RATIO)
 
     private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
 
-//    private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
+    private val rotationEncoder = DutyCycleEncoder(0)
 
 //    private val leftShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
 //    private val rightShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
@@ -55,31 +56,31 @@ class GUNSystem : SubsystemBase() {
 
         followerRotationMotor.follow(mainRotationMotor, true)
 
-//        mainRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-//        followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+        mainRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+        followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
 
-        positionPID.setP(GUNConstants.positionKP)
-        positionPID.setI(GUNConstants.positionKI)
-        positionPID.setD(GUNConstants.positionKD)
-        positionPID.setIZone(GUNConstants.positionIz)
-        positionPID.setFF(GUNConstants.positionFF)
-        positionPID.setOutputRange(GUNConstants.positionMin, GUNConstants.positionMax)
-        positionPID.setSmartMotionMaxVelocity(GUNConstants.positionMaxRPM, GUNConstants.SMART_MOTION_SLOT)
-        positionPID.setSmartMotionMinOutputVelocity(GUNConstants.positionMinRPM, GUNConstants.SMART_MOTION_SLOT)
-        positionPID.setSmartMotionMaxAccel(GUNConstants.positionMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
-        positionPID.setSmartMotionAllowedClosedLoopError(GUNConstants.positionMaxError, GUNConstants.SMART_MOTION_SLOT)
-
-        rotationPID.setP(GUNConstants.rotationKP)
-        rotationPID.setI(GUNConstants.rotationKI)
-        rotationPID.setD(GUNConstants.rotationKD)
-        rotationPID.setIZone(GUNConstants.rotationIz)
-        rotationPID.setFF(GUNConstants.rotationFF)
-        rotationPID.setOutputRange(GUNConstants.rotationMin, GUNConstants.rotationMax)
-        rotationPID.setSmartMotionMaxVelocity(GUNConstants.rotationMaxRPM, GUNConstants.SMART_MOTION_SLOT)
-        rotationPID.setSmartMotionMinOutputVelocity(GUNConstants.rotationMinRPM, GUNConstants.SMART_MOTION_SLOT)
-        rotationPID.setSmartMotionMaxAccel(GUNConstants.rotationMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
-        rotationPID.setSmartMotionAllowedClosedLoopError(GUNConstants.rotationMaxError, GUNConstants.SMART_MOTION_SLOT)
+//        positionPID.setP(GUNConstants.positionKP)
+//        positionPID.setI(GUNConstants.positionKI)
+//        positionPID.setD(GUNConstants.positionKD)
+//        positionPID.setIZone(GUNConstants.positionIz)
+//        positionPID.setFF(GUNConstants.positionFF)
+//        positionPID.setOutputRange(GUNConstants.positionMin, GUNConstants.positionMax)
+//        positionPID.setSmartMotionMaxVelocity(GUNConstants.positionMaxRPM, GUNConstants.SMART_MOTION_SLOT)
+//        positionPID.setSmartMotionMinOutputVelocity(GUNConstants.positionMinRPM, GUNConstants.SMART_MOTION_SLOT)
+//        positionPID.setSmartMotionMaxAccel(GUNConstants.positionMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
+//        positionPID.setSmartMotionAllowedClosedLoopError(GUNConstants.positionMaxError, GUNConstants.SMART_MOTION_SLOT)
+//
+//        rotationPID.setP(GUNConstants.rotationKP)
+//        rotationPID.setI(GUNConstants.rotationKI)
+//        rotationPID.setD(GUNConstants.rotationKD)
+//        rotationPID.setIZone(GUNConstants.rotationIz)
+//        rotationPID.setFF(GUNConstants.rotationFF)
+//        rotationPID.setOutputRange(GUNConstants.rotationMin, GUNConstants.rotationMax)
+//        rotationPID.setSmartMotionMaxVelocity(GUNConstants.rotationMaxRPM, GUNConstants.SMART_MOTION_SLOT)
+//        rotationPID.setSmartMotionMinOutputVelocity(GUNConstants.rotationMinRPM, GUNConstants.SMART_MOTION_SLOT)
+//        rotationPID.setSmartMotionMaxAccel(GUNConstants.rotationMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
+//        rotationPID.setSmartMotionAllowedClosedLoopError(GUNConstants.rotationMaxError, GUNConstants.SMART_MOTION_SLOT)
     }
 
     fun setZeroPosition() {
@@ -115,8 +116,8 @@ class GUNSystem : SubsystemBase() {
 //    }
 
     fun getRotation(): Double {
-        return 69.0
-//        return rotationEncoder.position
+//        return 69.0
+        return rotationEncoder.absolutePosition * 360.0
     }
 
     fun getPosition(): Double {
@@ -135,7 +136,7 @@ class GUNSystem : SubsystemBase() {
 
     fun rotate(speed: Double) {
         SmartDashboard.putNumber("rotation speed",  speed)
-        SmartDashboard.putString("thing", mainRotationMotor.set(speed).toString())
+        mainRotationMotor.set(speed)
     }
 
     override fun periodic() {
@@ -265,7 +266,11 @@ class GUNSystem : SubsystemBase() {
         SmartDashboard.putNumber("Rotation Position", pos)
         SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
         */
+        if(targetPosition == GUNPosition.CALIBRATE) {
+
+        }
 //        when(targetPosition) {
+//            GUNPosition.TRAP -> {}
 //            GUNPosition.AMP -> {
 //                if(rotationSetPoint != GUNConstants.AMP_ANGLE)
 //                    setDesiredRotation(GUNConstants.AMP_ANGLE)
