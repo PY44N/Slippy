@@ -36,6 +36,8 @@ class GUNSystem : SubsystemBase() {
     private val positionPID = elevatorMotor.pidController
     private val rotationPID = mainRotationMotor.pidController
 
+    private val elevatorEncoderConversionFactor = 1.0/GUNConstants.MOVER_GEAR_CIRCUMFERENCE_M
+
     var targetPosition = GUNPosition.STOW
 
     var rotationSetPoint = GUNConstants.TARGET_SAFE_ANGLE
@@ -51,7 +53,7 @@ class GUNSystem : SubsystemBase() {
         mainRotationMotor.restoreFactoryDefaults()
         followerRotationMotor.restoreFactoryDefaults()
 
-        elevatorMotor.inverted = true
+        elevatorMotor.inverted = false // elevator likes to not be inverted idk why
         mainRotationMotor.inverted = false
 
         positionPID.setFeedbackDevice(positionEncoder)
@@ -90,12 +92,12 @@ class GUNSystem : SubsystemBase() {
 //        rotationPID.setSmartMotionAllowedClosedLoopError(GUNConstants.rotationMaxError, GUNConstants.SMART_MOTION_SLOT)
     }
 
-    fun setZeroPosition() {
-        positionEncoder.setPosition(-GUNConstants.TOP_LIMIT_SWITCH_POSITION/GUNConstants.MOVER_GEAR_CIRCUMFERENCE_M)
+    private fun setZeroPosition() {
+        positionEncoder.setPosition(-GUNConstants.TOP_LIMIT_SWITCH_POSITION * elevatorEncoderConversionFactor)
     }
 
     private fun setDesiredPosition(position: Double) {
-        positionSetPoint = position
+        positionSetPoint = position * elevatorEncoderConversionFactor
         positionPID.setReference(positionSetPoint, CANSparkBase.ControlType.kSmartMotion)
     }
 
@@ -108,6 +110,10 @@ class GUNSystem : SubsystemBase() {
 //        leftShooter.set(left)
 //        rightShooter.set(right)
 //    }
+
+    fun setElevatorSpeed(speed: Double) {
+        elevatorMotor.set(-speed)
+    }
 
     fun getRotation(): Double {
         return rotationSetPoint
@@ -272,9 +278,9 @@ class GUNSystem : SubsystemBase() {
         if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
             setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
         else if(!calibrationMoving && getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-            elevatorMotor.set(.2)
+            setElevatorSpeed(.2)
         if(topLimit.get()) {
-            elevatorMotor.set(0.0)
+            setElevatorSpeed(0.0)
             targetPosition = GUNPosition.MANUAL_CONTROL
             setZeroPosition()
         }
@@ -292,11 +298,11 @@ class GUNSystem : SubsystemBase() {
         }
     }
     fun calibrate() {
-        elevatorMotor.set(0.0)
+        setElevatorSpeed(0.0)
         targetPosition = GUNPosition.CALIBRATE
     }
     fun stow() {
-        elevatorMotor.set(0.0)
+        setElevatorSpeed(0.0)
         targetPosition = GUNPosition.STOW
     }
     private fun goToSpeakerPose() {
