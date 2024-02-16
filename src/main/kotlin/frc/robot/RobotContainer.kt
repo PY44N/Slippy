@@ -63,10 +63,10 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         teleopElevateCommand = Commands.run({
-            gunSystem.elevate(xboxController.leftY)
+            gunSystem.elevate(-xboxController.leftY)
         })
         teleopRotateCommand = Commands.run({
-            gunSystem.rotate(xboxController.rightY) }
+            gunSystem.rotate(-xboxController.rightY) }
         )
         xboxController.a().onTrue(Commands.runOnce({
             gunSystem.setZeroPosition()

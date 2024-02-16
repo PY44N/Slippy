@@ -18,22 +18,22 @@ object GUNConstants {
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
 
-    var MIN_SAFE_ANGLE: Double = TODO()
-    var TARGET_SAFE_ANGLE: Double = TODO()
-    var MIN_SAFE_DISTANCE: Double = TODO()
-    var ABS_MIN_ANGLE: Double = TODO()
-    var ABS_MAX_ANGLE: Double = TODO()
-    var TOP_M: Double = TODO()
-    var BOTTOM_M: Double = TODO()
-    var SPEAKER_POSITION: Double = TODO()
-    var AMP_POSITION: Double = TODO()
-    var AMP_ANGLE: Double = TODO()
-    var INTAKE_POSITION: Double = TODO()
-    var INTAKE_ANGLE: Double = TODO()
-    var CROSSBAR_BOTTOM: Double = TODO()
-    var CROSSBAR_TOP: Double = TODO()
-    var STOW_POSITION: Double = TODO()
-    var STOW_ANGLE: Double = TODO()
+    var MIN_SAFE_ANGLE: Double = 0.0
+    var TARGET_SAFE_ANGLE: Double = 0.0
+    var MIN_SAFE_DISTANCE: Double = 0.0
+    var ABS_MIN_ANGLE: Double = 0.0
+    var ABS_MAX_ANGLE: Double = 0.0
+    var TOP_M: Double = 0.0
+    var BOTTOM_M: Double = 0.0
+    var SPEAKER_POSITION: Double = 0.0
+    var AMP_POSITION: Double = 0.0
+    var AMP_ANGLE: Double = 0.0
+    var INTAKE_POSITION: Double = 0.0
+    var INTAKE_ANGLE: Double = 0.0
+    var CROSSBAR_BOTTOM: Double = 0.0
+    var CROSSBAR_TOP: Double = 0.0
+    var STOW_POSITION: Double = 0.0
+    var STOW_ANGLE: Double = 0.0
 
     var rotationOffset: Double = 0.0
 

@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import com.revrobotics.SparkAbsoluteEncoder
+import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -26,6 +27,8 @@ class GUNSystem : SubsystemBase() {
 
     private val rotationEncoder = DutyCycleEncoder(0)
 
+    private val topLimit = DigitalInput(1)
+
 //    private val leftShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
 //    private val rightShooter = CANSparkMax(TODO(), CANSparkLowLevel.MotorType.kBrushless)
 
@@ -40,6 +43,8 @@ class GUNSystem : SubsystemBase() {
 
     var isDefinitelyAboveCrossbar = false
 
+    var calibrationMoving = false
+
     init {
         elevatorMotor.restoreFactoryDefaults()
         mainRotationMotor.restoreFactoryDefaults()
@@ -47,6 +52,8 @@ class GUNSystem : SubsystemBase() {
 
         elevatorMotor.inverted = true
         mainRotationMotor.inverted = false
+
+        positionPID.setFeedbackDevice(positionEncoder)
 
 //        mainRotationMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
 //        mainRotationMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
@@ -122,11 +129,10 @@ class GUNSystem : SubsystemBase() {
 
 
     fun elevate(speed: Double) {
-        elevatorMotor.set(-speed)
+        elevatorMotor.set(speed)
     }
 
     fun rotate(speed: Double) {
-        SmartDashboard.putNumber("rotation speed",  speed)
         mainRotationMotor.set(speed)
     }
 
@@ -257,74 +263,95 @@ class GUNSystem : SubsystemBase() {
         SmartDashboard.putNumber("Rotation Position", pos)
         SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
         */
-//        when(targetPosition) {
-//            GUNPosition.TRAP -> {}
-//            GUNPosition.AMP -> {
-//                if(rotationSetPoint != GUNConstants.AMP_ANGLE)
-//                    setDesiredRotation(GUNConstants.AMP_ANGLE)
-//                if(positionSetPoint != GUNConstants.AMP_POSITION) {
-//                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
-//                        isDefinitelyAboveCrossbar = true
-//                        setDesiredPosition(GUNConstants.AMP_POSITION)
-//                    }
-//                    else if (getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-//                        setDesiredPosition(GUNConstants.AMP_POSITION)
-//                }
-//            }
-//            GUNPosition.INTAKE -> {
-//                isDefinitelyAboveCrossbar = false
-//                if(rotationSetPoint != GUNConstants.INTAKE_ANGLE) {
-//                    if(getPosition() < GUNConstants.CROSSBAR_BOTTOM)
-//                        setDesiredRotation(GUNConstants.INTAKE_ANGLE)
-//                    else if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-//                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-//                }
-//                if(positionSetPoint != GUNConstants.INTAKE_POSITION) {
-//                    if(getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-//                        setDesiredPosition(GUNConstants.INTAKE_POSITION)
-//                    else if(positionSetPoint != GUNConstants.CROSSBAR_TOP)
-//                        setDesiredPosition(GUNConstants.CROSSBAR_TOP)
-//                }
-//            }
-//            GUNPosition.SPEAKER -> {
-//                if(rotationSetPoint != shootingAngle) {
-//                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
-//                        isDefinitelyAboveCrossbar = true
-//                        setDesiredRotation(shootingAngle) // maybe no
-//                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-//                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-//                }
-//                if(positionSetPoint != GUNConstants.SPEAKER_POSITION) {
-//                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-//                        setDesiredPosition(GUNConstants.SPEAKER_POSITION)
-//                    else
-//                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
-//                }
-//            }
-//            GUNPosition.STOW -> {
-//                if(rotationSetPoint != GUNConstants.STOW_ANGLE) {
-//                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
-//                        isDefinitelyAboveCrossbar = true
-//                        setDesiredRotation(GUNConstants.STOW_ANGLE) // maybe no
-//                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-//                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-//                }
-//                if(positionSetPoint != GUNConstants.STOW_POSITION) {
-//                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-//                        setDesiredPosition(GUNConstants.STOW_POSITION)
-//                    else
-//                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
-//                }
-//            }
-//        }
+        when(targetPosition) {
+            GUNPosition.TRAP -> { goToTrap() }
+            GUNPosition.AMP -> { goToAmp()
+                if(rotationSetPoint != GUNConstants.AMP_ANGLE)
+                    setDesiredRotation(GUNConstants.AMP_ANGLE)
+                if(positionSetPoint != GUNConstants.AMP_POSITION) {
+                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+                        isDefinitelyAboveCrossbar = true
+                        setDesiredPosition(GUNConstants.AMP_POSITION)
+                    }
+                    else if (getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                        setDesiredPosition(GUNConstants.AMP_POSITION)
+                }
+            }
+            GUNPosition.INTAKE -> { goToIntakePose()
+                isDefinitelyAboveCrossbar = false
+                if(rotationSetPoint != GUNConstants.INTAKE_ANGLE) {
+                    if(getPosition() < GUNConstants.CROSSBAR_BOTTOM)
+                        setDesiredRotation(GUNConstants.INTAKE_ANGLE)
+                    else if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+                }
+                if(positionSetPoint != GUNConstants.INTAKE_POSITION) {
+                    if(getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                        setDesiredPosition(GUNConstants.INTAKE_POSITION)
+                    else if(positionSetPoint != GUNConstants.CROSSBAR_TOP)
+                        setDesiredPosition(GUNConstants.CROSSBAR_TOP)
+                }
+            }
+            GUNPosition.SPEAKER -> {
+                if(rotationSetPoint != shootingAngle) {
+                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+                        isDefinitelyAboveCrossbar = true
+                        setDesiredRotation(shootingAngle) // maybe no
+                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+                }
+                if(positionSetPoint != GUNConstants.SPEAKER_POSITION) {
+                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                        setDesiredPosition(GUNConstants.SPEAKER_POSITION)
+                    else
+                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
+                }
+            }
+            GUNPosition.STOW -> {
+                if(rotationSetPoint != GUNConstants.STOW_ANGLE) {
+                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+                        isDefinitelyAboveCrossbar = true
+                        setDesiredRotation(GUNConstants.STOW_ANGLE) // maybe no
+                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+                }
+                if(positionSetPoint != GUNConstants.STOW_POSITION) {
+                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                        setDesiredPosition(GUNConstants.STOW_POSITION)
+                    else
+                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
+                }
+            }
+        }
     }
     private fun calibrate() {
         if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-            setDesiredRotation
+            setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+        else if(calibrationMoving == false && getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+            elevatorMotor.set(.2)
+        if(topLimit.get()) {
+            targetPosition = GUNPosition.STOW
+            setZeroPosition()
+        }
     }
-    private fun goToAmp() {
+    private fun goToAmpPose() {
 
     }
+    private fun goToSpeakerPose() {
+
+    }
+    private fun goToStowPose() {
+
+    }
+
+    private fun goToTrapPose() {
+
+    }
+
+    private fun goToIntakePose() {
+
+    }
+
     fun ampScore() {
 
     }
