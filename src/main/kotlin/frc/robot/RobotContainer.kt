@@ -68,8 +68,17 @@ object RobotContainer {
         teleopRotateCommand = Commands.run({
             gunSystem.rotate(-xboxController.rightY) }
         )
-        xboxController.a().onTrue(Commands.runOnce({
-            gunSystem.setZeroPosition()
+//        xboxController.a().onTrue(Commands.runOnce({
+//            gunSystem.setPosition(.25)
+//        }))
+        xboxController.y().onTrue(Commands.runOnce({
+            gunSystem.calibrate()
+        }))
+//        xboxController.b().onTrue(Commands.runOnce({
+//            gunSystem.setPosition(.5)
+//        }))
+        xboxController.x().onTrue(Commands.runOnce({
+            gunSystem.goManual()
         }))
     }
 }

@@ -35,6 +35,8 @@ object GUNConstants {
     var STOW_POSITION: Double = 0.0
     var STOW_ANGLE: Double = 0.0
 
+    var TOP_LIMIT_SWITCH_POSITION = 0.75
+
     var rotationOffset: Double = 0.0
 
     const val SMART_MOTION_SLOT = 0

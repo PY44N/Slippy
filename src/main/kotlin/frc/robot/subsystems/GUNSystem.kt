@@ -16,11 +16,12 @@ enum class GUNPosition {
     STOW,
     TRAP,
     CALIBRATE,
+    MANUAL_CONTROL,
 }
 
 class GUNSystem : SubsystemBase() {
     private val elevatorMotor = CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless)
-    private val positionEncoder = elevatorMotor.getAlternateEncoder(GUNConstants.POSITION_GEAR_RATIO)
+    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 
     private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
@@ -90,12 +91,12 @@ class GUNSystem : SubsystemBase() {
     }
 
     fun setZeroPosition() {
-        positionEncoder.setPosition(0.0)
+        positionEncoder.setPosition(-GUNConstants.TOP_LIMIT_SWITCH_POSITION/GUNConstants.MOVER_GEAR_CIRCUMFERENCE_M)
     }
 
     private fun setDesiredPosition(position: Double) {
         positionSetPoint = position
-        positionPID.setReference(position, CANSparkBase.ControlType.kSmartMotion)
+        positionPID.setReference(positionSetPoint, CANSparkBase.ControlType.kSmartMotion)
     }
 
     private fun setDesiredRotation(angle: Double) {
@@ -109,8 +110,8 @@ class GUNSystem : SubsystemBase() {
 //    }
 
     fun getRotation(): Double {
-//        return 69.0
-        return rotationEncoder.absolutePosition * 360.0
+        return rotationSetPoint
+//        return rotationEncoder.absolutePosition * 360.0
     }
 
     fun getPosition(): Double {
@@ -118,11 +119,16 @@ class GUNSystem : SubsystemBase() {
     }
 
     fun elevate(speed: Double) {
-        elevatorMotor.set(speed)
+        if(targetPosition == GUNPosition.MANUAL_CONTROL)
+            elevatorMotor.set(speed)
     }
-
+    fun goManual() {
+        targetPosition = GUNPosition.MANUAL_CONTROL
+    }
     fun rotate(speed: Double) {
-        mainRotationMotor.set(speed)
+        if (targetPosition == GUNPosition.MANUAL_CONTROL) {
+            mainRotationMotor.set(speed)
+        }
     }
 
     override fun periodic() {
@@ -258,16 +264,18 @@ class GUNSystem : SubsystemBase() {
             GUNPosition.INTAKE -> { goToIntakePose() }
             GUNPosition.SPEAKER -> { goToSpeakerPose() }
             GUNPosition.STOW -> { goToStowPose() }
-            GUNPosition.CALIBRATE -> { calibrate() }
+            GUNPosition.CALIBRATE -> { calibratePeriodic() }
+            GUNPosition.MANUAL_CONTROL -> {}
         }
     }
-    private fun calibrate() {
+    private fun calibratePeriodic() {
         if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
             setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
         else if(!calibrationMoving && getRotation() > GUNConstants.MIN_SAFE_ANGLE)
             elevatorMotor.set(.2)
         if(topLimit.get()) {
-            targetPosition = GUNPosition.STOW
+            elevatorMotor.set(0.0)
+            targetPosition = GUNPosition.MANUAL_CONTROL
             setZeroPosition()
         }
     }
@@ -282,6 +290,14 @@ class GUNSystem : SubsystemBase() {
             else if (getRotation() > GUNConstants.MIN_SAFE_ANGLE)
                 setDesiredPosition(GUNConstants.AMP_POSITION)
         }
+    }
+    fun calibrate() {
+        elevatorMotor.set(0.0)
+        targetPosition = GUNPosition.CALIBRATE
+    }
+    fun stow() {
+        elevatorMotor.set(0.0)
+        targetPosition = GUNPosition.STOW
     }
     private fun goToSpeakerPose() {
         if(rotationSetPoint != shootingAngle) {
@@ -333,7 +349,9 @@ class GUNSystem : SubsystemBase() {
                 setDesiredPosition(GUNConstants.CROSSBAR_TOP)
         }
     }
+    fun goToAmp() {
 
+    }
     fun ampScore() {
 
     }
@@ -342,6 +360,9 @@ class GUNSystem : SubsystemBase() {
 
     }
 
+//    fun setPosition(pos: Double) {
+//        setDesiredPosition(pos)
+//    }
 
 
     override fun simulationPeriodic() {}
