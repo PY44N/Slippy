@@ -35,7 +35,7 @@ class GUNSystem : SubsystemBase() {
     private val positionPID = elevatorMotor.pidController
     private val rotationPID = mainRotationMotor.pidController
 
-    var targetPosition = GUNPosition.SPEAKER
+    var targetPosition = GUNPosition.STOW
 
     var rotationSetPoint = GUNConstants.TARGET_SAFE_ANGLE
     var positionSetPoint = GUNConstants.SPEAKER_POSITION
@@ -93,20 +93,15 @@ class GUNSystem : SubsystemBase() {
         positionEncoder.setPosition(0.0)
     }
 
-    fun setDesiredPosition(position: Double) {
+    private fun setDesiredPosition(position: Double) {
         positionSetPoint = position
         positionPID.setReference(position, CANSparkBase.ControlType.kSmartMotion)
     }
 
-    fun setDesiredRotation(angle: Double) {
+    private fun setDesiredRotation(angle: Double) {
         rotationSetPoint = angle
         rotationPID.setReference(angle + GUNConstants.rotationOffset, CANSparkBase.ControlType.kSmartMotion)
     }
-//
-//    fun goToShoot(angle: Double) {
-//        shootingAngle = angle
-//        targetPosition = GUNPosition.SPEAKER
-//    }
 
 //    fun setSpeed(left: Double, right: Double) {
 //        leftShooter.set(left)
@@ -121,12 +116,6 @@ class GUNSystem : SubsystemBase() {
     fun getPosition(): Double {
         return -positionEncoder.position * GUNConstants.MOVER_GEAR_CIRCUMFERENCE_M
     }
-
-//    fun shoot(angle: Double, leftPower: Double, rightPower: Double) {
-//        goToShoot(angle)
-//        setSpeed(leftPower, rightPower)
-//    }
-
 
     fun elevate(speed: Double) {
         elevatorMotor.set(speed)
@@ -264,70 +253,18 @@ class GUNSystem : SubsystemBase() {
         SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
         */
         when(targetPosition) {
-            GUNPosition.TRAP -> { goToTrap() }
-            GUNPosition.AMP -> { goToAmp()
-                if(rotationSetPoint != GUNConstants.AMP_ANGLE)
-                    setDesiredRotation(GUNConstants.AMP_ANGLE)
-                if(positionSetPoint != GUNConstants.AMP_POSITION) {
-                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
-                        isDefinitelyAboveCrossbar = true
-                        setDesiredPosition(GUNConstants.AMP_POSITION)
-                    }
-                    else if (getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-                        setDesiredPosition(GUNConstants.AMP_POSITION)
-                }
-            }
-            GUNPosition.INTAKE -> { goToIntakePose()
-                isDefinitelyAboveCrossbar = false
-                if(rotationSetPoint != GUNConstants.INTAKE_ANGLE) {
-                    if(getPosition() < GUNConstants.CROSSBAR_BOTTOM)
-                        setDesiredRotation(GUNConstants.INTAKE_ANGLE)
-                    else if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-                }
-                if(positionSetPoint != GUNConstants.INTAKE_POSITION) {
-                    if(getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-                        setDesiredPosition(GUNConstants.INTAKE_POSITION)
-                    else if(positionSetPoint != GUNConstants.CROSSBAR_TOP)
-                        setDesiredPosition(GUNConstants.CROSSBAR_TOP)
-                }
-            }
-            GUNPosition.SPEAKER -> {
-                if(rotationSetPoint != shootingAngle) {
-                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
-                        isDefinitelyAboveCrossbar = true
-                        setDesiredRotation(shootingAngle) // maybe no
-                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-                }
-                if(positionSetPoint != GUNConstants.SPEAKER_POSITION) {
-                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-                        setDesiredPosition(GUNConstants.SPEAKER_POSITION)
-                    else
-                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
-                }
-            }
-            GUNPosition.STOW -> {
-                if(rotationSetPoint != GUNConstants.STOW_ANGLE) {
-                    if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
-                        isDefinitelyAboveCrossbar = true
-                        setDesiredRotation(GUNConstants.STOW_ANGLE) // maybe no
-                    } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
-                        setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-                }
-                if(positionSetPoint != GUNConstants.STOW_POSITION) {
-                    if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
-                        setDesiredPosition(GUNConstants.STOW_POSITION)
-                    else
-                        setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
-                }
-            }
+            GUNPosition.TRAP -> { goToTrapPose() }
+            GUNPosition.AMP -> { goToAmpPose() }
+            GUNPosition.INTAKE -> { goToIntakePose() }
+            GUNPosition.SPEAKER -> { goToSpeakerPose() }
+            GUNPosition.STOW -> { goToStowPose() }
+            GUNPosition.CALIBRATE -> { calibrate() }
         }
     }
     private fun calibrate() {
         if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
             setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-        else if(calibrationMoving == false && getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+        else if(!calibrationMoving && getRotation() > GUNConstants.MIN_SAFE_ANGLE)
             elevatorMotor.set(.2)
         if(topLimit.get()) {
             targetPosition = GUNPosition.STOW
@@ -335,13 +272,46 @@ class GUNSystem : SubsystemBase() {
         }
     }
     private fun goToAmpPose() {
-
+        if(rotationSetPoint != GUNConstants.AMP_ANGLE)
+            setDesiredRotation(GUNConstants.AMP_ANGLE)
+        if(positionSetPoint != GUNConstants.AMP_POSITION) {
+            if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+                isDefinitelyAboveCrossbar = true
+                setDesiredPosition(GUNConstants.AMP_POSITION)
+            }
+            else if (getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                setDesiredPosition(GUNConstants.AMP_POSITION)
+        }
     }
     private fun goToSpeakerPose() {
-
+        if(rotationSetPoint != shootingAngle) {
+            if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+                isDefinitelyAboveCrossbar = true
+                setDesiredRotation(shootingAngle) // maybe no
+            } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+                setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+        }
+        if(positionSetPoint != GUNConstants.SPEAKER_POSITION) {
+            if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                setDesiredPosition(GUNConstants.SPEAKER_POSITION)
+            else
+                setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
+        }
     }
     private fun goToStowPose() {
-
+        if(rotationSetPoint != GUNConstants.STOW_ANGLE) {
+            if(isDefinitelyAboveCrossbar || getPosition() > GUNConstants.CROSSBAR_TOP) {
+                isDefinitelyAboveCrossbar = true
+                setDesiredRotation(GUNConstants.STOW_ANGLE) // maybe no
+            } else if (rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+                setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+        }
+        if(positionSetPoint != GUNConstants.STOW_POSITION) {
+            if(isDefinitelyAboveCrossbar || getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                setDesiredPosition(GUNConstants.STOW_POSITION)
+            else
+                setDesiredPosition(GUNConstants.CROSSBAR_BOTTOM)
+        }
     }
 
     private fun goToTrapPose() {
@@ -349,7 +319,19 @@ class GUNSystem : SubsystemBase() {
     }
 
     private fun goToIntakePose() {
-
+        isDefinitelyAboveCrossbar = false
+        if(rotationSetPoint != GUNConstants.INTAKE_ANGLE) {
+            if(getPosition() < GUNConstants.CROSSBAR_BOTTOM)
+                setDesiredRotation(GUNConstants.INTAKE_ANGLE)
+            else if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+                setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
+        }
+        if(positionSetPoint != GUNConstants.INTAKE_POSITION) {
+            if(getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+                setDesiredPosition(GUNConstants.INTAKE_POSITION)
+            else if(positionSetPoint != GUNConstants.CROSSBAR_TOP)
+                setDesiredPosition(GUNConstants.CROSSBAR_TOP)
+        }
     }
 
     fun ampScore() {
