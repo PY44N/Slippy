@@ -9,6 +9,19 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.GUNConstants
+import frc.robot.constants.GUNConstants.SMART_MOTION_SLOT
+import frc.robot.constants.GUNConstants.positionFF
+import frc.robot.constants.GUNConstants.positionIz
+import frc.robot.constants.GUNConstants.positionKD
+import frc.robot.constants.GUNConstants.positionKI
+import frc.robot.constants.GUNConstants.positionKP
+import frc.robot.constants.GUNConstants.positionMax
+import frc.robot.constants.GUNConstants.positionMaxAcceleration
+import frc.robot.constants.GUNConstants.positionMaxError
+import frc.robot.constants.GUNConstants.positionMaxRPM
+import frc.robot.constants.GUNConstants.positionMin
+import frc.robot.constants.GUNConstants.positionMinRPM
+
 enum class GUNPosition {
     AMP,
     SPEAKER,
@@ -17,6 +30,7 @@ enum class GUNPosition {
     TRAP,
     CALIBRATE,
     MANUAL_CONTROL,
+    CUSTOM_POS,
 }
 
 class GUNSystem : SubsystemBase() {
@@ -49,12 +63,30 @@ class GUNSystem : SubsystemBase() {
     var calibrationMoving = false
 
     init {
+        val inputElevatorP = SmartDashboard.getNumber("Elevator P Gain", 0.0);
+        val inputElevatorI = SmartDashboard.getNumber("Elevator I Gain", 0.0);
+        val inputElevatorD = SmartDashboard.getNumber("Elevator D Gain", 0.0);
+        val inputElevatorIz = SmartDashboard.getNumber("Elevator I Zone", 0.0);
+        val inputElevatorFf = SmartDashboard.getNumber("Elevator Feed Forward", 0.0);
+        val inputElevatorMax = SmartDashboard.getNumber("Elevator Max Output", 0.0);
+        val inputElevatorMin = SmartDashboard.getNumber("Elevator Min Output", 0.0);
+        val inputElevatorMaxV = SmartDashboard.getNumber("Elevator Max Velocity", 0.0);
+        val inputElevatorMinV = SmartDashboard.getNumber("Elevator Min Velocity", 0.0);
+        val inputElevatorMaxA = SmartDashboard.getNumber("Elevator Max Acceleration", 0.0);
+        val inputElevatorAllE = SmartDashboard.getNumber("Elevator Allowed Closed Loop Error", 0.0);
         elevatorMotor.restoreFactoryDefaults()
         mainRotationMotor.restoreFactoryDefaults()
         followerRotationMotor.restoreFactoryDefaults()
 
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
         mainRotationMotor.inverted = false
+
+//        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, 0.0f)
+//        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,
+//            (-.73 * elevatorEncoderConversionFactor).toFloat()
+//        )
+//        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
+//        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
 
         positionPID.setFeedbackDevice(positionEncoder)
 
@@ -69,17 +101,17 @@ class GUNSystem : SubsystemBase() {
         followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
 
-//        positionPID.setP(GUNConstants.positionKP)
-//        positionPID.setI(GUNConstants.positionKI)
-//        positionPID.setD(GUNConstants.positionKD)
-//        positionPID.setIZone(GUNConstants.positionIz)
-//        positionPID.setFF(GUNConstants.positionFF)
-//        positionPID.setOutputRange(GUNConstants.positionMin, GUNConstants.positionMax)
-//        positionPID.setSmartMotionMaxVelocity(GUNConstants.positionMaxRPM, GUNConstants.SMART_MOTION_SLOT)
-//        positionPID.setSmartMotionMinOutputVelocity(GUNConstants.positionMinRPM, GUNConstants.SMART_MOTION_SLOT)
-//        positionPID.setSmartMotionMaxAccel(GUNConstants.positionMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
-//        positionPID.setSmartMotionAllowedClosedLoopError(GUNConstants.positionMaxError, GUNConstants.SMART_MOTION_SLOT)
-//
+        positionPID.setP(GUNConstants.positionKP)
+        positionPID.setI(GUNConstants.positionKI)
+        positionPID.setD(GUNConstants.positionKD)
+        positionPID.setIZone(GUNConstants.positionIz)
+        positionPID.setFF(GUNConstants.positionFF)
+        positionPID.setOutputRange(GUNConstants.positionMin, GUNConstants.positionMax)
+        positionPID.setSmartMotionMaxVelocity(GUNConstants.positionMaxRPM, GUNConstants.SMART_MOTION_SLOT)
+        positionPID.setSmartMotionMinOutputVelocity(GUNConstants.positionMinRPM, GUNConstants.SMART_MOTION_SLOT)
+        positionPID.setSmartMotionMaxAccel(GUNConstants.positionMaxAcceleration, GUNConstants.SMART_MOTION_SLOT)
+        positionPID.setSmartMotionAllowedClosedLoopError(GUNConstants.positionMaxError, GUNConstants.SMART_MOTION_SLOT)
+
 //        rotationPID.setP(GUNConstants.rotationKP)
 //        rotationPID.setI(GUNConstants.rotationKI)
 //        rotationPID.setD(GUNConstants.rotationKD)
@@ -97,8 +129,8 @@ class GUNSystem : SubsystemBase() {
     }
 
     private fun setDesiredPosition(position: Double) {
-        positionSetPoint = position * elevatorEncoderConversionFactor
-        positionPID.setReference(positionSetPoint, CANSparkBase.ControlType.kSmartMotion)
+        positionSetPoint = position
+        positionPID.setReference(-positionSetPoint * elevatorEncoderConversionFactor, CANSparkBase.ControlType.kSmartMotion)
     }
 
     private fun setDesiredRotation(angle: Double) {
@@ -126,7 +158,7 @@ class GUNSystem : SubsystemBase() {
 
     fun elevate(speed: Double) {
         if(targetPosition == GUNPosition.MANUAL_CONTROL)
-            elevatorMotor.set(speed)
+            setElevatorSpeed(speed)
     }
     fun goManual() {
         targetPosition = GUNPosition.MANUAL_CONTROL
@@ -139,8 +171,10 @@ class GUNSystem : SubsystemBase() {
 
     override fun periodic() {
         SmartDashboard.putNumber("elevator position", getPosition())
+        SmartDashboard.putNumber("elevator position setpoint", positionSetPoint)
         SmartDashboard.putNumber("pivot rotation", getRotation())
-        /*
+        SmartDashboard.putString("target position", targetPosition.name)
+
         val inputElevatorP = SmartDashboard.getNumber("Elevator P Gain", 0.0);
         val inputElevatorI = SmartDashboard.getNumber("Elevator I Gain", 0.0);
         val inputElevatorD = SmartDashboard.getNumber("Elevator D Gain", 0.0);
@@ -194,7 +228,7 @@ class GUNSystem : SubsystemBase() {
             positionPID.setSmartMotionAllowedClosedLoopError(inputElevatorAllE, SMART_MOTION_SLOT)
             positionMaxError = inputElevatorAllE
         }
-
+/*
         val inputRotationP = SmartDashboard.getNumber("Rotation P Gain", 0.0);
         val inputRotationI = SmartDashboard.getNumber("Rotation I Gain", 0.0);
         val inputRotationD = SmartDashboard.getNumber("Rotation D Gain", 0.0);
@@ -252,18 +286,16 @@ class GUNSystem : SubsystemBase() {
         val rotationSetPoint = SmartDashboard.getNumber("Rotation Set Position", 0.0)
         rotationPID.setReference(rotationSetPoint, CANSparkBase.ControlType.kSmartMotion)
         val rotation = rotationEncoder.position
+*/
+//        val setPoint = SmartDashboard.getNumber("Set Position", 0.0)
+//        positionPID.setReference(setPoint, CANSparkBase.ControlType.kSmartMotion)
+//        val pos = positionEncoder.position
 
-        val setPoint = SmartDashboard.getNumber("Set Position", 0.0)
-        positionPID.setReference(setPoint, CANSparkBase.ControlType.kSmartMotion)
-        val pos = positionEncoder.position
+        SmartDashboard.putNumber("Elevator Motor Output", elevatorMotor.appliedOutput)
+//        SmartDashboard.putNumber("Rotation SetPoint", setPoint)
+//        SmartDashboard.putNumber("Rotation Position", pos)
+//        SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
 
-        SmartDashboard.putNumber("Elevator SetPoint", setPoint)
-        SmartDashboard.putNumber("Elevator Position", pos)
-        SmartDashboard.putNumber("Elevator Motor Output", elevatorMotor.getAppliedOutput())
-        SmartDashboard.putNumber("Rotation SetPoint", setPoint)
-        SmartDashboard.putNumber("Rotation Position", pos)
-        SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
-        */
         when(targetPosition) {
             GUNPosition.TRAP -> { goToTrapPose() }
             GUNPosition.AMP -> { goToAmpPose() }
@@ -272,17 +304,20 @@ class GUNSystem : SubsystemBase() {
             GUNPosition.STOW -> { goToStowPose() }
             GUNPosition.CALIBRATE -> { calibratePeriodic() }
             GUNPosition.MANUAL_CONTROL -> {}
+            GUNPosition.CUSTOM_POS -> {}
         }
     }
     private fun calibratePeriodic() {
         if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
             setDesiredRotation(GUNConstants.TARGET_SAFE_ANGLE)
-        else if(!calibrationMoving && getRotation() > GUNConstants.MIN_SAFE_ANGLE)
+        else if(!calibrationMoving && getRotation() >= GUNConstants.MIN_SAFE_ANGLE)
             setElevatorSpeed(.2)
         if(topLimit.get()) {
             setElevatorSpeed(0.0)
             targetPosition = GUNPosition.MANUAL_CONTROL
             setZeroPosition()
+//            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
+//            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
         }
     }
     private fun goToAmpPose() {
@@ -299,6 +334,8 @@ class GUNSystem : SubsystemBase() {
     }
     fun calibrate() {
         setElevatorSpeed(0.0)
+        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
+        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
         targetPosition = GUNPosition.CALIBRATE
     }
     fun stow() {
@@ -366,9 +403,10 @@ class GUNSystem : SubsystemBase() {
 
     }
 
-//    fun setPosition(pos: Double) {
-//        setDesiredPosition(pos)
-//    }
+    fun setPosition(pos: Double) {
+        targetPosition = GUNPosition.CUSTOM_POS
+        setDesiredPosition(pos)
+    }
 
 
     override fun simulationPeriodic() {}
