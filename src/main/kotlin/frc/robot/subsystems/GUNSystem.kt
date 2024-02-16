@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.GUNConstants
-
 enum class GUNPosition {
     AMP,
     SPEAKER,
@@ -35,10 +34,10 @@ class GUNSystem : SubsystemBase() {
 
     var targetPosition = GUNPosition.SPEAKER
 
-    //    var rotationSetPoint = GUNConstants.TARGET_SAFE_ANGLE
-//    var positionSetPoint = GUNConstants.SPEAKER_POSITION
-//
-//    var shootingAngle = GUNConstants.TARGET_SAFE_ANGLE
+    var rotationSetPoint = GUNConstants.TARGET_SAFE_ANGLE
+    var positionSetPoint = GUNConstants.SPEAKER_POSITION
+    var shootingAngle = GUNConstants.TARGET_SAFE_ANGLE
+
     var isDefinitelyAboveCrossbar = false
 
     init {
@@ -87,23 +86,15 @@ class GUNSystem : SubsystemBase() {
         positionEncoder.setPosition(0.0)
     }
 
-    fun goToIntake() {
-        targetPosition = GUNPosition.INTAKE
+    fun setDesiredPosition(position: Double) {
+        positionSetPoint = position
+        positionPID.setReference(position, CANSparkBase.ControlType.kSmartMotion)
     }
 
-    fun goToAmp() {
-        targetPosition = GUNPosition.AMP
+    fun setDesiredRotation(angle: Double) {
+        rotationSetPoint = angle
+        rotationPID.setReference(angle + GUNConstants.rotationOffset, CANSparkBase.ControlType.kSmartMotion)
     }
-
-//    fun setDesiredPosition(position: Double) {
-//        positionSetPoint = position
-//        positionPID.setReference(position, kSmartMotion)
-//    }
-//
-//    fun setDesiredRotation(angle: Double) {
-//        rotationSetPoint = angle + GUNConstants.rotationOffset
-//        rotationPID.setReference(angle, kSmartMotion)
-//    }
 //
 //    fun goToShoot(angle: Double) {
 //        shootingAngle = angle
@@ -266,9 +257,6 @@ class GUNSystem : SubsystemBase() {
         SmartDashboard.putNumber("Rotation Position", pos)
         SmartDashboard.putNumber("Rotation Motor Output", mainRotationMotor.getAppliedOutput())
         */
-        if(targetPosition == GUNPosition.CALIBRATE) {
-
-        }
 //        when(targetPosition) {
 //            GUNPosition.TRAP -> {}
 //            GUNPosition.AMP -> {
@@ -330,6 +318,22 @@ class GUNSystem : SubsystemBase() {
 //            }
 //        }
     }
+    private fun calibrate() {
+        if(rotationSetPoint != GUNConstants.TARGET_SAFE_ANGLE)
+            setDesiredRotation
+    }
+    private fun goToAmp() {
+
+    }
+    fun ampScore() {
+
+    }
+
+    fun intake() {
+
+    }
+
+
 
     override fun simulationPeriodic() {}
 }
