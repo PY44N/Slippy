@@ -41,11 +41,11 @@ object GUNConstants {
 
     const val SMART_MOTION_SLOT = 0
 
-    var positionKP = 5e-5
-    var positionKI = 1e-6
+    var positionKP = .9
+    var positionKI = 0.0
     var positionKD = 0.0
     var positionIz = 0.0
-    var positionFF = 0.000156
+    var positionFF = 0.0
     var positionMax = 1.0
     var positionMin = -1.0
     var positionMinRPM = 10.0
@@ -53,11 +53,11 @@ object GUNConstants {
     var positionMaxAcceleration = 1500.0
     var positionMaxError = 5.0
 
-    var rotationKP = 5e-5
-    var rotationKI = 1e-6
+    var rotationKP = .7
+    var rotationKI = 0.0
     var rotationKD = 0.0
     var rotationIz = 0.0
-    var rotationFF = 0.000156
+    var rotationFF = 0.0
     var rotationMin = -1.0
     var rotationMax = 1.0
     var rotationMinRPM = 10.0

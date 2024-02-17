@@ -40,7 +40,7 @@ class GUNSystem : SubsystemBase() {
     private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
 
-    private val rotationEncoder = DutyCycleEncoder(0)
+//    private val rotationEncoder = DutyCycleEncoder(0)
 
     private val topLimit = DigitalInput(1)
 
@@ -85,12 +85,12 @@ class GUNSystem : SubsystemBase() {
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
         mainRotationMotor.inverted = false
 
-//        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, 0.0f)
-//        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,
-//            (-.73 * elevatorEncoderConversionFactor).toFloat()
-//        )
-//        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
-//        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
+        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, 0.0f)
+        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,
+            (-.73 * elevatorEncoderConversionFactor).toFloat()
+        )
+        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
+        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
 
         positionPID.setFeedbackDevice(positionEncoder)
 
@@ -135,12 +135,12 @@ class GUNSystem : SubsystemBase() {
     private fun setDesiredPosition(position: Double) {
         positionSetPoint = position
         trueSetpoint = -positionSetPoint * elevatorEncoderConversionFactor
-        positionPID.setReference(-positionSetPoint * elevatorEncoderConversionFactor, CANSparkBase.ControlType.kSmartMotion)
+        positionPID.setReference(-positionSetPoint * elevatorEncoderConversionFactor, CANSparkBase.ControlType.kPosition)
     }
 
     private fun setDesiredRotation(angle: Double) {
         rotationSetPoint = angle
-        rotationPID.setReference(angle + GUNConstants.rotationOffset, CANSparkBase.ControlType.kSmartMotion)
+        rotationPID.setReference(angle + GUNConstants.rotationOffset, CANSparkBase.ControlType.kPosition)
     }
 
 //    fun setSpeed(left: Double, right: Double) {
@@ -317,8 +317,8 @@ class GUNSystem : SubsystemBase() {
             setElevatorSpeed(0.0)
             targetPosition = GUNPosition.MANUAL_CONTROL
             setZeroPosition()
-//            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
-//            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
+            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
+            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
         }
     }
     private fun goToAmpPose() {
