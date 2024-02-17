@@ -69,13 +69,16 @@ object RobotContainer {
             gunSystem.rotate(-xboxController.rightY) }
         )
         xboxController.a().onTrue(Commands.runOnce({
-            gunSystem.customPosition()
+            gunSystem.intake()
         }))
         xboxController.y().onTrue(Commands.runOnce({
-            gunSystem.calibrate()
+            gunSystem.goToAmp()
         }))
         xboxController.x().onTrue(Commands.runOnce({
             gunSystem.goManual()
+        }))
+        xboxController.b().onTrue(Commands.runOnce({
+            gunSystem.zeroRotation()
         }))
     }
 }
