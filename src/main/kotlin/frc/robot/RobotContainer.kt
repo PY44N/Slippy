@@ -1,17 +1,16 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.wpilibj.Filesystem
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.TeleopSwerveDriveCommand
-import frc.robot.subsystems.GUNSystem
 import frc.robot.subsystems.SwerveSystem
 import frc.robot.subsystems.SwerveSystemIOReal
+import frc.robot.subsystems.trunk.TrunkIOReal
+import frc.robot.subsystems.trunk.TrunkIOSim
+import frc.robot.subsystems.trunk.TrunkSystem
 import java.io.File
 
 object RobotContainer {
@@ -20,10 +19,10 @@ object RobotContainer {
     private val xboxController: CommandXboxController = CommandXboxController(2)
 
     val swerveSystem: SwerveSystem
-    val gunSystem = GUNSystem()
+    val trunkSystem = TrunkSystem(TrunkIOReal())
 
     val autonomousCommand: Command = Commands.run({})
-  
+
     lateinit var teleopSwerveCommand: Command
     lateinit var teleopElevateCommand: Command
     lateinit var teleopRotateCommand: Command
@@ -34,22 +33,24 @@ object RobotContainer {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(
-                    SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+                        SwerveSystemIOReal(),
+                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
                 )
             }
+
             Constants.Mode.SIM -> {
                 // change these later
                 swerveSystem = SwerveSystem(
-                    SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+                        SwerveSystemIOReal(),
+                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
                 )
             }
+
             Constants.Mode.REPLAY -> {
                 // change these later
                 swerveSystem = SwerveSystem(
-                    SwerveSystemIOReal(),
-                    File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+                        SwerveSystemIOReal(),
+                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
                 )
             }
         }
@@ -63,22 +64,23 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         teleopElevateCommand = Commands.run({
-            gunSystem.elevate(-xboxController.leftY)
+            trunkSystem.elevate(-xboxController.leftY)
         })
         teleopRotateCommand = Commands.run({
-            gunSystem.rotate(-xboxController.rightY) }
+            trunkSystem.rotate(-xboxController.rightY)
+        }
         )
         xboxController.a().onTrue(Commands.runOnce({
-            gunSystem.intake()
+            trunkSystem.intake()
         }))
         xboxController.y().onTrue(Commands.runOnce({
-            gunSystem.goToAmp()
+            trunkSystem.goToAmp()
         }))
         xboxController.x().onTrue(Commands.runOnce({
-            gunSystem.goManual()
+            trunkSystem.goManual()
         }))
         xboxController.b().onTrue(Commands.runOnce({
-            gunSystem.zeroRotation()
+            trunkSystem.io.setZeroRotation()
         }))
     }
 }

@@ -1,33 +1,33 @@
 package frc.robot.util
 
 import frc.robot.RobotContainer
-import frc.robot.subsystems.GUNSystem
+import frc.robot.subsystems.trunk.TrunkSystem
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
+class ShooterCalibrator(val directory: String, val trunk: TrunkSystem) {
     var lastShot: Shot? = null
     fun readCsv(): List<Shot> {
         val inputStream = FileInputStream(directory)
         val reader = inputStream.bufferedReader()
         val header = reader.readLine()
         return reader.lineSequence()
-            .filter { it.isNotBlank() }
-            .map { line ->
-                val list = line.split(",", ignoreCase = false, limit = 8).map { it.trim().toDouble() }
-                Shot(
-                    list[0],
-                    list[1],
-                    list[2],
-                    list[3],
-                    list[4],
-                    list[5],
-                    list[6],
-                    list[7],
-                )
-            }.toList()
+                .filter { it.isNotBlank() }
+                .map { line ->
+                    val list = line.split(",", ignoreCase = false, limit = 8).map { it.trim().toDouble() }
+                    Shot(
+                            list[0],
+                            list[1],
+                            list[2],
+                            list[3],
+                            list[4],
+                            list[5],
+                            list[6],
+                            list[7],
+                    )
+                }.toList()
     }
 
     fun OutputStream.writeCsv(shots: List<Shot>) {
@@ -54,14 +54,14 @@ class ShooterCalibrator(val directory: String, val gun: GUNSystem) {
         val botPose = RobotContainer.swerveSystem.swerveDrive.pose
         val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
         lastShot = Shot(
-            botPose.x,
-            botPose.y,
-            v.vxMetersPerSecond,
-            v.vyMetersPerSecond,
-            botPose.rotation.radians,
-            shooterAngle,
-            leftPower,
-            rightPower,
+                botPose.x,
+                botPose.y,
+                v.vxMetersPerSecond,
+                v.vyMetersPerSecond,
+                botPose.rotation.radians,
+                shooterAngle,
+                leftPower,
+                rightPower,
         )
     }
 

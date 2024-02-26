@@ -4,7 +4,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-object GUNConstants {
+object TrunkConstants {
     // someone rename these
     const val POSITION_GEAR_RATIO = 15
     const val ROTATION_GEAR_RATIO = 100
