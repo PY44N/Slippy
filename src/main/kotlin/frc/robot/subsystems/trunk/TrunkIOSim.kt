@@ -1,7 +1,7 @@
 package frc.robot.subsystems.trunk
 
 import edu.wpi.first.wpilibj.Timer
-import java.lang.Math.pow
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlin.math.pow
 
 class TrunkIOSim : TrunkIO {
@@ -16,15 +16,15 @@ class TrunkIOSim : TrunkIO {
     var traversalPercentageTimer = Timer()
     var traversalPercentage = 0.0
 
-    var elevatorSpeed = 0.0
-    var rotationSpeed = 0.0
+    var desiredElevatorSpeed = 0.0
+    var desiredRotationSpeed = 0.0
 
     override fun getPosition(): Double = traversalPercentage
 
     override fun getRotation(): Double = trunkRotation
 
     override fun setDesiredPosition(position: Double) {
-        elevatorSpeed = 0.0
+        desiredElevatorSpeed = 0.0
         traversalPercentageTimer.reset()
         lastTraversalPercentage = desiredTraversalPercentage
         desiredTraversalPercentage = position
@@ -32,7 +32,7 @@ class TrunkIOSim : TrunkIO {
     }
 
     override fun setDesiredRotation(angle: Double) {
-        rotationSpeed = 0.0
+        desiredRotationSpeed = 0.0
         trunkRotationTimer.reset()
         lastTrunkRotation = desiredTrunkRotation
         desiredTrunkRotation = angle
@@ -40,11 +40,11 @@ class TrunkIOSim : TrunkIO {
     }
 
     override fun setElevatorSpeed(speed: Double) {
-        elevatorSpeed = speed / 10
+        desiredElevatorSpeed = speed / 10
     }
 
     override fun setRotationSpeed(speed: Double) {
-        rotationSpeed = speed * 5
+        desiredRotationSpeed = speed * 5
     }
 
     override fun setZeroPosition() {}
@@ -66,8 +66,10 @@ class TrunkIOSim : TrunkIO {
     }
 
     override fun periodic() {
-        trunkRotation += rotationSpeed
-        traversalPercentage += elevatorSpeed
+        trunkRotation += desiredRotationSpeed
+        traversalPercentage += desiredElevatorSpeed
+        SmartDashboard.putNumber("Traversal Percentage", traversalPercentage)
+        SmartDashboard.putNumber("Traversal Setpoint", desiredTraversalPercentage)
 
         if (trunkRotationTimer.get() < 1) {
             trunkRotation = (desiredTrunkRotation - lastTrunkRotation) * easeInOutCubic(trunkRotationTimer.get()) + lastTrunkRotation

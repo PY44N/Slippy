@@ -74,9 +74,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         trunkMechanism.angle = io.getRotation()
 
         SmartDashboard.putData("Trunk Mechanism", superstructureMechanism)
-        SmartDashboard.putString("Trunk Position", targetPosition.name)
 
-        SmartDashboard.putString("target position", targetPosition.name)
+        SmartDashboard.putNumber("Trunk Position", io.getPosition())
+        SmartDashboard.putNumber("Trunk Rotation", io.getRotation())
+        SmartDashboard.putNumber("Desired Position", positionSetPoint)
 
         // TODO: Remove for actual robot
         if (keyboard.getRawButton(1)) {
@@ -122,6 +123,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 customPositionPeriodic()
             }
         }
+
+        io.periodic()
     }
 
     private fun calibratePeriodic() {

@@ -14,12 +14,12 @@ import frc.robot.subsystems.trunk.TrunkSystem
 import java.io.File
 
 object RobotContainer {
-    val leftJoystick: CommandJoystick = CommandJoystick(0)
-    val rightJoystick: CommandJoystick = CommandJoystick(1)
+    val leftJoystick: CommandJoystick = CommandJoystick(1)
+    val rightJoystick: CommandJoystick = CommandJoystick(2)
     private val xboxController: CommandXboxController = CommandXboxController(2)
 
     val swerveSystem: SwerveSystem
-    val trunkSystem = TrunkSystem(TrunkIOReal())
+    val trunkSystem = TrunkSystem(TrunkIOSim())
 
     val autonomousCommand: Command = Commands.run({})
 
