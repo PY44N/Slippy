@@ -4,12 +4,12 @@ package frc.robot.subsystems.Cannon
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import frc.robot.constants.GunConstants
+import frc.robot.constants.CannonConstants
 
 class CannonIOReal : CannonIO {
 
-    val leftMotor: CANSparkMax = CANSparkMax(GunConstants.LEFT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-    val rightMotor: CANSparkMax = CANSparkMax(GunConstants.RIGHT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+    val leftMotor: CANSparkMax = CANSparkMax(CannonConstants.LEFT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+    val rightMotor: CANSparkMax = CANSparkMax(CannonConstants.RIGHT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
 
     val leftPID = leftMotor.pidController
     val rightPID = rightMotor.pidController
@@ -19,17 +19,17 @@ class CannonIOReal : CannonIO {
     val rightEncoder = rightMotor.getAlternateEncoder(0);
 
     init {
-        leftPID.setP(GunConstants.leftKP)
-        leftPID.setI(GunConstants.leftKI)
-        leftPID.setD(GunConstants.leftKD)
-        leftPID.setIZone(GunConstants.leftIz)
-        leftPID.setFF(GunConstants.leftFF)
+        leftPID.setP(CannonConstants.leftKP)
+        leftPID.setI(CannonConstants.leftKI)
+        leftPID.setD(CannonConstants.leftKD)
+        leftPID.setIZone(CannonConstants.leftIz)
+        leftPID.setFF(CannonConstants.leftFF)
 
-        rightPID.setP(GunConstants.rightKP)
-        rightPID.setI(GunConstants.rightKI)
-        rightPID.setD(GunConstants.rightKD)
-        rightPID.setIZone(GunConstants.rightIz)
-        rightPID.setFF(GunConstants.rightFF)
+        rightPID.setP(CannonConstants.rightKP)
+        rightPID.setI(CannonConstants.rightKI)
+        rightPID.setD(CannonConstants.rightKD)
+        rightPID.setIZone(CannonConstants.rightIz)
+        rightPID.setFF(CannonConstants.rightFF)
     }
 
     override fun getLeftVel(): Double {

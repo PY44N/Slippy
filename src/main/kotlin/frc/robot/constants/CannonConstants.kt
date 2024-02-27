@@ -1,6 +1,6 @@
 package frc.robot.constants
 
-object GunConstants {
+object CannonConstants {
     val LEFT_SHOOTER_MOTOR_ID = 40
     val RIGHT_SHOOTER_MOTOR_ID = 40
 
