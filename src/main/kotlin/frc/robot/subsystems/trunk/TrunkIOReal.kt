@@ -3,21 +3,19 @@ package frc.robot.subsystems.trunk
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
+import com.revrobotics.SparkAbsoluteEncoder
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
-    private val elevatorEncoderConversionFactor = 1.0 / TrunkConstants.MOVER_GEAR_CIRCUMFERENCE_M
-
     private val elevatorMotor = CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 
     private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
     private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
 
-    // private val rotationEncoder = DutyCycleEncoder(0)
-    private val rotationEncoder = mainRotationMotor.getAlternateEncoder(16384)
+    private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
 
     private val topLimit = DigitalInput(1)
     private val bottomLimit = DigitalInput(2)
@@ -47,22 +45,16 @@ class TrunkIOReal : TrunkIO {
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
         mainRotationMotor.inverted = true
 
-        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, 0.0f)
-        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse,
-                (-.73 * elevatorEncoderConversionFactor).toFloat()
-        )
-        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
-        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
-
         rotationEncoder.positionConversionFactor = 360.0
+        positionEncoder.positionConversionFactor = -1.0 / TrunkConstants.MOVER_GEAR_CIRCUMFERENCE_M
 
         positionPID.setFeedbackDevice(positionEncoder)
         rotationPID.setFeedbackDevice(rotationEncoder)
 
-        //        mainRotationMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        //        mainRotationMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        //        elevatorMotor.getForwardLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
-        //        elevatorMotor.getReverseLimitSwitch(kNormallyOpen).enableLimitSwitch(false)
+        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, 0.0f)
+        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, -.73f)
+        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
+        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
 
         followerRotationMotor.follow(mainRotationMotor, true)
 
@@ -93,8 +85,9 @@ class TrunkIOReal : TrunkIO {
         rotationPID.setSmartMotionAllowedClosedLoopError(TrunkConstants.rotationMaxError, TrunkConstants.SMART_MOTION_SLOT)
     }
 
-    override fun setZeroPosition() {
-        positionEncoder.setPosition(-TrunkConstants.TOP_LIMIT_SWITCH_POSITION * elevatorEncoderConversionFactor)
+    override fun setZeroPosition(top: Boolean) {
+
+        positionEncoder.setPosition(if(top) {TrunkConstants.TOP_BREAK_BEAM_POSITION} else {TrunkConstants.BOTTOM_BREAK_BEAM_POSITION})
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
     }
@@ -103,13 +96,13 @@ class TrunkIOReal : TrunkIO {
         return topLimit.get()
     }
 
+    override fun atBottomLimit(): Boolean {
+        return bottomLimit.get()
+    }
+
     override fun calibrate() {
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
-    }
-
-    override fun setZeroRotation() {
-        rotationEncoder.setPosition(0.0)
     }
 
     override fun getPosition(): Double {
@@ -121,7 +114,7 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setDesiredPosition(position: Double) {
-        positionPID.setReference(-position * elevatorEncoderConversionFactor, CANSparkBase.ControlType.kPosition)
+        positionPID.setReference(position, CANSparkBase.ControlType.kPosition)
     }
 
     override fun setDesiredRotation(angle: Double) {

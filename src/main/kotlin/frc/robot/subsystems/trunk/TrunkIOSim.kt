@@ -47,11 +47,13 @@ class TrunkIOSim : TrunkIO {
         desiredRotationSpeed = speed * 5
     }
 
-    override fun setZeroPosition() {}
-
-    override fun setZeroRotation() {}
+    override fun setZeroPosition(top: Boolean) {}
 
     override fun atTopLimit(): Boolean {
+        return true
+    }
+
+    override fun atBottomLimit(): Boolean {
         return true
     }
 

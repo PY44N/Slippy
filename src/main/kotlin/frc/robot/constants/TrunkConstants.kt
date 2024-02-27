@@ -35,7 +35,8 @@ object TrunkConstants {
     var STOW_POSITION: Double = 0.0
     var STOW_ANGLE: Double = 0.0
 
-    var TOP_LIMIT_SWITCH_POSITION = 0.75
+    var TOP_BREAK_BEAM_POSITION: Double = 0.75
+    var BOTTOM_BREAK_BEAM_POSITION: Double = 0.0
 
     var rotationOffset: Double = 0.0
 
