@@ -20,11 +20,7 @@ class TrunkIOReal : TrunkIO {
     private val rotationEncoder = mainRotationMotor.getAlternateEncoder(16384)
 
     private val topLimit = DigitalInput(1)
-
-    private val leftShooter = CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless)
-    private val rightShooter = CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless)
-
-    private val leftIntake = CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless)
+    private val bottomLimit = DigitalInput(2)
 
     private val positionPID = elevatorMotor.pidController
     private val rotationPID = mainRotationMotor.pidController
