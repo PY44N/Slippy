@@ -8,47 +8,68 @@ import frc.robot.constants.CannonConstants
 
 class CannonIOReal : CannonIO {
 
-    val leftMotor: CANSparkMax = CANSparkMax(CannonConstants.LEFT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-    val rightMotor: CANSparkMax = CANSparkMax(CannonConstants.RIGHT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+    val leftShooterMotor: CANSparkMax = CANSparkMax(CannonConstants.LEFT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+    val rightShooterMotor: CANSparkMax = CANSparkMax(CannonConstants.RIGHT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
 
-    val leftPID = leftMotor.pidController
-    val rightPID = rightMotor.pidController
+    val leftShooterPID = leftShooterMotor.pidController
+    val rightShooterPID = rightShooterMotor.pidController
 
     //TODO: get the actual encoder tick values
-    val leftEncoder = leftMotor.getAlternateEncoder(0);
-    val rightEncoder = rightMotor.getAlternateEncoder(0);
+    val leftShooterEncoder = leftShooterMotor.getAlternateEncoder(0);
+    val rightShooterEncoder = rightShooterMotor.getAlternateEncoder(0);
+
+    val outerIntakeMotor: CANSparkMax = CANSparkMax(CannonConstants.OUTER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+    val innerIntakeMotor: CANSparkMax = CANSparkMax(CannonConstants.INNER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
 
     init {
-        leftPID.setP(CannonConstants.leftKP)
-        leftPID.setI(CannonConstants.leftKI)
-        leftPID.setD(CannonConstants.leftKD)
-        leftPID.setIZone(CannonConstants.leftIz)
-        leftPID.setFF(CannonConstants.leftFF)
+        leftShooterPID.setP(CannonConstants.leftShooterKP)
+        leftShooterPID.setI(CannonConstants.leftShooterKI)
+        leftShooterPID.setD(CannonConstants.leftShooterKD)
+        leftShooterPID.setIZone(CannonConstants.leftShooterIz)
+        leftShooterPID.setFF(CannonConstants.leftShooterFF)
 
-        rightPID.setP(CannonConstants.rightKP)
-        rightPID.setI(CannonConstants.rightKI)
-        rightPID.setD(CannonConstants.rightKD)
-        rightPID.setIZone(CannonConstants.rightIz)
-        rightPID.setFF(CannonConstants.rightFF)
+        rightShooterPID.setP(CannonConstants.rightShooterKP)
+        rightShooterPID.setI(CannonConstants.rightShooterKI)
+        rightShooterPID.setD(CannonConstants.rightShooterKD)
+        rightShooterPID.setIZone(CannonConstants.rightShooterIz)
+        rightShooterPID.setFF(CannonConstants.rightShooterFF)
     }
 
-    override fun getLeftVel(): Double {
-        return leftEncoder.velocity
+    override fun getLeftShooterVel(): Double {
+        return leftShooterEncoder.velocity
     }
 
-    override fun getRightVel(): Double {
-        return rightEncoder.velocity
+    override fun getRightShooterVel(): Double {
+        return rightShooterEncoder.velocity
+    }
+
+
+
+    override fun setLeftShooterVel(vel: Double) {
+        leftShooterPID.setReference(vel, CANSparkBase.ControlType.kVelocity)
+    }
+
+    override fun setRightShooterVel(vel: Double) {
+        rightShooterPID.setReference(vel, CANSparkBase.ControlType.kVelocity)
+    }
+
+    override fun setInnerIntakePercent(percent: Double) {
+        innerIntakeMotor.set(percent)
+    }
+    override fun setOuterIntakePercent(percent: Double) {
+        outerIntakeMotor.set(percent)
     }
 
     override fun getExitBeamBreak(): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun setLeftVel(vel: Double) {
-        leftPID.setReference(vel, CANSparkBase.ControlType.kVelocity)
+    override fun getEntryBeamBreak(): Boolean {
+        TODO("Not yet implemented")
     }
 
-    override fun setRightVel(vel: Double) {
-        rightPID.setReference(vel, CANSparkBase.ControlType.kVelocity)
+    override fun getLoadedBeamBreak(): Boolean {
+        TODO("Not yet implemented")
     }
+
 }
