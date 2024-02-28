@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve
 
+import MiscCalculations
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathConstraints
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig
@@ -14,6 +15,8 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.GlobalZones
+import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
 import frc.robot.constants.yagsl_configs.YAGSLConfig
@@ -125,8 +128,34 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
 
 
     //Updates the swerve drive position zone in the state machine
-    fun updatePositionType() {
+    fun updateGlobalZone() {
+        val pos = swerveDrive.pose.translation
 
+        if (MiscCalculations.translation2dWithinRange(pos, RobotContainer.stateMachine.currentRobotZone.range)) {
+            return
+        }
+
+        val currentRange = MiscCalculations.findMatchingTranslation2dRange(pos, arrayOf(GlobalZones.Wing.range, GlobalZones.NO.range, GlobalZones.Stage.range))
+
+        //Not in any zone
+        if (currentRange.first.x == -1.0 && currentRange.second.y == -1.0) {
+            println("Not in a valid zone; ERROR")
+            return
+        }
+
+        val currentZone = when (currentRange) {
+            GlobalZones.Stage.range -> GlobalZones.Stage
+            GlobalZones.Wing.range -> GlobalZones.Wing
+            GlobalZones.NO.range -> GlobalZones.NO
+            else -> null
+        }
+
+        if (currentZone != null) {
+            RobotContainer.stateMachine.currentRobotZone = currentZone
+        }
+        else {
+            println("Not in a valid zone; current zone returned was not default; ERROR")
+        }
     }
 
     override fun periodic() {
@@ -138,8 +167,8 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
         Logger.recordOutput("RobotPose", swerveDrive.pose)
 
 
-
-        updatePositionType()
+        updateGlobalZone()
+        //TODO: update global (specific) positions in the state machine
     }
 
     fun driveToPose(pose: Pose2d): Command {

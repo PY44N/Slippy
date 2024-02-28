@@ -3,6 +3,7 @@
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.util.WPIUtilJNI
+import org.opencv.core.Mat.Tuple2
 import kotlin.math.abs
 
 /** Miscellaneous calculations. */
@@ -57,11 +58,22 @@ object MiscCalculations {
 
 
 
-    fun translation2dWithinRange(current: Translation2d, range_start: Translation2d, range_end: Translation2d): Boolean {
+    fun translation2dWithinRange(current: Translation2d, range: Pair<Translation2d, Translation2d>): Boolean {
+        val range_start = range.first
+        val range_end = range.second
         if (current.x > range_start.x && current.y > range_start.y && current.x < range_end.x && current.y < range_end.y) {
             return true
         }
         return false
+    }
+
+    fun findMatchingTranslation2dRange(current: Translation2d, ranges: Array<Pair<Translation2d, Translation2d>>, default: Pair<Translation2d, Translation2d> = Pair(Translation2d(-1.0, -1.0), Translation2d(-1.0, -1.0))): Pair<Translation2d, Translation2d> {
+        for (range: Pair<Translation2d, Translation2d> in ranges) {
+            if (translation2dWithinRange(current, range)) {
+                return range
+            }
+        }
+        return default
     }
 
     /**
