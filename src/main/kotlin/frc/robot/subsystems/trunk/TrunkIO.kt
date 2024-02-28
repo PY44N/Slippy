@@ -9,8 +9,12 @@ interface TrunkIO {
     fun setElevatorSpeed(speed: Double)
     fun setRotationSpeed(speed: Double)
     fun setZeroPosition(top: Boolean)
+    fun setTopPositionLimit(position: Double)
+    fun setBottomPositionLimit(position: Double)
+    fun setTopRotationLimit(angle: Double)
+    fun setBottomRotationLimit(angle: Double)
     fun atTopLimit(): Boolean
     fun atBottomLimit(): Boolean
-    fun calibrate()
+    fun disablePositionLimits()
     fun periodic()
 }

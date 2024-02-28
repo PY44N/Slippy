@@ -70,17 +70,5 @@ object RobotContainer {
             trunkSystem.rotate(-xboxController.rightY)
         }
         )
-        xboxController.a().onTrue(Commands.runOnce({
-            trunkSystem.intake()
-        }))
-        xboxController.y().onTrue(Commands.runOnce({
-            trunkSystem.goToAmp()
-        }))
-        xboxController.x().onTrue(Commands.runOnce({
-            trunkSystem.goManual()
-        }))
-        xboxController.b().onTrue(Commands.runOnce({
-            trunkSystem.io.setZeroRotation()
-        }))
     }
 }

@@ -6,37 +6,41 @@ import kotlin.math.sin
 
 object TrunkConstants {
     // someone rename these
-    const val POSITION_GEAR_RATIO = 15
-    const val ROTATION_GEAR_RATIO = 100
     const val MAX_PIVOT_HEIGHT_M = 0.8
     const val MIN_PIVOT_HEIGHT_M = 0.0
     const val THING_LENGTH_M = 0.6133
     const val MOVER_GEAR_RADIUS_M = 0.0127
-    const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2 * PI
-    val gearCircumfrence = 2 * PI * MOVER_GEAR_RADIUS_M
+    const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2.0 * PI
     const val ELEVATOR_ANGLE = 28.8309683
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
 
-    var MIN_SAFE_ANGLE: Double = -5.0
+    var MIN_SAFE_ANGLE: Double = -2.0
     var TARGET_SAFE_ANGLE: Double = 0.0
-    var MIN_SAFE_DISTANCE: Double = 0.0
-    var ABS_MIN_ANGLE: Double = 0.0
-    var ABS_MAX_ANGLE: Double = 0.0
-    var TOP_M: Double = 0.0
-    var BOTTOM_M: Double = 0.0
+    var MAX_ANGLE: Double = 0.0
+
     var SPEAKER_POSITION: Double = .6
+
     var AMP_POSITION: Double = 0.7
     var AMP_ANGLE: Double = 120.0
+
     var INTAKE_POSITION: Double = 0.0
     var INTAKE_ANGLE: Double = -30.0
+
     var CROSSBAR_BOTTOM: Double = 0.1
     var CROSSBAR_TOP: Double = .15
+
     var STOW_POSITION: Double = 0.0
     var STOW_ANGLE: Double = 0.0
 
+    var TRAP_POSITION: Double = 0.0
+    var TRAP_ANGLE: Double = 0.0
+
     var TOP_BREAK_BEAM_POSITION: Double = 0.75
     var BOTTOM_BREAK_BEAM_POSITION: Double = 0.0
+
+    val MIN_ANGLE_BELOW_CROSSBAR = -10.0
+    val MIN_ANGLE_ABOVE_CROSSBAR = -20.0
 
     var rotationOffset: Double = 0.0
 

@@ -23,20 +23,25 @@ class TrunkIOReal : TrunkIO {
     private val positionPID = elevatorMotor.pidController
     private val rotationPID = mainRotationMotor.pidController
 
+    private var bottomPositionLimit = TrunkConstants.BOTTOM_BREAK_BEAM_POSITION
+    private var topPositionLimit = TrunkConstants.TOP_BREAK_BEAM_POSITION
+    private var bottomRotationLimit = TrunkConstants.MIN_SAFE_ANGLE
+    private var topRotationLimit = TrunkConstants.MAX_ANGLE
+
     init {
-        SmartDashboard.putNumber("Rotation P Gain", TrunkConstants.rotationKP)
-        SmartDashboard.putNumber("Rotation I Gain", TrunkConstants.rotationKI)
-        SmartDashboard.putNumber("Rotation D Gain", TrunkConstants.rotationKD)
-        SmartDashboard.putNumber("Rotation I Zone", TrunkConstants.rotationIz)
-        SmartDashboard.putNumber("Rotation Feed Forward", TrunkConstants.rotationFF)
-        SmartDashboard.putNumber("Rotation Max Output", TrunkConstants.rotationMax)
-        SmartDashboard.putNumber("Rotation Min Output", TrunkConstants.rotationMin)
-        SmartDashboard.putNumber("Rotation Max Velocity", TrunkConstants.rotationMaxRPM)
-        SmartDashboard.putNumber("Rotation Min Velocity", TrunkConstants.rotationMinRPM)
-        SmartDashboard.putNumber("Rotation Max Acceleration", TrunkConstants.rotationMaxAcceleration)
-        SmartDashboard.putNumber("Rotation Allowed Closed Loop Error", TrunkConstants.rotationMaxError)
-        SmartDashboard.putNumber("Position SetPoint", 0.5)
-        SmartDashboard.putNumber("Rotation SetPoint", 0.0)
+//        SmartDashboard.putNumber("Rotation P Gain", TrunkConstants.rotationKP)
+//        SmartDashboard.putNumber("Rotation I Gain", TrunkConstants.rotationKI)
+//        SmartDashboard.putNumber("Rotation D Gain", TrunkConstants.rotationKD)
+//        SmartDashboard.putNumber("Rotation I Zone", TrunkConstants.rotationIz)
+//        SmartDashboard.putNumber("Rotation Feed Forward", TrunkConstants.rotationFF)
+//        SmartDashboard.putNumber("Rotation Max Output", TrunkConstants.rotationMax)
+//        SmartDashboard.putNumber("Rotation Min Output", TrunkConstants.rotationMin)
+//        SmartDashboard.putNumber("Rotation Max Velocity", TrunkConstants.rotationMaxRPM)
+//        SmartDashboard.putNumber("Rotation Min Velocity", TrunkConstants.rotationMinRPM)
+//        SmartDashboard.putNumber("Rotation Max Acceleration", TrunkConstants.rotationMaxAcceleration)
+//        SmartDashboard.putNumber("Rotation Allowed Closed Loop Error", TrunkConstants.rotationMaxError)
+//        SmartDashboard.putNumber("Position SetPoint", 0.5)
+//        SmartDashboard.putNumber("Rotation SetPoint", 0.0)
 
         elevatorMotor.restoreFactoryDefaults()
         mainRotationMotor.restoreFactoryDefaults()
@@ -51,8 +56,6 @@ class TrunkIOReal : TrunkIO {
         positionPID.setFeedbackDevice(positionEncoder)
         rotationPID.setFeedbackDevice(rotationEncoder)
 
-        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, 0.0f)
-        elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, -.73f)
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
 
@@ -86,10 +89,11 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setZeroPosition(top: Boolean) {
-
         positionEncoder.setPosition(if(top) {TrunkConstants.TOP_BREAK_BEAM_POSITION} else {TrunkConstants.BOTTOM_BREAK_BEAM_POSITION})
-        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
-        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
+        if(!top)
+            elevatorMotor.inverted = !elevatorMotor.inverted
+        setTopPositionLimit(TrunkConstants.TOP_BREAK_BEAM_POSITION)
+        setBottomPositionLimit(TrunkConstants.BOTTOM_BREAK_BEAM_POSITION)
     }
 
     override fun atTopLimit(): Boolean {
@@ -100,7 +104,7 @@ class TrunkIOReal : TrunkIO {
         return bottomLimit.get()
     }
 
-    override fun calibrate() {
+    override fun disablePositionLimits() {
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, false)
         elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, false)
     }
@@ -120,7 +124,37 @@ class TrunkIOReal : TrunkIO {
     override fun setDesiredRotation(angle: Double) {
         rotationPID.setReference(angle, CANSparkBase.ControlType.kPosition)
     }
+    override fun setTopPositionLimit(position: Double) {
+        if(topPositionLimit != position) {
+            topPositionLimit = position
+            elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, -position.toFloat())
+            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
+        }
+    }
 
+    override fun setBottomPositionLimit(position: Double) {
+        if(bottomPositionLimit != position) {
+            bottomPositionLimit = position
+            elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, -position.toFloat())
+            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
+        }
+    }
+
+    override fun setTopRotationLimit(angle: Double) {
+        if(topRotationLimit != angle) {
+            topRotationLimit = angle
+            mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, angle.toFloat())
+            mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
+        }
+    }
+
+    override fun setBottomRotationLimit(angle: Double) {
+        if(bottomRotationLimit != angle) {
+            bottomRotationLimit = angle
+            mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, angle.toFloat())
+            mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
+        }
+    }
 
     override fun setElevatorSpeed(speed: Double) {
         elevatorMotor.set(-speed)
@@ -131,8 +165,6 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun periodic() {
-        SmartDashboard.putNumber("elevator position", getPosition())
-        SmartDashboard.putNumber("pivot rotation", getRotation())
         SmartDashboard.putNumber("follower voltage", followerRotationMotor.appliedOutput)
         SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
     }

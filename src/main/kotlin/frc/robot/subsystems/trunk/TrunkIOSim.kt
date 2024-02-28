@@ -57,7 +57,7 @@ class TrunkIOSim : TrunkIO {
         return true
     }
 
-    override fun calibrate() {}
+    override fun disablePositionLimits() {}
 
     private fun easeInOutCubic(x: Double): Double {
         return if (x < 0.5) {
@@ -66,6 +66,10 @@ class TrunkIOSim : TrunkIO {
             1 - (-2 * x + 2).pow(3.0) / 2
         }
     }
+    override fun setTopPositionLimit(position: Double) {}
+    override fun setBottomPositionLimit(position: Double) {}
+    override fun setTopRotationLimit(rotation: Double) {}
+    override fun setBottomRotationLimit(rotation: Double) {}
 
     override fun periodic() {
         trunkRotation += desiredRotationSpeed
