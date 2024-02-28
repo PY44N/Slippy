@@ -1,4 +1,59 @@
 package frc.robot.commands.automatic
 
-class AimAndShoot {
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.wpilibj2.command.Command
+import frc.robot.*
+import frc.robot.commands.cannon.AutoShootCommand
+import frc.robot.constants.DriveConstants
+
+class AimAndShoot: Command() {
+
+    val autoShoot: AutoShootCommand = AutoShootCommand()
+
+
+
+    override fun initialize() {
+        RobotContainer.stateMachine.shooterState = ShooterState.Shooting
+        RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
+
+        if (RobotContainer.stateMachine.trunkState != TrunkState.Speaker && RobotContainer.stateMachine.trunkState != TrunkState.SpeakerFromStage) {
+            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
+                RobotContainer.stateMachine.trunkState = TrunkState.SpeakerFromStage
+            }
+            else {
+                RobotContainer.stateMachine.trunkState = TrunkState.Speaker
+            }
+        }
+
+        //Reset the controller
+        RobotContainer.swerveSystem.autoTwistController.reset(RobotContainer.swerveSystem.swerveDrive.pose.rotation,
+                RobotContainer.swerveSystem.swerveDrive.fieldVelocity)
+    }
+
+    override fun execute() {
+        //TODO: get the desired rotation (doesn't exist yet so using 0 as a placeholder)
+        val desiredRot = 0.0
+
+        val driveTwist = RobotContainer.swerveSystem.autoTwistController.calculateRotation(Rotation2d.fromDegrees(desiredRot))
+
+        val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
+                RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
+                DriveConstants.TELEOP_DEADZONE_X,
+                DriveConstants.TELEOP_DEADZONE_Y
+        )
+
+        RobotContainer.swerveSystem.drive(driveTranslation, driveTwist.degrees, true)
+
+        if (RobotContainer.swerveSystem.autoTwistController.isAtDesired() && !autoShoot.isScheduled) {
+            autoShoot.schedule()
+        }
+    }
+
+    override fun isFinished(): Boolean {
+        return (autoShoot.isFinished) || RobotContainer.stateMachine.noteState == NoteState.Empty
+    }
+
+    override fun end(interrupted: Boolean) {
+        RobotContainer.stateMachine.driveState = DriveState.Teleop
+    }
 }

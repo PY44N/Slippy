@@ -85,10 +85,6 @@ class RobotStateMachine {
     var robotAction: RobotAction = RobotAction.Chill
     var driveState: DriveState = DriveState.Teleop
 
-    var robotPose2d: Pose2d = Pose2d()
-        get() = RobotContainer.swerveSystem.swerveDrive.pose
-        private set
-
     //Is the trunk at the desired position?
     var trunkReady: Boolean = false
         get() = TODO("Not yet implemented")

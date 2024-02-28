@@ -10,6 +10,6 @@ object PathPlannerLibConstants {
 
     // TODO: tune; values are bad
     var translationPID = PIDConstants(5.0, 0.0, 0.0)
-    val rotationPID = PIDConstants(0.0, 0.0)
+    val rotationPID = PIDConstants(0.0, 0.0, 0.0)
 
 }

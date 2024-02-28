@@ -20,6 +20,7 @@ import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
 import frc.robot.constants.yagsl_configs.YAGSLConfig
+import frc.robot.util.AutoTwistController
 import org.littletonrobotics.junction.Logger
 import swervelib.SwerveDrive
 import swervelib.parser.SwerveParser
@@ -37,6 +38,8 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
     private val yPID: PIDController = PIDController(.1, 0.0, 0.01)
 
     private val PIDDeadzone = .005;
+
+    val autoTwistController: AutoTwistController = AutoTwistController()
 
     constructor(io: SwerveSystemIO, config: YAGSLConfig) : this(
         io,
@@ -70,6 +73,19 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
             swerveDrive.maximumAngularVelocity, Units.degreesToRadians(720.0)
         )
 
+    }
+
+    //Takes in joystick inputs
+    fun calculateJoyTranslation(rightX: Double, rightY: Double, throttle: Double, deadzoneX: Double, deadzoneY: Double): Translation2d {
+        return Translation2d(
+                -MiscCalculations.calculateDeadzone(rightY,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
+                -MiscCalculations.calculateDeadzone(rightX,deadzoneY) * DriveConstants.MAX_SPEED * throttle
+        )
+    }
+
+    fun calculateJoyThrottle(joyThrottle: Double): Double {
+        //Milan: trust me bro this'll work totally definitely please don't question it
+        return ((joyThrottle * -1) + 1) / 2
     }
 
     private fun setupPathPlanner() {

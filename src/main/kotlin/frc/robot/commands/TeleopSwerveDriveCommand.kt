@@ -1,10 +1,8 @@
 package frc.robot.commands
 
 import MiscCalculations.calculateDeadzone
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.DriveState
-import frc.robot.Robot
 import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
 
@@ -17,17 +15,20 @@ class TeleopSwerveDriveCommand : Command() {
         RobotContainer.stateMachine.driveState = DriveState.Teleop
     }
 
-    override fun execute() {
-        val deadzoneX=.15
-        val deadzoneY=.15
-        val deadzoneTwist=.15
-        val twoJoysticks=true
+    fun teleopTranslationAutoTwist(desiredAngle: Double) {
+        if (RobotContainer.stateMachine.driveState != DriveState.TranslationTeleop) {
+            return
+        }
+    }
 
+
+
+
+    override fun execute() {
+        val twoJoysticks=true
         val twist = if (twoJoysticks) {-RobotContainer.leftJoystick.x} else {RobotContainer.rightJoystick.twist}
 
-
-        //Milan: trust me bro this'll work totally definitely please don't question it
-        val throttle = ((RobotContainer.rightJoystick.throttle * -1) + 1) / 2
+        val throttle = RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle)
 
 
         if (RobotContainer.rightJoystick.button(2).asBoolean) {
@@ -39,11 +40,8 @@ class TeleopSwerveDriveCommand : Command() {
         }
 
         RobotContainer.swerveSystem.drive(
-                Translation2d(
-                        -calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
-                        -calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneY) * DriveConstants.MAX_SPEED * throttle
-                ),
-                calculateDeadzone(twist, deadzoneTwist) * throttle * DriveConstants.MAX_ANGLE_SPEED,
+                RobotContainer.swerveSystem.calculateJoyTranslation(RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y, throttle, DriveConstants.TELEOP_DEADZONE_X, DriveConstants.TELEOP_DEADZONE_Y),
+                calculateDeadzone(twist, DriveConstants.TELEOP_DEADZONE_TWIST) * throttle * DriveConstants.MAX_ANGLE_SPEED,
                 true
         )
     }
