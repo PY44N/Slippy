@@ -29,7 +29,8 @@ class FloorIntakeAndSeek: Command() {
 
         if (LimelightHelpers.getTV(RobotContainer.intakeLimelight)) {
             val fudgedLLOffset = LimelightHelpers.getTX(RobotContainer.intakeLimelight) * (1/27)
-            RobotContainer.swerveSystem.drive(Translation2d(1.0, 0.0), fudgedLLOffset, false)
+            //Milan - everything needs to be negated bc the front is STUPID "sHoOtTeR sHoUlD be FrONt"
+            RobotContainer.swerveSystem.drive(Translation2d(-1.0, 0.0), -fudgedLLOffset, false)
         }
     }
 
