@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Cannon
+package frc.robot.subsystems.cannon
 
 interface CannonIO {
 

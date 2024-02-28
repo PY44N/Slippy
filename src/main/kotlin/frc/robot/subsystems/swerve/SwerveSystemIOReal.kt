@@ -1,6 +1,7 @@
-package frc.robot.subsystems
+package frc.robot.subsystems.swerve
 
 import frc.robot.RobotContainer
+import frc.robot.subsystems.swerve.SwerveSystemIO
 import swervelib.SwerveController
 
 class SwerveSystemIOReal : SwerveSystemIO {

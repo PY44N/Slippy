@@ -1,4 +1,4 @@
-package frc.robot.subsystems
+package frc.robot.subsystems.swerve
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathConstraints
@@ -130,6 +130,10 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
         Logger.recordOutput("RobotVelocity", swerveDrive.fieldVelocity)
         Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d.angle)
         Logger.recordOutput("RobotPose", swerveDrive.pose)
+
+
+
+
     }
 
     fun driveToPose(pose: Pose2d): Command {

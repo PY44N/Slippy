@@ -37,6 +37,16 @@ object MiscCalculations {
     }
 
     /**
+     * Determines whether n_1 & n_2 are approximately equal (within a certain range). This range is inclusive
+      */
+    fun appxEqual(n1: Double, n2: Double, range: Double): Boolean {
+        if (abs(n1 - n2) <= range) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * A function to get the current time in milliseconds
      *
      * @return The current time in milliseconds

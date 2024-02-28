@@ -1,6 +1,28 @@
 package frc.robot.constants
 
 object CannonConstants {
+
+    val OUTER_INTAKE_PERCENT: Double = .8
+    val INNER_INTAKE_PERCENT: Double = .8
+
+    val OUTER_FEED_PERCENT: Double = .8
+    val INNER_FEED_PERCENT: Double = .8
+
+    val OUTER_SPIT_PERCENT: Double = -.8
+    val INNER_SPIT_PERCENT: Double = -.8
+
+    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = 10.0
+    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = 10.0
+
+    val RIGHT_SHOOTER_PREP_VELOCITY: Double = 2.0
+    val LEFT_SHOOTER_PREP_VELOCITY: Double = 2.0
+
+    val SHOOTER_VELOCITY_DEADZONE: Double = .1
+
+    //measure in ms
+    val NOTE_EXIT_BEAMBREAK_DELAY: Double = 50.0
+
+
     val LEFT_SHOOTER_MOTOR_ID = 40
     val RIGHT_SHOOTER_MOTOR_ID = 40
     val OUTER_INTAKE_MOTOR_ID = 50
