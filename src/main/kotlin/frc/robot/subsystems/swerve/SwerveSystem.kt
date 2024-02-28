@@ -151,6 +151,7 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
         }
 
         if (currentZone != null) {
+            RobotContainer.stateMachine.prevRobotZone = RobotContainer.stateMachine.currentRobotZone
             RobotContainer.stateMachine.currentRobotZone = currentZone
         }
         else {
