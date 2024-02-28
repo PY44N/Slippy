@@ -66,6 +66,12 @@ enum class RobotAction() {
     Chill
 }
 
+enum class DriveState() {
+    Teleop,
+    TranslationTeleop,
+    Auto
+}
+
 class RobotStateMachine {
 
     var trunkState: TrunkState = TrunkState.Stow;
@@ -77,6 +83,7 @@ class RobotStateMachine {
     var prevRobotZone: GlobalZones = GlobalZones.Wing
 
     var robotAction: RobotAction = RobotAction.Chill
+    var driveState: DriveState = DriveState.Teleop
 
     var robotPose2d: Pose2d = Pose2d()
         get() = RobotContainer.swerveSystem.swerveDrive.pose

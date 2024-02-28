@@ -38,6 +38,8 @@ object RobotContainer {
 
     val autoChooser: SendableChooser<Command>
 
+    val intakeLimelight: String = "limelight-intake"
+
     /**
      * The container for the robot.  Contains subsystems, IO devices, and commands.
      */
