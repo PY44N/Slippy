@@ -1,5 +1,7 @@
 //package cshcyberhawks.swolib.math
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.util.WPIUtilJNI
 import kotlin.math.abs
 
@@ -52,6 +54,15 @@ object MiscCalculations {
      * @return The current time in milliseconds
      */
     fun getCurrentTime(): Double = WPIUtilJNI.now() * 1.0e-6
+
+
+
+    fun translation2dWithinRange(current: Translation2d, range_start: Translation2d, range_end: Translation2d): Boolean {
+        if (current.x > range_start.x && current.y > range_start.y && current.x < range_end.x && current.y < range_end.y) {
+            return true
+        }
+        return false
+    }
 
     /**
      * A function to find the closes vector2 (relative to a reference vector2) in an array of vector2s

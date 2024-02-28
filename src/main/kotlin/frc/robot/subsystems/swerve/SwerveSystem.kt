@@ -123,6 +123,12 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
     fun isRed(): Boolean =
         DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red
 
+
+    //Updates the swerve drive position zone in the state machine
+    fun updatePositionType() {
+
+    }
+
     override fun periodic() {
         io.updateInputs(inputs)
         Logger.processInputs("SwerveSystem", inputs)
@@ -133,7 +139,7 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
 
 
 
-
+        updatePositionType()
     }
 
     fun driveToPose(pose: Pose2d): Command {
