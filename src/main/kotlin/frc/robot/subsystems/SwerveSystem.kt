@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.DriveConstants
+import frc.robot.constants.FieldConstants
 import frc.robot.constants.PathPlannerLibConstants
 import frc.robot.constants.yagsl_configs.YAGSLConfig
 import org.littletonrobotics.junction.Logger
@@ -23,6 +24,9 @@ import swervelib.parser.SwerveParser
 import swervelib.telemetry.SwerveDriveTelemetry
 import java.io.File
 import kotlin.math.abs
+import kotlin.math.PI
+import kotlin.math.atan2
+
 
 class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive) : SubsystemBase() {
     private val inputs: SwerveSystemIO.SwerveSystemIOInputs = SwerveSystemIO.SwerveSystemIOInputs
@@ -52,6 +56,7 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
             throw RuntimeException(e)
         }
     )
+
 
     init {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.NONE
@@ -112,8 +117,19 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
         }
 
 //        swerveDrive.drive(translation, rotation, fieldRelative, false)
-        swerveDrive.drive(translation, rotation, true, false)
 
+        swerveDrive.drive(translation, rotation, true, false)
+    }
+
+    fun driveSpeakerOriented(translation: Translation2d, angleOffset: Double) {
+        val p = swerveDrive.pose
+        val speakerAngle =
+            atan2(
+                FieldConstants.SPEAKER_CENTER_Y - p.y,
+                FieldConstants.SPEAKER_CENTER_X - p.x
+            ) + angleOffset * PI
+        // figure out sign and stuff
+        swerveDrive.drive(translation, speakerAngle, true, false)
     }
 
     fun autoDrive(velocity: ChassisSpeeds) {
