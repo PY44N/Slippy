@@ -48,8 +48,8 @@ class Robot : LoggedRobot() {
                 Logger.addDataReceiver(WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")))
             }
         }
-//        RobotContainer
-//        Logger.start()
+        RobotContainer
+        Logger.start()
         /* User can change the configs if they want, or leave it empty for factory-default */
 //        canCoder.getConfigurator().apply(toApply)
     }

@@ -15,26 +15,27 @@ object TrunkConstants {
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
 
-    var MIN_SAFE_ANGLE: Double = -2.0
-    var TARGET_SAFE_ANGLE: Double = 0.0
-    var MAX_ANGLE: Double = 0.0
+    var MIN_SAFE_ANGLE: Double = 0.0
+    var TARGET_SAFE_ANGLE: Double = 5.0
+
+    var MAX_ANGLE: Double = 170.0
 
     var SPEAKER_POSITION: Double = .6
 
-    var AMP_POSITION: Double = 0.7
-    var AMP_ANGLE: Double = 120.0
+    var AMP_POSITION: Double = 0.4
+    var AMP_ANGLE: Double = 140.0
 
     var INTAKE_POSITION: Double = 0.0
     var INTAKE_ANGLE: Double = -30.0
 
     var CROSSBAR_BOTTOM: Double = 0.1
-    var CROSSBAR_TOP: Double = .15
+    var CROSSBAR_TOP: Double = .5
 
-    var STOW_POSITION: Double = 0.0
+    var STOW_POSITION: Double = 0.55
     var STOW_ANGLE: Double = 0.0
 
-    var TRAP_POSITION: Double = 0.0
-    var TRAP_ANGLE: Double = 0.0
+    var TRAP_POSITION: Double = 0.7
+    var TRAP_ANGLE: Double = 160.0
 
     var TOP_BREAK_BEAM_POSITION: Double = 0.75
     var BOTTOM_BREAK_BEAM_POSITION: Double = 0.0

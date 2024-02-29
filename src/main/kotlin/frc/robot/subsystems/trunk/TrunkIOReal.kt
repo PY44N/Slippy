@@ -113,6 +113,10 @@ class TrunkIOReal : TrunkIO {
         return -positionEncoder.position * TrunkConstants.MOVER_GEAR_CIRCUMFERENCE_M
     }
 
+    override fun getRawRotation(): Double {
+        return getRotation()
+    }
+
     override fun getRotation(): Double {
         return rotationEncoder.position
     }

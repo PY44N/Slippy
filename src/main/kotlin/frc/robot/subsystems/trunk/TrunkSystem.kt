@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.visualization.Mechanism2d
 import frc.robot.util.visualization.MechanismLigament2d
+import org.littletonrobotics.junction.Logger
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -20,12 +21,12 @@ enum class TrunkPosition(val angle: Double, val position: Double) {
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
-    var targetPose = TrunkPosition.STOW
+    private var targetPose = TrunkPosition.STOW
 
     var currentPosition: Double = 0.0
     var currentRotation: Double = io.getRotation()
 
-    var isCalibrating = true
+    var isCalibrating = false
     var isManual = false
     var isTraveling = false
     var isShooting = false
@@ -35,14 +36,16 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     var shootingAngle = TrunkConstants.TARGET_SAFE_ANGLE
 
-    val superstructureMechanism = Mechanism2d(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2x, TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2y)
-    val elevatorMechanismRoot = superstructureMechanism.getRoot("Elevator Root", 0.0, 0.0)
-    val trunkMechanismRoot = superstructureMechanism.getRoot("Trunk Root", currentPosition * TrunkConstants.d2x, currentPosition * TrunkConstants.d2y)
+    val superstructureMechanism = Mechanism2d(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2x + 1.0, TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2y + 1.0)
+    val elevatorMechanismRoot = superstructureMechanism.getRoot("Elevator Root", 0.25, 0.25)
+    val trunkMechanismRoot = superstructureMechanism.getRoot("Trunk Root", currentPosition * TrunkConstants.d2x + .25, currentPosition * TrunkConstants.d2y + .25)
     val trunkMechanism = trunkMechanismRoot.append(MechanismLigament2d("Trunk", -.25, currentRotation, color = Color8Bit(0, 0, 255)))
+    val crossbarRoot = superstructureMechanism.getRoot("Crossbar Root", (TrunkConstants.CROSSBAR_BOTTOM +.02)* TrunkConstants.d2x+.25, (TrunkConstants.CROSSBAR_BOTTOM-.02) * TrunkConstants.d2y + 0.25)
 
 
     init {
-        elevatorMechanismRoot.append(MechanismLigament2d("Elevator", sqrt(2.0), 45.0))
+        elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
+        crossbarRoot.append(MechanismLigament2d("Crossbar", TrunkConstants.CROSSBAR_TOP-TrunkConstants.CROSSBAR_BOTTOM - .25, TrunkConstants.ELEVATOR_ANGLE, color=Color8Bit(0,255,0)))
         io.setDesiredRotation(TrunkConstants.TARGET_SAFE_ANGLE)
     }
 
@@ -85,33 +88,51 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         }
     }
 
+    fun setTargetPose(pose: TrunkPosition) {
+        targetPose = pose
+        isCalibrating = false
+        isTraveling = false
+        isShooting = pose == TrunkPosition.SPEAKER
+        isManual = false
+    }
+
     val keyboard = GenericHID(0)
 
     override fun periodic() {
         currentPosition = io.getPosition()
         currentRotation = io.getRotation()
 
-        trunkMechanismRoot.setPosition(currentPosition*TrunkConstants.d2x, currentPosition*TrunkConstants.d2y)
-        trunkMechanism.angle = currentRotation
+        trunkMechanismRoot.setPosition(currentPosition*TrunkConstants.d2x + .25, currentPosition*TrunkConstants.d2y + .25)
+        trunkMechanism.angle = io.getRawRotation()
 
         SmartDashboard.putData("Trunk Mechanism", superstructureMechanism)
 
         SmartDashboard.putNumber("Trunk Position", currentPosition)
         SmartDashboard.putNumber("Trunk Rotation", currentRotation)
         SmartDashboard.putNumber("Desired Position", positionSetPoint)
+        SmartDashboard.putNumber("Desired Rotation", rotationSetPoint)
+
+        SmartDashboard.putString("setpose", targetPose.name)
+        SmartDashboard.putBoolean("calibrating", isCalibrating)
+        SmartDashboard.putBoolean("traveling", isTraveling)
+        SmartDashboard.putBoolean("shooting", isShooting)
+        SmartDashboard.putNumber("shooting angle", shootingAngle)
+        SmartDashboard.putBoolean("manual", isManual)
+        SmartDashboard.putBoolean("top limit", io.atTopLimit())
+        SmartDashboard.putBoolean("bottom limit", io.atBottomLimit())
 
         // TODO: Remove for actual robot
         if (keyboard.getRawButton(1)) {
-            targetPose = TrunkPosition.STOW
+            setTargetPose(TrunkPosition.INTAKE)
         }
         if (keyboard.getRawButton(2)) {
-            targetPose = TrunkPosition.INTAKE
+            setTargetPose(TrunkPosition.STOW)
         }
         if (keyboard.getRawButton(3)) {
-            targetPose = TrunkPosition.SPEAKER
+            setTargetPose(TrunkPosition.AMP)
         }
         if (keyboard.getRawButton(4)) {
-            targetPose = TrunkPosition.AMP
+            setTargetPose(TrunkPosition.TRAP)
         }
 
 
@@ -127,6 +148,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             }
         }
         io.periodic()
+//        Logger.recordOutput("superstructureMechanism", superstructureMechanism
     }
 
     private fun goToTravelPeriodic() {
@@ -137,11 +159,13 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
 
     private fun goToTargetPosePeriodic() {
+        var number = 0.0
         val targetPoseIsAboveCrossbar = targetPose.position >= TrunkConstants.CROSSBAR_TOP
         val targetPoseIsBelowCrossbar = targetPose.position <= TrunkConstants.CROSSBAR_BOTTOM
         val isAboveCrossbar = currentPosition > TrunkConstants.CROSSBAR_TOP
         val isBelowCrossbar = currentPosition <= TrunkConstants.CROSSBAR_BOTTOM
         if(isAboveCrossbar && targetPoseIsAboveCrossbar || isBelowCrossbar && targetPoseIsBelowCrossbar) {
+            number = 1.0
             isTraveling = false
             setDesiredRotation(if(isShooting) shootingAngle else targetPose.angle)
             setDesiredPosition(targetPose.position)
@@ -155,10 +179,15 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 io.setBottomRotationLimit(TrunkConstants.MIN_ANGLE_BELOW_CROSSBAR)
             }
         }
-        else if(!isTraveling)
+        else if(!isTraveling) {
             goToTravelPeriodic()
-        else
+            number = 2.0
+        }
+        else {
             setDesiredPosition(targetPose.position)
+            number = 3.0
+        }
+        SmartDashboard.putNumber("asdfkjasdh", number)
     }
 
     private fun calibratePeriodic() {

@@ -2,6 +2,7 @@ package frc.robot.subsystems.trunk
 
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.robot.constants.TrunkConstants
 import kotlin.math.pow
 
 class TrunkIOSim : TrunkIO {
@@ -9,7 +10,7 @@ class TrunkIOSim : TrunkIO {
     var lastTrunkRotation = 0.0
     var trunkRotationTimer = Timer()
 
-    var trunkRotation = 0.0
+    var trunkRotation = TrunkConstants.ELEVATOR_ANGLE
 
     var desiredTraversalPercentage = 0.0
     var lastTraversalPercentage = 0.0
@@ -21,7 +22,12 @@ class TrunkIOSim : TrunkIO {
 
     override fun getPosition(): Double = traversalPercentage
 
-    override fun getRotation(): Double = trunkRotation
+    override fun getRawRotation(): Double {
+        return trunkRotation
+    }
+    override fun getRotation(): Double {
+        return -trunkRotation - TrunkConstants.ELEVATOR_ANGLE
+    }
 
     override fun setDesiredPosition(position: Double) {
         desiredElevatorSpeed = 0.0
@@ -35,7 +41,7 @@ class TrunkIOSim : TrunkIO {
         desiredRotationSpeed = 0.0
         trunkRotationTimer.reset()
         lastTrunkRotation = desiredTrunkRotation
-        desiredTrunkRotation = angle
+        desiredTrunkRotation = -angle + TrunkConstants.ELEVATOR_ANGLE
         trunkRotationTimer.start()
     }
 
@@ -44,17 +50,17 @@ class TrunkIOSim : TrunkIO {
     }
 
     override fun setRotationSpeed(speed: Double) {
-        desiredRotationSpeed = speed * 5
+        desiredRotationSpeed = -speed * 5
     }
 
     override fun setZeroPosition(top: Boolean) {}
 
     override fun atTopLimit(): Boolean {
-        return true
+        return traversalPercentage > .75
     }
 
     override fun atBottomLimit(): Boolean {
-        return true
+        return traversalPercentage < -.01
     }
 
     override fun disablePositionLimits() {}
@@ -88,5 +94,6 @@ class TrunkIOSim : TrunkIO {
         } else {
             traversalPercentage = desiredTraversalPercentage
         }
+        SmartDashboard.putNumber("rotationSim", trunkRotation)
     }
 }
