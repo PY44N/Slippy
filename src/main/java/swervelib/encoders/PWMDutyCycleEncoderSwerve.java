@@ -24,7 +24,7 @@ public class PWMDutyCycleEncoderSwerve extends SwerveAbsoluteEncoder {
     /**
      * An {@link Alert}  for if the encoder cannot report accurate velocities.
      */
-    private Alert inaccurateVelocities;
+    private final Alert inaccurateVelocities;
 
     /**
      * Constructor for the PWM duty cycle encoder.

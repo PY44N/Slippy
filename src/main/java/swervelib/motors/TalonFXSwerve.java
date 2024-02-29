@@ -43,7 +43,7 @@ public class TalonFXSwerve extends SwerveMotor {
     /**
      * Current TalonFX configuration.
      */
-    private TalonFXConfiguration configuration = new TalonFXConfiguration();
+    private final TalonFXConfiguration configuration = new TalonFXConfiguration();
 
     /**
      * Constructor for TalonFX swerve motor.

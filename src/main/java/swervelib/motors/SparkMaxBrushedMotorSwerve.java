@@ -45,11 +45,11 @@ public class SparkMaxBrushedMotorSwerve extends SwerveMotor {
     /**
      * An {@link Alert} for if there is an error configuring the motor.
      */
-    private Alert failureConfiguringAlert;
+    private final Alert failureConfiguringAlert;
     /**
      * An {@link Alert} for if the motor has no encoder defined.
      */
-    private Alert noEncoderDefinedAlert;
+    private final Alert noEncoderDefinedAlert;
 
     /**
      * Initialize the swerve motor.
