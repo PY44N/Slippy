@@ -17,8 +17,8 @@ import frc.robot.subsystems.trunk.TrunkSystem
 import java.io.File
 
 object RobotContainer {
-    val leftJoystick: CommandJoystick = CommandJoystick(1)
-    val rightJoystick: CommandJoystick = CommandJoystick(2)
+    val leftJoystick: CommandJoystick = CommandJoystick(0)
+    val rightJoystick: CommandJoystick = CommandJoystick(1)
     private val xboxController: CommandXboxController = CommandXboxController(2)
 
     val swerveSystem: SwerveSystem
@@ -43,7 +43,7 @@ object RobotContainer {
             Constants.Mode.REAL -> {
                 swerveSystem = SwerveSystem(
                         SwerveSystemIOReal(),
-                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy_kraken")
                 )
             }
 
@@ -51,7 +51,7 @@ object RobotContainer {
                 // change these later
                 swerveSystem = SwerveSystem(
                         SwerveSystemIOReal(),
-                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy_kraken")
                 )
             }
 
@@ -59,7 +59,7 @@ object RobotContainer {
                 // change these later
                 swerveSystem = SwerveSystem(
                         SwerveSystemIOReal(),
-                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy_kraken")
                 )
             }
         }

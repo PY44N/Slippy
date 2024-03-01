@@ -19,7 +19,6 @@ import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.FieldConstants
 import frc.robot.constants.PathPlannerLibConstants
-import frc.robot.constants.yagsl_configs.YAGSLConfig
 import frc.robot.util.AutoTwistController
 import org.littletonrobotics.junction.Logger
 import swervelib.SwerveDrive
@@ -29,7 +28,7 @@ import java.io.File
 import kotlin.math.PI
 import kotlin.math.atan2
 
-class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive) : SubsystemBase() {
+class SwerveSystem(private val io: SwerveSystemIO,  config: File) : SubsystemBase() {
     private val inputs: SwerveSystemIO.SwerveSystemIOInputs = SwerveSystemIO.SwerveSystemIOInputs
 
     var inputRotation: Double = 0.0
@@ -42,23 +41,11 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
 
     val autoTwistController: AutoTwistController = AutoTwistController()
 
-    constructor(io: SwerveSystemIO, config: YAGSLConfig) : this(
-        io,
-        swerveDrive = SwerveDrive(
-            config.driveConfig,
-            config.controllerConfig,
-            config.maxSpeedMPS,
-        )
-    )
-
-    constructor(io: SwerveSystemIO, config: File) : this(
-        io,
-        swerveDrive = try {
+    val swerveDrive: SwerveDrive = try {
             SwerveParser(config).createSwerveDrive(DriveConstants.MAX_SPEED)
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
-    )
 
 
     init {
