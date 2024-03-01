@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile
 import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.PathPlannerLibConstants
+import kotlin.math.PI
 
 
 class AutoTwistController {
@@ -24,7 +25,7 @@ class AutoTwistController {
                         TrapezoidProfile.Constraints(0.0, 0.0),
                         .02)
         rotationController.setIntegratorRange(-PathPlannerLibConstants.rotationPID.iZone, PathPlannerLibConstants.rotationPID.iZone)
-        rotationController.enableContinuousInput(-Math.PI, Math.PI)
+        rotationController.enableContinuousInput(-PI, PI)
     }
 
     public fun reset(currentRot: Rotation2d, currentSpeeds: ChassisSpeeds) {
