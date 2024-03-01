@@ -83,7 +83,7 @@ class Robot : LoggedRobot() {
 
     override fun disabledInit() {
         CommandScheduler.getInstance().cancelAll()
-        RobotContainer.swerveSystem.swerveDrive.lockPose()
+//        RobotContainer.swerveSystem.swerveDrive.lockPose()
     }
 
     override fun disabledPeriodic() {}
@@ -96,13 +96,26 @@ class Robot : LoggedRobot() {
 
     override fun teleopInit() {
         RobotContainer.autonomousCommand.cancel()
-        RobotContainer.teleopSwerveCommand.schedule()
-        RobotContainer.teleopElevateCommand.schedule()
-        RobotContainer.teleopRotateCommand.schedule()
+//        RobotContainer.teleopSwerveCommand.schedule()
+//        RobotContainer.teleopElevateCommand.schedule()
+//        RobotContainer.teleopRotateCommand.schedule()
     }
 
     override fun teleopPeriodic() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
+
+//        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
+//        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
+//        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
+//        val desiredState = SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
+//        if(RobotContainer.xboxController.b().asBoolean)
+//            RobotContainer.trunkSystem.goManual()
+//        if(RobotContainer.xboxController.x().asBoolean)
+//            RobotContainer.trunkSystem.STOP()
+//        if(RobotContainer.xboxController.a().asBoolean)
+//            RobotContainer.trunkSystem.calibrate()
+//        RobotContainer.trunkSystem.elevate(-RobotContainer.xboxController.leftY)
+//        RobotContainer.trunkSystem.rotate(-RobotContainer.xboxController.rightY*.3)
     }
 
     override fun testInit() {

@@ -3,6 +3,8 @@ package frc.robot
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.networktables.GenericEntry
 import edu.wpi.first.wpilibj.Filesystem
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
@@ -20,10 +22,10 @@ import java.io.File
 object RobotContainer {
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
-    private val xboxController: CommandXboxController = CommandXboxController(2)
+    val xboxController: CommandXboxController = CommandXboxController(2)
 
     val swerveSystem: SwerveSystem
-    val trunkSystem = TrunkSystem(TrunkIOSim())
+    val trunkSystem = TrunkSystem(TrunkIOReal())
 
     val stateMachine: RobotStateMachine = RobotStateMachine()
 
@@ -32,8 +34,7 @@ object RobotContainer {
     val autonomousCommand: Command = Commands.run({})
 
     lateinit var teleopSwerveCommand: Command
-    lateinit var teleopElevateCommand: Command
-    lateinit var teleopRotateCommand: Command
+
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
@@ -82,12 +83,5 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        teleopElevateCommand = Commands.run({
-            trunkSystem.elevate(-xboxController.leftY)
-        })
-        teleopRotateCommand = Commands.run({
-            trunkSystem.rotate(-xboxController.rightY)
-        }
-        )
     }
 }

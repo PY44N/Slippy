@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
+
     private val elevatorMotor = CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 
