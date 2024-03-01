@@ -6,18 +6,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.*
 import frc.robot.constants.CannonConstants
 
-class CannonSystem(val io: CannonIO) : SubsystemBase() {
+class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 
     //Desired shooter velocities
-    var desiredLeftVel = 0.0
-    var desiredRightVel = 0.0
+    private var desiredLeftVel = 0.0
+    private var desiredRightVel = 0.0
 
     //Desired intake percentages
-    var desiredOuterPercent = 0.0
-    var desiredInnerPercent = 0.0
+    private var desiredOuterPercent = 0.0
+    private var desiredInnerPercent = 0.0
 
 
-    private var exitBreakBeamTriggerTime: Double = -1.0;
+    private var exitBreakBeamTriggerTime: Double = -1.0; //
 
 
     init {
@@ -26,6 +26,8 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
 
     fun killShooter() {
+        io.setLeftShooterVel(0.0)
+        io.setRightShooterVel(0.0)
         RobotContainer.stateMachine.shooterState = ShooterState.Stopped
     }
 
@@ -61,12 +63,7 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
     fun shooterReady(): Boolean {
         //Shooter up to speed
-        if (MiscCalculations.appxEqual(RobotContainer.stateMachine.shooterState.leftVel, io.getLeftShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE) && MiscCalculations.appxEqual(RobotContainer.stateMachine.shooterState.rightVel, io.getRightShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)) {
-            return true
-        }
-        else {
-            return false
-        }
+        return MiscCalculations.appxEqual(RobotContainer.stateMachine.shooterState.leftVel, io.getLeftShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE) && MiscCalculations.appxEqual(RobotContainer.stateMachine.shooterState.rightVel, io.getRightShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)
     }
 
     override fun periodic() {

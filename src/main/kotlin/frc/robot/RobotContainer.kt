@@ -41,14 +41,11 @@ object RobotContainer {
     val intakeLimelight: String = "limelight-intake"
 
     val autoStateManagementEnableButton: Boolean
-            get() = SmartDashboard.getBoolean("Enable Automatic State Management", true)
+            get() = SmartDashboard.getBoolean("Enable Automatic State Management", false)
 
     val robotActionSendable: SendableChooser<RobotAction> = SendableChooser<RobotAction>()
 
 
-    /**
-     * The container for the robot.  Contains subsystems, IO devices, and commands.
-     */
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
