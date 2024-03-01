@@ -12,6 +12,12 @@ object TrunkConstants {
     const val MOVER_GEAR_RADIUS_M = 0.0127
     const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2.0 * PI
     const val ELEVATOR_ANGLE = 28.8309683
+
+    val SHOOTING_OFFSET = .1 // dist from center of robot to point of shooting (m)
+    val SHOOTING_HEIGHT = .3 // dist from ground to point of shooting (m)
+    val UNDER_STAGE_SHOOTING_OFFSET = .05
+    val UNDER_STAGE_SHOOTING_HEIGHT = .2
+
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
 

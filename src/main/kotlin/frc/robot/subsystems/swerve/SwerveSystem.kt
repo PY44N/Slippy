@@ -103,16 +103,16 @@ class SwerveSystem(private val io: SwerveSystemIO,  config: File) : SubsystemBas
         swerveDrive.drive(translation, rotation, true, false)
     }
 
-    fun driveSpeakerOriented(translation: Translation2d, angleOffset: Double) {
-        val p = swerveDrive.pose
-        val speakerAngle =
-            atan2(
-                FieldConstants.SPEAKER_CENTER_Y - p.y,
-                FieldConstants.SPEAKER_CENTER_X - p.x
-            ) + angleOffset * PI
-        // figure out sign and stuff
-        swerveDrive.drive(translation, speakerAngle, true, false)
-    }
+//    fun driveSpeakerOriented(translation: Translation2d, angleOffset: Double) {
+//        val p = swerveDrive.pose
+//        val speakerAngle =
+//            atan2(
+//                FieldConstants.SPEAKER_CENTER_Y - p.y,
+//                FieldConstants.SPEAKER_CENTER_X - p.x
+//            ) + angleOffset * PI
+//        // figure out sign and stuff
+//        swerveDrive.drive(translation, speakerAngle, true, false)
+//    }
 
     fun autoDrive(velocity: ChassisSpeeds) {
         swerveDrive.drive(velocity)

@@ -8,7 +8,7 @@ import frc.robot.constants.DriveConstants
 
 class TeleopSwerveDriveCommand : Command() {
     init {
-//        addRequirements(RobotContainer.swerveSystem)
+        addRequirements(RobotContainer.swerveSystem)
     }
 
     override fun initialize() {
