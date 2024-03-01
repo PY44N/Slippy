@@ -4,19 +4,17 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
 
-class AutoIntake: Command() {
+class AutoAmp : Command() {
     override fun initialize() {
-        RobotContainer.cannonSystem.intake()
+        RobotContainer.cannonSystem.ampSpit()
+        RobotContainer.cannonSystem.killShooter()
     }
 
     override fun execute() {
-//        if (RobotContainer.stateMachine.noteState == NoteState.Intaking) {
-//            RobotContainer.cannonSystem.feed()
-//        }
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.stateMachine.noteState == NoteState.Stored
+        return RobotContainer.stateMachine.noteState == NoteState.Empty
     }
 
     override fun end(interrupted: Boolean) {

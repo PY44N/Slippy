@@ -139,16 +139,7 @@ class Robot : LoggedRobot() {
      * This function is called periodically during operator control.
      */
     override fun teleopPeriodic() {
-        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
-        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
-        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
-
-        val desiredState =
-            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
-
-//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
-
-//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
+        RobotContainer.stateMachine.TeleopAutomaticStateManagement()
     }
 
     /**
