@@ -38,7 +38,9 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
     }
 
 
-
+    fun ampSpit() {
+        RobotContainer.stateMachine.intakeState = IntakeState.AmpSpitting
+    }
 
 
     fun intake() {

@@ -25,10 +25,11 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
     Stopped(0.0, 0.0),
     Intaking(CannonConstants.INNER_INTAKE_PERCENT, CannonConstants.OUTER_INTAKE_PERCENT),
     Feeding(CannonConstants.INNER_FEED_PERCENT, CannonConstants.OUTER_FEED_PERCENT),
-    Spitting(CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT)
+    Spitting(CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT),
+    AmpSpitting(-CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT),
 }
 
-//this represents the DESIRED trunk state
+//this represents the DESIRED trunk statautoshooe
 enum class TrunkState {
     Speaker,
     SpeakerFromStage,
@@ -72,6 +73,11 @@ enum class DriveState() {
     Auto
 }
 
+enum class AutoStateManagement {
+    Enabled,
+    Disabled
+}
+
 class RobotStateMachine {
 
     var trunkState: TrunkState = TrunkState.Stow;
@@ -85,9 +91,11 @@ class RobotStateMachine {
     var robotAction: RobotAction = RobotAction.Chill
     var driveState: DriveState = DriveState.Teleop
 
+    var autoStateManagement: AutoStateManagement = AutoStateManagement.Enabled
+
     //Is the trunk at the desired position?
     var trunkReady: Boolean = false
-        get() = TODO("Not yet implemented")
+        get() = true
         private set
 
     //Is the shooter at the desired velocity?
@@ -98,6 +106,9 @@ class RobotStateMachine {
 
     //Should be called in teleop periodic
     fun TeleopAutomaticStateManagement() {
+        if (autoStateManagement != AutoStateManagement.Enabled) {
+            return
+        }
         if (currentRobotZone != prevRobotZone) {
             when (currentRobotZone) {
                 //when in NO set to stow and sping down shooter (if not overridden)

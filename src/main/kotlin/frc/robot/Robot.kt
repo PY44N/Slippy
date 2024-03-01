@@ -102,10 +102,7 @@ class Robot : LoggedRobot() {
     }
 
     override fun teleopPeriodic() {
-        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
-        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
-        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
-        val desiredState = SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
+        RobotContainer.stateMachine.TeleopAutomaticStateManagement()
     }
 
     override fun testInit() {

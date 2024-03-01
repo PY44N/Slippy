@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.networktables.GenericEntry
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -38,6 +39,15 @@ object RobotContainer {
 
     val intakeLimelight: String = "limelight-intake"
 
+    val autoStateManagementEnableButton: Boolean
+            get() = SmartDashboard.getBoolean("Enable Automatic State Management", true)
+
+    val robotActionSendable: SendableChooser<RobotAction> = SendableChooser<RobotAction>()
+
+
+    /**
+     * The container for the robot.  Contains subsystems, IO devices, and commands.
+     */
     init {
         when (Constants.currentMode) {
             Constants.Mode.REAL -> {
