@@ -97,8 +97,8 @@ class Robot : LoggedRobot() {
     override fun teleopInit() {
         RobotContainer.autonomousCommand.cancel()
 //        RobotContainer.teleopSwerveCommand.schedule()
-        RobotContainer.teleopElevateCommand.schedule()
-        RobotContainer.teleopRotateCommand.schedule()
+//        RobotContainer.teleopElevateCommand.schedule()
+//        RobotContainer.teleopRotateCommand.schedule()
     }
 
     override fun teleopPeriodic() {
@@ -113,7 +113,7 @@ class Robot : LoggedRobot() {
         if(RobotContainer.xboxController.a().asBoolean)
             RobotContainer.trunkSystem.calibrate()
         RobotContainer.trunkSystem.elevate(-RobotContainer.xboxController.leftY)
-        RobotContainer.trunkSystem.rotate((-RobotContainer.xboxController.rightY))
+        RobotContainer.trunkSystem.rotate(-RobotContainer.xboxController.rightY*.3)
     }
 
     override fun testInit() {

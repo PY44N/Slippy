@@ -19,13 +19,13 @@ object RobotContainer {
     val xboxController: CommandXboxController = CommandXboxController(2)
 
 //    val swerveSystem: SwerveSystem
-    val trunkSystem = TrunkSystem(TrunkIOSim())
+    val trunkSystem = TrunkSystem(TrunkIOReal())
 
     val autonomousCommand: Command = Commands.run({})
 
 //    lateinit var teleopSwerveCommand: Command
-    lateinit var teleopElevateCommand: Command
-    lateinit var teleopRotateCommand: Command
+//    lateinit var teleopElevateCommand: Command
+//    lateinit var teleopRotateCommand: Command
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
@@ -63,12 +63,12 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        teleopElevateCommand = Commands.run({
-            trunkSystem.elevate(-xboxController.leftY)
-        })
-        teleopRotateCommand = Commands.run({
-            trunkSystem.rotate(-xboxController.rightY)
-        }
-        )
+//        teleopElevateCommand = Commands.run({
+//            trunkSystem.elevate(-xboxController.leftY)
+//        })
+//        teleopRotateCommand = Commands.run({
+//            trunkSystem.rotate(-xboxController.rightY)
+//        }
+//        )
     }
 }

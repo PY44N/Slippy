@@ -129,6 +129,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putBoolean("manual", isManual)
         SmartDashboard.putBoolean("top limit", io.atTopLimit())
         SmartDashboard.putBoolean("bottom limit", io.atBottomLimit())
+        SmartDashboard.putBoolean("STOP", stop)
 
         // TODO: Remove for actual robot
         if (keyboard.getRawButton(1)) {
