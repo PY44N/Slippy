@@ -15,8 +15,8 @@ class CannonIOReal : CannonIO {
     val rightShooterPID = rightShooterMotor.pidController
 
     //TODO: get the actual encoder tick values
-    val leftShooterEncoder = leftShooterMotor.getAlternateEncoder(0);
-    val rightShooterEncoder = rightShooterMotor.getAlternateEncoder(0);
+    val leftShooterEncoder = leftShooterMotor.getAlternateEncoder(8192);
+    val rightShooterEncoder = rightShooterMotor.getAlternateEncoder(8192);
 
     val outerIntakeMotor: CANSparkMax = CANSparkMax(CannonConstants.OUTER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
     val innerIntakeMotor: CANSparkMax = CANSparkMax(CannonConstants.INNER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
@@ -60,16 +60,16 @@ class CannonIOReal : CannonIO {
         outerIntakeMotor.set(percent)
     }
 
-    override fun getExitBeamBreak(): Boolean {
-        TODO("Not yet implemented")
+    override fun getExitBeamBreak(): Boolean {return true
+//        TODO("Not yet implemented")
     }
 
-    override fun getEntryBeamBreak(): Boolean {
-        TODO("Not yet implemented")
+    override fun getEntryBeamBreak(): Boolean {return true
+//        TODO("Not yet implemented")
     }
 
-    override fun getLoadedBeamBreak(): Boolean {
-        TODO("Not yet implemented")
+    override fun getLoadedBeamBreak(): Boolean {return true
+//        TODO("Not yet implemented")
     }
 
 }

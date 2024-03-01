@@ -24,9 +24,9 @@ object CannonConstants {
 
 
     val LEFT_SHOOTER_MOTOR_ID = 40
-    val RIGHT_SHOOTER_MOTOR_ID = 40
+    val RIGHT_SHOOTER_MOTOR_ID = 41
     val OUTER_INTAKE_MOTOR_ID = 50
-    val INNER_INTAKE_MOTOR_ID = 50
+    val INNER_INTAKE_MOTOR_ID = 51
 
     val outerIntakePercent = .5
     val innerIntakePercent = .5
