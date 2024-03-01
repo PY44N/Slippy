@@ -51,18 +51,18 @@ class ShooterCalibrator(val directory: String, val trunk: TrunkSystem) {
 
     fun shoot(shooterAngle: Double, leftPower: Double, rightPower: Double) {
 //        gun.shoot(shooterAngle, leftPower, rightPower)
-        val botPose = RobotContainer.swerveSystem.swerveDrive.pose
-        val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
-        lastShot = Shot(
-                botPose.x,
-                botPose.y,
-                v.vxMetersPerSecond,
-                v.vyMetersPerSecond,
-                botPose.rotation.radians,
-                shooterAngle,
-                leftPower,
-                rightPower,
-        )
+//        val botPose = RobotContainer.swerveSystem.swerveDrive.pose
+//        val v = RobotContainer.swerveSystem.swerveDrive.fieldVelocity
+//        lastShot = Shot(
+//                botPose.x,
+//                botPose.y,
+//                v.vxMetersPerSecond,
+//                v.vyMetersPerSecond,
+//                botPose.rotation.radians,
+//                shooterAngle,
+//                leftPower,
+//                rightPower,
+//        )
     }
 
     fun addLastShot() {

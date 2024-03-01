@@ -9,7 +9,7 @@ import frc.robot.constants.DriveConstants
 
 class TeleopSwerveDriveCommand : Command() {
     init {
-        addRequirements(RobotContainer.swerveSystem)
+//        addRequirements(RobotContainer.swerveSystem)
     }
 
     override fun execute() {
@@ -30,14 +30,14 @@ class TeleopSwerveDriveCommand : Command() {
 
         if (RobotContainer.rightJoystick.button(2).asBoolean) {
 //            println("pressed reset")
-            RobotContainer.swerveSystem.swerveDrive.zeroGyro()
+//            RobotContainer.swerveSystem.swerveDrive.zeroGyro()
         }
 //        else {
 //            println("not pressed reset")
 //        }
 
-        RobotContainer.swerveSystem.drive(
-                Translation2d(
+//        RobotContainer.swerveSystem.drive(
+//                Translation2d(
                         /**(if (abs(RobotContainer.rightJoystick.x) > 0.15) {
                             val inSpeed =
                                     if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
@@ -48,11 +48,11 @@ class TeleopSwerveDriveCommand : Command() {
                                     if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
                             (-inSpeed) * DriveConstants.MAX_SPEED
                         } else 0.0)**/
-                        -calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
-                        -calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneY) * DriveConstants.MAX_SPEED * throttle
-                ),
-                calculateDeadzone(twist, deadzoneTwist) * throttle * DriveConstants.MAX_ANGLE_SPEED,
-                true
-        )
+//                        -calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
+//                        -calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneY) * DriveConstants.MAX_SPEED * throttle
+//                ),
+//                calculateDeadzone(twist, deadzoneTwist) * throttle * DriveConstants.MAX_ANGLE_SPEED,
+//                true
+//        )
     }
 }

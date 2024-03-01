@@ -30,6 +30,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     var isManual = false
     var isTraveling = false
     var isShooting = false
+    var stop = true
 
     var rotationSetPoint = TrunkConstants.TARGET_SAFE_ANGLE
     var positionSetPoint = TrunkConstants.STOW_POSITION
@@ -67,11 +68,13 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         isCalibrating = false
         isTraveling = false
         isManual = true
+        stop = false
     }
 
     fun calibrate() {
         isManual = false
         isCalibrating = true
+        stop = false
         io.setElevatorSpeed(0.0)
         io.disablePositionLimits()
     }
@@ -93,6 +96,12 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         isCalibrating = false
         isTraveling = false
         isShooting = pose == TrunkPosition.SPEAKER
+        isManual = false
+    }
+
+    fun STOP() {
+        stop = true
+        isCalibrating = false
         isManual = false
     }
 
@@ -135,17 +144,20 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             setTargetPose(TrunkPosition.TRAP)
         }
 
-
-        if(isCalibrating) {
+        if(stop) {
+            io.setRotationSpeed(0.0)
+            io.setElevatorSpeed(0.0)
+        }
+        else if(isCalibrating) {
             calibratePeriodic()
-        } else {
-            if(io.atTopLimit())
-                io.setZeroPosition(top = true)
-            else if(io.atBottomLimit())
-                io.setZeroPosition(top = false)
-            if(!isManual) {
-                goToTargetPosePeriodic()
-            }
+//        } else {
+//            if(io.atTopLimit())
+//                io.setZeroPosition(top = true)
+//            else if(io.atBottomLimit())
+//                io.setZeroPosition(top = false)
+//            if(!isManual) {
+//                goToTargetPosePeriodic()
+//            }
         }
         io.periodic()
 //        Logger.recordOutput("superstructureMechanism", superstructureMechanism

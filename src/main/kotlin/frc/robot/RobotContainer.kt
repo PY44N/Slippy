@@ -16,48 +16,48 @@ import java.io.File
 object RobotContainer {
     val leftJoystick: CommandJoystick = CommandJoystick(1)
     val rightJoystick: CommandJoystick = CommandJoystick(2)
-    private val xboxController: CommandXboxController = CommandXboxController(2)
+    val xboxController: CommandXboxController = CommandXboxController(2)
 
-    val swerveSystem: SwerveSystem
+//    val swerveSystem: SwerveSystem
     val trunkSystem = TrunkSystem(TrunkIOSim())
 
     val autonomousCommand: Command = Commands.run({})
 
-    lateinit var teleopSwerveCommand: Command
+//    lateinit var teleopSwerveCommand: Command
     lateinit var teleopElevateCommand: Command
     lateinit var teleopRotateCommand: Command
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
     init {
-        when (Constants.currentMode) {
-            Constants.Mode.REAL -> {
-                swerveSystem = SwerveSystem(
-                        SwerveSystemIOReal(),
-                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
-                )
-            }
-
-            Constants.Mode.SIM -> {
-                // change these later
-                swerveSystem = SwerveSystem(
-                        SwerveSystemIOReal(),
-                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
-                )
-            }
-
-            Constants.Mode.REPLAY -> {
-                // change these later
-                swerveSystem = SwerveSystem(
-                        SwerveSystemIOReal(),
-                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
-                )
-            }
-        }
+//        when (Constants.currentMode) {
+//            Constants.Mode.REAL -> {
+//                swerveSystem = SwerveSystem(
+//                        SwerveSystemIOReal(),
+//                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+//                )
+//            }
+//
+//            Constants.Mode.SIM -> {
+//                // change these later
+//                swerveSystem = SwerveSystem(
+//                        SwerveSystemIOReal(),
+//                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+//                )
+//            }
+//
+//            Constants.Mode.REPLAY -> {
+//                // change these later
+//                swerveSystem = SwerveSystem(
+//                        SwerveSystemIOReal(),
+//                        File(Filesystem.getDeployDirectory(), "yagsl_configs/slippy")
+//                )
+//            }
+//        }
 //        SmartDashboard.putData("Auto Chooser", autoChooser)
 
-        teleopSwerveCommand = TeleopSwerveDriveCommand()
-        teleopSwerveCommand.schedule()
+//        teleopSwerveCommand = TeleopSwerveDriveCommand()
+//        teleopSwerveCommand.schedule()
 
         configureButtonBindings()
     }
