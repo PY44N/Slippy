@@ -11,14 +11,19 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Subsystem
 import java.util.function.Supplier
 
+
+/**
+ * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
+ * so it can be used in command-based projects easily.
+ */
 class CommandSwerveDrivetrain : SwerveDrivetrain, Subsystem {
-    private lateinit var m_simNotifier: Notifier
+    private var m_simNotifier: Notifier? = null
     private var m_lastSimTime = 0.0
 
     constructor(
-            driveTrainConstants: SwerveDrivetrainConstants?,
-            OdometryUpdateFrequency: Double,
-            vararg modules: SwerveModuleConstants?
+        driveTrainConstants: SwerveDrivetrainConstants?,
+        OdometryUpdateFrequency: Double,
+        vararg modules: SwerveModuleConstants?
     ) : super(driveTrainConstants, OdometryUpdateFrequency, *modules) {
         if (Utils.isSimulation()) {
             startSimThread()
@@ -26,8 +31,8 @@ class CommandSwerveDrivetrain : SwerveDrivetrain, Subsystem {
     }
 
     constructor(driveTrainConstants: SwerveDrivetrainConstants?, vararg modules: SwerveModuleConstants?) : super(
-            driveTrainConstants,
-            *modules
+        driveTrainConstants,
+        *modules
     ) {
         if (Utils.isSimulation()) {
             startSimThread()
