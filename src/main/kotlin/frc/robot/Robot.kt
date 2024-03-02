@@ -45,10 +45,12 @@ class Robot : LoggedRobot() {
                 Logger.addDataReceiver(NT4Publisher())
                 PowerDistribution(1, PowerDistribution.ModuleType.kRev)
             }
+
             Constants.Mode.SIM -> {
                 // Running a physics simulator, log to NT
                 Logger.addDataReceiver(NT4Publisher())
             }
+
             Constants.Mode.REPLAY -> {
                 // Replaying a log, set up replay source
                 setUseTiming(false) // Run as fast as possible
@@ -144,7 +146,7 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
 
         val desiredState =
-            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
+                SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
 
 //        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
 
@@ -167,5 +169,9 @@ class Robot : LoggedRobot() {
         RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
         RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
         RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
+        SmartDashboard.putNumber("0 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[0].absolutePosition)
+        SmartDashboard.putNumber("1 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[1].absolutePosition)
+        SmartDashboard.putNumber("2 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[2].absolutePosition)
+        SmartDashboard.putNumber("3 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[3].absolutePosition)
     }
 }

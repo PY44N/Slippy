@@ -36,25 +36,25 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
     private val PIDDeadzone = .005;
 
     constructor(io: SwerveSystemIO, config: YAGSLConfig) : this(
-        io,
-        swerveDrive = SwerveDrive(
-            config.driveConfig,
-            config.controllerConfig,
-            config.maxSpeedMPS,
-        )
+            io,
+            swerveDrive = SwerveDrive(
+                    config.driveConfig,
+                    config.controllerConfig,
+                    config.maxSpeedMPS,
+            )
     )
 
     constructor(io: SwerveSystemIO, config: File) : this(
-        io,
-        swerveDrive = try {
-            SwerveParser(config).createSwerveDrive(DriveConstants.MAX_SPEED)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
+            io,
+            swerveDrive = try {
+                SwerveParser(config).createSwerveDrive(DriveConstants.MAX_SPEED)
+            } catch (e: Exception) {
+                throw RuntimeException(e)
+            }
     )
 
     init {
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.NONE
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH
 
 //        swerveDrive.setHeadingCorrection(false)
         swerveDrive.chassisVelocityCorrection = true
@@ -63,31 +63,31 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
         swerveDrive.pushOffsetsToControllers()
         setupPathPlanner()
         autoConstraints = PathConstraints(
-            swerveDrive.maximumVelocity, 4.0,
-            swerveDrive.maximumAngularVelocity, Units.degreesToRadians(720.0)
+                swerveDrive.maximumVelocity, 4.0,
+                swerveDrive.maximumAngularVelocity, Units.degreesToRadians(720.0)
         )
 
     }
 
     private fun setupPathPlanner() {
         AutoBuilder.configureHolonomic(
-            swerveDrive::getPose,
-            swerveDrive::resetOdometry,
-            swerveDrive::getRobotVelocity,
-            this::autoDrive,
-            HolonomicPathFollowerConfig(
-                PathPlannerLibConstants.translationPID,
-                PIDConstants(
-                    swerveDrive.swerveController.thetaController.p,
-                    swerveDrive.swerveController.thetaController.i,
-                    swerveDrive.swerveController.thetaController.d,
+                swerveDrive::getPose,
+                swerveDrive::resetOdometry,
+                swerveDrive::getRobotVelocity,
+                this::autoDrive,
+                HolonomicPathFollowerConfig(
+                        PathPlannerLibConstants.translationPID,
+                        PIDConstants(
+                                swerveDrive.swerveController.thetaController.p,
+                                swerveDrive.swerveController.thetaController.i,
+                                swerveDrive.swerveController.thetaController.d,
+                        ),
+                        swerveDrive.maximumVelocity,
+                        swerveDrive.swerveDriveConfiguration.driveBaseRadiusMeters,
+                        PathPlannerLibConstants.replanningConfig,
                 ),
-                swerveDrive.maximumVelocity,
-                swerveDrive.swerveDriveConfiguration.driveBaseRadiusMeters,
-                PathPlannerLibConstants.replanningConfig,
-            ),
-            this::isRed,
-            this,
+                this::isRed,
+                this,
         )
     }
 
@@ -121,23 +121,23 @@ class SwerveSystem(private val io: SwerveSystemIO, val swerveDrive: SwerveDrive)
     }
 
     fun isRed(): Boolean =
-        DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red
+            DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red
 
     override fun periodic() {
-        io.updateInputs(inputs)
-        Logger.processInputs("SwerveSystem", inputs)
-        Logger.recordOutput("RobotAccel", swerveDrive.accel.orElse(Translation3d(0.0, 0.0, 0.0)))
-        Logger.recordOutput("RobotVelocity", swerveDrive.fieldVelocity)
-        Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d.angle)
-        Logger.recordOutput("RobotPose", swerveDrive.pose)
+//        io.updateInputs(inputs)
+//        Logger.processInputs("SwerveSystem", inputs)
+//        Logger.recordOutput("RobotAccel", swerveDrive.accel.orElse(Translation3d(0.0, 0.0, 0.0)))
+//        Logger.recordOutput("RobotVelocity", swerveDrive.fieldVelocity)
+//        Logger.recordOutput("RobotRotation", swerveDrive.gyroRotation3d.angle)
+//        Logger.recordOutput("RobotPose", swerveDrive.pose)
     }
 
     fun driveToPose(pose: Pose2d): Command {
         return AutoBuilder.pathfindToPose(
-            pose,
-            autoConstraints,
-            0.0,  // Goal end velocity in meters/sec
-            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+                pose,
+                autoConstraints,
+                0.0,  // Goal end velocity in meters/sec
+                0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         )
     }
 }

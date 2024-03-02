@@ -14,12 +14,16 @@ class TeleopSwerveDriveCommand : Command() {
 
     override fun execute() {
 //        swerveDrive.drive
-        val deadzoneX=.15
-        val deadzoneY=.15
-        val deadzoneTwist=.15
-        val twoJoysticks=true
+        val deadzoneX = .15
+        val deadzoneY = .15
+        val deadzoneTwist = .15
+        val twoJoysticks = true
 
-        val twist = if (twoJoysticks) {-RobotContainer.leftJoystick.x} else {RobotContainer.rightJoystick.twist}
+        val twist = if (twoJoysticks) {
+            -RobotContainer.leftJoystick.x
+        } else {
+            RobotContainer.rightJoystick.twist
+        }
 
 //        println(twist)
 
@@ -36,23 +40,23 @@ class TeleopSwerveDriveCommand : Command() {
 //            println("not pressed reset")
 //        }
 
-        RobotContainer.swerveSystem.drive(
-                Translation2d(
-                        /**(if (abs(RobotContainer.rightJoystick.x) > 0.15) {
-                            val inSpeed =
-                                    if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
-                            (inSpeed) * DriveConstants.MAX_SPEED
-                        } else 0.0),
-                        (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
-                            val inSpeed =
-                                    if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
-                            (-inSpeed) * DriveConstants.MAX_SPEED
-                        } else 0.0)**/
-                        -calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
-                        -calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneY) * DriveConstants.MAX_SPEED * throttle
-                ),
-                calculateDeadzone(twist, deadzoneTwist) * throttle * DriveConstants.MAX_ANGLE_SPEED,
-                true
-        )
+//        RobotContainer.swerveSystem.drive(
+//                Translation2d(
+//                        /**(if (abs(RobotContainer.rightJoystick.x) > 0.15) {
+//                            val inSpeed =
+//                                    if (RobotContainer.rightJoystick.x < 0.0) RobotContainer.rightJoystick.x + .15 else RobotContainer.rightJoystick.x - .15
+//                            (inSpeed) * DriveConstants.MAX_SPEED
+//                        } else 0.0),
+//                        (if (abs(RobotContainer.rightJoystick.y) > 0.15) {
+//                            val inSpeed =
+//                                    if (RobotContainer.rightJoystick.y < 0.0) RobotContainer.rightJoystick.y + .15 else RobotContainer.rightJoystick.y - .15
+//                            (-inSpeed) * DriveConstants.MAX_SPEED
+//                        } else 0.0)**/
+//                        -calculateDeadzone(RobotContainer.rightJoystick.y,deadzoneX) * DriveConstants.MAX_SPEED * throttle,
+//                        -calculateDeadzone(RobotContainer.rightJoystick.x,deadzoneY) * DriveConstants.MAX_SPEED * throttle
+//                ),
+//                calculateDeadzone(twist, deadzoneTwist) * throttle * DriveConstants.MAX_ANGLE_SPEED,
+//                true
+//        )
     }
 }
