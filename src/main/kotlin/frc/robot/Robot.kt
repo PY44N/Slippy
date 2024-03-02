@@ -20,6 +20,7 @@ class Robot : LoggedRobot() {
 
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        RobotContainer.stateMachine.logStates()
     }
 
     override fun disabledInit() {}
@@ -41,8 +42,8 @@ class Robot : LoggedRobot() {
         RobotContainer.teleopSwerveCommand.schedule()
 
 //        RobotContainer.drivetrain.setDefaultCommand(RobotContainer.drivetrain.applyRequest {
-//            RobotContainer.drive.withVelocityX(
-//                    1.5
+//            RobotContainer.swerveSystem.drive.withVelocityX(
+//                    0.5
 //            ).withVelocityY(0.0).withRotationalRate(0.0)
 //        })
     }

@@ -2,8 +2,8 @@ package frc.robot.subsystems.cannon
 
 interface CannonIO {
 
-    public fun setLeftShooterVel(vel: Double)
-    public fun setRightShooterVel(vel: Double)
+    public fun setLeftShooter(vel: Double)
+    public fun setRightShooter(vel: Double)
 
     public fun getLeftShooterVel(): Double
     public fun getRightShooterVel(): Double

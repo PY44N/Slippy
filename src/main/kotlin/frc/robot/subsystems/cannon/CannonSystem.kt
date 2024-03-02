@@ -1,7 +1,9 @@
 package frc.robot.subsystems.cannon
 
 import MiscCalculations
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.*
 import frc.robot.constants.CannonConstants
@@ -19,15 +21,14 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 
     private var exitBreakBeamTriggerTime: Double = -1.0; //
 
-
     init {
 
     }
 
 
     fun killShooter() {
-        io.setLeftShooterVel(0.0)
-        io.setRightShooterVel(0.0)
+        io.setLeftShooter(0.0)
+        io.setRightShooter(0.0)
         RobotContainer.stateMachine.shooterState = ShooterState.Stopped
     }
 
@@ -37,6 +38,10 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 
     fun shoot() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting;
+        println("called cannonsystem.shoot")
+
+        //TODO: remove this
+//        exitBreakBeamTriggerTime = Timer.getFPGATimestamp()
     }
 
 
@@ -67,17 +72,25 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
     }
 
     override fun periodic() {
+        SmartDashboard.putBoolean("Stow Beam Break", io.getLoadedBeamBreak())
+        SmartDashboard.putNumber("Left Cannon Speed", io.getLeftShooterVel())
+
+
         /*--------------------
              Beam Breaks
         -----------------------*/
 
         //Note is shot
-        if (io.getExitBeamBreak()) {
-            exitBreakBeamTriggerTime = Timer.getFPGATimestamp()
-        }
+//        if (io.getExitBeamBreak()) {
+//            exitBreakBeamTriggerTime = Timer.getFPGATimestamp()
+//        }
         //Note is stored
-        else if (io.getLoadedBeamBreak()) {
+        /*else*/ if (io.getLoadedBeamBreak()) {
             RobotContainer.stateMachine.noteState = NoteState.Stored;
+        }
+            //Note is not stored
+            else if (!io.getLoadedBeamBreak() && RobotContainer.stateMachine.shooterState != ShooterState.Shooting && !io.getEntryBeamBreak()) {
+                RobotContainer.stateMachine.noteState = NoteState.Empty
         }
         //Note is intaking
         else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak()) {
@@ -101,8 +114,10 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
             desiredLeftVel = RobotContainer.stateMachine.shooterState.leftVel
             desiredRightVel = RobotContainer.stateMachine.shooterState.rightVel
 
-            io.setLeftShooterVel(desiredLeftVel)
-            io.setRightShooterVel(desiredRightVel)
+            io.setRightShooter(desiredRightVel)
+            io.setLeftShooter(desiredLeftVel)
+
+            println("set the shooters")
         }
 
         /*----------------

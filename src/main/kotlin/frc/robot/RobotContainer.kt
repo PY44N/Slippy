@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.TeleopSwerveDriveCommand
+import frc.robot.commands.cannon.AutoAmp
+import frc.robot.commands.cannon.AutoIntake
+import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.TunerConstants
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
@@ -53,8 +56,21 @@ object RobotContainer {
 
     val swerveSystem: SwerveSystem = SwerveSystem()
 
-    private fun configureBindings() {
+    init {
+        configureBindings()
+    }
 
+    private fun configureBindings() {
+        xboxController.a().toggleOnTrue(AutoIntake())
+//        xboxController.x().toggleOnTrue(AutoShootCommand())
+        xboxController.x().onTrue(Commands.runOnce({
+            println("x button pressed")
+            cannonSystem.shoot()
+        }))
+        xboxController.b().onTrue(Commands.runOnce({
+            cannonSystem.killShooter()
+        }))
+        xboxController.y().toggleOnTrue(AutoAmp())
     }
 
 

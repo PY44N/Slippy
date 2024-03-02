@@ -7,6 +7,7 @@ import frc.robot.RobotContainer
 class AutoIntake: Command() {
     override fun initialize() {
         RobotContainer.cannonSystem.intake()
+        RobotContainer.cannonSystem.killShooter()
     }
 
     override fun execute() {
