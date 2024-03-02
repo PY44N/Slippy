@@ -1,6 +1,9 @@
 //package cshcyberhawks.swolib.math
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.util.WPIUtilJNI
+import org.opencv.core.Mat.Tuple2
 import kotlin.math.abs
 
 /** Miscellaneous calculations. */
@@ -37,11 +40,41 @@ object MiscCalculations {
     }
 
     /**
+     * Determines whether n_1 & n_2 are approximately equal (within a certain range). This range is inclusive
+      */
+    fun appxEqual(n1: Double, n2: Double, range: Double): Boolean {
+        if (abs(n1 - n2) <= range) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * A function to get the current time in milliseconds
      *
      * @return The current time in milliseconds
      */
     fun getCurrentTime(): Double = WPIUtilJNI.now() * 1.0e-6
+
+
+
+    fun translation2dWithinRange(current: Translation2d, range: Pair<Translation2d, Translation2d>): Boolean {
+        val range_start = range.first
+        val range_end = range.second
+        if (current.x > range_start.x && current.y > range_start.y && current.x < range_end.x && current.y < range_end.y) {
+            return true
+        }
+        return false
+    }
+
+    fun findMatchingTranslation2dRange(current: Translation2d, ranges: Array<Pair<Translation2d, Translation2d>>, default: Pair<Translation2d, Translation2d> = Pair(Translation2d(-1.0, -1.0), Translation2d(-1.0, -1.0))): Pair<Translation2d, Translation2d> {
+        for (range: Pair<Translation2d, Translation2d> in ranges) {
+            if (translation2dWithinRange(current, range)) {
+                return range
+            }
+        }
+        return default
+    }
 
     /**
      * A function to find the closes vector2 (relative to a reference vector2) in an array of vector2s

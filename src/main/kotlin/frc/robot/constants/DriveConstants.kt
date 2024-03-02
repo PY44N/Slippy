@@ -2,6 +2,25 @@ package frc.robot.constants
 
 
 object DriveConstants {
+    //Code (virtual) constants
+    const val TELEOP_DEADZONE_X: Double = .15
+    const val TELEOP_DEADZONE_Y: Double = .15
+    const val TELEOP_DEADZONE_TWIST: Double = .15
+
+    const val MAX_SPEED: Double = 4.7
+
+    //degrees
+    const val TELEOP_TRANSLATION_AUTOTWIST_DEADZONE = 2.0
+
+    const val MAX_ANGLE_SPEED: Double = 4.0
+    const val MAX_ANGLE_ACCEL: Double = 3.0
+
+
+    //Physical (hardware & physics0 constants
+
+
+
+
     // TODO: make these ids not bad (1-4 clockwise)
     const val FRONT_LEFT_DRIVE_ID: Int = 6
     const val FRONT_RIGHT_DRIVE_ID: Int = 8
@@ -13,9 +32,7 @@ object DriveConstants {
     const val BACK_RIGHT_TWIST_ID: Int = 11
     const val BACK_LEFT_TWIST_ID: Int = 9
 
-    const val MAX_SPEED: Double = 4.7
 
-    const val MAX_ANGLE_SPEED: Double = 4.0
 
     const val FRONT_LEFT_ENCODER_ID: Int = 2
     const val FRONT_RIGHT_ENCODER_ID: Int = 4
