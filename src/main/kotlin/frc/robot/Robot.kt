@@ -99,7 +99,7 @@ class Robot : LoggedRobot() {
         // this line or comment it out.
         // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
         RobotContainer.autonomousCommand.cancel()
-        RobotContainer.teleopSwerveCommand.schedule()
+//        RobotContainer.teleopSwerveCommand.schedule()
     }
 
     /**

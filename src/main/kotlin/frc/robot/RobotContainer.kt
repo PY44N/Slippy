@@ -31,10 +31,10 @@ object RobotContainer {
     private val xboxController: CommandXboxController = CommandXboxController(2)
 
 
-    lateinit var teleopSwerveCommand: Command
+    //    lateinit var teleopSwerveCommand: Command = Tel
     val autonomousCommand: Command = Commands.run({})
 
-    val autoChooser: SendableChooser<Command>
+//    val autoChooser: SendableChooser<Command>
 
     private const val MaxSpeed = TunerConstants.kSpeedAt12VoltsMps // kSpeedAt12VoltsMps desired top speed
     private const val MaxAngularRate = 1.5 * Math.PI // 3/4 of a rotation per second max angular velocity
@@ -56,8 +56,8 @@ object RobotContainer {
      * The container for the robot.  Contains subsystems, IO devices, and commands.
      */
     init {
-        autoChooser = AutoBuilder.buildAutoChooser()
-        SmartDashboard.putData("Auto Chooser", autoChooser)
+//        autoChooser = AutoBuilder.buildAutoChooser()
+//        SmartDashboard.putData("Auto Chooser", autoChooser)
 
         // Configure the button bindings
         configureButtonBindings()
