@@ -3,10 +3,14 @@ package frc.robot
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.PowerDistribution
-import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
+import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.NT4Publisher
+import org.littletonrobotics.junction.wpilog.WPILOGReader
+import org.littletonrobotics.junction.wpilog.WPILOGWriter
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,111 +24,111 @@ class Robot : LoggedRobot() {
      * initialization code.
      */
     override fun robotInit() {
+        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+
+        //        RobotContainer
+
+        //        Logger.start()
+        /* User can change the configs if they want, or leave it empty for factory-default */
+        //        canCoder.getConfigurator().apply(toApply)
     }
 
-//        RobotContainer
 
-//        Logger.start()
-    /* User can change the configs if they want, or leave it empty for factory-default */
-//        canCoder.getConfigurator().apply(toApply)
-}
+    /**
+     * This function is called every robot packet, no matter the mode. Use this for items like
+     * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+     *
+     *
+     * This runs after the mode specific periodic functions, but before
+     * LiveWindow and SmartDashboard integrated updating.
+     */
 
+    override fun robotPeriodic() {
+        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+        // commands, running already-scheduled commands, removing finished or interrupted commands,
+        // and running subsystem periodic() methods.  This must be called from the robot's periodic
+        // block in order for anything in the Command-based framework to work.
+        CommandScheduler.getInstance().run()
+        //        val left = "limelight-left"
+        //        val right = "limelight-right"
+        //
+        //        val leftPose = LimelightHelpers.getBotPose2d(left)
+        //        val rightPose = LimelightHelpers.getBotPose2d(right)
+        //        if (LimelightHelpers.getTV(left) && LimelightHelpers.getTV(right))
+        //            RobotContainer.swerveSystem.swerveDrive.addVisionMeasurement(
+        //                Pose2d(
+        //                    leftPose.translation.plus(rightPose.translation).div(2.0),
+        //                    leftPose.rotation.plus(rightPose.rotation).div(2.0)
+        //                ), Timer.getFPGATimestamp()
+        //            )
+    }
 
-/**
- * This function is called every robot packet, no matter the mode. Use this for items like
- * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
- *
- *
- * This runs after the mode specific periodic functions, but before
- * LiveWindow and SmartDashboard integrated updating.
- */
+    /**
+     * This function is called once each time the robot enters Disabled mode.
+     */
+    override fun disabledInit() {
+        CommandScheduler.getInstance().cancelAll()
+    }
 
-override fun robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run()
-//        val left = "limelight-left"
-//        val right = "limelight-right"
-//
-//        val leftPose = LimelightHelpers.getBotPose2d(left)
-//        val rightPose = LimelightHelpers.getBotPose2d(right)
-//        if (LimelightHelpers.getTV(left) && LimelightHelpers.getTV(right))
-//            RobotContainer.swerveSystem.swerveDrive.addVisionMeasurement(
-//                Pose2d(
-//                    leftPose.translation.plus(rightPose.translation).div(2.0),
-//                    leftPose.rotation.plus(rightPose.rotation).div(2.0)
-//                ), Timer.getFPGATimestamp()
-//            )
-}
+    /**
+     * This function is called periodically when disabled.
+     */
+    override fun disabledPeriodic() {}
 
-/**
- * This function is called once each time the robot enters Disabled mode.
- */
-override fun disabledInit() {
-    CommandScheduler.getInstance().cancelAll()
-}
+    /**
+     * This autonomous runs the autonomous command selected by your [RobotContainer] class.
+     */
+    override fun autonomousInit() {
+        // Schedule the autonomous command (example)
+        // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
+        RobotContainer.autonomousCommand.schedule()
+    }
 
-/**
- * This function is called periodically when disabled.
- */
-override fun disabledPeriodic() {}
+    /**
+     * This function is called periodically during autonomous.
+     */
+    override fun autonomousPeriodic() {}
 
-/**
- * This autonomous runs the autonomous command selected by your [RobotContainer] class.
- */
-override fun autonomousInit() {
-    // Schedule the autonomous command (example)
-    // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before scheduling it
-    RobotContainer.autonomousCommand.schedule()
-}
+    /**
+     * This function is called once when teleop is enabled.
+     */
+    override fun teleopInit() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
+        RobotContainer.autonomousCommand.cancel()
+        RobotContainer.teleopSwerveCommand.schedule()
+    }
 
-/**
- * This function is called periodically during autonomous.
- */
-override fun autonomousPeriodic() {}
+    /**
+     * This function is called periodically during operator control.
+     */
+    override fun teleopPeriodic() {
+        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
+        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
+        SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
 
-/**
- * This function is called once when teleop is enabled.
- */
-override fun teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    // Note the Kotlin safe-call(?.), this ensures autonomousCommand is not null before cancelling it
-    RobotContainer.autonomousCommand.cancel()
-    RobotContainer.teleopSwerveCommand.schedule()
-}
+        val desiredState =
+                SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
 
-/**
- * This function is called periodically during operator control.
- */
-override fun teleopPeriodic() {
-    SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
-    SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)
-    SmartDashboard.putNumber("JoyTwist", RobotContainer.rightJoystick.twist)
+        //        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
 
-    val desiredState =
-            SwerveModuleState(0.0, Rotation2d(0.0, 0.0))
+        //        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
+    }
 
-//        RobotContainer.swerveSystem.swerveDrive.setModuleStates(arrayOf(desiredState, desiredState, desiredState, desiredState), true)
+    /**
+     * This function is called once when test mode is enabled.
+     */
+    override fun testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll()
+    }
 
-//        SmartDashboard.putNumber("CANNNN", canCoder.position.value);
-}
-
-/**
- * This function is called once when test mode is enabled.
- */
-override fun testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll()
-}
-
-/**
- * This function is called periodically during test mode.
- */
-override fun testPeriodic() {
-}
+    /**
+     * This function is called periodically during test mode.
+     */
+    override fun testPeriodic() {
+    }
 }
