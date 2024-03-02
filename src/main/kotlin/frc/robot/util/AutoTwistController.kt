@@ -33,7 +33,6 @@ class AutoTwistController {
     }
 
 
-
     public fun calculateRotation(targetRotation: Rotation2d): Rotation2d {
         desiredRotation = targetRotation
 
@@ -51,7 +50,7 @@ class AutoTwistController {
 
         val rotationFeedback: Double =
                 rotationController.calculate(
-                        RobotContainer.swerveSystem.swerveDrive.pose.rotation.radians,
+                        RobotContainer.swerveSystem.getSwervePose().rotation.radians,
                         TrapezoidProfile.State(targetRotation.radians, 0.0),
                         rotationConstraints)
         val rotationFF: Double =
@@ -61,7 +60,7 @@ class AutoTwistController {
     }
 
     public fun isAtDesired(): Boolean {
-        val currentRot = RobotContainer.swerveSystem.swerveDrive.pose.rotation.degrees
+        val currentRot = RobotContainer.swerveSystem.getSwervePose().rotation.degrees
 
         if (MiscCalculations.appxEqual(currentRot, desiredRotation.degrees, DriveConstants.TELEOP_TRANSLATION_AUTOTWIST_DEADZONE)) {
             return true;

@@ -6,10 +6,9 @@ import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.DriveConstants
 
-class AimAndShoot: Command() {
+class AimAndShoot : Command() {
 
     val autoShoot: AutoShootCommand = AutoShootCommand()
-
 
 
     override fun initialize() {
@@ -19,15 +18,16 @@ class AimAndShoot: Command() {
         if (RobotContainer.stateMachine.trunkState != TrunkState.Speaker && RobotContainer.stateMachine.trunkState != TrunkState.SpeakerFromStage) {
             if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
                 RobotContainer.stateMachine.trunkState = TrunkState.SpeakerFromStage
-            }
-            else {
+            } else {
                 RobotContainer.stateMachine.trunkState = TrunkState.Speaker
             }
         }
 
         //Reset the controller
-        RobotContainer.swerveSystem.autoTwistController.reset(RobotContainer.swerveSystem.swerveDrive.pose.rotation,
-                RobotContainer.swerveSystem.swerveDrive.fieldVelocity)
+//        RobotContainer.swerveSystem.autoTwistController.reset(RobotContainer.swerveSystem.getSwervePose().rotation,
+//                RobotContainer.swerveSystem.driveTrain.fieldVelocity)
+        RobotContainer.swerveSystem.autoTwistController.reset(RobotContainer.swerveSystem.getSwervePose().rotation,
+                RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds)
     }
 
     override fun execute() {
@@ -41,8 +41,8 @@ class AimAndShoot: Command() {
                 DriveConstants.TELEOP_DEADZONE_X,
                 DriveConstants.TELEOP_DEADZONE_Y
         )
-
-        RobotContainer.swerveSystem.drive(driveTranslation, driveTwist.degrees, true)
+//        drive(driveTranslation, driveTwist.degrees, true)
+        RobotContainer.swerveSystem.driveTrain.applyRequest { RobotContainer.swerveSystem.drive.withVelocityX(driveTranslation.x).withVelocityY(driveTranslation.y).withRotationalRate(driveTwist.radians) }
 
         if (RobotContainer.swerveSystem.autoTwistController.isAtDesired() && !autoShoot.isScheduled) {
             autoShoot.schedule()

@@ -10,7 +10,7 @@ import frc.robot.commands.cannon.AutoIntake
 import frc.robot.constants.AutoConstants
 import limelightlib.LimelightHelpers
 
-class FloorIntakeAndSeek: Command() {
+class FloorIntakeAndSeek : Command() {
     val autoIntake: AutoIntake = AutoIntake()
 
     var initTime: Double = -1.0
@@ -28,9 +28,9 @@ class FloorIntakeAndSeek: Command() {
         }
 
         if (LimelightHelpers.getTV(RobotContainer.intakeLimelight)) {
-            val fudgedLLOffset = LimelightHelpers.getTX(RobotContainer.intakeLimelight) * (1/27)
+            val fudgedLLOffset = LimelightHelpers.getTX(RobotContainer.intakeLimelight) * (1 / 27)
             //Milan - everything needs to be negated bc the front is STUPID "sHoOtTeR sHoUlD be FrONt"
-            RobotContainer.swerveSystem.drive(Translation2d(-1.0, 0.0), -fudgedLLOffset, false)
+            RobotContainer.swerveSystem.driveTrain.applyRequest { RobotContainer.swerveSystem.forwardStraight.withVelocityX(-1.0).withRotationalRate(-fudgedLLOffset) }
         }
     }
 
