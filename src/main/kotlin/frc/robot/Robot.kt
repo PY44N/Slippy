@@ -102,7 +102,6 @@ class Robot : LoggedRobot() {
      */
     override fun disabledInit() {
         CommandScheduler.getInstance().cancelAll()
-        RobotContainer.swerveSystem.swerveDrive.lockPose()
     }
 
     /**
@@ -165,13 +164,5 @@ class Robot : LoggedRobot() {
      * This function is called periodically during test mode.
      */
     override fun testPeriodic() {
-        RobotContainer.swerveSystem.swerveDrive.modules[0].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[1].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[2].setAngle(0.0)
-        RobotContainer.swerveSystem.swerveDrive.modules[3].setAngle(0.0)
-        SmartDashboard.putNumber("0 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[0].absolutePosition)
-        SmartDashboard.putNumber("1 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[1].absolutePosition)
-        SmartDashboard.putNumber("2 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[2].absolutePosition)
-        SmartDashboard.putNumber("3 raw angle", RobotContainer.swerveSystem.swerveDrive.modules[3].absolutePosition)
     }
 }
