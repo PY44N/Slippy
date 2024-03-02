@@ -35,7 +35,7 @@ class Robot : LoggedRobot() {
 
         RobotContainer.drivetrain.setDefaultCommand(RobotContainer.drivetrain.applyRequest {
             RobotContainer.drive.withVelocityX(
-                1.5
+                    1.5
             ).withVelocityY(0.0).withRotationalRate(0.0)
         })
     }
