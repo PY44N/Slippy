@@ -46,7 +46,7 @@ class TeleopSwerveDriveCommand : Command() {
         val translation = RobotContainer.swerveSystem.calculateJoyTranslation(RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y, throttle, DriveConstants.TELEOP_DEADZONE_X, DriveConstants.TELEOP_DEADZONE_Y)
 
         val twist = calculateDeadzone(twistInput, DriveConstants.TELEOP_DEADZONE_TWIST) * throttle * DriveConstants.MAX_ANGLE_SPEED
-
+        println("driving")
         RobotContainer.swerveSystem.driveTrain.applyRequest {
             RobotContainer.swerveSystem.drive.withVelocityX(translation.x)
                     .withVelocityY(translation.y)

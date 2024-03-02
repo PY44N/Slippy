@@ -40,11 +40,11 @@ class Robot : LoggedRobot() {
         RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
 
-        RobotContainer.drivetrain.setDefaultCommand(RobotContainer.drivetrain.applyRequest {
-            RobotContainer.drive.withVelocityX(
-                    1.5
-            ).withVelocityY(0.0).withRotationalRate(0.0)
-        })
+//        RobotContainer.drivetrain.setDefaultCommand(RobotContainer.drivetrain.applyRequest {
+//            RobotContainer.drive.withVelocityX(
+//                    1.5
+//            ).withVelocityY(0.0).withRotationalRate(0.0)
+//        })
     }
 
     override fun teleopPeriodic() {

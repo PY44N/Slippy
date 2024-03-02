@@ -10,11 +10,11 @@ import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
 
-    private val elevatorMotor = CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless)
+    private val elevatorMotor = CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 
-    private val mainRotationMotor = CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless)
-    private val followerRotationMotor = CANSparkMax(14, CANSparkLowLevel.MotorType.kBrushless)
+    private val mainRotationMotor = CANSparkMax(22, CANSparkLowLevel.MotorType.kBrushless)
+    private val followerRotationMotor = CANSparkMax(21, CANSparkLowLevel.MotorType.kBrushless)
 
     private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
 
@@ -90,8 +90,12 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setZeroPosition(top: Boolean) {
-        positionEncoder.setPosition(if(top) {TrunkConstants.TOP_BREAK_BEAM_POSITION} else {TrunkConstants.BOTTOM_BREAK_BEAM_POSITION})
-        if(!top)
+        positionEncoder.setPosition(if (top) {
+            TrunkConstants.TOP_BREAK_BEAM_POSITION
+        } else {
+            TrunkConstants.BOTTOM_BREAK_BEAM_POSITION
+        })
+        if (!top)
             elevatorMotor.inverted = !elevatorMotor.inverted
         setTopPositionLimit(TrunkConstants.TOP_BREAK_BEAM_POSITION)
         setBottomPositionLimit(TrunkConstants.BOTTOM_BREAK_BEAM_POSITION)
@@ -129,8 +133,9 @@ class TrunkIOReal : TrunkIO {
     override fun setDesiredRotation(angle: Double) {
         rotationPID.setReference(angle, CANSparkBase.ControlType.kPosition)
     }
+
     override fun setTopPositionLimit(position: Double) {
-        if(topPositionLimit != position) {
+        if (topPositionLimit != position) {
             topPositionLimit = position
             elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, -position.toFloat())
             elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
@@ -138,7 +143,7 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setBottomPositionLimit(position: Double) {
-        if(bottomPositionLimit != position) {
+        if (bottomPositionLimit != position) {
             bottomPositionLimit = position
             elevatorMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, -position.toFloat())
             elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
@@ -146,7 +151,7 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setTopRotationLimit(angle: Double) {
-        if(topRotationLimit != angle) {
+        if (topRotationLimit != angle) {
             topRotationLimit = angle
             mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, angle.toFloat())
             mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
@@ -154,7 +159,7 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setBottomRotationLimit(angle: Double) {
-        if(bottomRotationLimit != angle) {
+        if (bottomRotationLimit != angle) {
             bottomRotationLimit = angle
             mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, angle.toFloat())
             mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)

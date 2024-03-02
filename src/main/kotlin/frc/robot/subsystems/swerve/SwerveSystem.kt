@@ -35,7 +35,7 @@ class SwerveSystem() : SubsystemBase() {
     public val point: SwerveRequest.PointWheelsAt = SwerveRequest.PointWheelsAt();
 
     /* Path follower */
-    public val runAuto: Command = driveTrain.getAutoPath("Tests");
+//    public val runAuto: Command = driveTrain.getAutoPath("Tests");
 
     public val logger: Telemetry = Telemetry(DriveConstants.MAX_SPEED);
 
@@ -98,7 +98,7 @@ class SwerveSystem() : SubsystemBase() {
     override fun periodic() {
 
 
-        updateGlobalZone()
+//        updateGlobalZone()
         //TODO: update global (specific) positions in the state machine
     }
 

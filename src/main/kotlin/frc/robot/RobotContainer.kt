@@ -25,10 +25,6 @@ object RobotContainer {
     /* Setting up bindings for necessary control of the swerve drive platform */ //  private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
     var drivetrain: CommandSwerveDrivetrain = TunerConstants.DriveTrain // My drivetrain
 
-    val drive: FieldCentric = FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage) // I want field-centric
-
     // driving in open loop
     private val brake = SwerveDriveBrake()
     private val point = PointWheelsAt()
