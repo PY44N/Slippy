@@ -136,14 +136,17 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
         val currentLeftVelo = io.getLeftShooterVel()
         val currentRightVelo = io.getRightShooterVel()
 
-        val leftFF = (desiredLeftVel - currentLeftVelo) * .6
-        val rightFF = (desiredRightVel - currentRightVelo) * .6
+        val leftFF = (desiredLeftVel) * .3
+        val rightFF = (desiredRightVel) * .3
 
         val leftPIDOut = leftShooterPID.calculate(currentLeftVelo, desiredLeftVel)
         val rightPIDOut = rightShooterPID.calculate(currentRightVelo, desiredRightVel)
 
         val leftPercent = (leftFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
         val rightPercent = (rightFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+
+        SmartDashboard.putNumber("left shooter pid", leftPIDOut)
+//        SmartDashboard.putNumber("left shooter percent", leftPercent)
 
         io.setLeftShooter(leftPercent)
         io.setRightShooter(rightPercent)

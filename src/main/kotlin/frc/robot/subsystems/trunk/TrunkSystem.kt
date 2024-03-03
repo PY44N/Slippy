@@ -62,8 +62,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
         crossbarRoot.append(MechanismLigament2d("Crossbar", TrunkConstants.CROSSBAR_TOP-TrunkConstants.CROSSBAR_BOTTOM - .25, TrunkConstants.ELEVATOR_ANGLE, color=Color8Bit(0,255,0)))
         io.setDesiredRotation(TrunkConstants.TARGET_SAFE_ANGLE)
-        SmartDashboard.putNumber("Position SetPoint", 0.15)
-        SmartDashboard.putNumber("Rotation SetPoint", 90.0)
+//        SmartDashboard.putNumber("Position SetPoint", 0.15)
+//        SmartDashboard.putNumber("Rotation SetPoint", 90.0)
     }
 
     private fun setDesiredPosition(position: Double) {
@@ -144,22 +144,22 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
 //        SmartDashboard.putData("Trunk Mechanism", superstructureMechanism)
 
-        SmartDashboard.putNumber("Trunk Position", currentPosition)
-        SmartDashboard.putNumber("Trunk Rotation", currentRotation)
-        SmartDashboard.putNumber("Desired Position", positionSetPoint)
-        SmartDashboard.putNumber("Desired Rotation", rotationSetPoint)
-
-    SmartDashboard.putString("set state trunk", currentState.name)
-
-        SmartDashboard.putString("setpose", targetPose.name)
-        SmartDashboard.putBoolean("calibrating", isCalibrating)
-        SmartDashboard.putBoolean("traveling", isTraveling)
-        SmartDashboard.putBoolean("shooting", isShooting)
-        SmartDashboard.putNumber("shooting angle", shootingAngle)
-        SmartDashboard.putBoolean("manual", isManual)
-        SmartDashboard.putBoolean("top limit", io.atTopLimit())
-        SmartDashboard.putBoolean("bottom limit", io.atBottomLimit())
-        SmartDashboard.putBoolean("STOP", stop)
+//        SmartDashboard.putNumber("Trunk Position", currentPosition)
+//        SmartDashboard.putNumber("Trunk Rotation", currentRotation)
+//        SmartDashboard.putNumber("Desired Position", positionSetPoint)
+//        SmartDashboard.putNumber("Desired Rotation", rotationSetPoint)
+//
+//    SmartDashboard.putString("set state trunk", currentState.name)
+//
+//        SmartDashboard.putString("setpose", targetPose.name)
+//        SmartDashboard.putBoolean("calibrating", isCalibrating)
+//        SmartDashboard.putBoolean("traveling", isTraveling)
+//        SmartDashboard.putBoolean("shooting", isShooting)
+//        SmartDashboard.putNumber("shooting angle", shootingAngle)
+//        SmartDashboard.putBoolean("manual", isManual)
+//        SmartDashboard.putBoolean("top limit", io.atTopLimit())
+//        SmartDashboard.putBoolean("bottom limit", io.atBottomLimit())
+//        SmartDashboard.putBoolean("STOP", stop)
 
         // TODO: Remove for actual robot
 //        if (keyboard.getRawButton(1)) {

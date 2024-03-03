@@ -1,12 +1,8 @@
 package frc.robot
 
-import edu.wpi.first.wpilibj.TimedRobot
-import com.revrobotics.CANSparkLowLevel
-import com.revrobotics.CANSparkMax
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.wpilibj.PowerDistribution
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.math.VecBuilder
+import edu.wpi.first.math.kinematics.SwerveModulePosition
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LoggedRobot
@@ -21,6 +17,42 @@ class Robot : LoggedRobot() {
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
+
+    }
+
+    fun updateOdometry() {
+        var leftLLMeasure: LimelightHelpers.PoseEstimate;
+        var rightLLMeasure: LimelightHelpers.PoseEstimate;
+
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+            leftLLMeasure =
+                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left")
+            rightLLMeasure =
+                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left")
+        }
+        else {
+            leftLLMeasure =
+                LimelightHelpers.getBotPoseEstimate_wpiRed("limelight-left")
+            rightLLMeasure =
+                LimelightHelpers.getBotPoseEstimate_wpiRed("limelight-left")
+        }
+
+
+        if (leftLLMeasure.tagCount >= 2) {
+            RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999.0))
+            RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
+                leftLLMeasure.pose,
+                leftLLMeasure.timestampSeconds
+            )
+        }
+
+        if (rightLLMeasure.tagCount >= 2) {
+            RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999.0))
+            RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
+                rightLLMeasure.pose,
+                rightLLMeasure.timestampSeconds
+            )
+        }
     }
 
     override fun disabledInit() {}

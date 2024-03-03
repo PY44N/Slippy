@@ -47,6 +47,9 @@ class CannonIOReal : CannonIO {
 //        leftShooterPID.setOutputRange(CannonConstants.rightShooterMin, CannonConstants.rightShooterMax)
 //        rightShooterPID.setFeedbackDevice(rightShooterEncoder)
 
+//        leftShooterMotor.restoreFactoryDefaults()
+//        rightShooterMotor.restoreFactoryDefaults()
+        rightShooterMotor.inverted = true
         leftShooterEncoder.setVelocityConversionFactor(1/8192.0)
         rightShooterEncoder.setVelocityConversionFactor(1/8192.0)
     }

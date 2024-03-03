@@ -62,11 +62,11 @@ object RobotContainer {
 
     private fun configureBindings() {
         xboxController.a().toggleOnTrue(AutoIntake())
-        xboxController.x().toggleOnTrue(AutoShootCommand())
-//        xboxController.x().onTrue(Commands.runOnce({
-//            println("x button pressed")
-//            cannonSystem.shoot()
-//        }))
+//        xboxController.x().toggleOnTrue(AutoShootCommand())
+        xboxController.x().onTrue(Commands.runOnce({
+            println("x button pressed")
+            cannonSystem.shoot()
+        }))
         xboxController.b().onTrue(Commands.runOnce({
             cannonSystem.killShooter()
         }))

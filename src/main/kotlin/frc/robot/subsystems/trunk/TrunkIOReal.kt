@@ -175,8 +175,8 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun periodic() {
-        SmartDashboard.putNumber("follower voltage", followerRotationMotor.appliedOutput)
-        SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
+//        SmartDashboard.putNumber("follower voltage", followerRotationMotor.appliedOutput)
+//        SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
     }
 
 }

@@ -3,11 +3,13 @@ package frc.robot.commands.cannon
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
+import frc.robot.TrunkState
 
 class AutoAmp : Command() {
     override fun initialize() {
         RobotContainer.cannonSystem.ampSpit()
         RobotContainer.cannonSystem.killShooter()
+        RobotContainer.stateMachine.trunkState = TrunkState.Amp
     }
 
     override fun execute() {
