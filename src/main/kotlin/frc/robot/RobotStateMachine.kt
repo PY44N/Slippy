@@ -105,9 +105,8 @@ class RobotStateMachine {
         private set
 
     //Is the shooter at the desired velocity?
-    var shooterReady: Boolean = true
+    val shooterReady: Boolean
         get() = RobotContainer.cannonSystem.shooterReady()
-        private set
 
 
     //Should be called in teleop periodic
