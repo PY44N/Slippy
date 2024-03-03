@@ -18,6 +18,9 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
     private var desiredOuterPercent = 0.0
     private var desiredInnerPercent = 0.0
 
+    val leftShooterPID = PIDController(CannonConstants.leftShooterKP, CannonConstants.leftShooterKI, CannonConstants.leftShooterKD)
+    val rightShooterPID = PIDController(CannonConstants.leftShooterKP, CannonConstants.leftShooterKI, CannonConstants.leftShooterKD)
+
 
     private var exitBreakBeamTriggerTime: Double = -1.0; //
 
@@ -114,10 +117,7 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
             desiredLeftVel = RobotContainer.stateMachine.shooterState.leftVel
             desiredRightVel = RobotContainer.stateMachine.shooterState.rightVel
 
-            io.setRightShooter(desiredRightVel)
-            io.setLeftShooter(desiredLeftVel)
-
-            println("set the shooters")
+            println("set the shooter PID")
         }
 
         /*----------------
@@ -130,6 +130,23 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
             io.setInnerIntakePercent(desiredInnerPercent)
             io.setOuterIntakePercent(desiredOuterPercent)
         }
+
+
+        //Actually run the motors with the PIDs and the feed forwards
+        val currentLeftVelo = io.getLeftShooterVel()
+        val currentRightVelo = io.getRightShooterVel()
+
+        val leftFF = (desiredLeftVel - currentLeftVelo) * .6
+        val rightFF = (desiredRightVel - currentRightVelo) * .6
+
+        val leftPIDOut = leftShooterPID.calculate(currentLeftVelo, desiredLeftVel)
+        val rightPIDOut = rightShooterPID.calculate(currentRightVelo, desiredRightVel)
+
+        val leftPercent = (leftFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+        val rightPercent = (rightFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+
+        io.setLeftShooter(leftPercent)
+        io.setRightShooter(rightPercent)
     }
 
     override fun simulationPeriodic() {
