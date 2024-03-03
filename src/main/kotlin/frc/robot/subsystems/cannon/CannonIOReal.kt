@@ -46,6 +46,9 @@ class CannonIOReal : CannonIO {
 //        rightShooterPID.setFF(CannonConstants.rightShooterFF)
 //        leftShooterPID.setOutputRange(CannonConstants.rightShooterMin, CannonConstants.rightShooterMax)
 //        rightShooterPID.setFeedbackDevice(rightShooterEncoder)
+
+        leftShooterEncoder.setVelocityConversionFactor(1/8192.0)
+        rightShooterEncoder.setVelocityConversionFactor(1/8192.0)
     }
 
     override fun getLeftShooterVel(): Double {

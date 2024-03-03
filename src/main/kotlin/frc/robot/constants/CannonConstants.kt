@@ -34,7 +34,7 @@ object CannonConstants {
     val outerIntakePercent = .5
     val innerIntakePercent = .5
 
-    var leftShooterKP = 0.0
+    var leftShooterKP = 0.1
     var leftShooterKI = 0.0
     var leftShooterKD = 0.0
     var leftShooterIz = 0.0
@@ -43,7 +43,7 @@ object CannonConstants {
     var leftShooterMin = 1.0
 
 
-    var rightShooterKP = 0.0
+    var rightShooterKP = 0.1
     var rightShooterKI = 0.0
     var rightShooterKD = 0.0
     var rightShooterIz = 0.0
