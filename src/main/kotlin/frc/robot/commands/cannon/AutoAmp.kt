@@ -9,7 +9,7 @@ class AutoAmp : Command() {
     override fun initialize() {
         RobotContainer.cannonSystem.ampSpit()
         RobotContainer.cannonSystem.killShooter()
-        RobotContainer.stateMachine.trunkState = TrunkState.Amp
+//        RobotContainer.stateMachine.tr
     }
 
     override fun execute() {

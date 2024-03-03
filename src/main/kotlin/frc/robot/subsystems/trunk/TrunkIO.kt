@@ -16,6 +16,7 @@ interface TrunkIO {
     fun setBottomRotationLimit(angle: Double)
     fun atTopLimit(): Boolean
     fun atBottomLimit(): Boolean
-    fun disablePositionLimits()
+    fun setPositionLimits(on: Boolean)
+    fun setPID(on: Boolean)
     fun periodic()
 }

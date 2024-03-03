@@ -9,71 +9,79 @@ object TrunkConstants {
     const val MAX_PIVOT_HEIGHT_M = 0.8
     const val MIN_PIVOT_HEIGHT_M = 0.0
     const val THING_LENGTH_M = 0.6133
-    const val MOVER_GEAR_RADIUS_M = 0.0127
-    const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2.0 * PI
+    const val POSITION_CONVERSION_FACTOR = -0.03980722784
+    const val ELEVATOR2M = -0.03980722784
+    const val M2ELEVATOR = 1.0 / ELEVATOR2M
+//    0.769531 - 10.342285 = -9.572754
+//    0.405762 - 9.967285 = -9.561523
+//    0.386719 - 9.974365 = -9.587646
+//    0.397217 - 9.974365 = -9.577148
+//    0.406494 - 9.969727 = -9.563233
+//    0.398438 - 9.962891 = -9.564453
+//    -9.572754 + -9.561523 + -9.587646 + -9.577148 + -9.563233 + -9.564453 = -57.426757
+//    -57.426757 / 6 = -9.571126167
+//    .3810000 / -9.571126167  = -0.03980722784
+
+
+    //        0.0609217993
+//    const val MOVER_GEAR_RADIUS_M = 0.0127
+//    const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2.0 * PI
     const val ELEVATOR_ANGLE = 28.8309683
-
-    val SHOOTING_OFFSET = .1 // dist from center of robot to point of shooting (m)
-    val SHOOTING_HEIGHT = .3 // dist from ground to point of shooting (m)
-    val UNDER_STAGE_SHOOTING_OFFSET = .05
-    val UNDER_STAGE_SHOOTING_HEIGHT = .2
-
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
 
-    var MIN_SAFE_ANGLE: Double = 0.0
-    var TARGET_SAFE_ANGLE: Double = 5.0
+    var MIN_SAFE_ANGLE: Double = 100.0
+    var TARGET_SAFE_ANGLE: Double = 100.0
 
     var MAX_ANGLE: Double = 170.0
 
-    var SPEAKER_POSITION: Double = .6
+    var SPEAKER_POSITION: Double = 0.381
 
     var AMP_POSITION: Double = 0.4
     var AMP_ANGLE: Double = 140.0
 
-    var INTAKE_POSITION: Double = 0.0
-    var INTAKE_ANGLE: Double = -30.0
+    var INTAKE_POSITION: Double = 0.01
+    var INTAKE_ANGLE: Double = 70.0
 
-    var CROSSBAR_BOTTOM: Double = 0.1
+    var CROSSBAR_BOTTOM: Double = 0.05
     var CROSSBAR_TOP: Double = .5
 
-    var STOW_POSITION: Double = 0.55
-    var STOW_ANGLE: Double = 0.0
+    var STOW_POSITION: Double = 0.381
+    var STOW_ANGLE: Double = 85.0
 
     var TRAP_POSITION: Double = 0.7
     var TRAP_ANGLE: Double = 160.0
 
-    var TOP_BREAK_BEAM_POSITION: Double = 0.75
+    var TOP_BREAK_BEAM_POSITION: Double = .3810000
     var BOTTOM_BREAK_BEAM_POSITION: Double = 0.0
 
     val MIN_ANGLE_BELOW_CROSSBAR = -10.0
     val MIN_ANGLE_ABOVE_CROSSBAR = -20.0
 
-    var rotationOffset: Double = 0.0
+    var rotationOffset: Double = 252.0
 
-    const val SMART_MOTION_SLOT = 0
-
-    var positionKP = .9
+    var positionKP = 22.0
     var positionKI = 0.0
-    var positionKD = 0.0
+    var positionKD = 0.1
     var positionIz = 0.0
-    var positionFF = 0.0
-    var positionMax = 1.0
-    var positionMin = -1.0
-    var positionMinRPM = 10.0
-    var positionMaxRPM = 5700.0
-    var positionMaxAcceleration = 1500.0
-    var positionMaxError = 5.0
 
-    var rotationKP = .075
-    var rotationKI = 0.0
-    var rotationKD = 0.0
-    var rotationIz = 0.0
-    var rotationFF = 0.0
-    var rotationMin = -1.0
-    var rotationMax = 1.0
-    var rotationMinRPM = 10.0
-    var rotationMaxRPM = 5700.0
-    var rotationMaxAcceleration = 1500.0
+    var positionFF = 0.02
+
+    val rotationFFkS = 0.03
+    val rotationFFkG = 0.48
+    val rotationFFkV = 2.44
+    val rotationFFkA = 0.02
+
+    val rotationEncoderID = 9
+
+    var rotationKP = 7.0
+    var rotationKI = 0.0001
+    var rotationKD = 1.25
+
+    //Degrees/sec^2
+    var rotationMaxAcceleration = 40.0
+
+    //degrees/sec
+    var rotationMaxVelo = 30.0
     var rotationMaxError = 5.0
 }

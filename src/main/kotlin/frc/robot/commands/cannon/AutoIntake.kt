@@ -9,7 +9,7 @@ class AutoIntake: Command() {
     override fun initialize() {
         RobotContainer.cannonSystem.intake()
         RobotContainer.cannonSystem.killShooter()
-        RobotContainer.stateMachine.trunkState = TrunkState.Floor
+//        RobotContainer.stateMachine.trunkState = TrunkState.Floor
     }
 
     override fun execute() {

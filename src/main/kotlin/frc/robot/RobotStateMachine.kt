@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
+import frc.robot.constants.TrunkConstants
 
 
 //This represents the desired shooter state
@@ -31,17 +32,23 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
 }
 
 //this represents the DESIRED trunk statautoshooe
-enum class TrunkState {
-    Speaker,
-    SpeakerFromStage,
-    Amp,
-    Stow,
-    Trap,
-    Floor,
-    Source,
-    Manual
+enum class TrunkPosition(val angle: Double, val position: Double) {
+    AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
+    SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
+    INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
+    STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
+    TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION), ;
 }
 
+
+enum class TrunkState() {
+    STOP,
+    CALIBRATING,
+    MANUAL,
+    CUSTOM,
+    SETPOINTSETUP,
+    TRAVELING,
+}
 
 //CURRENT states
 enum class GlobalZones(val range: Pair<Translation2d, Translation2d>) {
@@ -81,7 +88,14 @@ enum class AutoStateManagement {
 
 class RobotStateMachine {
 
-    var trunkState: TrunkState = TrunkState.Stow;
+    val targetTrunkPose: TrunkPosition
+        get() = RobotContainer.trunkSystem.targetPose
+
+    val trunkState: TrunkState
+        get() = RobotContainer.trunkSystem.currentState
+
+
+
     var intakeState: IntakeState = IntakeState.Stopped;
     var shooterState: ShooterState = ShooterState.Stopped;
     var noteState: NoteState = NoteState.Stored;
@@ -111,37 +125,37 @@ class RobotStateMachine {
 
     //Should be called in teleop periodic
     fun TeleopAutomaticStateManagement() {
-        if (autoStateManagement != AutoStateManagement.Enabled) {
-            return
-        }
-        if (currentRobotZone != prevRobotZone) {
-            when (currentRobotZone) {
-                //when in NO set to stow and sping down shooter (if not overridden)
-                GlobalZones.NO -> {
-                    if (noteState == NoteState.Empty) {
-                        trunkState = TrunkState.Stow
-                        shooterState = ShooterState.Stopped
-                    }
-                }
-                //when in wing set to wing shooting position and enable the auto (pivot) aiming and prep shooter (if not manual override)
-                GlobalZones.Wing -> {
-                    if (noteState != NoteState.Empty) {
-                        if (robotAction == RobotAction.Speaker) {
-                            trunkState = TrunkState.Speaker
-                            shooterState = ShooterState.Prepped
-                        }
-                    }
-                }
-                //when in stage, set to stage shooting position and enable the auto (pivot) aiming and prep shooter (if not manual override)
-                GlobalZones.Stage -> {
-                    if (noteState != NoteState.Empty) {
-                        if (robotAction == RobotAction.Speaker) {
-                            trunkState = TrunkState.SpeakerFromStage
-                            shooterState = ShooterState.Prepped
-                        }
-                    }
-                }
-            }
-        }
+//        if (autoStateManagement != AutoStateManagement.Enabled) {
+//            return
+//        }
+//        if (currentRobotZone != prevRobotZone) {
+//            when (currentRobotZone) {
+//                //when in NO set to stow and sping down shooter (if not overridden)
+//                GlobalZones.NO -> {
+//                    if (noteState == NoteState.Empty) {
+//                        trunkState = TrunkState.Stow
+//                        shooterState = ShooterState.Stopped
+//                    }
+//                }
+//                //when in wing set to wing shooting position and enable the auto (pivot) aiming and prep shooter (if not manual override)
+//                GlobalZones.Wing -> {
+//                    if (noteState != NoteState.Empty) {
+//                        if (robotAction == RobotAction.Speaker) {
+//                            trunkState = TrunkState.Speaker
+//                            shooterState = ShooterState.Prepped
+//                        }
+//                    }
+//                }
+//                //when in stage, set to stage shooting position and enable the auto (pivot) aiming and prep shooter (if not manual override)
+//                GlobalZones.Stage -> {
+//                    if (noteState != NoteState.Empty) {
+//                        if (robotAction == RobotAction.Speaker) {
+//                            trunkState = TrunkState.SpeakerFromStage
+//                            shooterState = ShooterState.Prepped
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }

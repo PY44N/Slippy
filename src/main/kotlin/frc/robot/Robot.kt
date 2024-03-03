@@ -3,6 +3,7 @@ package frc.robot
 import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.littletonrobotics.junction.LoggedRobot
@@ -11,13 +12,32 @@ import org.littletonrobotics.junction.LoggedRobot
 class Robot : LoggedRobot() {
     private lateinit var m_autonomousCommand: Command
 
+    private var lastRobotAction: RobotAction = RobotContainer.stateMachine.robotAction
     override fun robotInit() {
     }
 
     override fun robotPeriodic() {
+        if (RobotContainer.robotActionSendable.selected != lastRobotAction) {
+            RobotContainer.stateMachine.robotAction = RobotContainer.robotActionSendable.selected
+            lastRobotAction = RobotContainer.robotActionSendable.selected
+        }
+
+
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
 
+        if (RobotContainer.stateMachine.trunkState == TrunkState.MANUAL) {
+            RobotContainer.trunkSystem.elevate(-RobotContainer.xboxController.leftY)
+            RobotContainer.trunkSystem.rotate(-RobotContainer.xboxController.rightY * .1)
+        }
+        else {
+//            if (!RobotContainer.trunkSystem.isMoving) {
+//                RobotContainer.trunkSystem.io.setDesiredRotation(RobotContainer.trunkSystem.io.getRotation() + (-RobotContainer.xboxController.rightY * .1))
+//            }
+        }
+
+        SmartDashboard.putString("Trunk Position", RobotContainer.trunkSystem.targetPose.name)
+        SmartDashboard.putString("Trunk State", RobotContainer.trunkSystem.currentState.name)
     }
 
     fun updateOdometry() {
@@ -72,6 +92,7 @@ class Robot : LoggedRobot() {
     override fun teleopInit() {
         RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
+        RobotContainer.trunkSystem.calibrate()
 
 //        RobotContainer.drivetrain.setDefaultCommand(RobotContainer.drivetrain.applyRequest {
 //            RobotContainer.swerveSystem.drive.withVelocityX(
@@ -82,6 +103,7 @@ class Robot : LoggedRobot() {
 
     override fun teleopPeriodic() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
+
 
         //        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
         //        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)

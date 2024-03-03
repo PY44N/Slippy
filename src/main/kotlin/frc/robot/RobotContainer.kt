@@ -59,24 +59,62 @@ object RobotContainer {
 
     init {
         configureBindings()
+
+        RobotAction.entries.forEach {
+            robotActionSendable.addOption(it.name, it)
+        }
     }
 
     private fun configureBindings() {
-        xboxController.a().toggleOnTrue(AutoIntake())
-        xboxController.x().toggleOnTrue(AutoShootCommand())
-//        xboxController.x().onTrue(Commands.runOnce({
-//            println("x button pressed")
-//            cannonSystem.shoot()
+//        xboxController.a().toggleOnTrue(AutoIntake())
+//        xboxController.x().toggleOnTrue(AutoShootCommand())
+////        xboxController.x().onTrue(Commands.runOnce({
+////            println("x button pressed")
+////            cannonSystem.shoot()
+////        }))
+//        xboxController.b().onTrue(Commands.runOnce({
+//            cannonSystem.killShooter()
 //        }))
+//        xboxController.y().toggleOnTrue(AutoAmp())
+//        //MURDER...KILL IT ALL
+//        xboxController.start().onTrue(Commands.runOnce({
+//            cannonSystem.killShooter()
+//            cannonSystem.killIntake()
+//        }))
+
+        rightJoystick.button(3).onTrue(Commands.runOnce({
+            when (stateMachine.robotAction) {
+                RobotAction.Speaker -> AutoShootCommand();
+                RobotAction.Amp -> AutoAmp();
+                RobotAction.SourceIntake -> TODO("Not yet implemented");
+                RobotAction.FloorIntake -> AutoIntake()
+                RobotAction.Trap -> TODO("Not yet implemented")
+                //Does literally nothing
+                RobotAction.Chill -> println("*Hits blunt* Yoooooooo sup bra (currently in chill mode)")
+            }
+        }))
+
+        xboxController.a().onTrue(Commands.runOnce({
+            RobotContainer.trunkSystem.targetPose = TrunkPosition.STOW
+        }))
         xboxController.b().onTrue(Commands.runOnce({
-            cannonSystem.killShooter()
+            RobotContainer.trunkSystem.targetPose = TrunkPosition.INTAKE
         }))
-        xboxController.y().toggleOnTrue(AutoAmp())
-        //MURDER...KILL IT ALL
+        xboxController.x().onTrue(Commands.runOnce({
+            RobotContainer.trunkSystem.calibrate()
+        }))
+        xboxController.back().onTrue(Commands.runOnce({
+            RobotContainer.trunkSystem.STOP()
+        }))
         xboxController.start().onTrue(Commands.runOnce({
-            cannonSystem.killShooter()
-            cannonSystem.killIntake()
+            println("pressed start")
+            RobotContainer.trunkSystem.goManual()
         }))
+        xboxController.y().onTrue(Commands.runOnce({
+            println("pressed y")
+            RobotContainer.trunkSystem.goToCustom()
+        }))
+
     }
 
 

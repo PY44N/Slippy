@@ -1,9 +1,12 @@
 package frc.robot.subsystems.trunk
 
+import MiscCalculations
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.Color8Bit
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.TrunkPosition
+import frc.robot.TrunkState
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.visualization.Mechanism2d
 import frc.robot.util.visualization.MechanismLigament2d
@@ -12,35 +15,30 @@ import java.util.TimeZone
 import kotlin.math.max
 import kotlin.math.sqrt
 
-enum class TrunkPosition(val angle: Double, val position: Double) {
-    AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
-    SPEAKER(TrunkConstants.TARGET_SAFE_ANGLE, TrunkConstants.SPEAKER_POSITION),
-    INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
-    STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
-    TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),;
-}
 
-enum class TrunkState() {
-    STOP,
-    CALIBRATING,
-    MANUAL,
-    CUSTOM,
-//    SETPOINTSETUP,
-//    TRAVELING,
-}
+
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
-    private var currentState = TrunkState.STOP
-    private var targetPose = TrunkPosition.STOW
+
+    var currentState = TrunkState.CALIBRATING
+    var targetPose = TrunkPosition.STOW
+        set(value) =
+            if (!this.isMoving) {
+                field = value
+            } else {
+                field = field
+            }
+
+
+    private var prevTargetPose = TrunkPosition.SPEAKER
 
     var currentPosition: Double = 0.0
     var currentRotation: Double = io.getRotation()
 
-    var isCalibrating = false
-    var isManual = false
-    var isTraveling = false
-    var isShooting = false
-    var stop = true
+    var isRotationSafe = false
+    var hasElevatorMoved = false
+
+    var isMoving = false
 
     var bottomisSet = false
     var bottomPosition = 0.0
@@ -55,224 +53,141 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     val elevatorMechanismRoot = superstructureMechanism.getRoot("Elevator Root", 0.25, 0.25)
     val trunkMechanismRoot = superstructureMechanism.getRoot("Trunk Root", currentPosition * TrunkConstants.d2x + .25, currentPosition * TrunkConstants.d2y + .25)
     val trunkMechanism = trunkMechanismRoot.append(MechanismLigament2d("Trunk", -.25, currentRotation, color = Color8Bit(0, 0, 255)))
-    val crossbarRoot = superstructureMechanism.getRoot("Crossbar Root", (TrunkConstants.CROSSBAR_BOTTOM +.02)* TrunkConstants.d2x+.25, (TrunkConstants.CROSSBAR_BOTTOM-.02) * TrunkConstants.d2y + 0.25)
+    val crossbarRoot = superstructureMechanism.getRoot("Crossbar Root", (TrunkConstants.CROSSBAR_BOTTOM + .02) * TrunkConstants.d2x + .25, (TrunkConstants.CROSSBAR_BOTTOM - .02) * TrunkConstants.d2y + 0.25)
 
 
-    init {
-        elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
-        crossbarRoot.append(MechanismLigament2d("Crossbar", TrunkConstants.CROSSBAR_TOP-TrunkConstants.CROSSBAR_BOTTOM - .25, TrunkConstants.ELEVATOR_ANGLE, color=Color8Bit(0,255,0)))
-        io.setDesiredRotation(TrunkConstants.TARGET_SAFE_ANGLE)
-//        SmartDashboard.putNumber("Position SetPoint", 0.15)
-//        SmartDashboard.putNumber("Rotation SetPoint", 90.0)
-    }
-
-    private fun setDesiredPosition(position: Double) {
-        if(positionSetPoint != position) {
-            positionSetPoint = position
-            io.setDesiredPosition(position)
-        }
-    }
-//
-//    private fun setDesiredRotation(angle: Double) {
-//        if(rotationSetPoint != angle) {
-//            rotationSetPoint = angle
-//            io.setDesiredRotation(angle)
+//    fun setTargetPose(targetPose: TrunkPosition) {
+//        if (!this.isMoving) {
+//            this.targetPose = targetPose
 //        }
 //    }
 
+
+    init {
+        SmartDashboard.getNumber("bottom soft limit", 100.0)
+        SmartDashboard.getNumber("top soft limit", 180.0)
+        elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
+        crossbarRoot.append(MechanismLigament2d("Crossbar", TrunkConstants.CROSSBAR_TOP - TrunkConstants.CROSSBAR_BOTTOM - .25, TrunkConstants.ELEVATOR_ANGLE, color = Color8Bit(0, 255, 0)))
+        io.setDesiredRotation(TrunkConstants.TARGET_SAFE_ANGLE)
+//        SmartDashboard.putNumber("Position SetPoint", 0.15)
+//        SmartDashboard.putNumber("Rotation SetPoint", 150.0)
+    }
+
     fun goManual() {
-        isManual = true
+        io.setElevatorSpeed(0.0)
+        io.setRotationSpeed(0.0)
+        io.setPID(false)
         currentState = TrunkState.MANUAL
+        io.setPositionLimits(true)
     }
 
     fun calibrate() {
+        io.setElevatorSpeed(0.0)
+        io.setRotationSpeed(0.0)
+        io.setPID(false)
         bottomisSet = false
-        isManual = false
         currentState = TrunkState.CALIBRATING
         io.setElevatorSpeed(0.1)
-        io.disablePositionLimits()
+        io.setPositionLimits(false)
     }
 
-/*
-0.763465
-     */
     fun rotate(speed: Double) {
-        if (isManual || currentState == TrunkState.CUSTOM) {
+        if (currentState == TrunkState.MANUAL) {
             io.setRotationSpeed(speed)
+            SmartDashboard.putNumber("rotation percent output", speed)
         }
     }
 
     fun elevate(speed: Double) {
-        if (isManual) {
+        if (currentState == TrunkState.MANUAL) {
             io.setElevatorSpeed(speed)
         }
     }
-
-    fun setTargetPose(pose: TrunkPosition) {
-        targetPose = pose
-        isCalibrating = false
-        isTraveling = false
-        isShooting = pose == TrunkPosition.SPEAKER
-        isManual = false
+    fun goToCustom() {
+        io.setElevatorSpeed(0.0)
+        io.setPID(true)
+        currentState = TrunkState.CUSTOM
+        io.setPositionLimits(true)
     }
 
-    fun goToCustom() {
-        stop = false
-        isManual = false
-        currentState = TrunkState.CUSTOM
+    override fun periodic() {
+        SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
+        SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
+        SmartDashboard.putNumber("Angle val", io.getRotation())
+        SmartDashboard.putNumber("position val", io.getPosition())
+        SmartDashboard.putNumber("target position", targetPose.position)
+        SmartDashboard.putNumber("target angle", targetPose.angle)
+        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
+        SmartDashboard.putString("targetPosition name", targetPose.name)
+
+        if (currentState == TrunkState.CUSTOM) {
+//            io.setDesiredPosition(TrunkConstants.STOW_POSITION)
+            //Changed position
+            if (targetPose != prevTargetPose) {
+                io.setPID(true)
+                isMoving = true
+                //Not safe rotation
+                if (!isRotationSafe && !hasElevatorMoved) {
+                    io.setDesiredPosition(prevTargetPose.position)
+                    io.setDesiredRotation(TrunkConstants.MIN_SAFE_ANGLE)
+                } else if (isRotationSafe && !hasElevatorMoved) {
+                    println("set the desired position to target position")
+                    io.setDesiredRotation(TrunkConstants.MIN_SAFE_ANGLE)
+                    io.setDesiredPosition(targetPose.position)
+                }
+
+                if (MiscCalculations.appxEqual(io.getPosition(), targetPose.position, .05)) {
+                    hasElevatorMoved = true
+                }
+
+                //Elevator has moved
+                if (hasElevatorMoved) {
+                    io.setDesiredRotation(targetPose.angle)
+                }
+
+                //Elevator has moved and the angle is good
+                if (hasElevatorMoved && MiscCalculations.appxEqual(io.getRotation(), targetPose.angle, 4.0)) {
+                    prevTargetPose = targetPose
+                    hasElevatorMoved = false
+                    isMoving = false
+                }
+            }
+            else {
+//                io.setDesiredPosit
+            }
+
+            //Is rotation safe?
+            if (io.getRotation() > TrunkConstants.MIN_SAFE_ANGLE || MiscCalculations.appxEqual(io.getRotation(), TrunkConstants.MIN_SAFE_ANGLE, 5.0)) {
+                isRotationSafe = true
+            }
+        }
+        else if (currentState == TrunkState.CALIBRATING) {
+            doubleCalibratePeriodic()
+        }
+//        else if (currentState == TrunkState.STOP) {
+//            stopPeriodic()
+//        }
+        io.periodic()
     }
     fun STOP() {
-        isManual = false
+        io.setPID(false)
         currentState = TrunkState.STOP
         io.setElevatorSpeed(0.0)
         io.setRotationSpeed(0.0)
+        io.setPositionLimits(true)
     }
-
-    fun stopPeriodic() {
-        io.setRotationSpeed(0.0)
-        io.setElevatorSpeed(0.0)
-    }
-
-    val keyboard = GenericHID(0)
-
-    override fun periodic() {
-        currentPosition = io.getPosition()
-        currentRotation = io.getRotation()
-
-        trunkMechanismRoot.setPosition(currentPosition*TrunkConstants.d2x + .25, currentPosition*TrunkConstants.d2y + .25)
-        trunkMechanism.angle = io.getRawRotation()
-
-//        SmartDashboard.putData("Trunk Mechanism", superstructureMechanism)
-
-//        SmartDashboard.putNumber("Trunk Position", currentPosition)
-//        SmartDashboard.putNumber("Trunk Rotation", currentRotation)
-//        SmartDashboard.putNumber("Desired Position", positionSetPoint)
-//        SmartDashboard.putNumber("Desired Rotation", rotationSetPoint)
-//
-//    SmartDashboard.putString("set state trunk", currentState.name)
-//
-//        SmartDashboard.putString("setpose", targetPose.name)
-//        SmartDashboard.putBoolean("calibrating", isCalibrating)
-//        SmartDashboard.putBoolean("traveling", isTraveling)
-//        SmartDashboard.putBoolean("shooting", isShooting)
-//        SmartDashboard.putNumber("shooting angle", shootingAngle)
-//        SmartDashboard.putBoolean("manual", isManual)
-//        SmartDashboard.putBoolean("top limit", io.atTopLimit())
-//        SmartDashboard.putBoolean("bottom limit", io.atBottomLimit())
-//        SmartDashboard.putBoolean("STOP", stop)
-
-        // TODO: Remove for actual robot
-//        if (keyboard.getRawButton(1)) {
-//            setTargetPose(TrunkPosition.INTAKE)
-//        }
-//        if (keyboard.getRawButton(2)) {
-//            setTargetPose(TrunkPosition.STOW)
-//        }
-//        if (keyboard.getRawButton(3)) {
-//            setTargetPose(TrunkPosition.AMP)
-//        }
-//        if (keyboard.getRawButton(4)) {
-//            setTargetPose(TrunkPosition.TRAP)
-//        }
-
-        when(currentState) {
-            TrunkState.STOP -> stopPeriodic()
-            TrunkState.MANUAL -> {isManual = true}
-            TrunkState.CALIBRATING -> {doubleCalibratePeriodic()}
-            TrunkState.CUSTOM -> {
-                customPositionPeriodic()
-            }
-        }
-
-
-//        } else {
-//            if(io.atTopLimit())
-//                io.setZeroPosition(top = true)
-//            else if(io.atBottomLimit())
-//                io.setZeroPosition(top = false)
-//            if(!isManual) {
-//                goToTargetPosePeriodic()
-//            }
-        io.periodic()
-        SmartDashboard.putNumber("bottom beam position", bottomPosition)
-        SmartDashboard.putNumber("top beam position", topPosition)
-//        Logger.recordOutput("superstructureMechanism", superstructureMechanism
-    }
-
-//    private fun goToTravelPeriodic() {
-//        if(currentRotation >= TrunkConstants.MIN_SAFE_ANGLE)
-//            isTraveling = true
-//        setDesiredRotation(max(TrunkConstants.TARGET_SAFE_ANGLE, targetPose.angle))
-//        io.setBottomRotationLimit(TrunkConstants.MIN_SAFE_ANGLE)
-//    }
-
     private fun doubleCalibratePeriodic() {
         val topLimit = io.atTopLimit()
         val bottomLimit = io.atBottomLimit()
-        if(bottomLimit && !bottomisSet) {
+        if (bottomLimit && !bottomisSet) {
             bottomisSet = true
             bottomPosition = io.getPosition()
         }
-        if(topLimit) {
+        if (topLimit) {
             topPosition = io.getPosition()
             io.setElevatorSpeed(0.0)
             io.setZeroPosition(true)
             STOP()
         }
-    }
-
-//    private fun goToTargetPosePeriodic() {
-//        var number = 0.0
-//        val targetPoseIsAboveCrossbar = targetPose.position >= TrunkConstants.CROSSBAR_TOP
-//        val targetPoseIsBelowCrossbar = targetPose.position <= TrunkConstants.CROSSBAR_BOTTOM
-//        val isAboveCrossbar = currentPosition > TrunkConstants.CROSSBAR_TOP
-//        val isBelowCrossbar = currentPosition <= TrunkConstants.CROSSBAR_BOTTOM
-//        if(isAboveCrossbar && targetPoseIsAboveCrossbar || isBelowCrossbar && targetPoseIsBelowCrossbar) {
-//            number = 1.0
-//            isTraveling = false
-//            setDesiredRotation(if(isShooting) shootingAngle else targetPose.angle)
-//            setDesiredPosition(targetPose.position)
-//            if(isAboveCrossbar) {
-//                io.setTopPositionLimit(TrunkConstants.TOP_BREAK_BEAM_POSITION)
-//                io.setBottomPositionLimit(TrunkConstants.CROSSBAR_TOP)
-//                io.setBottomRotationLimit(TrunkConstants.MIN_ANGLE_ABOVE_CROSSBAR)
-//            } else {
-//                io.setTopPositionLimit(TrunkConstants.CROSSBAR_BOTTOM)
-//                io.setBottomPositionLimit(TrunkConstants.BOTTOM_BREAK_BEAM_POSITION)
-//                io.setBottomRotationLimit(TrunkConstants.MIN_ANGLE_BELOW_CROSSBAR)
-//            }
-//        }
-//        else if(!isTraveling) {
-//            goToTravelPeriodic()
-//            number = 2.0
-//        }
-//        else {
-//            setDesiredPosition(targetPose.position)
-//            number = 3.0
-//        }
-//        SmartDashboard.putNumber("asdfkjasdh", number)
-//    }
-
-//    private fun calibratePeriodic() {
-//        if(!isTraveling)
-//            goToTravelPeriodic()
-//        else
-//            io.setElevatorSpeed(.2)
-//
-//        val topLimit = io.atTopLimit()
-//        val bottomLimit = io.atBottomLimit()
-//        if (topLimit || bottomLimit) {
-//            io.setElevatorSpeed(0.0)
-//            isCalibrating = false
-//            io.setZeroPosition(topLimit)
-//            io.setTopPositionLimit(TrunkConstants.TOP_BREAK_BEAM_POSITION)
-//        }
-//    }
-
-    private fun customPositionPeriodic() {
-        val position = SmartDashboard.getNumber("Position SetPoint", 0.15)
-        val rotation = SmartDashboard.getNumber("Rotation SetPoint", 90.0)
-        setDesiredPosition(position)
-//        setDesiredRotation(rotation)
     }
 }

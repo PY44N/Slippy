@@ -49,10 +49,10 @@ class TeleopSwerveDriveCommand : Command() {
         SmartDashboard.putNumber("drive in y", translation.y)
         val twist = calculateDeadzone(twistInput, DriveConstants.TELEOP_DEADZONE_TWIST) * throttle * DriveConstants.MAX_ANGLE_SPEED
 //        println("driving")
-        RobotContainer.swerveSystem.driveTrain.applyRequest {
-            RobotContainer.swerveSystem.drive.withVelocityX(translation.x)
-                    .withVelocityY(translation.y)
-                    .withRotationalRate(twist)
-        }.execute()
+//        RobotContainer.swerveSystem.driveTrain.applyRequest {
+//            RobotContainer.swerveSystem.drive.withVelocityX(translation.x)
+//                    .withVelocityY(translation.y)
+//                    .withRotationalRate(twist)
+//        }.execute()
     }
 }

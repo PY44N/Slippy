@@ -12,16 +12,16 @@ class AimAndShoot : Command() {
 
 
     override fun initialize() {
-        RobotContainer.stateMachine.shooterState = ShooterState.Shooting
-        RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
-
-        if (RobotContainer.stateMachine.trunkState != TrunkState.Speaker && RobotContainer.stateMachine.trunkState != TrunkState.SpeakerFromStage) {
-            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
-                RobotContainer.stateMachine.trunkState = TrunkState.SpeakerFromStage
-            } else {
-                RobotContainer.stateMachine.trunkState = TrunkState.Speaker
-            }
-        }
+//        RobotContainer.stateMachine.shooterState = ShooterState.Shooting
+//        RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
+//
+//        if (RobotContainer.stateMachine.trunkState != TrunkState.Speaker && RobotContainer.stateMachine.trunkState != TrunkState.SpeakerFromStage) {
+//            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
+//                RobotContainer.stateMachine.trunkState = TrunkState.SpeakerFromStage
+//            } else {
+//                RobotContainer.stateMachine.trunkState = TrunkState.Speaker
+//            }
+//        }
 
         //Reset the controller
 //        RobotContainer.swerveSystem.autoTwistController.reset(RobotContainer.swerveSystem.getSwervePose().rotation,

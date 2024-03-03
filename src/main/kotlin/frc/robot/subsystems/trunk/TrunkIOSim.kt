@@ -25,6 +25,7 @@ class TrunkIOSim : TrunkIO {
     override fun getRawRotation(): Double {
         return trunkRotation
     }
+
     override fun getRotation(): Double {
         return -trunkRotation - TrunkConstants.ELEVATOR_ANGLE
     }
@@ -35,6 +36,7 @@ class TrunkIOSim : TrunkIO {
         lastTraversalPercentage = desiredTraversalPercentage
         desiredTraversalPercentage = position
         traversalPercentageTimer.start()
+
     }
 
     override fun setDesiredRotation(angle: Double) {
@@ -63,7 +65,9 @@ class TrunkIOSim : TrunkIO {
         return traversalPercentage < -.01
     }
 
-    override fun disablePositionLimits() {}
+    override fun setPID(on: Boolean) {}
+
+    override fun setPositionLimits(on: Boolean) {}
 
     private fun easeInOutCubic(x: Double): Double {
         return if (x < 0.5) {
@@ -72,6 +76,7 @@ class TrunkIOSim : TrunkIO {
             1 - (-2 * x + 2).pow(3.0) / 2
         }
     }
+
     override fun setTopPositionLimit(position: Double) {}
     override fun setBottomPositionLimit(position: Double) {}
     override fun setTopRotationLimit(rotation: Double) {}
