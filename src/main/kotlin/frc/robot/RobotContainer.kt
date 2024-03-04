@@ -21,6 +21,8 @@ import frc.robot.subsystems.swerve.Telemetry
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkSystem
 
+import frc.robot.util.TargetingSystem
+
 object RobotContainer {
     private val MaxSpeed: Double = TunerConstants.kSpeedAt12VoltsMps // kSpeedAt12VoltsMps desired top speed
     private val MaxAngularRate = 1.5 * Math.PI // 3/4 of a rotation per second max angular velocity
@@ -47,6 +49,12 @@ object RobotContainer {
     val autonomousCommand: Command = Commands.run({})
 
     var teleopSwerveCommand: Command = TeleopSwerveDriveCommand()
+
+
+    val targetingSystem: TargetingSystem = TargetingSystem()
+
+
+//    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
     val intakeLimelight: String = "limelight-intake"
 

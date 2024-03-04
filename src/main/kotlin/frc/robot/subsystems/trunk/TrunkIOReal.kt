@@ -211,6 +211,4 @@ class TrunkIOReal : TrunkIO {
 //        positionPID.setPID(posPIDP, 0.0, posPIDD)
 
     }
-
-
 }
