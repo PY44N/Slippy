@@ -95,10 +95,10 @@ object RobotContainer {
         }))
 
         xboxController.a().onTrue(Commands.runOnce({
-            RobotContainer.trunkSystem.targetPose = TrunkPosition.STOW
+            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
         }))
         xboxController.b().onTrue(Commands.runOnce({
-            RobotContainer.trunkSystem.targetPose = TrunkPosition.INTAKE
+            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.INTAKE
         }))
         xboxController.x().onTrue(Commands.runOnce({
             RobotContainer.trunkSystem.calibrate()

@@ -36,7 +36,7 @@ class Robot : LoggedRobot() {
 //            }
         }
 
-        SmartDashboard.putString("Trunk Position", RobotContainer.trunkSystem.targetPose.name)
+        SmartDashboard.putString("Trunk Position", RobotContainer.stateMachine.targetTrunkPose.name)
         SmartDashboard.putString("Trunk State", RobotContainer.trunkSystem.currentState.name)
     }
 

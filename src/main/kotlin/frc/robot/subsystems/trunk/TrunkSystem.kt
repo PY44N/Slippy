@@ -1,10 +1,14 @@
 package frc.robot.subsystems.trunk
 
 import MiscCalculations
+import edu.wpi.first.math.controller.ArmFeedforward
+import edu.wpi.first.math.controller.ElevatorFeedforward
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.Color8Bit
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.RobotContainer
 import frc.robot.TrunkPosition
 import frc.robot.TrunkState
 import frc.robot.constants.TrunkConstants
@@ -20,20 +24,31 @@ import kotlin.math.sqrt
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
+    private val positionPID: PIDController = PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
+    private val positionFF: ElevatorFeedforward = ElevatorFeedforward(0.0001, 0.27, 3.07, 0.09)
+
+    var rotationOffset = TrunkConstants.rotationOffset
+    private val rotationFF = ArmFeedforward(TrunkConstants.rotationFFkS, TrunkConstants.rotationFFkG, TrunkConstants.rotationFFkV, TrunkConstants.rotationFFkA)
+    private val rotationPID = PIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD)
+
+
+    private var isPIDing = true
+
+
     var currentState = TrunkState.CALIBRATING
-    var targetPose = TrunkPosition.STOW
-        set(value) =
-            if (!this.isMoving) {
-                field = value
-            } else {
-                field = field
-            }
+//    var RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+//        set(value) =
+//            if (!this.isMoving) {
+//                field = value
+//            } else {
+//                field = field
+//            }
 
 
     private var prevTargetPose = TrunkPosition.SPEAKER
 
     var currentPosition: Double = 0.0
-    var currentRotation: Double = io.getRotation()
+    var currentRotation: Double = getRotation()
 
     var isRotationSafe = false
     var hasElevatorMoved = false
@@ -56,11 +71,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     val crossbarRoot = superstructureMechanism.getRoot("Crossbar Root", (TrunkConstants.CROSSBAR_BOTTOM + .02) * TrunkConstants.d2x + .25, (TrunkConstants.CROSSBAR_BOTTOM - .02) * TrunkConstants.d2y + 0.25)
 
 
-//    fun setTargetPose(targetPose: TrunkPosition) {
-//        if (!this.isMoving) {
-//            this.targetPose = targetPose
-//        }
-//    }
 
 
     init {
@@ -68,7 +78,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.getNumber("top soft limit", 180.0)
         elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
         crossbarRoot.append(MechanismLigament2d("Crossbar", TrunkConstants.CROSSBAR_TOP - TrunkConstants.CROSSBAR_BOTTOM - .25, TrunkConstants.ELEVATOR_ANGLE, color = Color8Bit(0, 255, 0)))
-        io.setDesiredRotation(TrunkConstants.TARGET_SAFE_ANGLE)
+        setDesiredRotation(TrunkConstants.TARGET_SAFE_ANGLE)
 //        SmartDashboard.putNumber("Position SetPoint", 0.15)
 //        SmartDashboard.putNumber("Rotation SetPoint", 150.0)
     }
@@ -76,7 +86,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     fun goManual() {
         io.setElevatorSpeed(0.0)
         io.setRotationSpeed(0.0)
-        io.setPID(false)
+        setPID(false)
         currentState = TrunkState.MANUAL
         io.setPositionLimits(true)
     }
@@ -84,7 +94,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     fun calibrate() {
         io.setElevatorSpeed(0.0)
         io.setRotationSpeed(0.0)
-        io.setPID(false)
+        setPID(false)
         bottomisSet = false
         currentState = TrunkState.CALIBRATING
         io.setElevatorSpeed(0.1)
@@ -105,86 +115,142 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
     fun goToCustom() {
         io.setElevatorSpeed(0.0)
-        io.setPID(true)
+        setPID(true)
         currentState = TrunkState.CUSTOM
+        io.setPositionLimits(true)
+    }
+
+    fun getRotation(): Double {
+        return frc.robot.util.Math.wrapAroundAngles((-io.getRawRotation() * 360.0) - rotationOffset)
+//        return rotationEncoder.position
+    }
+
+    fun getPosition(): Double {
+        return io.getRawPosition() * TrunkConstants.ELEVATOR2M
+    }
+
+    fun setDesiredPosition(position: Double) {
+        positionPID.setpoint = position
+    }
+
+    fun setDesiredRotation(angle: Double) {
+        rotationPID.setpoint = (Math.toRadians(angle))
+    }
+
+    fun setPID(on: Boolean) {
+        isPIDing = on
+    }
+
+
+    fun STOP() {
+        setPID(false)
+        currentState = TrunkState.STOP
+        io.setElevatorSpeed(0.0)
+        io.setRotationSpeed(0.0)
         io.setPositionLimits(true)
     }
 
     override fun periodic() {
         SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
         SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
-        SmartDashboard.putNumber("Angle val", io.getRotation())
-        SmartDashboard.putNumber("position val", io.getPosition())
-        SmartDashboard.putNumber("target position", targetPose.position)
-        SmartDashboard.putNumber("target angle", targetPose.angle)
+        SmartDashboard.putNumber("Angle val", getRotation())
+        SmartDashboard.putNumber("position val", getPosition())
+        SmartDashboard.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position)
+        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
         SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
-        SmartDashboard.putString("targetPosition name", targetPose.name)
+        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
+        SmartDashboard.putNumber("rotation offset", rotationOffset)
 
         if (currentState == TrunkState.CUSTOM) {
 //            io.setDesiredPosition(TrunkConstants.STOW_POSITION)
             //Changed position
-            if (targetPose != prevTargetPose) {
-                io.setPID(true)
+            if (RobotContainer.stateMachine.targetTrunkPose != prevTargetPose) {
+                setPID(true)
                 isMoving = true
                 //Not safe rotation
                 if (!isRotationSafe && !hasElevatorMoved) {
-                    io.setDesiredPosition(prevTargetPose.position)
-                    io.setDesiredRotation(TrunkConstants.MIN_SAFE_ANGLE)
+                    setDesiredPosition(prevTargetPose.position)
+                    setDesiredRotation(TrunkConstants.MIN_SAFE_ANGLE)
                 } else if (isRotationSafe && !hasElevatorMoved) {
                     println("set the desired position to target position")
-                    io.setDesiredRotation(TrunkConstants.MIN_SAFE_ANGLE)
-                    io.setDesiredPosition(targetPose.position)
+                    setDesiredRotation(TrunkConstants.MIN_SAFE_ANGLE)
+                    setDesiredPosition(RobotContainer.stateMachine.targetTrunkPose.position)
                 }
 
-                if (MiscCalculations.appxEqual(io.getPosition(), targetPose.position, .05)) {
+                if (MiscCalculations.appxEqual(getPosition(), RobotContainer.stateMachine.targetTrunkPose.position, .05)) {
                     hasElevatorMoved = true
                 }
 
                 //Elevator has moved
                 if (hasElevatorMoved) {
-                    io.setDesiredRotation(targetPose.angle)
+                    setDesiredRotation(RobotContainer.stateMachine.targetTrunkPose.angle)
                 }
 
                 //Elevator has moved and the angle is good
-                if (hasElevatorMoved && MiscCalculations.appxEqual(io.getRotation(), targetPose.angle, 4.0)) {
-                    prevTargetPose = targetPose
+                if (hasElevatorMoved && MiscCalculations.appxEqual(getRotation(), RobotContainer.stateMachine.targetTrunkPose.angle, 4.0)) {
+                    prevTargetPose = RobotContainer.stateMachine.targetTrunkPose
                     hasElevatorMoved = false
                     isMoving = false
                 }
             }
-            else {
-//                io.setDesiredPosit
-            }
-
             //Is rotation safe?
-            if (io.getRotation() > TrunkConstants.MIN_SAFE_ANGLE || MiscCalculations.appxEqual(io.getRotation(), TrunkConstants.MIN_SAFE_ANGLE, 5.0)) {
+            if (getRotation() > TrunkConstants.MIN_SAFE_ANGLE || MiscCalculations.appxEqual(getRotation(), TrunkConstants.MIN_SAFE_ANGLE, 5.0)) {
                 isRotationSafe = true
             }
         }
         else if (currentState == TrunkState.CALIBRATING) {
             doubleCalibratePeriodic()
         }
-//        else if (currentState == TrunkState.STOP) {
-//            stopPeriodic()
-//        }
+
+
+        //Do the trunk PIDs
+        SmartDashboard.putNumber("position pid setpoint", positionPID.setpoint)
+        SmartDashboard.putNumber("angle pid setpoint", rotationPID.setpoint)
+
+        val positionPIDOut = positionPID.calculate(getPosition())
+
+
+
+//        SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
+        val posFF = TrunkConstants.positionFF
+
+        SmartDashboard.putNumber("position pid out", positionPIDOut)
+        SmartDashboard.putNumber("position pid + FF", positionPIDOut + posFF)
+
+
+
+        rotationOffset = SmartDashboard.getNumber("rotation offset", TrunkConstants.rotationOffset)
+        SmartDashboard.putBoolean("Is PIDing", isPIDing)
+        if (isPIDing) {
+
+            io.setElevatorSpeed(posFF + positionPIDOut)
+
+
+            val pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
+            SmartDashboard.putNumber("rotation pid out", pidVal)
+            SmartDashboard.putNumber("rotation PID + FF", pidVal
+                    + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
+
+
+            io.setRotationVoltage(
+                    (pidVal
+                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
+            )
+        }
+
         io.periodic()
     }
-    fun STOP() {
-        io.setPID(false)
-        currentState = TrunkState.STOP
-        io.setElevatorSpeed(0.0)
-        io.setRotationSpeed(0.0)
-        io.setPositionLimits(true)
-    }
+
+
     private fun doubleCalibratePeriodic() {
         val topLimit = io.atTopLimit()
         val bottomLimit = io.atBottomLimit()
         if (bottomLimit && !bottomisSet) {
             bottomisSet = true
-            bottomPosition = io.getPosition()
+            bottomPosition = getPosition()
         }
         if (topLimit) {
-            topPosition = io.getPosition()
+            topPosition = getPosition()
             io.setElevatorSpeed(0.0)
             io.setZeroPosition(true)
             STOP()

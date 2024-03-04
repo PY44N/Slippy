@@ -88,8 +88,13 @@ enum class AutoStateManagement {
 
 class RobotStateMachine {
 
-    val targetTrunkPose: TrunkPosition
-        get() = RobotContainer.trunkSystem.targetPose
+    var targetTrunkPose: TrunkPosition = TrunkPosition.STOW
+        set(value) =
+            if (RobotContainer.trunkSystem.isMoving == false) {
+                field = value;
+            } else {
+                field = field
+            }
 
     val trunkState: TrunkState
         get() = RobotContainer.trunkSystem.currentState

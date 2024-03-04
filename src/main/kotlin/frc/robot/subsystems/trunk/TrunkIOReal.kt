@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
-    private var isPIDing = true
 
     private val elevatorMotor = CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
@@ -30,19 +29,15 @@ class TrunkIOReal : TrunkIO {
     private val topLimit = DigitalInput(0)
     private val bottomLimit = DigitalInput(1)
 
-    var rotationOffset = TrunkConstants.rotationOffset
 
     //    private val positionPID = elevatorMotor.pidController
 //    private val positionPID: ProfiledPIDController = ProfiledPIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD, TrapezoidProfile.Constraints(TrunkConstants.positionMaxRPM, TrunkConstants.positionMaxAcceleration))
-    private val positionPID: PIDController = PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
-    private val positionFF: ElevatorFeedforward = ElevatorFeedforward(0.0001, 0.27, 3.07, 0.09)
+
 //    private val rotationPID = mainRotationMotor.pidController
 
     private var lastRotationTime = 0.0
     private var lastRotationVelo = 0.0
-    private val rotationFF = ArmFeedforward(TrunkConstants.rotationFFkS, TrunkConstants.rotationFFkG, TrunkConstants.rotationFFkV, TrunkConstants.rotationFFkA)
     //    private val rotationPID = ProfiledPIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD, TrapezoidProfile.Constraints(TrunkConstants.rotationMaxVelo, TrunkConstants.rotationMaxAcceleration))
-    private val rotationPID = PIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD)
 
 
 
@@ -54,15 +49,14 @@ class TrunkIOReal : TrunkIO {
 
 
     init {
-
-        SmartDashboard.putNumber("position pid p", TrunkConstants.positionKP)
-        SmartDashboard.putNumber("position pid d", TrunkConstants.positionKD)
+//        SmartDashboard.putNumber("position pid p", TrunkConstants.positionKP)
+//        SmartDashboard.putNumber("position pid d", TrunkConstants.positionKD)
 
 //        SmartDashboard.putNumber("Rotation P Gain", TrunkConstants.rotationKP)
 //        SmartDashboard.putNumber("Rotation I Gain", TrunkConstants.rotationKI)
 //        SmartDashboard.putNumber("Rotation D Gain", TrunkConstants.rotationKD)
 //        SmartDashboard.putNumber("Rotation I Zone", TrunkConstants.rotationIz)
-        SmartDashboard.putNumber("position ff", TrunkConstants.positionFF)
+//        SmartDashboard.putNumber("position ff", TrunkConstants.positionFF)
 //        SmartDashboard.putNumber("Position Max Output", TrunkConstants.positionMax)
 //        SmartDashboard.putNumber("Rotation Min Output", TrunkConstants.rotationMin)
 //        SmartDashboard.putNumber("Rotation Max Velocity", TrunkConstants.rotationMaxRPM)
@@ -70,7 +64,6 @@ class TrunkIOReal : TrunkIO {
 //        SmartDashboard.putNumber("Rotation Max Acceleration", TrunkConstants.rotationMaxAcceleration)
 //        SmartDashboard.putNumber("Rotation Allowed Closed Loop Error", TrunkConstants.rotationMaxError)
 //        SmartDashboard.putNumber("Position SetPoint", 0.5)
-        SmartDashboard.putNumber("rotation offset", rotationOffset)
 
         elevatorMotor.restoreFactoryDefaults()
         mainRotationMotor.restoreFactoryDefaults()
@@ -148,29 +141,16 @@ class TrunkIOReal : TrunkIO {
 //        elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, on)
     }
 
-    override fun getPosition(): Double {
-        return positionEncoder.position * TrunkConstants.ELEVATOR2M
+    override fun getRawPosition(): Double {
+        return positionEncoder.position
     }
 
     override fun getRawRotation(): Double {
-        return getRotation()
+        return rotationEncoder.absolutePosition
     }
 
-    override fun getRotation(): Double {
-        return frc.robot.util.Math.wrapAroundAngles((-rotationEncoder.absolutePosition * 360.0) - rotationOffset)
-//        return rotationEncoder.position
-    }
 
-    override fun setDesiredPosition(position: Double) {
-        println("io set desired position: " + position)
-        positionPID.setpoint = position
-//        positionPID.setReference(position * TrunkConstants.M2ELEVATOR, CANSparkBase.ControlType.kPosition)
-    }
 
-    override fun setDesiredRotation(angle: Double) {
-//        rotationPID.setReference(angle, CANSparkBase.ControlType.kPosition)
-        rotationPID.setpoint = (Math.toRadians(angle))
-    }
 
     override fun setTopPositionLimit(position: Double) {
         if (topPositionLimit != position) {
@@ -212,6 +192,10 @@ class TrunkIOReal : TrunkIO {
         mainRotationMotor.set(speed)
     }
 
+    override fun setRotationVoltage(volts: Double) {
+        mainRotationMotor.setVoltage(volts);
+    }
+
     override fun periodic() {
 //        val inputFF = SmartDashboard.getNumber("Position Feed Forward", 0.0)
 //        if(inputFF != TrunkConstants.positionFF) {
@@ -225,51 +209,8 @@ class TrunkIOReal : TrunkIO {
 //        rotationPID.setPID(anglePIDP, 0.0, anglePIDD)
 
 //        positionPID.setPID(posPIDP, 0.0, posPIDD)
-        SmartDashboard.putNumber("position pid setpoint", positionPID.setpoint)
-        SmartDashboard.putNumber("angle pid setpoint", rotationPID.setpoint)
 
-
-        val positionPIDOut = positionPID.calculate(getPosition())
-
-
-
-//        SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
-        val posFF = TrunkConstants.positionFF
-
-        SmartDashboard.putNumber("position pid out", positionPIDOut)
-        SmartDashboard.putNumber("position pid + FF", positionPIDOut + posFF)
-
-
-
-        rotationOffset = SmartDashboard.getNumber("rotation offset", TrunkConstants.rotationOffset)
-        SmartDashboard.putBoolean("Is PIDing", isPIDing)
-        if (isPIDing) {
-
-            setElevatorSpeed(posFF + positionPIDOut)
-//            println("setting elevator voltage")
-//            SmartDashboard.putNumber("elevator voltage", elevatorMotor.appliedOutput)
-
-
-            val pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
-            SmartDashboard.putNumber("rotation pid out", pidVal)
-            SmartDashboard.putNumber("rotation PID + FF", pidVal
-                    + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
-
-//            val acceleration: Double =
-//                    (rotationPID.setpoint.velocity - lastRotationVelo) / (Timer.getFPGATimestamp() - lastRotationTime)
-            mainRotationMotor.setVoltage(
-                (pidVal
-                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
-            )
-//            SmartDashboard.putNumber("rotation velocity", rotationPID.setpoint.velocity)
-//            SmartDashboard.putNumber("rotation FF out", rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
-
-//            lastRotationVelo = rotationPID.setpoint.velocity
-//            lastRotationTime = Timer.getFPGATimestamp()
-        }
     }
 
-    override fun setPID(on: Boolean) {
-        isPIDing = on
-    }
+
 }
