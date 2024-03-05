@@ -1,11 +1,12 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.RobotContainer
 import frc.robot.constants.FieldConstants
 import frc.robot.constants.TrunkConstants
 import kotlin.math.*
 
-data class ShotSetup(val robotAngle: Double, val shooterAngle: Double)
+data class ShotSetup(var robotAngle: Double, var shooterAngle: Double)
 private data class TargetingVariables(val underStage: Boolean) {
     val x: Double
     val y: Double
@@ -21,9 +22,9 @@ private data class TargetingVariables(val underStage: Boolean) {
 
         val shootingOffset =
             if (underStage) TrunkConstants.UNDER_STAGE_SHOOTING_OFFSET else TrunkConstants.SHOOTING_OFFSET
-        val xOffset = FieldConstants.SPEAKER_CENTER_X
+        val xOffset = FieldConstants.Speaker.centerSpeakerOpening.x
 //        + cos(robotAngle) * shootingOffset
-        val yOffset = FieldConstants.SPEAKER_CENTER_Y
+        val yOffset = FieldConstants.Speaker.centerSpeakerOpening.y
 //        + sin(robotAngle) * shootingOffset
 
         x = robotPose.x - xOffset
@@ -38,7 +39,7 @@ private data class TargetingVariables(val underStage: Boolean) {
 class TargetingSystem {
     private val g = 9.81
     private val rad2deg = 180.0 / PI
-    val shootingVelocity = 15.0
+    val shootingVelocity = 16.0
     private val shootingVelocityScaling = 1.3
     fun calculateShot(underStage: Boolean): ShotSetup {
         val shooterVars = TargetingVariables(underStage)
@@ -63,7 +64,7 @@ class TargetingSystem {
     private fun shooterAngleFunction(vars: TargetingVariables): Double {
         val inverseR = 1.0 / vars.r
         val rDot = inverseR * (vars.x * vars.vx + vars.y * vars.vy)
-        val h = FieldConstants.SPEAKER_CENTER_Z - if (vars.underStage)
+        val h = FieldConstants.Speaker.centerSpeakerOpening.z - if (vars.underStage)
             TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT
 
         return atan(
@@ -77,11 +78,16 @@ class TargetingSystem {
 
     fun getShotNoVelocity(underStage: Boolean): ShotSetup {
         val vars = TargetingVariables(underStage)
-        val h = FieldConstants.SPEAKER_CENTER_Z - if (vars.underStage)
+        SmartDashboard.putNumber("robot speaker rel pos x", vars.x)
+        SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
+        SmartDashboard.putNumber("robot distance to speaker", vars.r)
+
+        val h = FieldConstants.Speaker.centerSpeakerOpening.z - if (vars.underStage)
             TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
-        val targetShooterAngle = atan2(g * (vars.rSquared + h * h) + 2 * h * shootingVelocity, vars.r) * rad2deg
+//        val targetShooterAngle = atan2(g * (vars.rSquared + h * h) + 2 * h * shootingVelocity, vars.r) * rad2deg
+        val targetShooterAngle = atan((h + .5*g*(vars.rSquared+h*h)) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }

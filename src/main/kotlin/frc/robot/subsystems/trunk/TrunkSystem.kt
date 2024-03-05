@@ -131,7 +131,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     fun rotate(speed: Double) {
         if (currentState == TrunkState.MANUAL) {
             io.setRotationSpeed(speed)
-            SmartDashboard.putNumber("rotation percent output", speed)
+//            SmartDashboard.putNumber("rotation percent output", speed)
         }
     }
 
@@ -198,23 +198,27 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         if(io.atTopLimit()) {
             io.setZeroPosition(top = true)
         }
+
+        SmartDashboard.putString("Angle Idle Mode", io.getAngleIdleMode().name)
+
 //        if(io.atBottomLimit()) {
 //            io.setZeroPosition(top = false)
 //        }
 
-        SmartDashboard.putBoolean("is moving", isMoving)
-
-        SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
-        SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
+//        SmartDashboard.putBoolean("is moving", isMoving)
+//
+//        SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
+//        SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
         SmartDashboard.putNumber("Angle val", getRotation())
-        SmartDashboard.putNumber("position val", getPosition())
-        SmartDashboard.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position)
-        SmartDashboard.putString("trunk state", RobotContainer.stateMachine.trunkState.name)
-        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
-        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
-        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
+        SmartDashboard.putNumber("Angle val raw", io.getRawRotation() * 360)
+//        SmartDashboard.putNumber("position val", getPosition())
+//        SmartDashboard.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position)
+//        SmartDashboard.putString("trunk state", RobotContainer.stateMachine.trunkState.name)
+//        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
+//        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
+//        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
         SmartDashboard.putNumber("rotation offset", rotationOffset)
-        SmartDashboard.putBoolean("is angle PID?", isAnglePID)
+//        SmartDashboard.putBoolean("is angle PID?", isAnglePID)
 
         if (currentState == TrunkState.CUSTOM) {
 //            io.setDesiredPosition(TrunkConstants.STOW_POSITION)
@@ -262,7 +266,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                     isMoving = false
                 }
                 //More handling for the stupid intaking (stupid intaking finished)
-                else if (hasElevatorMoved && isAnglePID == false  && RobotContainer.stateMachine.targetTrunkPose == TrunkPosition.INTAKE) {
+                else if (hasElevatorMoved && !isAnglePID && RobotContainer.stateMachine.targetTrunkPose == TrunkPosition.INTAKE) {
                     prevTargetPose = RobotContainer.stateMachine.targetTrunkPose
                     hasElevatorMoved = false
                     isMoving = false

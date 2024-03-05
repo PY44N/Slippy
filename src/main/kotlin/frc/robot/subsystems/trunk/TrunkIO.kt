@@ -15,6 +15,7 @@ interface TrunkIO {
     fun setBottomRotationLimit(angle: Double)
 
     fun setAngleIdleMode(mode: CANSparkBase.IdleMode)
+    fun getAngleIdleMode(): CANSparkBase.IdleMode
     fun setPositionIdleMode(mode: CANSparkBase.IdleMode)
     fun setRotationVoltage(volts: Double)
     fun atTopLimit(): Boolean

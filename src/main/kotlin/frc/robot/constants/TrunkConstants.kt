@@ -33,6 +33,8 @@ object TrunkConstants {
     var SAFE_TRAVEL_ANGLE: Double = 60.0
 
     var MAX_ANGLE: Double = 170.0
+    var MAX_SHOOT_ANGLE = 90.0
+    var MIN_SHOOT_ANGLE = 45.0
 
     var SPEAKER_POSITION: Double = 0.381
 
@@ -46,7 +48,7 @@ object TrunkConstants {
     var CROSSBAR_TOP: Double = .5
 
     var STOW_POSITION: Double = 0.381
-    var STOW_ANGLE: Double = 65.0
+    var STOW_ANGLE: Double = 60.0
 
     var TRAP_POSITION: Double = 0.7
     var TRAP_ANGLE: Double = 160.0
@@ -57,7 +59,7 @@ object TrunkConstants {
     val MIN_ANGLE_BELOW_CROSSBAR = -10.0
     val MIN_ANGLE_ABOVE_CROSSBAR = -20.0
 
-    var rotationOffset: Double = 282.0
+    var rotationOffset: Double = 274.0
 
     var positionKP = 22.0
     var positionKI = 0.0
@@ -91,9 +93,9 @@ object TrunkConstants {
 
     val UNDER_STAGE_SHOOTING_OFFSET = 0.0
     val SHOOTING_OFFSET = 0.0
-
-    val UNDER_STAGE_SHOOTING_HEIGHT = 0.0
-    val SHOOTING_HEIGHT = 0.0
+// TODO: actually tune
+    val UNDER_STAGE_SHOOTING_HEIGHT = 0.3
+    val SHOOTING_HEIGHT = 0.3
 
     val SPEAKER_FROM_STAGE_ANGLE = STOW_ANGLE
     val SPEAKER_FROM_STAGE_POSITION = STOW_POSITION

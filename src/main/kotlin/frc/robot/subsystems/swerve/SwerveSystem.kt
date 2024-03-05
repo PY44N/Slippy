@@ -6,6 +6,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.GlobalZones
 import frc.robot.RobotContainer
@@ -78,6 +79,9 @@ class SwerveSystem() : SubsystemBase() {
         if (MiscCalculations.translation2dWithinRange(pos, RobotContainer.stateMachine.currentRobotZone.range)) {
             return
         }
+
+        SmartDashboard.putNumber("Robot Pos X", pos.x)
+        SmartDashboard.putNumber("Robot Pos Y", pos.y)
 
         val currentRange = MiscCalculations.findMatchingTranslation2dRange(
             pos,

@@ -17,6 +17,7 @@ class TrunkIOReal : TrunkIO {
 
     //    private val rotationEncoder = mainRotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle)
     private val rotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
+    private var angleIdleMode = CANSparkBase.IdleMode.kBrake
 
     private val topLimit = DigitalInput(0)
     private val bottomLimit = DigitalInput(1)
@@ -114,6 +115,11 @@ class TrunkIOReal : TrunkIO {
     override fun setAngleIdleMode(mode: CANSparkBase.IdleMode) {
         mainRotationMotor.setIdleMode(mode)
         followerRotationMotor.setIdleMode(mode)
+        angleIdleMode = mode
+    }
+
+    override fun getAngleIdleMode(): CANSparkBase.IdleMode {
+        return angleIdleMode
     }
 
     override fun setZeroPosition(top: Boolean) {

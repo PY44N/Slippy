@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.TeleopSwerveDriveCommand
+import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.cannon.AutoAmp
 import frc.robot.commands.cannon.AutoIntake
 import frc.robot.commands.cannon.AutoShootCommand
@@ -110,6 +111,7 @@ object RobotContainer {
             println("pressed y")
             RobotContainer.trunkSystem.goToCustom()
         }))
+        xboxController.rightBumper().onTrue(AutoAimAndShoot())
 
     }
 

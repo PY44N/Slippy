@@ -1,11 +1,16 @@
 package frc.robot.commands.automatic
 
 import MiscCalculations
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.DriveConstants
+import frc.robot.constants.TrunkConstants
+import frc.robot.util.Math
 
 class AutoAimAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
@@ -29,15 +34,30 @@ class AutoAimAndShoot : Command() {
     }
 
     override fun execute() {
+        underStage = false
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity(underStage)
 
+        SmartDashboard.putNumber("Raw Shot Angle", shotSetup.shooterAngle)
+        SmartDashboard.putNumber("robot shot angle", shotSetup.robotAngle)
+
+        if (shotSetup.shooterAngle > TrunkConstants.MAX_SHOOT_ANGLE || shotSetup.shooterAngle < TrunkConstants.MIN_SHOOT_ANGLE) {
+            SmartDashboard.putBoolean("Shot Good", false)
+
+            shotSetup.shooterAngle = MathUtil.clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
+        } else {
+            SmartDashboard.putBoolean("Shot Good", true)
+        }
+
+        SmartDashboard.putNumber("Shot Angle", shotSetup.shooterAngle)
+        SmartDashboard.putNumber("Good Shot Angle?", Math.wrapAroundAngles(shotSetup.shooterAngle))
+
         //Handle the cannon aiming component
-        RobotContainer.trunkSystem.setShootingAngle(shotSetup.shooterAngle)
+//        RobotContainer.trunkSystem.setShootingAngle(shotSetup.shooterAngle)
 
         //Can we shoot?
         if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled
         ) {
-            autoShoot.schedule()
+//            autoShoot.schedule()
         }
     }
 
@@ -46,6 +66,7 @@ class AutoAimAndShoot : Command() {
     }
 
     override fun end(interrupted: Boolean) {
+        println("Shootyboi Done")
         RobotContainer.stateMachine.driveState = DriveState.Teleop
     }
 }
