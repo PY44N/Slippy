@@ -1,6 +1,5 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
@@ -35,6 +34,7 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
 enum class TrunkPosition(val angle: Double, val position: Double) {
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
+    SPEAKER_FROM_STAGE(TrunkConstants.SPEAKER_FROM_STAGE_ANGLE, TrunkConstants.SPEAKER_FROM_STAGE_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION), ;
@@ -100,7 +100,6 @@ class RobotStateMachine {
         get() = RobotContainer.trunkSystem.currentState
 
 
-
     var intakeState: IntakeState = IntakeState.Stopped;
     var shooterState: ShooterState = ShooterState.Stopped;
     var noteState: NoteState = NoteState.Stored;
@@ -119,9 +118,8 @@ class RobotStateMachine {
     }
 
     //Is the trunk at the desired position?
-    var trunkReady: Boolean = false
-        get() = true
-        private set
+    val trunkReady: Boolean
+        get() = !RobotContainer.trunkSystem.isMoving && RobotContainer.trunkSystem.isAtAngle
 
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean

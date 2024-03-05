@@ -1,14 +1,13 @@
 package frc.robot.commands.automatic
 
+import MiscCalculations
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.DriveConstants
-import frc.robot.util.TargetingSystem
 
-class DumbAutoAimAndShoot: Command() {
+class AutoAimDumbTwistAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
     val twistPIDController: PIDController = PIDController(0.1, 0.0, 0.0)
@@ -19,13 +18,12 @@ class DumbAutoAimAndShoot: Command() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
 
-        if (RobotContainer.stateMachine.trunkState != TrunkState.Speaker && RobotContainer.stateMachine.trunkState != TrunkState.SpeakerFromStage) {
+        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
             if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
-                RobotContainer.stateMachine.trunkState = TrunkState.SpeakerFromStage
+                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER_FROM_STAGE
                 underStage = true
-            }
-            else {
-                RobotContainer.stateMachine.trunkState = TrunkState.Speaker
+            } else {
+                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
                 underStage = false
             }
         }
@@ -36,9 +34,18 @@ class DumbAutoAimAndShoot: Command() {
     }
 
     override fun execute() {
-        val desiredRot = RobotContainer.targetingSystem.getShotNoVelocity()
+        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity(underStage)
 
-        val driveTwist = RobotContainer.swerveSystem.autoTwistController.calculateRotation(Rotation2d.fromDegrees(desiredRot))
+        //Handle the cannon aiming component
+        RobotContainer.trunkSystem.setShootingAngle(shotSetup.shooterAngle)
+
+
+        //Handle the twisting component
+
+        val driveTwist = twistPIDController.calculate(
+            RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
+            shotSetup.robotAngle
+        )
 
         val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
             RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
@@ -47,9 +54,19 @@ class DumbAutoAimAndShoot: Command() {
             DriveConstants.TELEOP_DEADZONE_Y
         )
 
-        RobotContainer.swerveSystem.drive(driveTranslation, driveTwist.degrees, true)
+        RobotContainer.swerveSystem.driveTrain.applyRequest({
+            RobotContainer.swerveSystem.drive.withVelocityX(driveTranslation.x).withVelocityY(driveTranslation.y)
+                .withRotationalRate(driveTwist)
+        })
 
-        if (RobotContainer.swerveSystem.autoTwistController.isAtDesired() && !autoShoot.isScheduled) {
+
+        //Can we shoot?
+        if (RobotContainer.stateMachine.trunkReady && MiscCalculations.appxEqual(
+                twistPIDController.setpoint,
+                shotSetup.robotAngle,
+                1.0
+            ) && !autoShoot.isScheduled
+        ) {
             autoShoot.schedule()
         }
     }

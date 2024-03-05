@@ -1,0 +1,107 @@
+<dashboard-tab
+    tab-name="Testing"
+    slot="tab"
+    source-provider="NetworkTables"
+    selected=""
+><frc-toggle-button
+        source-provider="NetworkTables"
+        style="transform: translate(235.2px, 28.8px); width: 100px; height: 82px;"
+        source-key="/SmartDashboard/arm motors free?"
+        toggled=""
+        label="Arm Motors Free?"
+    ></frc-toggle-button><frc-toggle-button
+        source-provider="NetworkTables"
+        source-key="/SmartDashboard/Two joysticks?"
+        style="transform: translate(92px, 37.6px);"
+        label="Dual Stick Drive?"
+    ></frc-toggle-button><vaadin-text-field
+        label="Trunk Target"
+        has-label=""
+        source-provider="NetworkTables"
+        source-key="/SmartDashboard/targetPosition name"
+        has-value=""
+        style="transform: translate(396px, 24px); width: 192px; height: 66.6px;"
+        placeholder=""
+    ><input
+            slot="input"
+            type="text"
+            id="vaadin-text-field-111"
+            aria-labelledby="label-vaadin-text-field-111"
+            aria-describedby=""
+        ><label
+            slot="label"
+            id="label-vaadin-text-field-111"
+            for="vaadin-text-field-111"
+        >Trunk Target</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-text-field-100"
+            hidden=""
+        ></div>
+    </vaadin-text-field><vaadin-text-field
+        label="Trunk State"
+        has-label=""
+        source-provider="NetworkTables"
+        style="width: 192px; height: 75.4px; transform: translate(628px, 22.4px);"
+        source-key="/SmartDashboard/trunk state"
+        has-value=""
+        placeholder=""
+    ><input
+            slot="input"
+            type="text"
+            id="vaadin-text-field-154"
+            aria-labelledby="label-vaadin-text-field-154"
+            aria-describedby=""
+        ><label
+            slot="label"
+            id="label-vaadin-text-field-154"
+            for="vaadin-text-field-154"
+        >Trunk State</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-text-field-128"
+            hidden=""
+        ></div>
+    </vaadin-text-field><frc-field-wrapper
+        source-key="/Pose"
+        source-provider="NetworkTables"
+        style="transform: translate(206.4px, 199.2px);"
+        game="Crescendo"
+        grid-size="1"
+    >
+    </frc-field-wrapper><vaadin-number-field
+        label="Arm Angle"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(62.4px, 135.2px);"
+        source-key="/SmartDashboard/Angle val"
+        placeholder=""
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-250"
+            aria-labelledby="label-vaadin-number-field-252"
+            aria-describedby=""
+            min="undefined"
+            max="undefined"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-252"
+            for="vaadin-number-field-250"
+        >Arm Angle</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-202"
+            hidden=""
+        ></div>
+    </vaadin-number-field></dashboard-tab><dashboard-tab
+    slot="tab"
+    tab-name="Autonomous"
+    source-provider="NetworkTables"
+></dashboard-tab>

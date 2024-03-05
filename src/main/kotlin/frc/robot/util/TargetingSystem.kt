@@ -19,9 +19,12 @@ private data class TargetingVariables(val underStage: Boolean) {
         val robotVelocity = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
         val robotAngle = robotPose.rotation.radians
 
-        val shootingOffset = if (underStage) TrunkConstants.UNDER_STAGE_SHOOTING_OFFSET else TrunkConstants.SHOOTING_OFFSET
-        val xOffset = FieldConstants.SPEAKER_CENTER_X + cos(robotAngle) * shootingOffset
-        val yOffset = FieldConstants.SPEAKER_CENTER_Y + sin(robotAngle) * shootingOffset
+        val shootingOffset =
+            if (underStage) TrunkConstants.UNDER_STAGE_SHOOTING_OFFSET else TrunkConstants.SHOOTING_OFFSET
+        val xOffset = FieldConstants.SPEAKER_CENTER_X
+//        + cos(robotAngle) * shootingOffset
+        val yOffset = FieldConstants.SPEAKER_CENTER_Y
+//        + sin(robotAngle) * shootingOffset
 
         x = robotPose.x - xOffset
         y = robotPose.y - yOffset
@@ -51,8 +54,10 @@ class TargetingSystem {
     fun calculateRobotAngle(underStage: Boolean) = robotAngleFunction(TargetingVariables(underStage))
 
     private fun robotAngleFunction(vars: TargetingVariables): Double {
-        return acos(vars.x * ((vars.x * vars.x - vars.y * vars.y) * vars.vx + 2 * vars.x * vars.y * vars.vy) /
-                (vars.r.pow(1.5) * sqrt(vars.vx * vars.vx + vars.vy * vars.vy))) * rad2deg
+        return acos(
+            vars.x * ((vars.x * vars.x - vars.y * vars.y) * vars.vx + 2 * vars.x * vars.y * vars.vy) /
+                    (vars.r.pow(1.5) * sqrt(vars.vx * vars.vx + vars.vy * vars.vy))
+        ) * rad2deg
     }
 
     private fun shooterAngleFunction(vars: TargetingVariables): Double {
@@ -61,8 +66,12 @@ class TargetingSystem {
         val h = FieldConstants.SPEAKER_CENTER_Z - if (vars.underStage)
             TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT
 
-        return atan(h * inverseR + g * vars.r /
-                ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.rSquared + h * h)) + rDot).pow(2)) * rad2deg +
+        return atan(
+            h * inverseR + g * vars.r /
+                    ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.rSquared + h * h)) + rDot).pow(
+                        2
+                    )
+        ) * rad2deg +
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
 

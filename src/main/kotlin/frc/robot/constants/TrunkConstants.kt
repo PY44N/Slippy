@@ -30,8 +30,7 @@ object TrunkConstants {
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
 
-    var MIN_SAFE_ANGLE: Double = 100.0
-    var TARGET_SAFE_ANGLE: Double = 100.0
+    var SAFE_TRAVEL_ANGLE: Double = 60.0
 
     var MAX_ANGLE: Double = 170.0
 
@@ -47,7 +46,7 @@ object TrunkConstants {
     var CROSSBAR_TOP: Double = .5
 
     var STOW_POSITION: Double = 0.381
-    var STOW_ANGLE: Double = 85.0
+    var STOW_ANGLE: Double = 65.0
 
     var TRAP_POSITION: Double = 0.7
     var TRAP_ANGLE: Double = 160.0
@@ -58,7 +57,7 @@ object TrunkConstants {
     val MIN_ANGLE_BELOW_CROSSBAR = -10.0
     val MIN_ANGLE_ABOVE_CROSSBAR = -20.0
 
-    var rotationOffset: Double = 252.0
+    var rotationOffset: Double = 282.0
 
     var positionKP = 22.0
     var positionKI = 0.0
@@ -84,4 +83,18 @@ object TrunkConstants {
     //degrees/sec
     var rotationMaxVelo = 30.0
     var rotationMaxError = 5.0
+
+    val ANGLE_DEADZONE = 4.0
+
+    val SAFE_TO_DROP_INTAKE_POSITION = 0.23
+
+
+    val UNDER_STAGE_SHOOTING_OFFSET = 0.0
+    val SHOOTING_OFFSET = 0.0
+
+    val UNDER_STAGE_SHOOTING_HEIGHT = 0.0
+    val SHOOTING_HEIGHT = 0.0
+
+    val SPEAKER_FROM_STAGE_ANGLE = STOW_ANGLE
+    val SPEAKER_FROM_STAGE_POSITION = STOW_POSITION
 }

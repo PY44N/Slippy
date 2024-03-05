@@ -1,5 +1,7 @@
 package frc.robot.subsystems.trunk
 
+import com.revrobotics.CANSparkBase
+
 interface TrunkIO {
     // TODO: I have no wifi, so I can't see how to actually advantagekit this
     fun getRawPosition(): Double
@@ -12,6 +14,8 @@ interface TrunkIO {
     fun setTopRotationLimit(angle: Double)
     fun setBottomRotationLimit(angle: Double)
 
+    fun setAngleIdleMode(mode: CANSparkBase.IdleMode)
+    fun setPositionIdleMode(mode: CANSparkBase.IdleMode)
     fun setRotationVoltage(volts: Double)
     fun atTopLimit(): Boolean
     fun atBottomLimit(): Boolean

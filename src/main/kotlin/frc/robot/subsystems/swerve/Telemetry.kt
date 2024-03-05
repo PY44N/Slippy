@@ -77,27 +77,27 @@ class Telemetry
             )
         )
 
-        /* Telemeterize the robot's general speeds */
-        val currentTime = Utils.getCurrentTimeSeconds()
-        val diffTime = currentTime - lastTime
-        lastTime = currentTime
-        val distanceDiff = pose.minus(m_lastPose).translation
-        m_lastPose = pose
-
-        val velocities = distanceDiff.div(diffTime)
-
-        speed.set(velocities.norm)
-        velocityX.set(velocities.x)
-        velocityY.set(velocities.y)
-        odomPeriod.set(state.OdometryPeriod)
-
-        /* Telemeterize the module's states */
-        for (i in 0..3) {
-            m_moduleSpeeds[i].setAngle(state.ModuleStates[i].angle)
-            m_moduleDirections[i].setAngle(state.ModuleStates[i].angle)
-            m_moduleSpeeds[i].length = state.ModuleStates[i].speedMetersPerSecond / (2 * MaxSpeed)
-
-            SmartDashboard.putData("Module $i", m_moduleMechanisms[i])
-        }
+//        /* Telemeterize the robot's general speeds */
+//        val currentTime = Utils.getCurrentTimeSeconds()
+//        val diffTime = currentTime - lastTime
+//        lastTime = currentTime
+//        val distanceDiff = pose.minus(m_lastPose).translation
+//        m_lastPose = pose
+//
+//        val velocities = distanceDiff.div(diffTime)
+//
+//        speed.set(velocities.norm)
+//        velocityX.set(velocities.x)
+//        velocityY.set(velocities.y)
+//        odomPeriod.set(state.OdometryPeriod)
+//
+//        /* Telemeterize the module's states */
+//        for (i in 0..3) {
+//            m_moduleSpeeds[i].setAngle(state.ModuleStates[i].angle)
+//            m_moduleDirections[i].setAngle(state.ModuleStates[i].angle)
+//            m_moduleSpeeds[i].length = state.ModuleStates[i].speedMetersPerSecond / (2 * MaxSpeed)
+//
+//            SmartDashboard.putData("Module $i", m_moduleMechanisms[i])
+//        }
     }
 }

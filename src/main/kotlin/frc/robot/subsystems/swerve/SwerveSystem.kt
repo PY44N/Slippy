@@ -6,7 +6,6 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.GlobalZones
 import frc.robot.RobotContainer
@@ -26,12 +25,14 @@ class SwerveSystem() : SubsystemBase() {
 
 
     public val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
-            .withDeadband(DriveConstants.MAX_SPEED * 0.1).withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
-            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
+        .withDeadband(DriveConstants.MAX_SPEED * 0.1)
+        .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
+        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
     public val brake: SwerveRequest.SwerveDriveBrake = SwerveRequest.SwerveDriveBrake();
-    public val forwardStraight: SwerveRequest.RobotCentric = SwerveRequest.RobotCentric().withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
+    public val forwardStraight: SwerveRequest.RobotCentric =
+        SwerveRequest.RobotCentric().withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
     public val point: SwerveRequest.PointWheelsAt = SwerveRequest.PointWheelsAt();
 
     /* Path follower */
@@ -44,10 +45,16 @@ class SwerveSystem() : SubsystemBase() {
 
 
     //Takes in joystick inputs
-    fun calculateJoyTranslation(rightX: Double, rightY: Double, throttle: Double, deadzoneX: Double, deadzoneY: Double): Translation2d {
+    fun calculateJoyTranslation(
+        rightX: Double,
+        rightY: Double,
+        throttle: Double,
+        deadzoneX: Double,
+        deadzoneY: Double
+    ): Translation2d {
         return Translation2d(
-                -MiscCalculations.calculateDeadzone(rightY, deadzoneX) * DriveConstants.MAX_SPEED * throttle,
-                -MiscCalculations.calculateDeadzone(rightX, deadzoneY) * DriveConstants.MAX_SPEED * throttle
+            -MiscCalculations.calculateDeadzone(rightY, deadzoneX) * DriveConstants.MAX_SPEED * throttle,
+            -MiscCalculations.calculateDeadzone(rightX, deadzoneY) * DriveConstants.MAX_SPEED * throttle
         )
     }
 
@@ -72,11 +79,14 @@ class SwerveSystem() : SubsystemBase() {
             return
         }
 
-        val currentRange = MiscCalculations.findMatchingTranslation2dRange(pos, arrayOf(GlobalZones.Wing.range, GlobalZones.NO.range, GlobalZones.Stage.range))
+        val currentRange = MiscCalculations.findMatchingTranslation2dRange(
+            pos,
+            arrayOf(GlobalZones.Wing.range, GlobalZones.NO.range, GlobalZones.Stage.range)
+        )
 
         //Not in any zone
         if (currentRange.first.x == -1.0 && currentRange.second.y == -1.0) {
-            println("Not in a valid zone; ERROR")
+//            println("Not in a valid zone; ERROR")
             return
         }
 
@@ -91,14 +101,14 @@ class SwerveSystem() : SubsystemBase() {
             RobotContainer.stateMachine.prevRobotZone = RobotContainer.stateMachine.currentRobotZone
             RobotContainer.stateMachine.currentRobotZone = currentZone
         } else {
-            println("Not in a valid zone; current zone returned was not default; ERROR")
+//            println("Not in a valid zone; current zone returned was not default; ERROR")
         }
     }
 
     override fun periodic() {
 
 
-//        updateGlobalZone()
+        updateGlobalZone()
         //TODO: update global (specific) positions in the state machine
     }
 
