@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.RobotContainer
+import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
 import frc.robot.constants.TrunkConstants
 import kotlin.math.*
@@ -39,7 +40,14 @@ private data class TargetingVariables(val underStage: Boolean) {
 class TargetingSystem {
     private val g = 9.81
     private val rad2deg = 180.0 / PI
-    val shootingVelocity = 16.0
+    val shootingVelocity = CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY / 60 * PI * 3
+
+    init {
+        if (CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY != CannonConstants.RIGHT_SHOOTER_SHOOT_VELOCITY) {
+            println("Shooting with spin, shooter velocity needs to be recalculated")
+        }
+    }
+
     private val shootingVelocityScaling = 1.3
     fun calculateShot(underStage: Boolean): ShotSetup {
         val shooterVars = TargetingVariables(underStage)
@@ -87,7 +95,7 @@ class TargetingSystem {
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
 //        val targetShooterAngle = atan2(g * (vars.rSquared + h * h) + 2 * h * shootingVelocity, vars.r) * rad2deg
-        val targetShooterAngle = atan((h + .5*g*(vars.rSquared+h*h)) / vars.r) * rad2deg
+        val targetShooterAngle = atan((h + .5 * g * (vars.rSquared + h * h)) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
