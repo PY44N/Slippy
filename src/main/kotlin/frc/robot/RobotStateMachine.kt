@@ -90,7 +90,7 @@ class RobotStateMachine {
 
     var targetTrunkPose: TrunkPosition = TrunkPosition.STOW
         set(value) =
-            if (RobotContainer.trunkSystem.isMoving == false) {
+            if (!RobotContainer.trunkSystem.isMoving) {
                 field = value;
             } else {
                 field = field

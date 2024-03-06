@@ -97,11 +97,11 @@ class TargetingSystem {
         SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
         SmartDashboard.putNumber("robot distance to speaker", vars.r)
 
-        val z = FieldConstants.Speaker.centerSpeakerOpening.z - TrunkConstants.SHOOTING_HEIGHT
+        val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
 //        val targetShooterAngle = atan2(g * (vars.rSquared + h * h) + 2 * h * shootingVelocity, vars.r) * rad2deg
-        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2))) / vars.r) * rad2deg
+        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / vars.shooterVelocity.pow(2)) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }

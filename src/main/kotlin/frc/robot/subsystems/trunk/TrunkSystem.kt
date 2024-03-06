@@ -18,11 +18,14 @@ import frc.robot.util.visualization.MechanismLigament2d
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
+    private val positionLimits = false
+    private val rotationLimits = false
+
     private val positionPID: PIDController =
         PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
     private val positionFF: ElevatorFeedforward = ElevatorFeedforward(0.0001, 0.27, 3.07, 0.09)
 
-    var rotationOffset = TrunkConstants.rotationOffset
+    private var rotationOffset = TrunkConstants.rotationOffset
     private val rotationFF = ArmFeedforward(
         TrunkConstants.rotationFFkS,
         TrunkConstants.rotationFFkG,
@@ -198,7 +201,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         val rotationBottomLimit = SmartDashboard.getNumber("rotation bottom limit",TrunkConstants.SAFE_TRAVEL_ANGLE)
         val rotationTopLimit = SmartDashboard.getNumber("rotation top limit",200.0)
 
-        if(getPosition() < positionBottomLimit || getPosition() > positionTopLimit || getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit)
+        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
             goManual()
 
         if(io.atTopLimit()) {
@@ -207,9 +210,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
         SmartDashboard.putString("Angle Idle Mode", io.getAngleIdleMode().name)
 
-//        if(io.atBottomLimit()) {
-//            io.setZeroPosition(top = false)
-//        }
+        if(io.atBottomLimit()) {
+            io.setZeroPosition(top = false)
+        }
 
 //        SmartDashboard.putBoolean("is moving", isMoving)
 //
@@ -223,7 +226,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
 //        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
 //        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
-        SmartDashboard.putNumber("rotation offset", rotationOffset)
+//        SmartDashboard.putNumber("rotation offset", rotationOffset)
 //        SmartDashboard.putBoolean("is angle PID?", isAnglePID)
 
         if (currentState == TrunkState.CUSTOM) {

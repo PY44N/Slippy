@@ -7,12 +7,10 @@ import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.DriveConstants
 
-class AutoAimDumbTwistAndShoot : Command() {
+class DumbAutoAimTwistAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
     val twistPIDController: PIDController = PIDController(0.1, 0.0, 0.0)
-
-    var underStage: Boolean = false
 
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
@@ -21,10 +19,8 @@ class AutoAimDumbTwistAndShoot : Command() {
         if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
             if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
                 RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER_FROM_STAGE
-                underStage = true
             } else {
                 RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
-                underStage = false
             }
         }
 
@@ -34,7 +30,7 @@ class AutoAimDumbTwistAndShoot : Command() {
     }
 
     override fun execute() {
-        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity(underStage)
+        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity(actualVelocity = false)
 
         //Handle the cannon aiming component
         RobotContainer.trunkSystem.setShootingAngle(shotSetup.shooterAngle)

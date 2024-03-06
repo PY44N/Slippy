@@ -12,19 +12,17 @@ import kotlin.math.PI
 
 
 class AutoTwistController {
-    val rotationController: ProfiledPIDController
+    val rotationController: ProfiledPIDController = ProfiledPIDController(
+        PathPlannerLibConstants.rotationPID.kP,
+        PathPlannerLibConstants.rotationPID.kI,
+        PathPlannerLibConstants.rotationPID.kD,
+        TrapezoidProfile.Constraints(0.0, 0.0),
+        .02
+    )
 
     var desiredRotation: Rotation2d = Rotation2d(0.0)
 
     init {
-        this.rotationController =
-            ProfiledPIDController(
-                PathPlannerLibConstants.rotationPID.kP,
-                PathPlannerLibConstants.rotationPID.kI,
-                PathPlannerLibConstants.rotationPID.kD,
-                TrapezoidProfile.Constraints(0.0, 0.0),
-                .02
-            )
         rotationController.setIntegratorRange(
             -PathPlannerLibConstants.rotationPID.iZone,
             PathPlannerLibConstants.rotationPID.iZone
@@ -32,12 +30,12 @@ class AutoTwistController {
         rotationController.enableContinuousInput(-PI, PI)
     }
 
-    public fun reset(currentRot: Rotation2d, currentSpeeds: ChassisSpeeds) {
+    fun reset(currentRot: Rotation2d, currentSpeeds: ChassisSpeeds) {
         rotationController.reset(currentRot.radians, currentSpeeds.omegaRadiansPerSecond)
     }
 
 
-    public fun calculateRotation(targetRotation: Rotation2d): Rotation2d {
+    fun calculateRotation(targetRotation: Rotation2d): Rotation2d {
         desiredRotation = targetRotation
 
         val angVelConstraint: Double = DriveConstants.MAX_ANGLE_SPEED
@@ -65,17 +63,13 @@ class AutoTwistController {
         return Rotation2d(rotationFF + rotationFeedback)
     }
 
-    public fun isAtDesired(): Boolean {
+    fun isAtDesired(): Boolean {
         val currentRot = RobotContainer.swerveSystem.getSwervePose().rotation.degrees
 
-        if (MiscCalculations.appxEqual(
-                currentRot,
-                desiredRotation.degrees,
-                DriveConstants.TELEOP_TRANSLATION_AUTOTWIST_DEADZONE
-            )
-        ) {
-            return true;
-        }
-        return false;
+        return MiscCalculations.appxEqual(
+            currentRot,
+            desiredRotation.degrees,
+            DriveConstants.TELEOP_TRANSLATION_AUTOTWIST_DEADZONE
+        )
     }
 }
