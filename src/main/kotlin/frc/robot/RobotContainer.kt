@@ -1,7 +1,5 @@
 package frc.robot
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.PointWheelsAt
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SwerveDriveBrake
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -13,20 +11,20 @@ import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.cannon.AutoAmp
 import frc.robot.commands.cannon.AutoIntake
 import frc.robot.commands.cannon.AutoShootCommand
-import frc.robot.constants.TunerConstants
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
-import frc.robot.subsystems.swerve.CommandSwerveDrivetrain
 import frc.robot.subsystems.swerve.SwerveSystem
-import frc.robot.subsystems.swerve.Telemetry
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkSystem
 import frc.robot.util.TargetingSystem
+import frc.robot.util.TelemetryToggles
 
 object RobotContainer {
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
+
+    val telemetry = TelemetryToggles()
 
 
     val trunkSystem = TrunkSystem(TrunkIOReal())

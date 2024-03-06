@@ -94,9 +94,9 @@ class TargetingSystem {
 
     fun getShotNoVelocity(): ShotSetup {
         val vars = TargetingVariables()
-        SmartDashboard.putNumber("robot speaker rel pos x", vars.x)
-        SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
-        SmartDashboard.putNumber("robot distance to speaker", vars.r)
+        Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
 
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 

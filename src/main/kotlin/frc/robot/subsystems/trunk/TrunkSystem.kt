@@ -12,6 +12,7 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPosition
 import frc.robot.TrunkState
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.Telemetry
 import frc.robot.util.visualization.Mechanism2d
 import frc.robot.util.visualization.MechanismLigament2d
 
@@ -99,8 +100,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             )
         )
         setDesiredRotation(TrunkConstants.SAFE_TRAVEL_ANGLE)
-//        SmartDashboard.putNumber("Position SetPoint", 0.15)
-//        SmartDashboard.putNumber("Rotation SetPoint", 150.0)
     }
 
     fun goManual() {
@@ -188,6 +187,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
 
     override fun periodic() {
+        RobotContainer.telemetry.trunkTelemetry = SmartDashboard.getBoolean("Trunk Telemetry", RobotContainer.telemetry.trunkTelemetry)
+        SmartDashboard.putBoolean("Trunk Telemetry", RobotContainer.telemetry.trunkTelemetry)
+
 //        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
 //            goManual()
 //
@@ -195,25 +197,24 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //            io.setZeroPosition(top = true)
 //        }
 
-        SmartDashboard.putString("Angle Idle Mode", io.getAngleIdleMode().name)
+        Telemetry.putString("Angle Idle Mode", io.getAngleIdleMode().name, RobotContainer.telemetry.trunkTelemetry)
 
 //        if(io.atBottomLimit()) {
 //            io.setZeroPosition(top = false)
 //        }
 
-        SmartDashboard.putBoolean("is moving", isMoving)
-//
-        SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
-        SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
-        SmartDashboard.putNumber("Angle val", getRotation())
-        SmartDashboard.putNumber("Angle val raw", io.getRawRotation() * 360)
-        SmartDashboard.putNumber("position val", getPosition())
-        SmartDashboard.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position)
-        SmartDashboard.putString("trunk state", RobotContainer.stateMachine.trunkState.name)
-        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
-        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
-        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
-        SmartDashboard.putBoolean("is angle PID?", isAnglePID)
+        Telemetry.putBoolean("is moving", isMoving, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putBoolean("is rotation safe?", isRotationSafe, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putBoolean("has elevator moved?", hasElevatorMoved, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("Angle val", getRotation(), RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("Angle val raw", io.getRawRotation() * 360, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("position val", getPosition(), RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putString("trunk state", RobotContainer.stateMachine.trunkState.name, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putString("prevTargetPosition name", prevTargetPose.name, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putBoolean("is angle PID?", isAnglePID, RobotContainer.telemetry.trunkTelemetry)
 
         if (currentState == TrunkState.CUSTOM) {
 //            io.setDesiredPosition(TrunkConstants.STOW_POSITION)
@@ -294,8 +295,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
 
         //Do the trunk PIDs
-        SmartDashboard.putNumber("position pid setpoint", positionPID.setpoint)
-        SmartDashboard.putNumber("angle pid setpoint", rotationPID.setpoint)
+        Telemetry.putNumber("position pid setpoint", positionPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("angle pid setpoint", rotationPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
 
         val positionPIDOut = positionPID.calculate(getPosition())
 
@@ -303,21 +304,20 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //        SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
         val posFF = TrunkConstants.positionFF
 
-        SmartDashboard.putNumber("position pid out", positionPIDOut)
-        SmartDashboard.putNumber("position pid + FF", positionPIDOut + posFF)
+        Telemetry.putNumber("position pid out", positionPIDOut, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("position pid + FF", positionPIDOut + posFF, RobotContainer.telemetry.trunkTelemetry)
 
-        rotationOffset = SmartDashboard.getNumber("rotation offset", TrunkConstants.rotationOffset)
-        SmartDashboard.putBoolean("Is PIDing", isPIDing)
+        Telemetry.putBoolean("Is PIDing", isPIDing, RobotContainer.telemetry.trunkTelemetry)
         if (isPIDing) {
 
             io.setElevatorSpeed(posFF + positionPIDOut)
 
             if (isAnglePID) {
                 val pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
-                SmartDashboard.putNumber("rotation pid out", pidVal)
-                SmartDashboard.putNumber(
+                Telemetry.putNumber("rotation pid out", pidVal, RobotContainer.telemetry.trunkTelemetry)
+                Telemetry.putNumber(
                     "rotation PID + FF", pidVal
-                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0)
+                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0), RobotContainer.telemetry.trunkTelemetry
                 )
 
                 io.setRotationVoltage(

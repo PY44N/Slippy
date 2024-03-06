@@ -39,7 +39,7 @@ class SwerveSystem() : SubsystemBase() {
     /* Path follower */
 //    public val runAuto: Command = driveTrain.getAutoPath("Tests");
 
-    public val logger: Telemetry = Telemetry(DriveConstants.MAX_SPEED);
+    public val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
 
 
     val autoTwistController: AutoTwistController = AutoTwistController()

@@ -10,9 +10,9 @@ import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.ShooterState
 import frc.robot.constants.CannonConstants
+import frc.robot.util.Telemetry
 
 class CannonSystem(private val io: CannonIO) : SubsystemBase() {
-
     //Desired shooter velocities
     private var desiredLeftVel = 0.0
     private var desiredRightVel = 0.0
@@ -88,9 +88,12 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
     }
 
     override fun periodic() {
-        SmartDashboard.putBoolean("Stow Beam Break", io.getLoadedBeamBreak())
-        SmartDashboard.putNumber("Current left Cannon Speed", io.getLeftShooterVel())
-        SmartDashboard.putNumber("Desired left speed", leftShooterPID.setpoint)
+        RobotContainer.telemetry.cannonTelemetry = SmartDashboard.getBoolean("Trunk Telemetry", RobotContainer.telemetry.cannonTelemetry)
+        SmartDashboard.putBoolean("Trunk Telemetry", RobotContainer.telemetry.cannonTelemetry)
+
+        Telemetry.putBoolean("Stow Beam Break", io.getLoadedBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putNumber("Current left Cannon Speed", io.getLeftShooterVel(), RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putNumber("Desired left speed", leftShooterPID.setpoint, RobotContainer.telemetry.cannonTelemetry)
 
 
         /*--------------------
