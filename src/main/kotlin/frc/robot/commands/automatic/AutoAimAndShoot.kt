@@ -1,16 +1,21 @@
 package frc.robot.commands.automatic
 
 
+import MiscCalculations
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
+import frc.robot.constants.DriveConstants
+import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 
 
 class AutoAimAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
+
+    val waitForTwist: Boolean = true
 
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
@@ -29,15 +34,26 @@ class AutoAimAndShoot : Command() {
 
         //Handle the cannon aiming component
         val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
-        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)
         RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
         RobotContainer.trunkSystem.goToCustom()
         //Handle the cannon aiming component
         RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
 
-        //Can we shoot?
-        if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled) {
-            autoShoot.schedule()
+        SmartDashboard.putBoolean("Is shot angle possible?", shooterAngle == shotSetup.shooterAngle);
+
+
+        if (waitForTwist) {
+            val robotAngleGood: Boolean =  MiscCalculations.appxEqual(RobotContainer.swerveSystem.getSwervePose().rotation.degrees, shotSetup.robotAngle, TargetingConstants.ROBOT_ANGLE_DEADZONE)
+            SmartDashboard.putBoolean("Shot aimed and ready?", shooterAngle == shotSetup.shooterAngle && robotAngleGood)
+            if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled && robotAngleGood) {
+                autoShoot.schedule()
+            }
+        }
+        else {
+            SmartDashboard.putBoolean("Shot aimed and ready?", RobotContainer.stateMachine.trunkReady)
+            if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled) {
+                autoShoot.schedule()
+            }
         }
     }
 

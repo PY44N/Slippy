@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.util.Telemetry
+import frc.robot.constants.LimelightConstants
 import org.littletonrobotics.junction.LoggedRobot
 
 
@@ -16,7 +17,7 @@ class Robot : LoggedRobot() {
     override fun robotInit() {
         SmartDashboard.putBoolean("arm motors free?", false)
 
-
+        RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
     }
 
     override fun robotPeriodic() {
@@ -39,8 +40,6 @@ class Robot : LoggedRobot() {
 //            }
         }
 
-
-
         val armMotorsFree = SmartDashboard.getBoolean("arm motors free?", false)
 
         if (armMotorsFree && !DriverStation.isTeleopEnabled() && !DriverStation.isTestEnabled() && !DriverStation.isAutonomousEnabled()) {
@@ -50,49 +49,19 @@ class Robot : LoggedRobot() {
             RobotContainer.trunkSystem.brakeMotors()
         }
 
-        updateOdometry()
+        if (!DriverStation.isDisabled()) {
+            RobotContainer.visionSystem.updateOdometry(2, true)
+        }
+        else {
+            RobotContainer.visionSystem.updateOdometry(1, false)
+        }
+        
         Telemetry.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady(), RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
     }
 
-    fun updateOdometry() {
-        var leftLLMeasure: LimelightHelpers.PoseEstimate;
-        var rightLLMeasure: LimelightHelpers.PoseEstimate;
 
-        if (DriverStation.getAlliance().isEmpty) {
-            return
-        }
-
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-            leftLLMeasure =
-                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left")
-            rightLLMeasure =
-                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left")
-        } else {
-            leftLLMeasure =
-                LimelightHelpers.getBotPoseEstimate_wpiRed("limelight-left")
-            rightLLMeasure =
-                LimelightHelpers.getBotPoseEstimate_wpiRed("limelight-left")
-        }
-
-
-        if (leftLLMeasure.tagCount >= 2) {
-            RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999.0))
-            RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
-                leftLLMeasure.pose,
-                leftLLMeasure.timestampSeconds
-            )
-        }
-
-        if (rightLLMeasure.tagCount >= 2) {
-            RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999.0))
-            RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
-                rightLLMeasure.pose,
-                rightLLMeasure.timestampSeconds
-            )
-        }
-    }
 
     override fun disabledInit() {}
 

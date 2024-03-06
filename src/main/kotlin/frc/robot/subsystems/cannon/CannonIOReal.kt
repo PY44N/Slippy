@@ -64,14 +64,12 @@ class CannonIOReal : CannonIO {
         return rightShooterEncoder.velocity
     }
 
-    override fun setLeftShooter(vel: Double) {
-        Telemetry.putNumber("Left shooter set precent", vel, RobotContainer.telemetry.cannonTelemetry)
-        leftShooterMotor.set(vel)
+    override fun setLeftShooter(percent: Double) {
+        leftShooterMotor.set(percent)
     }
 
-    override fun setRightShooter(vel: Double) {
-        Telemetry.putNumber("Right Shooter set percent", vel, RobotContainer.telemetry.cannonTelemetry)
-        rightShooterMotor.set(vel)
+    override fun setRightShooter(percent: Double) {
+        rightShooterMotor.set(percent)
     }
 
     override fun setInnerIntakePercent(percent: Double) {
