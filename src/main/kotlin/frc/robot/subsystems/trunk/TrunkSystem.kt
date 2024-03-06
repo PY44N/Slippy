@@ -17,9 +17,9 @@ import frc.robot.util.visualization.MechanismLigament2d
 
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
-
-    private val positionLimits = false
-    private val rotationLimits = false
+//
+//    private val positionLimits = false
+//    private val rotationLimits = false
 
     private val positionPID: PIDController =
         PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
@@ -63,10 +63,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     var isMoving = false
 
-    var bottomisSet = false
-    var bottomPosition = 0.0
-    var topPosition = 0.0
-
     var isAnglePID = false
 
     var rotationSetPoint = TrunkConstants.SAFE_TRAVEL_ANGLE
@@ -93,10 +89,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
 
     init {
-        SmartDashboard.putNumber("position bottom limit", 0.0)
-        SmartDashboard.putNumber("position bottom limit", 0.381)
-        SmartDashboard.putNumber("rotation bottom limit", TrunkConstants.SAFE_TRAVEL_ANGLE)
-        SmartDashboard.putNumber("rotation top limit", 200.0)
         elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
         crossbarRoot.append(
             MechanismLigament2d(
@@ -116,6 +108,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         io.setRotationSpeed(0.0)
         setPID(false)
         currentState = TrunkState.MANUAL
+        brakeMotors()
         io.setPositionLimits(true)
     }
 
@@ -123,9 +116,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         io.setElevatorSpeed(0.0)
         io.setRotationSpeed(0.0)
         setPID(false)
-        bottomisSet = false
         currentState = TrunkState.CALIBRATING
-        io.setElevatorSpeed(0.1)
+        io.setElevatorSpeed(0.2)
         io.setPositionLimits(false)
     }
 
@@ -196,38 +188,32 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
 
     override fun periodic() {
-        val positionBottomLimit = SmartDashboard.getNumber("position bottom limit",0.0)
-        val positionTopLimit = SmartDashboard.getNumber("position bottom limit",0.381)
-        val rotationBottomLimit = SmartDashboard.getNumber("rotation bottom limit",TrunkConstants.SAFE_TRAVEL_ANGLE)
-        val rotationTopLimit = SmartDashboard.getNumber("rotation top limit",200.0)
-
-        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
-            goManual()
-
-        if(io.atTopLimit()) {
-            io.setZeroPosition(top = true)
-        }
+//        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
+//            goManual()
+//
+//        if(io.atTopLimit()) {
+//            io.setZeroPosition(top = true)
+//        }
 
         SmartDashboard.putString("Angle Idle Mode", io.getAngleIdleMode().name)
 
-        if(io.atBottomLimit()) {
-            io.setZeroPosition(top = false)
-        }
+//        if(io.atBottomLimit()) {
+//            io.setZeroPosition(top = false)
+//        }
 
-//        SmartDashboard.putBoolean("is moving", isMoving)
+        SmartDashboard.putBoolean("is moving", isMoving)
 //
-//        SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
-//        SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
+        SmartDashboard.putBoolean("is rotation safe?", isRotationSafe)
+        SmartDashboard.putBoolean("has elevator moved?", hasElevatorMoved)
         SmartDashboard.putNumber("Angle val", getRotation())
         SmartDashboard.putNumber("Angle val raw", io.getRawRotation() * 360)
-//        SmartDashboard.putNumber("position val", getPosition())
-//        SmartDashboard.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position)
-//        SmartDashboard.putString("trunk state", RobotContainer.stateMachine.trunkState.name)
-//        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
-//        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
-//        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
-//        SmartDashboard.putNumber("rotation offset", rotationOffset)
-//        SmartDashboard.putBoolean("is angle PID?", isAnglePID)
+        SmartDashboard.putNumber("position val", getPosition())
+        SmartDashboard.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position)
+        SmartDashboard.putString("trunk state", RobotContainer.stateMachine.trunkState.name)
+        SmartDashboard.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle)
+        SmartDashboard.putString("prevTargetPosition name", prevTargetPose.name)
+        SmartDashboard.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name)
+        SmartDashboard.putBoolean("is angle PID?", isAnglePID)
 
         if (currentState == TrunkState.CUSTOM) {
 //            io.setDesiredPosition(TrunkConstants.STOW_POSITION)
@@ -303,7 +289,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 isAnglePID = true
             }
         } else if (currentState == TrunkState.CALIBRATING) {
-            doubleCalibratePeriodic()
+            calibratePeriodic()
         }
 
 
@@ -320,8 +306,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("position pid out", positionPIDOut)
         SmartDashboard.putNumber("position pid + FF", positionPIDOut + posFF)
 
-
-
         rotationOffset = SmartDashboard.getNumber("rotation offset", TrunkConstants.rotationOffset)
         SmartDashboard.putBoolean("Is PIDing", isPIDing)
         if (isPIDing) {
@@ -336,10 +320,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                             + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0)
                 )
 
-//                io.setRotationVoltage(
-//                    (pidVal
-//                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
-//                )
+                io.setRotationVoltage(
+                    (pidVal
+                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
+                )
             }
         }
         io.periodic()
@@ -357,19 +341,12 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
        io.setAngleIdleMode(CANSparkBase.IdleMode.kBrake)
    }
 
-    private fun doubleCalibratePeriodic() {
+    private fun calibratePeriodic() {
         io.setRotationSpeed(0.0)
         val topLimit = io.atTopLimit()
-        val bottomLimit = io.atBottomLimit()
-        if (bottomLimit && !bottomisSet) {
-            bottomisSet = true
-            bottomPosition = getPosition()
-        }
         if (topLimit) {
-            topPosition = getPosition()
             io.setElevatorSpeed(0.0)
             io.setZeroPosition(true)
-//            STOP()
             goToCustom()
         }
     }

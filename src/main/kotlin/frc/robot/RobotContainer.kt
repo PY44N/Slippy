@@ -92,33 +92,28 @@ object RobotContainer {
         }))
 
         xboxController.a().onTrue(Commands.runOnce({
-            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+            stateMachine.targetTrunkPose = TrunkPosition.STOW
         }))
-        xboxController.b().onTrue(Commands.runOnce({
-            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.INTAKE
-        }))
+        xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.x().onTrue(Commands.runOnce({
-            RobotContainer.trunkSystem.calibrate()
+            trunkSystem.calibrate()
         }))
         xboxController.back().onTrue(Commands.runOnce({
-            RobotContainer.trunkSystem.STOP()
+            trunkSystem.STOP()
         }))
         xboxController.start().onTrue(Commands.runOnce({
-            println("pressed start")
-            RobotContainer.trunkSystem.goManual()
+            trunkSystem.goManual()
         }))
         xboxController.y().onTrue(Commands.runOnce({
-            println("pressed y")
-            RobotContainer.trunkSystem.goToCustom()
+            trunkSystem.goToCustom()
         }))
-        xboxController.rightBumper().onTrue(AutoAimAndShoot())
-
+        xboxController.rightBumper().toggleOnTrue(AutoAimAndShoot())
+        xboxController.leftBumper().toggleOnTrue(AutoAmp())
+        xboxController.back().toggleOnTrue(AutoShootCommand())
     }
-
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 //        SmartDashboard.putData("Auto Chooser", autoChooser)
-
 
 }
 

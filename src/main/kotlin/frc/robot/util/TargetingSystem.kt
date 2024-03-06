@@ -1,9 +1,5 @@
-package frc.robot.util;
+package frc.robot.util
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.units.Velocity
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.RobotContainer
 import frc.robot.constants.CannonConstants
@@ -12,8 +8,12 @@ import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 import kotlin.math.*
 
-data class ShotSetup(var robotAngle: Double, var shooterAngle: Double)
-private data class TargetingVariables(val shooterVelocity: Double) {
+data class ShotSetup(var robotAngle: Double, var shooterAngle: Double) {
+    init {
+        shooterAngle = -shooterAngle + 90
+    }
+}
+private class TargetingVariables {
     val x: Double
     val y: Double
     val vx: Double
@@ -41,11 +41,13 @@ private data class TargetingVariables(val shooterVelocity: Double) {
 
 class TargetingSystem {
 //    private val g = 9.81
+
     // overaccount for gravity
     private val g = 11.0
+
     private val rad2deg = 180.0 / PI
 
-    val shootingVelocity = CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY / 60 * PI * 3
+    private val shootingVelocity = TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY / 60 * PI * 3
 
 //    init {
 //        if (CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY != CannonConstants.RIGHT_SHOOTER_SHOOT_VELOCITY) {
@@ -56,9 +58,8 @@ class TargetingSystem {
 // dumb scaling dont think about it
     private val shootingVelocityScaling = 1.3
 
-    // if prep then use ideal velocity else use actual velocity
-    fun calculateShot(actualVelocity: Boolean): ShotSetup {
-        val shooterVars = TargetingVariables(shootingVelocity)
+    fun calculateShot(): ShotSetup {
+        val shooterVars = TargetingVariables()
 
         val targetRobotAngle = robotAngleFunction(shooterVars)
         val targetShooterAngle = shooterAngleFunction(shooterVars)
@@ -66,9 +67,9 @@ class TargetingSystem {
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
 
-    fun calculateShootingAngle(actualVelocity: Boolean) = shooterAngleFunction(TargetingVariables(shootingVelocity))
+    fun calculateShootingAngle() = shooterAngleFunction(TargetingVariables())
 
-    fun calculateRobotAngle() = robotAngleFunction(TargetingVariables(shootingVelocity))
+    fun calculateRobotAngle() = robotAngleFunction(TargetingVariables())
 
     private fun robotAngleFunction(vars: TargetingVariables): Double {
         return acos(
@@ -91,8 +92,8 @@ class TargetingSystem {
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
 
-    fun getShotNoVelocity(actualVelocity: Boolean): ShotSetup {
-        val vars = TargetingVariables(shootingVelocity * TargetingConstants.velocityMultiplier)
+    fun getShotNoVelocity(): ShotSetup {
+        val vars = TargetingVariables()
         SmartDashboard.putNumber("robot speaker rel pos x", vars.x)
         SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
         SmartDashboard.putNumber("robot distance to speaker", vars.r)
@@ -100,8 +101,7 @@ class TargetingSystem {
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
-//        val targetShooterAngle = atan2(g * (vars.rSquared + h * h) + 2 * h * shootingVelocity, vars.r) * rad2deg
-        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / vars.shooterVelocity.pow(2)) / vars.r) * rad2deg
+        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }

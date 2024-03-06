@@ -91,7 +91,7 @@ class RobotStateMachine {
     var targetTrunkPose: TrunkPosition = TrunkPosition.STOW
         set(value) =
             if (!RobotContainer.trunkSystem.isMoving) {
-                field = value;
+                field = value
             } else {
                 field = field
             }
@@ -100,9 +100,9 @@ class RobotStateMachine {
         get() = RobotContainer.trunkSystem.currentState
 
 
-    var intakeState: IntakeState = IntakeState.Stopped;
-    var shooterState: ShooterState = ShooterState.Stopped;
-    var noteState: NoteState = NoteState.Stored;
+    var intakeState: IntakeState = IntakeState.Stopped
+    var shooterState: ShooterState = ShooterState.Stopped
+    var noteState: NoteState = NoteState.Stored
 
     var currentRobotZone: GlobalZones = GlobalZones.Wing
     var prevRobotZone: GlobalZones = GlobalZones.Wing

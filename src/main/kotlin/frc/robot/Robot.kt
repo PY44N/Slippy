@@ -14,6 +14,8 @@ class Robot : LoggedRobot() {
     private var lastRobotAction: RobotAction = RobotContainer.stateMachine.robotAction
     override fun robotInit() {
         SmartDashboard.putBoolean("arm motors free?", false)
+
+
     }
 
     override fun robotPeriodic() {
@@ -48,6 +50,9 @@ class Robot : LoggedRobot() {
         }
 
         updateOdometry()
+        SmartDashboard.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady())
+        SmartDashboard.putString("note state", RobotContainer.stateMachine.noteState.name)
+        SmartDashboard.putString("intake state", RobotContainer.stateMachine.intakeState.name)
     }
 
     fun updateOdometry() {

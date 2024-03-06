@@ -2,10 +2,12 @@ package frc.robot.commands.automatic
 
 import MiscCalculations
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.DriveConstants
+import frc.robot.constants.TrunkConstants
 
 class DumbAutoAimTwistAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
@@ -30,14 +32,15 @@ class DumbAutoAimTwistAndShoot : Command() {
     }
 
     override fun execute() {
-        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity(actualVelocity = false)
+        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
 
         //Handle the cannon aiming component
-        RobotContainer.trunkSystem.setShootingAngle(shotSetup.shooterAngle)
+//        val shooterAngle = Math.clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
+//        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)
+//        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
 
 
         //Handle the twisting component
-
         val driveTwist = twistPIDController.calculate(
             RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
             shotSetup.robotAngle
@@ -50,10 +53,10 @@ class DumbAutoAimTwistAndShoot : Command() {
             DriveConstants.TELEOP_DEADZONE_Y
         )
 
-        RobotContainer.swerveSystem.driveTrain.applyRequest({
+        RobotContainer.swerveSystem.driveTrain.applyRequest {
             RobotContainer.swerveSystem.drive.withVelocityX(driveTranslation.x).withVelocityY(driveTranslation.y)
                 .withRotationalRate(driveTwist)
-        })
+        }
 
 
         //Can we shoot?

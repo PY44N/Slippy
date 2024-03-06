@@ -34,7 +34,7 @@ object TrunkConstants {
 
     var MAX_ANGLE: Double = 170.0
     var MAX_SHOOT_ANGLE = 90.0
-    var MIN_SHOOT_ANGLE = 45.0
+    var MIN_SHOOT_ANGLE = 50.0
 
     var SPEAKER_POSITION: Double = 0.381
 
@@ -56,15 +56,11 @@ object TrunkConstants {
     var TOP_BREAK_BEAM_POSITION: Double = .3810000
     var BOTTOM_BREAK_BEAM_POSITION: Double = 0.0
 
-    val MIN_ANGLE_BELOW_CROSSBAR = -10.0
-    val MIN_ANGLE_ABOVE_CROSSBAR = -20.0
-
     var rotationOffset: Double = -34.00
 
     var positionKP = 22.0
     var positionKI = 0.0
     var positionKD = 0.1
-    var positionIz = 0.0
 
     var positionFF = 0.02
 
@@ -76,8 +72,9 @@ object TrunkConstants {
     val rotationEncoderID = 9
 
     var rotationKP = 7.0
-    var rotationKI = 0.0001
-    var rotationKD = 1.25
+//    var rotationKI = 0.0001
+    var rotationKI = 0.0
+    var rotationKD = .125
 
     //Degrees/sec^2
     var rotationMaxAcceleration = 40.0
