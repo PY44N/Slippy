@@ -22,7 +22,7 @@ private data class TargetingVariables(val underStage: Boolean) {
         val robotAngle = robotPose.rotation.radians
 
         val shootingOffset =
-            if (underStage) TrunkConstants.UNDER_STAGE_SHOOTING_OFFSET else TrunkConstants.SHOOTING_OFFSET
+                if (underStage) TrunkConstants.UNDER_STAGE_SHOOTING_OFFSET else TrunkConstants.SHOOTING_OFFSET
         val xOffset = FieldConstants.Speaker.centerSpeakerOpening.x
 //        + cos(robotAngle) * shootingOffset
         val yOffset = FieldConstants.Speaker.centerSpeakerOpening.y
@@ -64,8 +64,8 @@ class TargetingSystem {
 
     private fun robotAngleFunction(vars: TargetingVariables): Double {
         return acos(
-            vars.x * ((vars.x * vars.x - vars.y * vars.y) * vars.vx + 2 * vars.x * vars.y * vars.vy) /
-                    (vars.r.pow(1.5) * sqrt(vars.vx * vars.vx + vars.vy * vars.vy))
+                vars.x * ((vars.x * vars.x - vars.y * vars.y) * vars.vx + 2 * vars.x * vars.y * vars.vy) /
+                        (vars.r.pow(1.5) * sqrt(vars.vx * vars.vx + vars.vy * vars.vy))
         ) * rad2deg
     }
 
@@ -76,10 +76,10 @@ class TargetingSystem {
             TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT
 
         return atan(
-            h * inverseR + g * vars.r /
-                    ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.rSquared + h * h)) + rDot).pow(
-                        2
-                    )
+                h * inverseR + g * vars.r /
+                        ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.rSquared + h * h)) + rDot).pow(
+                                2
+                        )
         ) * rad2deg +
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
