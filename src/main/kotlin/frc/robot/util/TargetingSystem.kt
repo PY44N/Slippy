@@ -8,21 +8,18 @@ import frc.robot.constants.TrunkConstants
 import kotlin.math.*
 
 data class ShotSetup(var robotAngle: Double, var shooterAngle: Double)
-private data class TargetingVariables(val underStage: Boolean) {
+private data class TargetingVariables() {
     val x: Double
     val y: Double
     val vx: Double
     val vy: Double
     val r: Double
-    val rSquared: Double
-
     init {
         val robotPose = RobotContainer.swerveSystem.getSwervePose()
         val robotVelocity = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
         val robotAngle = robotPose.rotation.radians
 
-        val shootingOffset =
-            if (underStage) TrunkConstants.UNDER_STAGE_SHOOTING_OFFSET else TrunkConstants.SHOOTING_OFFSET
+//        val shootingOffset = TrunkConstants.SHOOTING_OFFSET
         val xOffset = FieldConstants.Speaker.centerSpeakerOpening.x
 //        + cos(robotAngle) * shootingOffset
         val yOffset = FieldConstants.Speaker.centerSpeakerOpening.y
@@ -32,8 +29,7 @@ private data class TargetingVariables(val underStage: Boolean) {
         y = robotPose.y - yOffset
         vx = robotVelocity.vxMetersPerSecond
         vy = robotVelocity.vyMetersPerSecond
-        rSquared = x * x + y * y
-        r = sqrt(rSquared)
+        r = sqrt(x * x + y * y)
     }
 }
 
@@ -49,8 +45,8 @@ class TargetingSystem {
     }
 
     private val shootingVelocityScaling = 1.3
-    fun calculateShot(underStage: Boolean): ShotSetup {
-        val shooterVars = TargetingVariables(underStage)
+    fun calculateShot(): ShotSetup {
+        val shooterVars = TargetingVariables()
 
         val targetRobotAngle = robotAngleFunction(shooterVars)
         val targetShooterAngle = shooterAngleFunction(shooterVars)
@@ -58,9 +54,9 @@ class TargetingSystem {
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
 
-    fun calculateShootingAngle(underStage: Boolean) = shooterAngleFunction(TargetingVariables(underStage))
+    fun calculateShootingAngle() = shooterAngleFunction(TargetingVariables())
 
-    fun calculateRobotAngle(underStage: Boolean) = robotAngleFunction(TargetingVariables(underStage))
+    fun calculateRobotAngle() = robotAngleFunction(TargetingVariables())
 
     private fun robotAngleFunction(vars: TargetingVariables): Double {
         return acos(
@@ -72,12 +68,11 @@ class TargetingSystem {
     private fun shooterAngleFunction(vars: TargetingVariables): Double {
         val inverseR = 1.0 / vars.r
         val rDot = inverseR * (vars.x * vars.vx + vars.y * vars.vy)
-        val h = FieldConstants.Speaker.centerSpeakerOpening.z - if (vars.underStage)
-            TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT
+        val h = FieldConstants.Speaker.centerSpeakerOpening.z - TrunkConstants.SHOOTING_HEIGHT
 
         return atan(
             h * inverseR + g * vars.r /
-                    ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.rSquared + h * h)) + rDot).pow(
+                    ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.r.pow(2) + h.pow(2))) + rDot).pow(
                         2
                     )
         ) * rad2deg +
@@ -85,17 +80,16 @@ class TargetingSystem {
     }
 
     fun getShotNoVelocity(underStage: Boolean): ShotSetup {
-        val vars = TargetingVariables(underStage)
+        val vars = TargetingVariables()
         SmartDashboard.putNumber("robot speaker rel pos x", vars.x)
         SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
         SmartDashboard.putNumber("robot distance to speaker", vars.r)
 
-        val h = FieldConstants.Speaker.centerSpeakerOpening.z - if (vars.underStage)
-            TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT
+        val h = FieldConstants.Speaker.centerSpeakerOpening.z - TrunkConstants.SHOOTING_HEIGHT
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
 //        val targetShooterAngle = atan2(g * (vars.rSquared + h * h) + 2 * h * shootingVelocity, vars.r) * rad2deg
-        val targetShooterAngle = atan((h + .5 * g * (vars.rSquared + h * h)) / vars.r) * rad2deg
+        val targetShooterAngle = atan((h + .5 * g * (vars.r.pow(2) + h.pow(2))) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }

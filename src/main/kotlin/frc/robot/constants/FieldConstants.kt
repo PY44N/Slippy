@@ -140,4 +140,7 @@ object FieldConstants {
         val center: Pose2d = Pose2d(Units.inchesToMeters(192.55), Units.inchesToMeters(161.638), Rotation2d())
         val centerToChainDistance: Double = center.translation.getDistance(centerPodiumAmpChain.translation)
     }
+    object Targeting {
+
+    }
 }
