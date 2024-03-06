@@ -8,7 +8,7 @@ import frc.robot.RobotContainer
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.DriveConstants
 
-class AimTwistAndShoot : Command() {
+class AutoAimTwistAndShoot : Command() {
 
     val autoShoot: AutoShootCommand = AutoShootCommand()
 

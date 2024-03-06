@@ -1,6 +1,8 @@
 package frc.robot.util
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.robot.Robot
 import frc.robot.RobotContainer
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
@@ -13,14 +15,13 @@ data class ShotSetup(var robotAngle: Double, var shooterAngle: Double) {
         shooterAngle = -shooterAngle + 90
     }
 }
-private class TargetingVariables {
+private class TargetingVariables(val robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose()) {
     val x: Double
     val y: Double
     val vx: Double
     val vy: Double
     val r: Double
     init {
-        val robotPose = RobotContainer.swerveSystem.getSwervePose()
         val robotVelocity = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 //        val robotAngle = robotPose.rotation.angle
 
@@ -94,6 +95,20 @@ class TargetingSystem {
 
     fun getShotNoVelocity(): ShotSetup {
         val vars = TargetingVariables()
+        Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
+
+        val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
+
+        val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
+        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r) * rad2deg
+
+        return ShotSetup(targetRobotAngle, targetShooterAngle)
+    }
+
+    fun getShotNoVelocityFromPosition(position: Pose2d): ShotSetup {
+        val vars = TargetingVariables(position)
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)

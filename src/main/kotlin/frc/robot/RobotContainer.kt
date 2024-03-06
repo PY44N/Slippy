@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.TeleopSwerveDriveCommand
 import frc.robot.commands.automatic.AutoAimAndShoot
+import frc.robot.commands.automatic.AutoAimAndShootFromPosition
 import frc.robot.commands.cannon.AutoAmp
 import frc.robot.commands.cannon.AutoIntake
 import frc.robot.commands.cannon.AutoShootCommand
@@ -51,6 +52,7 @@ object RobotContainer {
         get() = SmartDashboard.getBoolean("Enable Automatic State Management", false)
 
     val robotActionSendable: SendableChooser<RobotAction> = SendableChooser<RobotAction>()
+    val shootPositionSendable: SendableChooser<ShootPosition> = SendableChooser<ShootPosition>()
 
     val swerveSystem: SwerveSystem = SwerveSystem()
 
@@ -81,7 +83,13 @@ object RobotContainer {
 
         rightJoystick.button(3).onTrue(Commands.runOnce({
             when (stateMachine.robotAction) {
-                RobotAction.Speaker -> AutoShootCommand();
+                RobotAction.Speaker -> {
+                    if (stateMachine.shootPosition == ShootPosition.AutoAim) {
+                        AutoAimAndShoot()
+                    } else {
+                        AutoAimAndShootFromPosition(stateMachine.shootPosition.position)
+                    }
+                };
                 RobotAction.Amp -> AutoAmp();
                 RobotAction.SourceIntake -> TODO("Not yet implemented");
                 RobotAction.FloorIntake -> AutoIntake()
