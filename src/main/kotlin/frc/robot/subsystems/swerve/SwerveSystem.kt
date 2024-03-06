@@ -113,7 +113,6 @@ class SwerveSystem() : SubsystemBase() {
 
 
         updateGlobalZone()
-        //TODO: update global (specific) positions in the state machine
     }
 
 }

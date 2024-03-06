@@ -64,12 +64,10 @@ class CannonIOReal : CannonIO {
     }
 
     override fun setLeftShooter(percent: Double) {
-        SmartDashboard.putNumber("Left shooter set precent", percent)
         leftShooterMotor.set(percent)
     }
 
     override fun setRightShooter(percent: Double) {
-        SmartDashboard.putNumber("Right Shooter set percent", percent)
         rightShooterMotor.set(percent)
     }
 

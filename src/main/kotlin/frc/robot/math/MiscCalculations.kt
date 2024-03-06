@@ -15,6 +15,7 @@ object MiscCalculations {
      */
     fun gToMetersPerSecond(g: Double): Double = g * 9.8066
 
+
     /**
      * Deadzones an input so it can not be below a certain value. This is a weighted deadzone.
      *

@@ -14,6 +14,7 @@ import frc.robot.commands.cannon.AutoAmp
 import frc.robot.commands.cannon.AutoIntake
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.constants.TunerConstants
+import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain
@@ -42,10 +43,10 @@ object RobotContainer {
 
     val targetingSystem: TargetingSystem = TargetingSystem()
 
+    val visionSystem: VisionSystem = VisionSystem()
+
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
-
-    val intakeLimelight: String = "limelight-intake"
 
     val autoStateManagementEnableButton: Boolean
         get() = SmartDashboard.getBoolean("Enable Automatic State Management", false)
