@@ -20,4 +20,6 @@ object TargetingConstants {
 
     var shooterZ = 0.0
 
+    val ROBOT_ANGLE_DEADZONE = 5.0
+
 }
