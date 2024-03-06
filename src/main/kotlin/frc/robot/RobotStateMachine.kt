@@ -1,5 +1,7 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
@@ -87,6 +89,12 @@ enum class AutoStateManagement {
     Disabled
 }
 
+enum class ShootPosition(val position: Pose2d) {
+    AutoAim(Pose2d()),
+    StageFront(Pose2d(Translation2d(2.75, 4.0), Rotation2d(-32.0))), // Angle might not be measured correctly
+    StageSide(Pose2d(Translation2d(3.36, 4.83), Rotation2d(-32.0))) // Angle might not be measured correctly
+}
+
 class RobotStateMachine {
 
     var targetTrunkPose: TrunkPosition = TrunkPosition.STOW
@@ -108,7 +116,10 @@ class RobotStateMachine {
     var currentRobotZone: GlobalZones = GlobalZones.Wing
     var prevRobotZone: GlobalZones = GlobalZones.Wing
 
-    var robotAction: RobotAction = RobotAction.Chill
+    val robotAction: RobotAction
+        get() = RobotContainer.robotActionSendable.selected
+    val shootPosition: ShootPosition
+        get() = RobotContainer.shootPositionSendable.selected
     var driveState: DriveState = DriveState.Teleop
 
     var autoStateManagement: AutoStateManagement = AutoStateManagement.Disabled
