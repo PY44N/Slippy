@@ -66,7 +66,7 @@ class SwerveTelemetry
     /* Accept the swerve drive state and telemeterize it to smartdashboard */
     fun telemeterize(state: SwerveDriveState) {
         /* Telemeterize the pose */
-        val pose = state.Pose
+        val pose = state.Pose ?: Pose2d()
         fieldTypePub.set("Field2d")
         fieldPub.set(
             doubleArrayOf(

@@ -88,8 +88,8 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
     }
 
     override fun periodic() {
-        RobotContainer.telemetry.cannonTelemetry = SmartDashboard.getBoolean("Trunk Telemetry", RobotContainer.telemetry.cannonTelemetry)
-        SmartDashboard.putBoolean("Trunk Telemetry", RobotContainer.telemetry.cannonTelemetry)
+        RobotContainer.telemetry.cannonTelemetry = SmartDashboard.getBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
+        SmartDashboard.putBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
 
         Telemetry.putBoolean("Stow Beam Break", io.getLoadedBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putNumber("Current left Cannon Speed", io.getLeftShooterVel(), RobotContainer.telemetry.cannonTelemetry)

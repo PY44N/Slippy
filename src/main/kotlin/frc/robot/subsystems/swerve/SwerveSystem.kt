@@ -65,7 +65,7 @@ class SwerveSystem() : SubsystemBase() {
     }
 
     fun getSwervePose(): Pose2d {
-        return driveTrain.state.Pose
+        return driveTrain.state.Pose ?: Pose2d()
     }
 
     fun zeroGyro() {
