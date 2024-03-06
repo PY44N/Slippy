@@ -89,7 +89,8 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 
     override fun periodic() {
         SmartDashboard.putBoolean("Stow Beam Break", io.getLoadedBeamBreak())
-        SmartDashboard.putNumber("Left Cannon Speed", io.getLeftShooterVel())
+        SmartDashboard.putNumber("Current left Cannon Speed", io.getLeftShooterVel())
+        SmartDashboard.putNumber("Desired left speed", leftShooterPID.setpoint)
 
 
         /*--------------------
@@ -141,6 +142,8 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 
             io.setInnerIntakePercent(desiredInnerPercent)
             io.setOuterIntakePercent(desiredOuterPercent)
+
+            println("set inner and outer percents")
         }
 
 
@@ -157,14 +160,10 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
         val leftPercent = (leftFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
         val rightPercent = (rightFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
 
-        SmartDashboard.putNumber("left shooter pid", leftPIDOut)
+//        SmartDashboard.putNumber("left shooter pid", leftPIDOut)
 //        SmartDashboard.putNumber("left shooter percent", leftPercent)
 
         io.setLeftShooter(leftPercent)
         io.setRightShooter(rightPercent)
-    }
-
-    override fun simulationPeriodic() {
-
     }
 }

@@ -20,7 +20,7 @@ object CannonConstants {
     val RIGHT_SHOOTER_PREP_VELOCITY: Double = .3 * SHOOTER_MAX_RPM
     val LEFT_SHOOTER_PREP_VELOCITY: Double = .3 * SHOOTER_MAX_RPM
 
-    val SHOOTER_VELOCITY_DEADZONE: Double = .1
+    val SHOOTER_VELOCITY_DEADZONE: Double = 200.0
 
     //measure in ms
     val NOTE_EXIT_BEAMBREAK_DELAY: Double = 50.0
