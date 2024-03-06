@@ -59,7 +59,7 @@ object TrunkConstants {
     val MIN_ANGLE_BELOW_CROSSBAR = -10.0
     val MIN_ANGLE_ABOVE_CROSSBAR = -20.0
 
-    var rotationOffset: Double = 274.0
+    var rotationOffset: Double = 218.6
 
     var positionKP = 22.0
     var positionKI = 0.0

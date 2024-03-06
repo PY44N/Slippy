@@ -37,11 +37,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     val isAtAngle: Boolean
         get() =
-            if (MiscCalculations.appxEqual(rotationPID.setpoint, getRotation(), TrunkConstants.ANGLE_DEADZONE)) {
-                true
-            } else {
-                false
-            }
+            MiscCalculations.appxEqual(rotationPID.setpoint, getRotation(), TrunkConstants.ANGLE_DEADZONE)
 
 
     var currentState = TrunkState.CALIBRATING
@@ -94,8 +90,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
 
     init {
-        SmartDashboard.getNumber("bottom soft limit", 100.0)
-        SmartDashboard.getNumber("top soft limit", 180.0)
+        SmartDashboard.putNumber("position bottom limit", 0.0)
+        SmartDashboard.putNumber("position bottom limit", 0.381)
+        SmartDashboard.putNumber("rotation bottom limit", TrunkConstants.SAFE_TRAVEL_ANGLE)
+        SmartDashboard.putNumber("rotation top limit", 200.0)
         elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
         crossbarRoot.append(
             MechanismLigament2d(
@@ -195,6 +193,14 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
 
     override fun periodic() {
+        val positionBottomLimit = SmartDashboard.getNumber("position bottom limit",0.0)
+        val positionTopLimit = SmartDashboard.getNumber("position bottom limit",0.381)
+        val rotationBottomLimit = SmartDashboard.getNumber("rotation bottom limit",TrunkConstants.SAFE_TRAVEL_ANGLE)
+        val rotationTopLimit = SmartDashboard.getNumber("rotation top limit",200.0)
+
+        if(getPosition() < positionBottomLimit || getPosition() > positionTopLimit || getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit)
+            goManual()
+
         if(io.atTopLimit()) {
             io.setZeroPosition(top = true)
         }
@@ -327,14 +333,12 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                             + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0)
                 )
 
-                io.setRotationVoltage(
-                    (pidVal
-                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
-                )
+//                io.setRotationVoltage(
+//                    (pidVal
+//                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
+//                )
             }
         }
-
-
         io.periodic()
     }
 

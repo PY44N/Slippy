@@ -57,7 +57,7 @@ class TargetingSystem {
     private val shootingVelocityScaling = 1.3
 
     // if prep then use ideal velocity else use actual velocity
-    fun calculateShot(prep: Boolean): ShotSetup {
+    fun calculateShot(actualVelocity: Boolean): ShotSetup {
         val shooterVars = TargetingVariables(shootingVelocity)
 
         val targetRobotAngle = robotAngleFunction(shooterVars)
@@ -66,7 +66,7 @@ class TargetingSystem {
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
 
-    fun calculateShootingAngle(prep: Boolean) = shooterAngleFunction(TargetingVariables(shootingVelocity))
+    fun calculateShootingAngle(actualVelocity: Boolean) = shooterAngleFunction(TargetingVariables(shootingVelocity))
 
     fun calculateRobotAngle() = robotAngleFunction(TargetingVariables(shootingVelocity))
 
@@ -91,7 +91,7 @@ class TargetingSystem {
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
 
-    fun getShotNoVelocity(underStage: Boolean): ShotSetup {
+    fun getShotNoVelocity(actualVelocity: Boolean): ShotSetup {
         val vars = TargetingVariables(shootingVelocity * TargetingConstants.velocityMultiplier)
         SmartDashboard.putNumber("robot speaker rel pos x", vars.x)
         SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
