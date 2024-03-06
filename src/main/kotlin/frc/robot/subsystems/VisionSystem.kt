@@ -9,7 +9,7 @@ import frc.robot.constants.LimelightConstants
 class VisionSystem {
     val limelightNames: Array<String> = arrayOf("limelight-left", "limelight-right")
 
-    fun updateOdometry(tagCount: Int) {
+    fun updateOdometry(tagCount: Int, poseDifferenceCheck: Boolean) {
         for (llName in limelightNames) {
             var llMeasure: LimelightHelpers.PoseEstimate
 
@@ -31,12 +31,12 @@ class VisionSystem {
 
             if (llMeasure.tagCount >= tagCount && llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
                 val poseDifference = llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
-                if (poseDifference < LimelightConstants.MAX_DISTANCE_DIFFERENCE_METERS) {
+                if (poseDifferenceCheck == false || poseDifference < LimelightConstants.MAX_DISTANCE_DIFFERENCE_METERS) {
                     val distanceToTag = llMeasure.avgTagDist
+
                     if (distanceToTag < LimelightConstants.MAX_TAG_DISTANCE_METERS) {
                         var xyStds: Double
                         var degStds: Double
-
 
                         if (llMeasure.tagCount >= 2) {
                             xyStds = 0.5

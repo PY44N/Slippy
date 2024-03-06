@@ -49,10 +49,10 @@ class Robot : LoggedRobot() {
         }
 
         if (!DriverStation.isDisabled()) {
-            RobotContainer.visionSystem.updateOdometry(2)
+            RobotContainer.visionSystem.updateOdometry(2, true)
         }
         else {
-            RobotContainer.visionSystem.updateOdometry(1)
+            RobotContainer.visionSystem.updateOdometry(1, false)
         }
 
 
