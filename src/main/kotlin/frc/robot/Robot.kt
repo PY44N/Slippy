@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.util.Telemetry
 import frc.robot.constants.LimelightConstants
 import org.littletonrobotics.junction.LoggedRobot
 
@@ -54,11 +55,10 @@ class Robot : LoggedRobot() {
         else {
             RobotContainer.visionSystem.updateOdometry(1, false)
         }
-
-
-        SmartDashboard.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady())
-        SmartDashboard.putString("note state", RobotContainer.stateMachine.noteState.name)
-        SmartDashboard.putString("intake state", RobotContainer.stateMachine.intakeState.name)
+        
+        Telemetry.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady(), RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
     }
 
 

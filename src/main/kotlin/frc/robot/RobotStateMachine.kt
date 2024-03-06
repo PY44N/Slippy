@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.Telemetry
 
 
 //This represents the desired shooter state
@@ -113,8 +114,11 @@ class RobotStateMachine {
     var autoStateManagement: AutoStateManagement = AutoStateManagement.Disabled
 
     fun logStates() {
-        SmartDashboard.putString("Note State", noteState.name)
-        SmartDashboard.putString("Shooter State", shooterState.name)
+        RobotContainer.telemetry.stateMachineTelemetry = SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
+        SmartDashboard.putBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
+
+        Telemetry.putString("Note State", noteState.name, RobotContainer.telemetry.stateMachineTelemetry)
+        Telemetry.putString("Shooter State", shooterState.name, RobotContainer.telemetry.stateMachineTelemetry)
     }
 
     //Is the trunk at the desired position?

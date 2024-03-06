@@ -53,9 +53,9 @@ class TargetingSystemVelocity {
 
     fun getShotNoVelocity(underStage: Boolean): ShotSetupVelocity {
         val vars = TargetingVariablesVelocity(underStage)
-        SmartDashboard.putNumber("robot speaker rel pos x", vars.x)
-        SmartDashboard.putNumber("robot speaker rel pos y", vars.y)
-        SmartDashboard.putNumber("robot distance to speaker", vars.r)
+        Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
 
         val h = FieldConstants.Speaker.centerSpeakerOpening.z - if (vars.underStage)
             TrunkConstants.UNDER_STAGE_SHOOTING_HEIGHT else TrunkConstants.SHOOTING_HEIGHT

@@ -4,8 +4,9 @@ package frc.robot.subsystems.cannon
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.robot.RobotContainer
 import frc.robot.constants.CannonConstants
+import frc.robot.util.Telemetry
 
 class CannonIOReal : CannonIO {
 

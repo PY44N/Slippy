@@ -39,7 +39,7 @@ class SwerveSystem() : SubsystemBase() {
     /* Path follower */
 //    public val runAuto: Command = driveTrain.getAutoPath("Tests");
 
-    public val logger: Telemetry = Telemetry(DriveConstants.MAX_SPEED);
+    public val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
 
 
     val autoTwistController: AutoTwistController = AutoTwistController()
@@ -65,7 +65,7 @@ class SwerveSystem() : SubsystemBase() {
     }
 
     fun getSwervePose(): Pose2d {
-        return driveTrain.state.Pose
+        return driveTrain.state.Pose ?: Pose2d()
     }
 
     fun zeroGyro() {
