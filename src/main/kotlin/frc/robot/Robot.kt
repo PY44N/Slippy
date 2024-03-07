@@ -27,6 +27,8 @@ class Robot : LoggedRobot() {
     override fun robotPeriodic() {
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
+        SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
+
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
 

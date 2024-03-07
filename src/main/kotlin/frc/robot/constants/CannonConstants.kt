@@ -2,7 +2,7 @@ package frc.robot.constants
 
 object CannonConstants {
 
-    val SHOOTER_MAX_RPM = 5000.0
+    val SHOOTER_MAX_RPM = 7000.0
 
     val OUTER_INTAKE_PERCENT: Double = .8
     val INNER_INTAKE_PERCENT: Double = .8
@@ -16,8 +16,8 @@ object CannonConstants {
     //percent of max rpm
 //    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = .8 * SHOOTER_MAX_RPM
 //    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = .8 * SHOOTER_MAX_RPM
-    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = 1600.0
-    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = 1600.0
+    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = 6000.0
+    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = 6000.0
 
     val RIGHT_SHOOTER_PREP_VELOCITY: Double = .3 * SHOOTER_MAX_RPM
     val LEFT_SHOOTER_PREP_VELOCITY: Double = .3 * SHOOTER_MAX_RPM

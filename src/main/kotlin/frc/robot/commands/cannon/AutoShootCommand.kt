@@ -17,10 +17,12 @@ class AutoShootCommand : Command() {
     override fun execute() {
         if (RobotContainer.stateMachine.shooterReady || hasShooterBeenReady) {
             RobotContainer.cannonSystem.feed()
-            SmartDashboard.putBoolean("shooter ready", true)
             hasShooterBeenReady = true
+            println("feeding")
         }
-        SmartDashboard.putBoolean("shooter ready", false)
+        SmartDashboard.putBoolean("shooter ready", RobotContainer.stateMachine.shooterReady || hasShooterBeenReady)
+
+//        SmartDashboard.putBoolean("shooter ready", false)
     }
 
     override fun isFinished(): Boolean {

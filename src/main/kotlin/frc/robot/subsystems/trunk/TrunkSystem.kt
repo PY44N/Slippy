@@ -67,10 +67,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     var isAnglePID = false
 
-    var rotationSetPoint = TrunkConstants.SAFE_TRAVEL_ANGLE
-    var positionSetPoint = TrunkConstants.STOW_POSITION
-
-
     val superstructureMechanism = Mechanism2d(
         TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2x + 1.0,
         TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2y + 1.0
@@ -194,9 +190,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
 //            goManual()
 //
-//        if(io.atTopLimit()) {
-//            io.setZeroPosition(top = true)
-//        }
+        if(io.atTopLimit()) {
+            io.setZeroPosition(top = true)
+        }
 
         Telemetry.putString("Angle Idle Mode", io.getAngleIdleMode().name, RobotContainer.telemetry.trunkTelemetry)
 
@@ -212,7 +208,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         Telemetry.putNumber("position val", getPosition(), RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("trunk state", RobotContainer.stateMachine.trunkState.name, RobotContainer.telemetry.trunkTelemetry)
-        Telemetry.putNumber("target angle", RobotContainer.stateMachine.targetTrunkPose.angle, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("target angle", RobotContainer.trunkSystem.rotationPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("prevTargetPosition name", prevTargetPose.name, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("is angle PID?", isAnglePID, RobotContainer.telemetry.trunkTelemetry)

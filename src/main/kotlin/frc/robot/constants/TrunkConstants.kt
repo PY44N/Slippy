@@ -39,7 +39,7 @@ object TrunkConstants {
     var SPEAKER_POSITION: Double = 0.381
 
     var AMP_POSITION: Double = 0.3281
-    var AMP_ANGLE: Double = 202.0
+    var AMP_ANGLE: Double = 190.0
 
     var INTAKE_POSITION: Double = 0.01
     var INTAKE_ANGLE: Double = 70.0

@@ -26,9 +26,11 @@ class TeleopSwerveDriveCommand : Command() {
 
 
     override fun execute() {
-        val twoJoysticks = SmartDashboard.getBoolean("Two joysticks?", false)
+//        val twoJoysticks = SmartDashboard.getBoolean("Two joysticks?", false)
+        val twoJoysticks = true
+
         val twistInput = if (twoJoysticks) {
-            -RobotContainer.leftJoystick.x
+                RobotContainer.leftJoystick.x
         } else {
             RobotContainer.rightJoystick.twist
         }

@@ -6,6 +6,7 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPosition
 
 class AutoAmp : Command() {
+
     override fun initialize() {
 //        RobotContainer.cannonSystem.ampSpit()
         RobotContainer.cannonSystem.killShooter()
@@ -14,17 +15,25 @@ class AutoAmp : Command() {
     }
 
     override fun execute() {
-        if (!RobotContainer.trunkSystem.isMoving) {
+//        if (RobotContainer.stateMachine.trunkReady) {
+//            RobotContainer.cannonSystem.ampSpit()
+//        }
+        if (RobotContainer.xboxController.start().asBoolean) {
             RobotContainer.cannonSystem.ampSpit()
+        }
+        else {
+            RobotContainer.cannonSystem.killIntake()
         }
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.stateMachine.noteState == NoteState.Empty
+//        return RobotContainer.stateMachine.noteState == NoteState.Empty
+        return false
     }
 
     override fun end(interrupted: Boolean) {
         RobotContainer.cannonSystem.killIntake()
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
         println("amp end")
     }
 }

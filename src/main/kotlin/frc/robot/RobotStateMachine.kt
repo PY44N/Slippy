@@ -30,7 +30,7 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
     Intaking(CannonConstants.INNER_INTAKE_PERCENT, -CannonConstants.OUTER_INTAKE_PERCENT),
     Feeding(CannonConstants.INNER_FEED_PERCENT, -CannonConstants.OUTER_FEED_PERCENT),
     Spitting(CannonConstants.INNER_SPIT_PERCENT, -CannonConstants.OUTER_SPIT_PERCENT),
-    AmpSpitting(-CannonConstants.INNER_SPIT_PERCENT, -CannonConstants.OUTER_SPIT_PERCENT),
+    AmpSpitting(CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT),
 }
 
 //this represents the DESIRED trunk statautoshooe
@@ -117,11 +117,15 @@ class RobotStateMachine {
     var prevRobotZone: GlobalZones = GlobalZones.Wing
 
     val robotAction: RobotAction
-        get() = RobotContainer.robotActionSendable.selected
-    val shootPosition: ShootPosition
-        get() = RobotContainer.shootPositionSendable.selected
-    val trunkPosition: TrunkPosition
-        get() = RobotContainer.trunkPositionSendable.selected
+        get() = if (RobotContainer.robotActionSendable.selected != null) {
+            RobotContainer.robotActionSendable.selected
+        } else {
+            RobotAction.Chill
+        }
+    val shootPosition: ShootPosition = ShootPosition.StageFront
+//        get() = RobotContainer.shootPositionSendable.selected
+//    val trunkPosition: TrunkPosition
+//        get() = RobotContainer.trunkPositionSendable.selected
     var driveState: DriveState = DriveState.Teleop
 
     var autoStateManagement: AutoStateManagement = AutoStateManagement.Disabled

@@ -5,21 +5,16 @@
     selected=""
 ><frc-toggle-button
         source-provider="NetworkTables"
-        style="transform: translate(235.2px, 28.8px); width: 100px; height: 82px;"
+        style="transform: translate(27.2px, 20.8px); width: 100px; height: 82px;"
         source-key="/SmartDashboard/arm motors free?"
         toggled=""
         label="Arm Motors Free?"
-    ></frc-toggle-button><frc-toggle-button
-        source-provider="NetworkTables"
-        source-key="/SmartDashboard/Two joysticks?"
-        style="transform: translate(92px, 37.6px);"
-        label="Dual Stick Drive?"
     ></frc-toggle-button><vaadin-text-field
         label="Trunk Target"
         has-label=""
         source-provider="NetworkTables"
         source-key="/SmartDashboard/targetPosition name"
-        style="transform: translate(396px, 24px); width: 192px; height: 66.6px;"
+        style="transform: translate(155.2px, 0px); width: 192px; height: 66.6px;"
         has-value=""
     ><input
             slot="input"
@@ -41,7 +36,7 @@
         label="Trunk State"
         has-label=""
         source-provider="NetworkTables"
-        style="width: 192px; height: 75.4px; transform: translate(628px, 22.4px);"
+        style="width: 192px; height: 65.8px; transform: translate(385.6px, 0px);"
         source-key="/SmartDashboard/trunk state"
         has-value=""
     ><input
@@ -63,7 +58,7 @@
     </vaadin-text-field><frc-field-wrapper
         source-key="/Pose"
         source-provider="NetworkTables"
-        style="transform: translate(206.4px, 199.2px);"
+        style="transform: translate(208px, 84px);"
         game="Crescendo"
         grid-size="1"
     >
@@ -103,7 +98,7 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(51.2px, 139.2px);"
+        style="transform: translate(736.8px, 20px);"
         source-key="/SmartDashboard/position val"
         min="NaN"
         max="NaN"
@@ -133,7 +128,7 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(42.4px, 263.2px);"
+        style="transform: translate(30.4px, 111.2px);"
         source-key="/SmartDashboard/Desired left speed"
         min="NaN"
         max="NaN"
@@ -163,7 +158,7 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(55.2px, 375.2px); width: 135.2px; height: 98.6px;"
+        style="transform: translate(13.6px, 192.8px); width: 135.2px; height: 98.6px;"
         source-key="/SmartDashboard/Current left Cannon Speed"
         min="NaN"
         max="NaN"
@@ -193,7 +188,7 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(83.2px, 497.6px);"
+        style="transform: translate(29.6px, 283.2px);"
         source-key="/SmartDashboard/Left PID setpoint"
         placeholder=""
         min="NaN"
@@ -220,11 +215,43 @@
         ></div>
     </vaadin-number-field><frc-toggle-button
         source-provider="NetworkTables"
-        style="transform: translate(512.8px, 148px);"
+        style="transform: translate(602.4px, 25.6px);"
         source-key="/SmartDashboard/Cannon Telemetry"
         toggled=""
         label="Cannon Telemetry?"
-    ></frc-toggle-button></dashboard-tab><dashboard-tab
+    ></frc-toggle-button><vaadin-text-field
+        label="Note State"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(737.6px, 272px);"
+        source-key="/SmartDashboard/note state"
+        has-value=""
+        placeholder=""
+    ><input
+            slot="input"
+            type="text"
+            id="vaadin-text-field-165"
+            aria-labelledby="label-vaadin-text-field-172"
+            aria-describedby=""
+        ><label
+            slot="label"
+            id="label-vaadin-text-field-172"
+            for="vaadin-text-field-165"
+        >Note State</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-text-field-129"
+            hidden=""
+        ></div>
+    </vaadin-text-field><frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="transform: translate(216px, 422.4px);"
+        source-key="/limelight-back"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+    ></frc-camera-wrapper></dashboard-tab><dashboard-tab
     slot="tab"
     tab-name="Autonomous"
     source-provider="NetworkTables"

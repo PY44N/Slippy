@@ -11,18 +11,20 @@ import frc.robot.constants.TrunkConstants
 
 
 class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
-    val autoShoot: AutoShootCommand = AutoShootCommand()
+    private val autoShoot: AutoShootCommand = AutoShootCommand()
 
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
 
-        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
-            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
-                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER_FROM_STAGE
-            } else {
-                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
-            }
-        }
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+
+//        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
+//            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
+//                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER_FROM_STAGE
+//            } else {
+//                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+//            }
+//        }
     }
 
     override fun execute() {
@@ -30,16 +32,21 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
 
         //Handle the cannon aiming component
         val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
-        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)
-        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
-        RobotContainer.trunkSystem.goToCustom()
+//        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)
+//        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
+//        RobotContainer.trunkSystem.goToCustom()
         //Handle the cannon aiming component
+        println("shooting angle " + shooterAngle)
         RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
 
         //Can we shoot?
-        if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled) {
+        if (RobotContainer.stateMachine.trunkReady) {
             autoShoot.schedule()
         }
+//        if (RobotContainer.leftJoystick.button(2).asBoolean) {
+//            autoShoot.schedule()
+//            println("scheduling auto shoot")
+//        }
     }
 
     override fun isFinished(): Boolean {
@@ -50,6 +57,6 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
         println("Shootyboi Done")
         RobotContainer.stateMachine.shooterState = ShooterState.Stopped
         RobotContainer.stateMachine.driveState = DriveState.Teleop
-//        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
     }
 }
