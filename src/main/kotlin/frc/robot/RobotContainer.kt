@@ -54,6 +54,7 @@ object RobotContainer {
 
     val robotActionSendable: SendableChooser<RobotAction> = SendableChooser<RobotAction>()
     val shootPositionSendable: SendableChooser<ShootPosition> = SendableChooser<ShootPosition>()
+    val trunkPositionSendable: SendableChooser<TrunkPosition> = SendableChooser<TrunkPosition>()
 
     val swerveSystem: SwerveSystem = SwerveSystem()
 
@@ -62,6 +63,14 @@ object RobotContainer {
 
         RobotAction.entries.forEach {
             robotActionSendable.addOption(it.name, it)
+        }
+
+        ShootPosition.entries.forEach {
+            shootPositionSendable.addOption(it.name, it)
+        }
+
+        TrunkPosition.entries.forEach {
+            trunkPositionSendable.addOption(it.name, it)
         }
     }
 

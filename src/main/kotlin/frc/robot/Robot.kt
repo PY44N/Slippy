@@ -25,15 +25,6 @@ class Robot : LoggedRobot() {
     }
 
     override fun robotPeriodic() {
-        if (RobotContainer.robotActionSendable.selected != lastRobotAction && RobotContainer.robotActionSendable.selected != null) {
-            RobotContainer.stateMachine.robotAction = RobotContainer.robotActionSendable.selected
-            lastRobotAction = RobotContainer.robotActionSendable.selected
-        }
-        if (RobotContainer.shootPositionSendable.selected != lastShootPosition && RobotContainer.shootPositionSendable.selected != null) {
-            RobotContainer.stateMachine.shootPosition = RobotContainer.shootPositionSendable.selected
-            lastShootPosition = RobotContainer.shootPositionSendable.selected
-        }
-
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
         CommandScheduler.getInstance().run()
