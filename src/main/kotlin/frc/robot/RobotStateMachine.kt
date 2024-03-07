@@ -116,10 +116,8 @@ class RobotStateMachine {
     var currentRobotZone: GlobalZones = GlobalZones.Wing
     var prevRobotZone: GlobalZones = GlobalZones.Wing
 
-    val robotAction: RobotAction
-        get() = RobotContainer.robotActionSendable.selected
-    val shootPosition: ShootPosition
-        get() = RobotContainer.shootPositionSendable.selected
+    var robotAction: RobotAction = RobotAction.Speaker
+    var shootPosition: ShootPosition = ShootPosition.AutoAim
     var driveState: DriveState = DriveState.Teleop
 
     var autoStateManagement: AutoStateManagement = AutoStateManagement.Disabled

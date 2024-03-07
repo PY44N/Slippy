@@ -30,6 +30,7 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
     private var exitBreakBeamTriggerTime: Double = -1.0; //
 
     init {
+        SmartDashboard.putBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
 
     }
 
@@ -76,25 +77,46 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 
     fun shooterReady(): Boolean {
         //Shooter up to speed
-        return MiscCalculations.appxEqual(
-            RobotContainer.stateMachine.shooterState.leftVel,
-            io.getLeftShooterVel(),
-            CannonConstants.SHOOTER_VELOCITY_DEADZONE
-        ) && MiscCalculations.appxEqual(
-            RobotContainer.stateMachine.shooterState.rightVel,
-            io.getRightShooterVel(),
-            CannonConstants.SHOOTER_VELOCITY_DEADZONE
-        )
+//        return MiscCalculations.appxEqual(
+//            desiredLeftVel,
+//            io.getLeftShooterVel(),
+//            CannonConstants.SHOOTER_VELOCITY_DEADZONE
+//        ) && MiscCalculations.appxEqual(
+//            desiredRightVel,
+//            io.getRightShooterVel(),
+//            CannonConstants.SHOOTER_VELOCITY_DEADZONE
+//        )
+        if (MiscCalculations.appxEqual(desiredLeftVel, io.getLeftShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)
+            && MiscCalculations.appxEqual(desiredRightVel, io.getRightShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)
+            && desiredLeftVel != 0.0 && desiredRightVel != 0.0) {
+            println("shooter ready")
+            return true
+        }
+        else if (MiscCalculations.appxEqual(desiredLeftVel, io.getLeftShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE) && !MiscCalculations.appxEqual(desiredRightVel, io.getRightShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)) {
+            println("left ready but not right")
+            return false
+        }
+        else if (desiredLeftVel == 0.0 || desiredRightVel == 0.0) {
+            println("desired vel is 0")
+            return false
+        }
+        println("shooter not ready")
+        return false
     }
 
     override fun periodic() {
         RobotContainer.telemetry.cannonTelemetry = SmartDashboard.getBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
-        SmartDashboard.putBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
 
-        Telemetry.putBoolean("Stow Beam Break", io.getLoadedBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
-        Telemetry.putNumber("Current left Cannon Speed", io.getLeftShooterVel(), RobotContainer.telemetry.cannonTelemetry)
-        Telemetry.putNumber("Desired left speed", leftShooterPID.setpoint, RobotContainer.telemetry.cannonTelemetry)
+//        Telemetry.putBoolean("Stow Beam Break", io.getLoadedBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putNumber("Current right Cannon Speed", io.getRightShooterVel(), RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putNumber("Desired right speed", desiredRightVel, RobotContainer.telemetry.cannonTelemetry)
+//        Telemetry.putNumber("Left PID setpoint", leftShooterPID.setpoint, RobotContainer.telemetry.cannonTelemetry)
 
+//        println("stow beam break " + io.getLoadedBeamBreak())
+//        println("note state " + RobotContainer.stateMachine.noteState)
+
+        Telemetry.putBoolean("Intake Beam Break", io.getEntryBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putBoolean("Stowed Beam Break", io.getLoadedBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
 
         /*--------------------
              Beam Breaks
@@ -113,9 +135,9 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
             RobotContainer.stateMachine.noteState = NoteState.Empty
         }
         //Note is intaking
-        else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak()) {
-            RobotContainer.stateMachine.noteState = NoteState.Intaking;
-        }
+//        else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak()) {
+//            RobotContainer.stateMachine.noteState = NoteState.Intaking;
+//        }
 
 
         //Note is shot delay handling
@@ -146,7 +168,7 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
             io.setInnerIntakePercent(desiredInnerPercent)
             io.setOuterIntakePercent(desiredOuterPercent)
 
-            println("set inner and outer percents")
+//            println("set inner and outer percents")
         }
 
 
@@ -154,11 +176,15 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
         val currentLeftVelo = io.getLeftShooterVel()
         val currentRightVelo = io.getRightShooterVel()
 
-        val leftFF = (desiredLeftVel) * .3
-        val rightFF = (desiredRightVel) * .3
+        val leftFF = (desiredLeftVel) * .8
+        val rightFF = (desiredRightVel) * .8
 
         val leftPIDOut = leftShooterPID.calculate(currentLeftVelo, desiredLeftVel)
         val rightPIDOut = rightShooterPID.calculate(currentRightVelo, desiredRightVel)
+
+//        println("currentLeftVelo " + io.getLeftShooterVel())
+//        println("left ff" + leftFF)
+//        println("left pid out" + leftPIDOut)
 
         val leftPercent = (leftFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
         val rightPercent = (rightFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
@@ -166,7 +192,11 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
 //        SmartDashboard.putNumber("left shooter pid", leftPIDOut)
 //        SmartDashboard.putNumber("left shooter percent", leftPercent)
 
+        Telemetry.putNumber("right percent", rightPercent, RobotContainer.telemetry.cannonTelemetry)
+
         io.setLeftShooter(leftPercent)
         io.setRightShooter(rightPercent)
+//        println("Cannon periodic end; percent: " + leftPercent)
+
     }
 }

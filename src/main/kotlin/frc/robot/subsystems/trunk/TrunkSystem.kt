@@ -2,6 +2,7 @@ package frc.robot.subsystems.trunk
 
 import MiscCalculations
 import com.revrobotics.CANSparkBase
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.ArmFeedforward
 import edu.wpi.first.math.controller.ElevatorFeedforward
 import edu.wpi.first.math.controller.PIDController
@@ -207,7 +208,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         Telemetry.putBoolean("is rotation safe?", isRotationSafe, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("has elevator moved?", hasElevatorMoved, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("Angle val", getRotation(), RobotContainer.telemetry.trunkTelemetry)
-        Telemetry.putNumber("Angle val raw", io.getRawRotation() * 360, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("Angle val no offset", frc.robot.util.Math.wrapAroundAngles((-io.getRawRotation() * 360.0)), RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("position val", getPosition(), RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("trunk state", RobotContainer.stateMachine.trunkState.name, RobotContainer.telemetry.trunkTelemetry)
@@ -313,7 +314,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             io.setElevatorSpeed(posFF + positionPIDOut)
 
             if (isAnglePID) {
-                val pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
+                val pidVal: Double = MathUtil.clamp(rotationPID.calculate(Math.toRadians(getRotation())), -5.0, 5.0)
                 Telemetry.putNumber("rotation pid out", pidVal, RobotContainer.telemetry.trunkTelemetry)
                 Telemetry.putNumber(
                     "rotation PID + FF", pidVal
@@ -347,6 +348,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         if (topLimit) {
             io.setElevatorSpeed(0.0)
             io.setZeroPosition(true)
+            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+            prevTargetPose = TrunkPosition.SPEAKER
             goToCustom()
         }
     }

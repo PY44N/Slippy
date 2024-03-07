@@ -19,19 +19,18 @@
         has-label=""
         source-provider="NetworkTables"
         source-key="/SmartDashboard/targetPosition name"
-        has-value=""
         style="transform: translate(396px, 24px); width: 192px; height: 66.6px;"
-        placeholder=""
+        has-value=""
     ><input
             slot="input"
             type="text"
-            id="vaadin-text-field-111"
+            id="vaadin-text-field-2"
             aria-labelledby="label-vaadin-text-field-111"
             aria-describedby=""
         ><label
             slot="label"
             id="label-vaadin-text-field-111"
-            for="vaadin-text-field-111"
+            for="vaadin-text-field-2"
         >Trunk Target</label>
         <div
             slot="error-message"
@@ -45,17 +44,16 @@
         style="width: 192px; height: 75.4px; transform: translate(628px, 22.4px);"
         source-key="/SmartDashboard/trunk state"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             type="text"
-            id="vaadin-text-field-154"
+            id="vaadin-text-field-3"
             aria-labelledby="label-vaadin-text-field-154"
             aria-describedby=""
         ><label
             slot="label"
             id="label-vaadin-text-field-154"
-            for="vaadin-text-field-154"
+            for="vaadin-text-field-3"
         >Trunk State</label>
         <div
             slot="error-message"
@@ -77,23 +75,22 @@
         source-provider="NetworkTables"
         style="transform: translate(813.6px, 162.387px); width: 128px; height: 64.2px;"
         source-key="/SmartDashboard/Angle val"
-        placeholder=""
         min="NaN"
         max="NaN"
     ><input
             slot="input"
             value="0"
             type="number"
-            id="vaadin-number-field-250"
+            id="vaadin-number-field-4"
             aria-labelledby="label-vaadin-number-field-252"
             aria-describedby=""
-            min="undefined"
-            max="undefined"
+            min="NaN"
+            max="NaN"
             step="any"
         ><label
             slot="label"
             id="label-vaadin-number-field-252"
-            for="vaadin-number-field-250"
+            for="vaadin-number-field-4"
         >Arm Angle</label>
         <div
             slot="error-message"
@@ -108,23 +105,22 @@
         source-provider="NetworkTables"
         style="transform: translate(51.2px, 139.2px);"
         source-key="/SmartDashboard/position val"
-        placeholder=""
         min="NaN"
         max="NaN"
     ><input
             slot="input"
             value="0"
             type="number"
-            id="vaadin-number-field-388"
+            id="vaadin-number-field-5"
             aria-labelledby="label-vaadin-number-field-393"
             aria-describedby=""
-            min="undefined"
-            max="undefined"
+            min="NaN"
+            max="NaN"
             step="any"
         ><label
             slot="label"
             id="label-vaadin-number-field-393"
-            for="vaadin-number-field-388"
+            for="vaadin-number-field-5"
         >Arm Position</label>
         <div
             slot="error-message"
@@ -132,30 +128,29 @@
             hidden=""
         ></div>
     </vaadin-number-field><vaadin-number-field
-        label="Left Shooter Setpoint"
+        label="Desired Left Shooter"
         value="0"
         has-value=""
         has-label=""
         source-provider="NetworkTables"
         style="transform: translate(42.4px, 263.2px);"
         source-key="/SmartDashboard/Desired left speed"
-        placeholder=""
         min="NaN"
         max="NaN"
     ><input
             slot="input"
             value="0"
             type="number"
-            id="vaadin-number-field-444"
+            id="vaadin-number-field-6"
             aria-labelledby="label-vaadin-number-field-453"
             aria-describedby=""
-            min="undefined"
-            max="undefined"
+            min="NaN"
+            max="NaN"
             step="any"
         ><label
             slot="label"
             id="label-vaadin-number-field-453"
-            for="vaadin-number-field-444"
+            for="vaadin-number-field-6"
         >Left Shooter Setpoint</label>
         <div
             slot="error-message"
@@ -168,8 +163,38 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(76px, 415.2px);"
+        style="transform: translate(55.2px, 375.2px); width: 135.2px; height: 98.6px;"
         source-key="/SmartDashboard/Current left Cannon Speed"
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-7"
+            aria-labelledby="label-vaadin-number-field-487"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-487"
+            for="vaadin-number-field-7"
+        >Current Left Shooter</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-371"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="Cannon Left Setpoint"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(83.2px, 497.6px);"
+        source-key="/SmartDashboard/Left PID setpoint"
         placeholder=""
         min="NaN"
         max="NaN"
@@ -177,23 +202,29 @@
             slot="input"
             value="0"
             type="number"
-            id="vaadin-number-field-478"
-            aria-labelledby="label-vaadin-number-field-487"
+            id="vaadin-number-field-61"
+            aria-labelledby="label-vaadin-number-field-61"
             aria-describedby=""
             min="undefined"
             max="undefined"
             step="any"
         ><label
             slot="label"
-            id="label-vaadin-number-field-487"
-            for="vaadin-number-field-478"
-        >Current Left Shooter</label>
+            id="label-vaadin-number-field-61"
+            for="vaadin-number-field-61"
+        >Cannon Left Setpoint</label>
         <div
             slot="error-message"
-            id="error-message-vaadin-number-field-371"
+            id="error-message-vaadin-number-field-44"
             hidden=""
         ></div>
-    </vaadin-number-field></dashboard-tab><dashboard-tab
+    </vaadin-number-field><frc-toggle-button
+        source-provider="NetworkTables"
+        style="transform: translate(512.8px, 148px);"
+        source-key="/SmartDashboard/Cannon Telemetry"
+        toggled=""
+        label="Cannon Telemetry?"
+    ></frc-toggle-button></dashboard-tab><dashboard-tab
     slot="tab"
     tab-name="Autonomous"
     source-provider="NetworkTables"

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.commands.automatic.AutoClimbCommand
 import frc.robot.util.Telemetry
 import frc.robot.constants.LimelightConstants
 import org.littletonrobotics.junction.LoggedRobot
@@ -14,6 +15,9 @@ class Robot : LoggedRobot() {
     private lateinit var m_autonomousCommand: Command
 
     private var lastRobotAction: RobotAction = RobotContainer.stateMachine.robotAction
+    private var lastShootPosition: ShootPosition = RobotContainer.stateMachine.shootPosition
+
+    private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
     override fun robotInit() {
         SmartDashboard.putBoolean("arm motors free?", false)
 
@@ -24,6 +28,10 @@ class Robot : LoggedRobot() {
         if (RobotContainer.robotActionSendable.selected != lastRobotAction && RobotContainer.robotActionSendable.selected != null) {
             RobotContainer.stateMachine.robotAction = RobotContainer.robotActionSendable.selected
             lastRobotAction = RobotContainer.robotActionSendable.selected
+        }
+        if (RobotContainer.shootPositionSendable.selected != lastShootPosition && RobotContainer.shootPositionSendable.selected != null) {
+            RobotContainer.stateMachine.shootPosition = RobotContainer.shootPositionSendable.selected
+            lastShootPosition = RobotContainer.shootPositionSendable.selected
         }
 
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
@@ -78,18 +86,33 @@ class Robot : LoggedRobot() {
     override fun autonomousExit() {}
 
     override fun teleopInit() {
+        RobotContainer.cannonSystem.killShooter()
+        RobotContainer.cannonSystem.killIntake()
+
+        RobotContainer
+
         RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
         RobotContainer.trunkSystem.calibrate()
 
 //        RobotContainer.trunkSystem.STOP()
 
+
+        SmartDashboard.putBoolean("Schedule Climb Command?", false)
+        SmartDashboard.putBoolean("Pulldown Climb?", false)
     }
 
     override fun teleopPeriodic() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
 
 
+        val scheduleClimbBool =SmartDashboard.getBoolean("Schedule Climb Command?", false)
+        if (scheduleClimbBool && autoClimbCommand.isScheduled() == false) {
+            autoClimbCommand.schedule()
+        }
+        else if (autoClimbCommand.isScheduled == true && scheduleClimbBool == false) {
+            autoClimbCommand.cancel()
+        }
 
 
         //        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)

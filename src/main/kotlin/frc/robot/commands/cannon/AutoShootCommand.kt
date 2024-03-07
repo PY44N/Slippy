@@ -4,16 +4,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
+import frc.robot.TrunkPosition
 
 class AutoShootCommand : Command() {
+
+    var hasShooterBeenReady: Boolean = false
     override fun initialize() {
         RobotContainer.cannonSystem.shoot()
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
     }
 
     override fun execute() {
-        if (RobotContainer.stateMachine.shooterReady) {
+        if (RobotContainer.stateMachine.shooterReady || hasShooterBeenReady) {
             RobotContainer.cannonSystem.feed()
             SmartDashboard.putBoolean("shooter ready", true)
+            hasShooterBeenReady = true
         }
         SmartDashboard.putBoolean("shooter ready", false)
     }

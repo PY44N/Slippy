@@ -26,13 +26,13 @@ class CannonIOReal : CannonIO {
     val innerIntakeMotor: CANSparkMax =
         CANSparkMax(CannonConstants.INNER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
 
-    val entryBeamBreak: DigitalInput = DigitalInput(4)
-    val loadedBeamBreak: DigitalInput = DigitalInput(3)
+    val entryBeamBreak: DigitalInput = DigitalInput(3)
+    val loadedBeamBreak: DigitalInput = DigitalInput(2)
 
 
     init {
-//       leftShooterEncoder.setVelocityConversionFactor(1 / (8192.0 * 2))
-//        rightShooterEncoder.setVelocityConversionFactor(1 / (8192.0 * 2))
+//       leftShooterEncoder.setVelocityConversionFactor(1 / (8192.0 * (27/40)))
+//        rightShooterEncoder.setVelocityConversionFactor(1 / (8192.0 * (27/40)))
 
 
 //        leftShooterPID.setP(CannonConstants.leftShooterKP)
@@ -52,16 +52,16 @@ class CannonIOReal : CannonIO {
 //        leftShooterMotor.restoreFactoryDefaults()
 //        rightShooterMotor.restoreFactoryDefaults()
         rightShooterMotor.inverted = true
-        leftShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
-        rightShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
+//        leftShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
+//        rightShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
     }
 
     override fun getLeftShooterVel(): Double {
-        return leftShooterEncoder.velocity
+        return leftShooterEncoder.velocity * (40.0/27.0)
     }
 
     override fun getRightShooterVel(): Double {
-        return rightShooterEncoder.velocity
+        return rightShooterEncoder.velocity * (40.0/27.0)
     }
 
     override fun setLeftShooter(percent: Double) {

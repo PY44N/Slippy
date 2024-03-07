@@ -12,6 +12,7 @@ import frc.robot.commands.automatic.AutoAimAndShootFromPosition
 import frc.robot.commands.cannon.AutoAmp
 import frc.robot.commands.cannon.AutoIntake
 import frc.robot.commands.cannon.AutoShootCommand
+import frc.robot.commands.cannon.AutoSpit
 import frc.robot.constants.TunerConstants
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
@@ -99,25 +100,26 @@ object RobotContainer {
             }
         }))
 
-        xboxController.a().onTrue(Commands.runOnce({
+        xboxController.x().onTrue(Commands.runOnce({
             stateMachine.targetTrunkPose = TrunkPosition.STOW
         }))
         xboxController.b().toggleOnTrue(AutoIntake())
-        xboxController.x().onTrue(Commands.runOnce({
-            trunkSystem.calibrate()
-        }))
+        xboxController.a().toggleOnTrue(AutoAmp())
+//        xboxController.x().onTrue(Commands.runOnce({
+//            trunkSystem.calibrate()
+//        }))
         xboxController.back().onTrue(Commands.runOnce({
             trunkSystem.STOP()
         }))
-        xboxController.start().onTrue(Commands.runOnce({
-            trunkSystem.goManual()
-        }))
-        xboxController.y().onTrue(Commands.runOnce({
+//        xboxController.start().onTrue(Commands.runOnce({
+//            trunkSystem.goManual()
+//        }))
+        xboxController.leftTrigger().onTrue(Commands.runOnce({
             trunkSystem.goToCustom()
         }))
-        xboxController.rightBumper().toggleOnTrue(AutoAimAndShoot())
-        xboxController.leftBumper().toggleOnTrue(AutoAmp())
-        xboxController.back().toggleOnTrue(AutoShootCommand())
+        xboxController.y().toggleOnTrue(AutoAimAndShoot())
+        xboxController.start().toggleOnTrue(AutoShootCommand())
+        xboxController.rightTrigger().toggleOnTrue(AutoSpit())
     }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
