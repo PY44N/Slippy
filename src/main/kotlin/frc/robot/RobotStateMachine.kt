@@ -120,6 +120,8 @@ class RobotStateMachine {
         get() = RobotContainer.robotActionSendable.selected
     val shootPosition: ShootPosition
         get() = RobotContainer.shootPositionSendable.selected
+    val trunkPosition: TrunkPosition
+        get() = RobotContainer.trunkPositionSendable.selected
     var driveState: DriveState = DriveState.Teleop
 
     var autoStateManagement: AutoStateManagement = AutoStateManagement.Disabled
