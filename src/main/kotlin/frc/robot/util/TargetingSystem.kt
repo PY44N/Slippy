@@ -1,6 +1,7 @@
 package frc.robot.util
 
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.Robot
 import frc.robot.RobotContainer
@@ -48,7 +49,8 @@ class TargetingSystem {
 
     private val rad2deg = 180.0 / PI
 
-    private val shootingVelocity = TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY / 60 * PI * 3
+    private val shootingVelocity = TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY * TargetingConstants.rpm2ups(
+        Units.inchesToMeters(1.5))
 
 //    init {
 //        if (CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY != CannonConstants.RIGHT_SHOOTER_SHOOT_VELOCITY) {
@@ -102,7 +104,7 @@ class TargetingSystem {
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
-        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r) * rad2deg
+        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r - TargetingConstants.stupidConstant/shootingVelocity) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
@@ -116,8 +118,10 @@ class TargetingSystem {
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
-        val targetShooterAngle = atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r) * rad2deg
+        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r - TargetingConstants.stupidConstant/shootingVelocity) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
+//    fun test() {
+//    }
 }

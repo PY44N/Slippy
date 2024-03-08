@@ -6,10 +6,6 @@ import kotlin.math.sin
 
 object TrunkConstants {
     // someone rename these
-    const val MAX_PIVOT_HEIGHT_M = 0.8
-    const val MIN_PIVOT_HEIGHT_M = 0.0
-    const val THING_LENGTH_M = 0.6133
-    const val POSITION_CONVERSION_FACTOR = -0.03980722784
     const val ELEVATOR2M = -0.03980722784
     const val M2ELEVATOR = 1.0 / ELEVATOR2M
 //    0.769531 - 10.342285 = -9.572754
