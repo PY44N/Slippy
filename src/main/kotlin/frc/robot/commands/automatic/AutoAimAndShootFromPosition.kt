@@ -17,6 +17,7 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
 
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+        RobotContainer.trunkSystem.goToAim()
 
 //        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
 //            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
@@ -37,7 +38,12 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
 //        RobotContainer.trunkSystem.goToCustom()
         //Handle the cannon aiming component
         println("shooting angle " + shooterAngle)
-        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
+//        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
+                RobotContainer.trunkSystem.setShootingAngle(51.2)
+//        RobotContainer.trunkSystem.setShootingAngle(51.2)
+//
+
+
 
         //Can we shoot?
         if (RobotContainer.stateMachine.trunkReady) {
@@ -58,5 +64,6 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
         RobotContainer.stateMachine.shooterState = ShooterState.Stopped
         RobotContainer.stateMachine.driveState = DriveState.Teleop
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+        RobotContainer.trunkSystem.goToCustom()
     }
 }

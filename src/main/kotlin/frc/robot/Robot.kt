@@ -22,6 +22,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("arm motors free?", false)
 
         RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
+
+//        SmartDashboard.putNumber("shooter angle", 0.0)
     }
 
     override fun robotPeriodic() {
@@ -51,10 +53,13 @@ class Robot : LoggedRobot() {
         }
 
         if (!DriverStation.isDisabled()) {
+//            RobotContainer.visionSystem.updateOdometry(1, true)
             RobotContainer.visionSystem.updateOdometry(2, true)
+
         }
         else {
-            RobotContainer.visionSystem.updateOdometry(1, false)
+//            RobotContainer.visionSystem.updateOdometry(1, false)
+            RobotContainer.visionSystem.updateOdometryFromDisabled()
         }
         
         Telemetry.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady(), RobotContainer.telemetry.cannonTelemetry)

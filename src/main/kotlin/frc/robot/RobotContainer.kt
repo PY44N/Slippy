@@ -1,5 +1,8 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -57,6 +60,8 @@ object RobotContainer {
     val trunkPositionSendable: SendableChooser<TrunkPosition> = SendableChooser<TrunkPosition>()
 
     val swerveSystem: SwerveSystem = SwerveSystem()
+
+    val intakeLimelight = "limelight-back"
 
     init {
         configureBindings()
@@ -127,8 +132,11 @@ object RobotContainer {
         xboxController.leftTrigger().onTrue(Commands.runOnce({
             trunkSystem.goToCustom()
         }))
-        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(ShootPosition.StageFront.position))
-        xboxController.rightTrigger().toggleOnTrue(AutoSpit())
+//        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(1.35, 5.5), Rotation2d())))
+                xboxController.y().toggleOnTrue(AutoAimAndShoot())
+
+//        xboxController.rightTrigger().toggleOnTrue(AutoSpit())
+        xboxController.rightBumper().toggleOnTrue(AutoSpit())
     }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()

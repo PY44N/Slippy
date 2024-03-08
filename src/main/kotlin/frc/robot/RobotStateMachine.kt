@@ -27,10 +27,10 @@ enum class NoteState {
 //this represents the DESIRED intake state (functionally current since intake immediately spins up)
 enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
     Stopped(0.0, 0.0),
-    Intaking(CannonConstants.INNER_INTAKE_PERCENT, -CannonConstants.OUTER_INTAKE_PERCENT),
-    Feeding(CannonConstants.INNER_FEED_PERCENT, -CannonConstants.OUTER_FEED_PERCENT),
-    Spitting(CannonConstants.INNER_SPIT_PERCENT, -CannonConstants.OUTER_SPIT_PERCENT),
-    AmpSpitting(CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT),
+    Intaking(CannonConstants.INNER_INTAKE_PERCENT, CannonConstants.OUTER_INTAKE_PERCENT),
+    Feeding(CannonConstants.INNER_FEED_PERCENT, CannonConstants.OUTER_FEED_PERCENT),
+    Spitting(CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT),
+    AmpSpitting(CannonConstants.INNER_AMP_PERCENT, CannonConstants.OUTER_AMP_PERCENT),
 }
 
 //this represents the DESIRED trunk statautoshooe
@@ -49,6 +49,7 @@ enum class TrunkState() {
     CALIBRATING,
     MANUAL,
     CUSTOM,
+    AIMING,
     SETPOINTSETUP,
     TRAVELING,
 }

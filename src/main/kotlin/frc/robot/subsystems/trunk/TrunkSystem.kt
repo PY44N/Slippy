@@ -42,7 +42,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     val isAtAngle: Boolean
         get() =
-            MiscCalculations.appxEqual(rotationPID.setpoint, getRotation(), TrunkConstants.ANGLE_DEADZONE)
+            MiscCalculations.appxEqual(Math.toDegrees(rotationPID.setpoint), getRotation(), TrunkConstants.ANGLE_DEADZONE)
 
 
     var currentState = TrunkState.CALIBRATING
@@ -164,7 +164,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             return
         }
         //If we aren't in IK mode, don't do this
-        if (RobotContainer.stateMachine.trunkState != TrunkState.CUSTOM) {
+        if (RobotContainer.stateMachine.trunkState != TrunkState.AIMING) {
             return
         }
         setDesiredRotation(angle)
@@ -181,6 +181,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         io.setElevatorSpeed(0.0)
         io.setRotationSpeed(0.0)
         io.setPositionLimits(true)
+    }
+
+    fun goToAim() {
+        currentState = TrunkState.AIMING
     }
 
     override fun periodic() {
@@ -200,6 +204,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //            io.setZeroPosition(top = false)
 //        }
 
+        Telemetry.putBoolean("Is at angle?", isAtAngle, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("is moving", isMoving, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("is rotation safe?", isRotationSafe, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("has elevator moved?", hasElevatorMoved, RobotContainer.telemetry.trunkTelemetry)
@@ -208,7 +213,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         Telemetry.putNumber("position val", getPosition(), RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("target position", RobotContainer.stateMachine.targetTrunkPose.position, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("trunk state", RobotContainer.stateMachine.trunkState.name, RobotContainer.telemetry.trunkTelemetry)
-        Telemetry.putNumber("target angle", RobotContainer.trunkSystem.rotationPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("target angle", Math.toDegrees(RobotContainer.trunkSystem.rotationPID.setpoint), RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("prevTargetPosition name", prevTargetPose.name, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putString("targetPosition name", RobotContainer.stateMachine.targetTrunkPose.name, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("is angle PID?", isAnglePID, RobotContainer.telemetry.trunkTelemetry)
@@ -228,7 +233,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 //Safe rotation but still need to start
                 else if (isRotationSafe && !hasElevatorMoved) {
                     isMoving = true
-                    println("set the desired position to target position")
+//                    println("set the desired position to target position")
                     setDesiredRotation(TrunkConstants.SAFE_TRAVEL_ANGLE)
                     setDesiredPosition(RobotContainer.stateMachine.targetTrunkPose.position)
                 }
@@ -286,14 +291,20 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             } else {
                 isAnglePID = true
             }
-        } else if (currentState == TrunkState.CALIBRATING) {
+        }
+        else if (currentState == TrunkState.AIMING) {
+            isMoving = false
+            isAnglePID = true
+            isPIDing = true
+        }
+        else if (currentState == TrunkState.CALIBRATING) {
             calibratePeriodic()
         }
 
 
         //Do the trunk PIDs
         Telemetry.putNumber("position pid setpoint", positionPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
-        Telemetry.putNumber("angle pid setpoint", rotationPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
+//        Telemetry.putNumber("angle pid setpoint", rotationPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
 
         val positionPIDOut = positionPID.calculate(getPosition())
 

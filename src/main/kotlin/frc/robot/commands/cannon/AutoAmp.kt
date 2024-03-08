@@ -11,6 +11,7 @@ class AutoAmp : Command() {
 //        RobotContainer.cannonSystem.ampSpit()
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.AMP
+        RobotContainer.trunkSystem.goToCustom()
 
     }
 
@@ -34,6 +35,6 @@ class AutoAmp : Command() {
     override fun end(interrupted: Boolean) {
         RobotContainer.cannonSystem.killIntake()
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
-        println("amp end")
+//        println("amp end")
     }
 }
