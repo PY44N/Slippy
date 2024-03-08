@@ -33,6 +33,9 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
+        SmartDashboard.putNumber("shooter angle", 58.5)
+
+
         RobotContainer
 
 
@@ -163,6 +166,7 @@ class Robot : LoggedRobot() {
         //        readShots.forEach {
         //            println(it.toCSV())
         //        }
+        RobotContainer.targetingSystem.test()
     }
 
     override fun testExit() {}

@@ -16,6 +16,7 @@ import frc.robot.constants.TrunkConstants
 import frc.robot.util.Telemetry
 import frc.robot.util.visualization.Mechanism2d
 import frc.robot.util.visualization.MechanismLigament2d
+import kotlin.math.abs
 
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
@@ -284,7 +285,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                     )
             ) {
                 isRotationSafe = true
-                println("safe rotation")
+//                println("safe rotation")
             }
 
             //Handling for the garbage intake logic bc the build team poorly designed the intake and didn't tell us
@@ -324,7 +325,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             io.setElevatorSpeed(posFF + positionPIDOut)
 
             if (isAnglePID) {
-                val pidVal: Double = MathUtil.clamp(rotationPID.calculate(Math.toRadians(getRotation())), -5.0, 5.0)
+//                val pidVal: Double = MathUtil.clamp(rotationPID.calculate(Math.toRadians(getRotation())), -.5, 1.0)
+                var pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
+
                 Telemetry.putNumber("rotation pid out", pidVal, RobotContainer.telemetry.trunkTelemetry)
 //                Telemetry.putNumber(
 //                        "rotation PID + FF", pidVal
@@ -337,9 +340,25 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //                        + rotationFF.calculate(rotationPID.setpoint - (Math.PI / 2.0), 0.0), RobotContainer.telemetry.trunkTelemetry
 //                )
 
+
+                if (Math.toDegrees(rotationPID.setpoint) < getRotation()) {
+                    pidVal *= .5
+                }
+
+                var rotationMiniFF = 0.0
+
+                //The * (.1) is to convert to volts from the angle distance and the .6 is just a fudge
+                if (abs(pidVal) <= .2) {
+                    rotationMiniFF = MathUtil.clamp((Math.toRadians(rotationPID.setpoint) - getRotation() * (.1) * (.6)), -.8, 0.8)
+                }
+
+//                println("rotation mini FF: " + rotationMiniFF)
+
+                val twistVolts =  MathUtil.clamp((pidVal
+                        + rotationFF.calculate(rotationPID.setpoint - (Math.PI / 2.0), 0.0)), -.5, 2.0)
+
                 Telemetry.putNumber(
-                    "rotation PID + FF", pidVal
-                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0), RobotContainer.telemetry.trunkTelemetry
+                    "rotation PID + FF", twistVolts, RobotContainer.telemetry.trunkTelemetry
                 )
 
 //                io.setRotationVoltage(
@@ -348,9 +367,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //                )
 
                                 io.setRotationVoltage(
-                        (pidVal
-                                + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
-                )
+                       twistVolts)
+
             }
         }
         io.periodic()

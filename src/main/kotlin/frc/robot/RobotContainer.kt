@@ -122,9 +122,9 @@ object RobotContainer {
         }))
         xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.a().toggleOnTrue(AutoAmp())
-        xboxController.leftBumper().onTrue(Commands.runOnce({
-            trunkSystem.calibrate()
-        }))
+//        xboxController.leftBumper().onTrue(Commands.runOnce({
+//            trunkSystem.calibrate()
+//        }))
 //        xboxController.a().toggleOnTrue(ArmPIDCalibrationAngleCommand())
         xboxController.back().onTrue(Commands.runOnce({
             trunkSystem.STOP()
@@ -135,7 +135,7 @@ object RobotContainer {
         xboxController.leftTrigger().onTrue(Commands.runOnce({
             trunkSystem.goToCustom()
         }))
-        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(1.9, 5.54), Rotation2d())))
+        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(2.89, 5.54), Rotation2d())))
 //                xboxController.y().toggleOnTrue(AutoAimAndShoot())
 
 //        xboxController.rightTrigger().toggleOnTrue(AutoSpit())

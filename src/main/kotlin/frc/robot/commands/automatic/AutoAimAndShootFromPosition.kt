@@ -32,12 +32,21 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocityFromPosition(position)
 
         //Handle the cannon aiming component
-        val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
+//        val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
 //        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)
-//        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
+//        RobotContainer.trunkSystem.setShootingAngle(90 - shooterAngle)
 //        RobotContainer.trunkSystem.goToCustom()
         //Handle the cannon aiming component
-        println("shooting angle " + shooterAngle)
+        val shooterAngle = 58.0
+
+
+        //70 = angle from back bumper on the wing line (5.37m, 6.37)
+        //angle = 58 from the preload line (2.90m, 5.55)
+        // angle = X from amp (1.78, 7.32)
+
+
+
+//        println("shooting angle " + shooterAngle)
         RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
 //                RobotContainer.trunkSystem.setShootingAngle(51.2)
 //        RobotContainer.trunkSystem.setShootingAngle(51.2)
@@ -56,7 +65,7 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return (autoShoot.isFinished) || RobotContainer.stateMachine.noteState == NoteState.Empty
+        return (autoShoot.isFinished)
     }
 
     override fun end(interrupted: Boolean) {

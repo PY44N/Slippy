@@ -33,7 +33,7 @@ object CannonConstants {
     val SHOOTER_VELOCITY_DEADZONE: Double = 150.0
 
     //measure in ms
-    val NOTE_EXIT_BEAMBREAK_DELAY: Double = 0.5
+    val NOTE_EXIT_BEAMBREAK_DELAY: Double = 1.0
 
 
     val LEFT_SHOOTER_MOTOR_ID = 40

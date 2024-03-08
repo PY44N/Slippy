@@ -9,17 +9,23 @@ import frc.robot.TrunkPosition
 
 class AutoShootCommand : Command() {
 
-
+    var shooterReadyTime = -1.0
     override fun initialize() {
         RobotContainer.cannonSystem.shoot()
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+        shooterReadyTime = -1.0
     }
 
     override fun execute() {
-        if (RobotContainer.stateMachine.shooterReady) {
-            RobotContainer.cannonSystem.feed()
+        if (RobotContainer.stateMachine.shooterReady && shooterReadyTime < 0.0) {
+            shooterReadyTime = Timer.getFPGATimestamp()
 //            println("feeding")
         }
+
+        if (Timer.getFPGATimestamp() - shooterReadyTime > .5 && shooterReadyTime >= 0.0) {
+            RobotContainer.cannonSystem.feed()
+        }
+
         SmartDashboard.putBoolean("shooter ready", RobotContainer.stateMachine.shooterReady )
 
 

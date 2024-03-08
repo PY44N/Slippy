@@ -1,5 +1,6 @@
 package frc.robot.constants
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -28,14 +29,14 @@ object TrunkConstants {
 
     var SAFE_TRAVEL_ANGLE: Double = 63.0
 
-    var MAX_ANGLE: Double = 195.0
+    var MAX_ANGLE: Double = 190.0
     var MAX_SHOOT_ANGLE = 90.0
     var MIN_SHOOT_ANGLE = 50.0
 
     var SPEAKER_POSITION: Double = 0.381
 
     var AMP_POSITION: Double = 0.3281
-    var AMP_ANGLE: Double = 190.0
+    var AMP_ANGLE: Double = 185.0
 //    var AMP_ANGLE: Double = 180.0
 
 
@@ -74,6 +75,7 @@ object TrunkConstants {
 //        var rotationKI = 0.001
     var rotationKI = 0.0
     var rotationKD = .125
+//    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
     var rotationMaxAcceleration = 40.0
@@ -82,7 +84,7 @@ object TrunkConstants {
     var rotationMaxVelo = 30.0
     var rotationMaxError = 5.0
 
-    val ANGLE_DEADZONE = 4.0
+    val ANGLE_DEADZONE = 3.5
 
     val SAFE_TO_DROP_INTAKE_POSITION = 0.23
 
