@@ -48,7 +48,7 @@ class AutoAimAndShoot : Command() {
 //
 
         if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled) {
-                autoShoot.schedule()
+            autoShoot.schedule()
         }
     }
 
@@ -59,8 +59,8 @@ class AutoAimAndShoot : Command() {
     override fun end(interrupted: Boolean) {
         println("Shootyboi Done")
         RobotContainer.stateMachine.shooterState = ShooterState.Stopped
-        RobotContainer.stateMachine.driveState = DriveState.Teleop
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+//        RobotContainer.stateMachine.driveState = DriveState.Teleop
+//        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
         RobotContainer.trunkSystem.goToCustom()
 
     }

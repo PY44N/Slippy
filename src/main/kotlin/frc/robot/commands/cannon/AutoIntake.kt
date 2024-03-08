@@ -27,6 +27,7 @@ class AutoIntake : Command() {
 //        }
 
         if (RobotContainer.stateMachine.noteState == NoteState.Stored && !hasIntake) {
+            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
             RobotContainer.cannonSystem.killIntake()
             RobotContainer.cannonSystem.spit()
             hasIntake = true

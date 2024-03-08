@@ -24,18 +24,18 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //    private val rotationLimits = false
 
     private val positionPID: PIDController =
-        PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
+            PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
     private val positionFF: ElevatorFeedforward = ElevatorFeedforward(0.0001, 0.27, 3.07, 0.09)
 
     private var rotationOffset = TrunkConstants.rotationOffset
     private val rotationFF = ArmFeedforward(
-        TrunkConstants.rotationFFkS,
-        TrunkConstants.rotationFFkG,
-        TrunkConstants.rotationFFkV,
-        TrunkConstants.rotationFFkA
+            TrunkConstants.rotationFFkS,
+            TrunkConstants.rotationFFkG,
+            TrunkConstants.rotationFFkV,
+            TrunkConstants.rotationFFkA
     )
     private val rotationPID =
-        PIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD)
+            PIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD)
 
 
     private var isPIDing = true
@@ -68,33 +68,33 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     var isAnglePID = false
 
     val superstructureMechanism = Mechanism2d(
-        TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2x + 1.0,
-        TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2y + 1.0
+            TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2x + 1.0,
+            TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.d2y + 1.0
     )
     val elevatorMechanismRoot = superstructureMechanism.getRoot("Elevator Root", 0.25, 0.25)
     val trunkMechanismRoot = superstructureMechanism.getRoot(
-        "Trunk Root",
-        currentPosition * TrunkConstants.d2x + .25,
-        currentPosition * TrunkConstants.d2y + .25
+            "Trunk Root",
+            currentPosition * TrunkConstants.d2x + .25,
+            currentPosition * TrunkConstants.d2y + .25
     )
     val trunkMechanism =
-        trunkMechanismRoot.append(MechanismLigament2d("Trunk", -.25, currentRotation, color = Color8Bit(0, 0, 255)))
+            trunkMechanismRoot.append(MechanismLigament2d("Trunk", -.25, currentRotation, color = Color8Bit(0, 0, 255)))
     val crossbarRoot = superstructureMechanism.getRoot(
-        "Crossbar Root",
-        (TrunkConstants.CROSSBAR_BOTTOM + .02) * TrunkConstants.d2x + .25,
-        (TrunkConstants.CROSSBAR_BOTTOM - .02) * TrunkConstants.d2y + 0.25
+            "Crossbar Root",
+            (TrunkConstants.CROSSBAR_BOTTOM + .02) * TrunkConstants.d2x + .25,
+            (TrunkConstants.CROSSBAR_BOTTOM - .02) * TrunkConstants.d2y + 0.25
     )
 
 
     init {
         elevatorMechanismRoot.append(MechanismLigament2d("Elevator", .8, TrunkConstants.ELEVATOR_ANGLE))
         crossbarRoot.append(
-            MechanismLigament2d(
-                "Crossbar",
-                TrunkConstants.CROSSBAR_TOP - TrunkConstants.CROSSBAR_BOTTOM - .25,
-                TrunkConstants.ELEVATOR_ANGLE,
-                color = Color8Bit(0, 255, 0)
-            )
+                MechanismLigament2d(
+                        "Crossbar",
+                        TrunkConstants.CROSSBAR_TOP - TrunkConstants.CROSSBAR_BOTTOM - .25,
+                        TrunkConstants.ELEVATOR_ANGLE,
+                        color = Color8Bit(0, 255, 0)
+                )
         )
         setDesiredRotation(TrunkConstants.SAFE_TRAVEL_ANGLE)
     }
@@ -135,6 +135,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         setPID(true)
         currentState = TrunkState.CUSTOM
         io.setPositionLimits(true)
+        isMoving = false
+        isAnglePID = true
+        isPIDing = true
     }
 
     fun getRotation(): Double {
@@ -194,7 +197,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
 //            goManual()
 //
-        if(io.atTopLimit()) {
+        if (io.atTopLimit()) {
             io.setZeroPosition(top = true)
         }
 
@@ -239,10 +242,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 }
 
                 if (MiscCalculations.appxEqual(
-                        getPosition(),
-                        RobotContainer.stateMachine.targetTrunkPose.position,
-                        .05
-                    )
+                                getPosition(),
+                                RobotContainer.stateMachine.targetTrunkPose.position,
+                                .05
+                        )
                 ) {
                     hasElevatorMoved = true
                 }
@@ -254,10 +257,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
                 //Elevator has moved and the angle is good (finished)
                 if (hasElevatorMoved && MiscCalculations.appxEqual(
-                        getRotation(),
-                        RobotContainer.stateMachine.targetTrunkPose.angle,
-                        TrunkConstants.ANGLE_DEADZONE
-                    )
+                                getRotation(),
+                                RobotContainer.stateMachine.targetTrunkPose.angle,
+                                TrunkConstants.ANGLE_DEADZONE
+                        )
                 ) {
                     prevTargetPose = RobotContainer.stateMachine.targetTrunkPose
                     hasElevatorMoved = false
@@ -273,10 +276,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             }
             //Is rotation safe?
             if (getRotation() > TrunkConstants.SAFE_TRAVEL_ANGLE || MiscCalculations.appxEqual(
-                    getRotation(),
-                    TrunkConstants.SAFE_TRAVEL_ANGLE,
-                    TrunkConstants.ANGLE_DEADZONE
-                )
+                            getRotation(),
+                            TrunkConstants.SAFE_TRAVEL_ANGLE,
+                            TrunkConstants.ANGLE_DEADZONE
+                    )
             ) {
                 isRotationSafe = true
             }
@@ -291,13 +294,11 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             } else {
                 isAnglePID = true
             }
-        }
-        else if (currentState == TrunkState.AIMING) {
+        } else if (currentState == TrunkState.AIMING) {
             isMoving = false
             isAnglePID = true
             isPIDing = true
-        }
-        else if (currentState == TrunkState.CALIBRATING) {
+        } else if (currentState == TrunkState.CALIBRATING) {
             calibratePeriodic()
         }
 
@@ -324,13 +325,13 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 val pidVal: Double = MathUtil.clamp(rotationPID.calculate(Math.toRadians(getRotation())), -5.0, 5.0)
                 Telemetry.putNumber("rotation pid out", pidVal, RobotContainer.telemetry.trunkTelemetry)
                 Telemetry.putNumber(
-                    "rotation PID + FF", pidVal
-                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0), RobotContainer.telemetry.trunkTelemetry
+                        "rotation PID + FF", pidVal
+                        + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0), RobotContainer.telemetry.trunkTelemetry
                 )
 
                 io.setRotationVoltage(
-                    (pidVal
-                            + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
+                        (pidVal
+                                + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0))
                 )
             }
         }
@@ -344,10 +345,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         io.setRotationSpeed(0.0)
     }
 
-   fun brakeMotors() {
-       io.setPositionIdleMode(CANSparkBase.IdleMode.kBrake)
-       io.setAngleIdleMode(CANSparkBase.IdleMode.kBrake)
-   }
+    fun brakeMotors() {
+        io.setPositionIdleMode(CANSparkBase.IdleMode.kBrake)
+        io.setAngleIdleMode(CANSparkBase.IdleMode.kBrake)
+    }
 
     private fun calibratePeriodic() {
         io.setRotationSpeed(0.0)
