@@ -1,6 +1,7 @@
 package frc.robot
 
 import edu.wpi.first.math.VecBuilder
+import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -8,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.commands.automatic.AutoClimbCommand
 import frc.robot.util.Telemetry
 import frc.robot.constants.LimelightConstants
+import frc.robot.constants.TargetingConstants
+import frc.robot.constants.TrunkConstants
+import frc.robot.util.TargetingSystem
 import org.littletonrobotics.junction.LoggedRobot
 
 
@@ -20,7 +24,12 @@ class Robot : LoggedRobot() {
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
     override fun robotInit() {
         SmartDashboard.putBoolean("arm motors free?", false)
-
+        SmartDashboard.putNumber("varying shooter fudging constant", TargetingConstants.stupidConstant)
+        SmartDashboard.putNumber("shooter endpoint x", TargetingConstants.endpointX)
+        SmartDashboard.putNumber("shooter endpoint z", TargetingConstants.endpointZ)
+        SmartDashboard.putNumber("shooter height", TargetingConstants.shooterZ)
+        SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
+        SmartDashboard.putNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
 //        SmartDashboard.putNumber("shooter angle", 0.0)
@@ -30,6 +39,7 @@ class Robot : LoggedRobot() {
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
+        println(RobotContainer.targetingSystem.test())
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
