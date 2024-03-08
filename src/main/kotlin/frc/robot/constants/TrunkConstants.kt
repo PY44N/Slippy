@@ -18,11 +18,8 @@ object TrunkConstants {
 //    -9.572754 + -9.561523 + -9.587646 + -9.577148 + -9.563233 + -9.564453 = -57.426757
 //    -57.426757 / 6 = -9.571126167
 //    .3810000 / -9.571126167  = -0.03980722784
-
-
     //        0.0609217993
-//    const val MOVER_GEAR_RADIUS_M = 0.0127
-//    const val MOVER_GEAR_CIRCUMFERENCE_M = MOVER_GEAR_RADIUS_M * 2.0 * PI
+
     const val ELEVATOR_ANGLE = 28.8309683
     val d2y = sin(ELEVATOR_ANGLE * PI / 180.0)
     val d2x = cos(ELEVATOR_ANGLE * PI / 180.0)
@@ -87,7 +84,6 @@ object TrunkConstants {
     val ANGLE_DEADZONE = 3.5
 
     val SAFE_TO_DROP_INTAKE_POSITION = 0.23
-
 
     val UNDER_STAGE_SHOOTING_OFFSET = 0.0
     val SHOOTING_OFFSET = 0.0

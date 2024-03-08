@@ -159,14 +159,8 @@ class Robot : LoggedRobot() {
     }
 
     override fun testPeriodic() {
-        //        RobotContainer.swerveSystem.drive(Translation2d(0.25, 0.0), 0.0, true)
-        //        val calibrator = ShooterCalibrator("/u/shooter_calibrator/test1.csv");
-        //        calibrator.writeOut(shots)
-        //        val readShots = calibrator.readCsv();
-        //        readShots.forEach {
-        //            println(it.toCSV())
-        //        }
-        RobotContainer.targetingSystem.test()
+
+//        RobotContainer.targetingSystem.test()
     }
 
     override fun testExit() {}

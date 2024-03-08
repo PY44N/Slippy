@@ -125,7 +125,7 @@ class TargetingSystem {
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
     fun test() {
-        println("2.9: " + RobotContainer.targetingSystem.getShotNoVelocityFromPosition(Pose2d(2.9, 5.55, Rotation2d(180.0))).shooterAngle)
-        println("5.37" + RobotContainer.targetingSystem.getShotNoVelocityFromPosition(Pose2d(5.37, 6.41, Rotation2d(180.0))).shooterAngle)
+//        println("2.9: " + RobotContainer.targetingSystem.getShotNoVelocityFromPosition(Pose2d(2.9, 5.55, Rotation2d(180.0))).shooterAngle)
+//        println("5.37: " + RobotContainer.targetingSystem.getShotNoVelocityFromPosition(Pose2d(5.37, 6.41, Rotation2d(180.0))).shooterAngle)
     }
 }
