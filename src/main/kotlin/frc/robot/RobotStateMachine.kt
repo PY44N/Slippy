@@ -40,7 +40,8 @@ enum class TrunkPosition(val angle: Double, val position: Double) {
     SPEAKER_FROM_STAGE(TrunkConstants.SPEAKER_FROM_STAGE_ANGLE, TrunkConstants.SPEAKER_FROM_STAGE_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
-    TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION), ;
+    TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
+    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION);
 }
 
 
@@ -141,7 +142,13 @@ class RobotStateMachine {
 
     //Is the trunk at the desired position?
     val trunkReady: Boolean
-        get() = !RobotContainer.trunkSystem.isMoving && RobotContainer.trunkSystem.isAtAngle
+        get() = if (trunkState == TrunkState.AIMING) {
+            RobotContainer.trunkSystem.isMoving == false && RobotContainer.trunkSystem.isAtAngle == true
+        }
+        else {
+            targetTrunkPose == RobotContainer.trunkSystem.prevTargetPose
+        }
+//get() = targetTrunkPose == RobotContainer.trunkSystem.prevTargetPose
 
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean

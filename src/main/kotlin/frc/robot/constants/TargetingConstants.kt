@@ -21,7 +21,7 @@ object TargetingConstants {
 
     var stupidConstant = 0.0
     // 5 maybe
-    var constantStupidConstant = 0.0
+    var constantStupidConstant = -5.0
         // 11.0 maybe
 
 //    var shooterZ = 0.0

@@ -13,7 +13,7 @@ class AutoIntake : Command() {
     var hasIntake: Boolean = false
     var hasAlmostSpit: Boolean = false
     override fun initialize() {
-        RobotContainer.trunkSystem.goToCustom()
+//        RobotContainer.trunkSystem.goToCustom()
         RobotContainer.cannonSystem.intake()
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.INTAKE

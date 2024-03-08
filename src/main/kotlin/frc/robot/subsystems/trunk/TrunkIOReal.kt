@@ -60,10 +60,10 @@ class TrunkIOReal : TrunkIO {
                 TrunkConstants.BOTTOM_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR
             }
         )
-        if (!top)
-            elevatorMotor.inverted = !elevatorMotor.inverted
-        setTopPositionLimit(TrunkConstants.TOP_BREAK_BEAM_POSITION)
-        setBottomPositionLimit(TrunkConstants.BOTTOM_BREAK_BEAM_POSITION)
+//        if (!top)
+//            elevatorMotor.inverted = !elevatorMotor.inverted
+//        setTopPositionLimit(TrunkConstants.TOP_BREAK_BEAM_POSITION)
+//        setBottomPositionLimit(TrunkConstants.BOTTOM_BREAK_BEAM_POSITION)
     }
 
     override fun atTopLimit(): Boolean = topLimit.get()
@@ -80,41 +80,41 @@ class TrunkIOReal : TrunkIO {
     override fun getRawRotation(): Double = rotationEncoder.absolutePosition
 
     override fun setTopPositionLimit(position: Double) {
-        if (topPositionLimit != position) {
-            topPositionLimit = position
-            elevatorMotor.setSoftLimit(
-                CANSparkBase.SoftLimitDirection.kForward,
-                (position * TrunkConstants.M2ELEVATOR).toFloat()
-            )
-            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
-        }
+//        if (topPositionLimit != position) {
+//            topPositionLimit = position
+//            elevatorMotor.setSoftLimit(
+//                CANSparkBase.SoftLimitDirection.kForward,
+//                (position * TrunkConstants.M2ELEVATOR).toFloat()
+//            )
+//            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
+//        }
     }
 
     override fun setBottomPositionLimit(position: Double) {
-        if (bottomPositionLimit != position) {
-            bottomPositionLimit = position
-            elevatorMotor.setSoftLimit(
-                CANSparkBase.SoftLimitDirection.kReverse,
-                (position * TrunkConstants.M2ELEVATOR).toFloat()
-            )
-            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
-        }
+//        if (bottomPositionLimit != position) {
+//            bottomPositionLimit = position
+//            elevatorMotor.setSoftLimit(
+//                CANSparkBase.SoftLimitDirection.kReverse,
+//                (position * TrunkConstants.M2ELEVATOR).toFloat()
+//            )
+//            elevatorMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
+//        }
     }
 
     override fun setTopRotationLimit(angle: Double) {
-        if (topRotationLimit != angle) {
-            topRotationLimit = angle
-            mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, angle.toFloat())
-            mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
-        }
+//        if (topRotationLimit != angle) {
+//            topRotationLimit = angle
+//            mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kForward, angle.toFloat())
+//            mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kForward, true)
+//        }
     }
 
     override fun setBottomRotationLimit(angle: Double) {
-        if (bottomRotationLimit != angle) {
-            bottomRotationLimit = angle
-            mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, angle.toFloat())
-            mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
-        }
+//        if (bottomRotationLimit != angle) {
+//            bottomRotationLimit = angle
+//            mainRotationMotor.setSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, angle.toFloat())
+//            mainRotationMotor.enableSoftLimit(CANSparkBase.SoftLimitDirection.kReverse, true)
+//        }
     }
 
     override fun setElevatorSpeed(speed: Double) {

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.commands.ArmPIDCalibrationAngleCommand
 import frc.robot.commands.TeleopSwerveDriveCommand
 import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.automatic.AutoAimAndShootFromPosition
@@ -116,6 +117,7 @@ object RobotContainer {
 
 
         xboxController.x().onTrue(Commands.runOnce({
+            trunkSystem.goToCustom()
             stateMachine.targetTrunkPose = TrunkPosition.STOW
         }))
         xboxController.b().toggleOnTrue(AutoIntake())
@@ -123,6 +125,7 @@ object RobotContainer {
         xboxController.leftBumper().onTrue(Commands.runOnce({
             trunkSystem.calibrate()
         }))
+//        xboxController.a().toggleOnTrue(ArmPIDCalibrationAngleCommand())
         xboxController.back().onTrue(Commands.runOnce({
             trunkSystem.STOP()
         }))
@@ -132,8 +135,8 @@ object RobotContainer {
         xboxController.leftTrigger().onTrue(Commands.runOnce({
             trunkSystem.goToCustom()
         }))
-//        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(1.35, 5.5), Rotation2d())))
-                xboxController.y().toggleOnTrue(AutoAimAndShoot())
+        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(1.9, 5.54), Rotation2d())))
+//                xboxController.y().toggleOnTrue(AutoAimAndShoot())
 
 //        xboxController.rightTrigger().toggleOnTrue(AutoSpit())
         xboxController.rightBumper().toggleOnTrue(AutoSpit())

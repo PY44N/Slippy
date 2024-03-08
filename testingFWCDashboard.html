@@ -16,6 +16,7 @@
         source-key="/SmartDashboard/targetPosition name"
         style="transform: translate(155.2px, 0px); width: 192px; height: 66.6px;"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             type="text"
@@ -39,6 +40,7 @@
         style="width: 192px; height: 65.8px; transform: translate(385.6px, 0px);"
         source-key="/SmartDashboard/trunk state"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             type="text"
@@ -72,6 +74,7 @@
         source-key="/SmartDashboard/Angle val"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -102,6 +105,7 @@
         source-key="/SmartDashboard/position val"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -132,6 +136,7 @@
         source-key="/SmartDashboard/Desired left speed"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -162,6 +167,7 @@
         source-key="/SmartDashboard/Current left Cannon Speed"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -190,23 +196,22 @@
         source-provider="NetworkTables"
         style="transform: translate(29.6px, 283.2px);"
         source-key="/SmartDashboard/Left PID setpoint"
-        placeholder=""
         min="NaN"
         max="NaN"
     ><input
             slot="input"
             value="0"
             type="number"
-            id="vaadin-number-field-61"
+            id="vaadin-number-field-8"
             aria-labelledby="label-vaadin-number-field-61"
             aria-describedby=""
-            min="undefined"
-            max="undefined"
+            min="NaN"
+            max="NaN"
             step="any"
         ><label
             slot="label"
             id="label-vaadin-number-field-61"
-            for="vaadin-number-field-61"
+            for="vaadin-number-field-8"
         >Cannon Left Setpoint</label>
         <div
             slot="error-message"
@@ -226,17 +231,16 @@
         style="transform: translate(737.6px, 272px);"
         source-key="/SmartDashboard/note state"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             type="text"
-            id="vaadin-text-field-165"
+            id="vaadin-text-field-9"
             aria-labelledby="label-vaadin-text-field-172"
             aria-describedby=""
         ><label
             slot="label"
             id="label-vaadin-text-field-172"
-            for="vaadin-text-field-165"
+            for="vaadin-text-field-9"
         >Note State</label>
         <div
             slot="error-message"
@@ -246,7 +250,7 @@
     </vaadin-text-field><frc-camera-wrapper
         source-provider="NetworkTables"
         style="transform: translate(216px, 422.4px);"
-        source-key="/limelight-back"
+        source-key="/CameraPublisher/limelight-back"
         streams="[]"
         background-color="black"
         wait-image="./no-camera-stream.jpg"

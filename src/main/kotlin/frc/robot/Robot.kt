@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.commands.automatic.AutoClimbCommand
+import frc.robot.commands.autonomous.DriveBackAuto
 import frc.robot.util.Telemetry
 import frc.robot.constants.LimelightConstants
 import frc.robot.constants.TargetingConstants
@@ -31,6 +32,9 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
         SmartDashboard.putNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
+
+        RobotContainer
+
 
 //        SmartDashboard.putNumber("shooter angle", 0.0)
     }
@@ -92,7 +96,9 @@ class Robot : LoggedRobot() {
     override fun disabledExit() {}
 
     override fun autonomousInit() {
-        RobotContainer.autonomousCommand.schedule()
+//        RobotContainer.autonomousCommand.schedule()
+        RobotContainer.swerveSystem.zeroGyro()
+        DriveBackAuto().schedule()
     }
 
     override fun autonomousPeriodic() {}
@@ -103,7 +109,6 @@ class Robot : LoggedRobot() {
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.cannonSystem.killIntake()
 
-        RobotContainer
 
         RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()

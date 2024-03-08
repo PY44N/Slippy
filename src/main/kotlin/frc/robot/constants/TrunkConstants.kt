@@ -28,7 +28,7 @@ object TrunkConstants {
 
     var SAFE_TRAVEL_ANGLE: Double = 63.0
 
-    var MAX_ANGLE: Double = 170.0
+    var MAX_ANGLE: Double = 195.0
     var MAX_SHOOT_ANGLE = 90.0
     var MIN_SHOOT_ANGLE = 50.0
 
@@ -36,6 +36,8 @@ object TrunkConstants {
 
     var AMP_POSITION: Double = 0.3281
     var AMP_ANGLE: Double = 190.0
+//    var AMP_ANGLE: Double = 180.0
+
 
     var INTAKE_POSITION: Double = 0.01
     var INTAKE_ANGLE: Double = 70.0
@@ -67,8 +69,9 @@ object TrunkConstants {
 
     val rotationEncoderID = 9
 
-    var rotationKP = 7.0
-//    var rotationKI = 0.0001
+//    var rotationKP = 7.0
+        var rotationKP = 5.0
+//        var rotationKI = 0.001
     var rotationKI = 0.0
     var rotationKD = .125
 

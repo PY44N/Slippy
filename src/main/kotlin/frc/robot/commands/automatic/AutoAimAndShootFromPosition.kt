@@ -38,8 +38,8 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
 //        RobotContainer.trunkSystem.goToCustom()
         //Handle the cannon aiming component
         println("shooting angle " + shooterAngle)
-//        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
-                RobotContainer.trunkSystem.setShootingAngle(51.2)
+        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
+//                RobotContainer.trunkSystem.setShootingAngle(51.2)
 //        RobotContainer.trunkSystem.setShootingAngle(51.2)
 //
 

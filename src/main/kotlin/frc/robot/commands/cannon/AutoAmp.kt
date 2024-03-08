@@ -11,8 +11,7 @@ class AutoAmp : Command() {
 //        RobotContainer.cannonSystem.ampSpit()
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.AMP
-        RobotContainer.trunkSystem.goToCustom()
-
+//        RobotContainer.trunkSystem.goToCustom()
     }
 
     override fun execute() {
@@ -29,7 +28,8 @@ class AutoAmp : Command() {
 
     override fun isFinished(): Boolean {
 //        return RobotContainer.stateMachine.noteState == NoteState.Empty
-        return false
+//        return false
+        return RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.AMP
     }
 
     override fun end(interrupted: Boolean) {
