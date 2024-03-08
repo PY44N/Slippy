@@ -39,7 +39,13 @@ class Robot : LoggedRobot() {
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
-        println(RobotContainer.targetingSystem.test())
+
+        TargetingConstants.stupidConstant = SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
+        TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
+        TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
+        TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
+        TargetingConstants.constantStupidConstant = SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
+        TargetingConstants.velocityMultiplier = SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()

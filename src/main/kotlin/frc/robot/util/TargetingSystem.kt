@@ -23,11 +23,6 @@ private class TargetingVariables(val robotPose: Pose2d = RobotContainer.swerveSy
     val vy: Double
     val r: Double
     init {
-        TargetingConstants.stupidConstant = SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
-        TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
-        TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
-        TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
-        TargetingConstants.constantStupidConstant = SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         val robotVelocity = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 //        val robotAngle = robotPose.rotation.angle
 
