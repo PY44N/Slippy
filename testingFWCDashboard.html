@@ -7,16 +7,14 @@
         source-provider="NetworkTables"
         style="transform: translate(27.2px, 20.8px); width: 100px; height: 82px;"
         source-key="/SmartDashboard/arm motors free?"
-        toggled=""
         label="Arm Motors Free?"
     ></frc-toggle-button><vaadin-text-field
         label="Trunk Target"
         has-label=""
         source-provider="NetworkTables"
         source-key="/SmartDashboard/targetPosition name"
-        style="transform: translate(155.2px, 0px); width: 192px; height: 66.6px;"
+        style="transform: translate(767.2px, 56px); width: 192px; height: 66.6px;"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             type="text"
@@ -37,10 +35,9 @@
         label="Trunk State"
         has-label=""
         source-provider="NetworkTables"
-        style="width: 192px; height: 65.8px; transform: translate(385.6px, 0px);"
+        style="width: 192px; height: 65.8px; transform: translate(1036px, 65.6px);"
         source-key="/SmartDashboard/trunk state"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             type="text"
@@ -70,11 +67,10 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(813.6px, 162.387px); width: 128px; height: 64.2px;"
+        style="transform: translate(32.8px, 623.987px); width: 128px; height: 64.2px;"
         source-key="/SmartDashboard/Angle val"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -101,11 +97,10 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(736.8px, 20px);"
+        style="transform: translate(51.2px, 491.2px);"
         source-key="/SmartDashboard/position val"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -136,7 +131,6 @@
         source-key="/SmartDashboard/Desired left speed"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -167,7 +161,6 @@
         source-key="/SmartDashboard/Current left Cannon Speed"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -194,10 +187,11 @@
         has-value=""
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(29.6px, 283.2px);"
+        style="transform: translate(55.2px, 392px);"
         source-key="/SmartDashboard/Left PID setpoint"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -220,7 +214,7 @@
         ></div>
     </vaadin-number-field><frc-toggle-button
         source-provider="NetworkTables"
-        style="transform: translate(602.4px, 25.6px);"
+        style="transform: translate(423.2px, 30.4px);"
         source-key="/SmartDashboard/Cannon Telemetry"
         toggled=""
         label="Cannon Telemetry?"
@@ -228,9 +222,10 @@
         label="Note State"
         has-label=""
         source-provider="NetworkTables"
-        style="transform: translate(737.6px, 272px);"
+        style="transform: translate(188.8px, 32px);"
         source-key="/SmartDashboard/note state"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             type="text"
@@ -249,13 +244,73 @@
         ></div>
     </vaadin-text-field><frc-camera-wrapper
         source-provider="NetworkTables"
-        style="transform: translate(216px, 422.4px);"
+        style="transform: translate(968px, 212px); width: 512px; height: 416.8px;"
         source-key="/CameraPublisher/limelight-back"
         streams="[]"
         background-color="black"
         wait-image="./no-camera-stream.jpg"
         crosshair-color="white"
-    ></frc-camera-wrapper></dashboard-tab><dashboard-tab
+    ></frc-camera-wrapper><vaadin-text-field
+        label="Previous Trunk Target"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(757.6px, 165.6px);"
+        source-key="/SmartDashboard/prevTargetPosition name"
+        has-value=""
+        placeholder=""
+    ><input
+            slot="input"
+            type="text"
+            id="vaadin-text-field-88"
+            aria-labelledby="label-vaadin-text-field-88"
+            aria-describedby=""
+        ><label
+            slot="label"
+            id="label-vaadin-text-field-88"
+            for="vaadin-text-field-88"
+        >Previous Trunk Target</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-text-field-62"
+            hidden=""
+        ></div>
+    </vaadin-text-field><frc-boolean-box
+        source-provider="NetworkTables"
+        style="transform: translate(767.2px, 333.6px); width: 168.8px; height: 182.4px;"
+        source-key="/SmartDashboard/Shooter Ready &amp; Aimed"
+        label="Shooter Ready"
+    ></frc-boolean-box><vaadin-number-field
+        label="Target Angle"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(186.4px, 624px);"
+        source-key="/SmartDashboard/target angle"
+        placeholder=""
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-247"
+            aria-labelledby="label-vaadin-number-field-265"
+            aria-describedby=""
+            min="undefined"
+            max="undefined"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-265"
+            for="vaadin-number-field-247"
+        >Target Angle</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-183"
+            hidden=""
+        ></div>
+    </vaadin-number-field></dashboard-tab><dashboard-tab
     slot="tab"
     tab-name="Autonomous"
     source-provider="NetworkTables"

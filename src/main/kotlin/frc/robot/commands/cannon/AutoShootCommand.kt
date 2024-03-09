@@ -22,7 +22,7 @@ class AutoShootCommand : Command() {
 //            println("feeding")
         }
 
-        if (Timer.getFPGATimestamp() - shooterReadyTime > .5 && shooterReadyTime >= 0.0) {
+        if (Timer.getFPGATimestamp() - shooterReadyTime > .15 && shooterReadyTime >= 0.0) {
             RobotContainer.cannonSystem.feed()
         }
 

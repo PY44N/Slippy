@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.ArmPIDCalibrationAngleCommand
 import frc.robot.commands.TeleopSwerveDriveCommand
+import frc.robot.commands.UnBreakTheIK
 import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.automatic.AutoAimAndShootFromPosition
+import frc.robot.commands.automatic.FloorIntakeAndSeek
 import frc.robot.commands.cannon.AutoAmp
 import frc.robot.commands.cannon.AutoIntake
 import frc.robot.commands.cannon.AutoShootCommand
@@ -117,29 +119,17 @@ object RobotContainer {
 
 
         xboxController.x().onTrue(Commands.runOnce({
-            trunkSystem.goToCustom()
             stateMachine.targetTrunkPose = TrunkPosition.STOW
         }))
-        xboxController.b().toggleOnTrue(AutoIntake())
-        xboxController.a().toggleOnTrue(AutoAmp())
-//        xboxController.leftBumper().onTrue(Commands.runOnce({
-//            trunkSystem.calibrate()
-//        }))
-//        xboxController.a().toggleOnTrue(ArmPIDCalibrationAngleCommand())
         xboxController.back().onTrue(Commands.runOnce({
             trunkSystem.STOP()
         }))
-//        xboxController.start().onTrue(Commands.runOnce({
-//            trunkSystem.goManual()
-//        }))
-        xboxController.leftTrigger().onTrue(Commands.runOnce({
-            trunkSystem.goToCustom()
-        }))
-        xboxController.y().toggleOnTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(2.89, 5.54), Rotation2d())))
-//                xboxController.y().toggleOnTrue(AutoAimAndShoot())
-
-//        xboxController.rightTrigger().toggleOnTrue(AutoSpit())
+        xboxController.y().onTrue(UnBreakTheIK())
+        xboxController.b().toggleOnTrue(AutoIntake())
+        xboxController.leftBumper().onTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(2.89, 5.54), Rotation2d())))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
+
+        leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
     }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()

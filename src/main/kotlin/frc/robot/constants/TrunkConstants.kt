@@ -81,7 +81,7 @@ object TrunkConstants {
     var rotationMaxVelo = 30.0
     var rotationMaxError = 5.0
 
-    val ANGLE_DEADZONE = 3.5
+    val ANGLE_DEADZONE = 4.5
 
     val SAFE_TO_DROP_INTAKE_POSITION = 0.23
 

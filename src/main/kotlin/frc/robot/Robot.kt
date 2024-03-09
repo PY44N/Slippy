@@ -35,6 +35,8 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putNumber("shooter angle", 58.5)
 
+        SmartDashboard.putBoolean("Shooter Ready & Aimed", false)
+
 
         RobotContainer
 

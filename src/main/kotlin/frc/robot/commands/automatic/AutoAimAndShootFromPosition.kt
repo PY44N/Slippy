@@ -52,10 +52,13 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
 //        RobotContainer.trunkSystem.setShootingAngle(51.2)
 //
 
+        SmartDashboard.putBoolean("Is at angle", RobotContainer.trunkSystem.isAtAngle)
+
+        SmartDashboard.putBoolean("Shooter Ready & Aimed", RobotContainer.stateMachine.shooterReady && RobotContainer.trunkSystem.isAtAngle)
 
 
         //Can we shoot?
-        if (RobotContainer.stateMachine.trunkReady) {
+        if (RobotContainer.xboxController.leftTrigger().asBoolean && !autoShoot.isScheduled) {
             autoShoot.schedule()
         }
 //        if (RobotContainer.leftJoystick.button(2).asBoolean) {

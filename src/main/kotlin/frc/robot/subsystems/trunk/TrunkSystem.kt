@@ -194,18 +194,11 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         RobotContainer.telemetry.trunkTelemetry = SmartDashboard.getBoolean("Trunk Telemetry", RobotContainer.telemetry.trunkTelemetry)
         SmartDashboard.putBoolean("Trunk Telemetry", RobotContainer.telemetry.trunkTelemetry)
 
-//        if(positionLimits && (getPosition() < positionBottomLimit || getPosition() > positionTopLimit) || rotationLimits &&  (getRotation() < rotationBottomLimit || getRotation() > rotationTopLimit))
-//            goManual()
-//
         if (io.atTopLimit()) {
             io.setZeroPosition(top = true)
         }
 
         Telemetry.putString("Angle Idle Mode", io.getAngleIdleMode().name, RobotContainer.telemetry.trunkTelemetry)
-
-//        if(io.atBottomLimit()) {
-//            io.setZeroPosition(top = false)
-//        }
 
         Telemetry.putBoolean("Is at angle?", isAtAngle, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putBoolean("is moving", isMoving, RobotContainer.telemetry.trunkTelemetry)
@@ -222,7 +215,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         Telemetry.putBoolean("is angle PID?", isAnglePID, RobotContainer.telemetry.trunkTelemetry)
 
         if (currentState == TrunkState.CUSTOM) {
-//            io.setDesiredPosition(TrunkConstants.STOW_POSITION)
             //Changed position
             if (RobotContainer.stateMachine.targetTrunkPose != prevTargetPose) {
                 setPID(true)
@@ -235,7 +227,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 //Safe rotation but still need to start
                 else if (isRotationSafe && !hasElevatorMoved) {
                     isMoving = true
-//                    println("set the desired position to target position")
                     setDesiredRotation(TrunkConstants.SAFE_TRAVEL_ANGLE)
                     setDesiredPosition(RobotContainer.stateMachine.targetTrunkPose.position)
                 }
@@ -285,7 +276,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                     )
             ) {
                 isRotationSafe = true
-//                println("safe rotation")
+            }
+            else {
+                isRotationSafe = false
             }
 
             //Handling for the garbage intake logic bc the build team poorly designed the intake and didn't tell us
@@ -293,7 +286,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 isAnglePID = false
                 io.setAngleIdleMode(CANSparkBase.IdleMode.kCoast)
                 io.setRotationVoltage(0.0)
-//                println("for stupid intake coasted the motors")
             } else {
                 isAnglePID = true
             }
@@ -308,12 +300,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
         //Do the trunk PIDs
         Telemetry.putNumber("position pid setpoint", positionPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
-//        Telemetry.putNumber("angle pid setpoint", rotationPID.setpoint, RobotContainer.telemetry.trunkTelemetry)
 
         val positionPIDOut = positionPID.calculate(getPosition())
 
 
-//        SmartDashboard.putNumber("leader voltage", mainRotationMotor.appliedOutput)
         val posFF = TrunkConstants.positionFF
 
         Telemetry.putNumber("position pid out", positionPIDOut, RobotContainer.telemetry.trunkTelemetry)
@@ -325,20 +315,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             io.setElevatorSpeed(posFF + positionPIDOut)
 
             if (isAnglePID) {
-//                val pidVal: Double = MathUtil.clamp(rotationPID.calculate(Math.toRadians(getRotation())), -.5, 1.0)
                 var pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
 
                 Telemetry.putNumber("rotation pid out", pidVal, RobotContainer.telemetry.trunkTelemetry)
-//                Telemetry.putNumber(
-//                        "rotation PID + FF", pidVal
-//                        + rotationFF.calculate(Math.toRadians(getRotation() - 90), 0.0), RobotContainer.telemetry.trunkTelemetry
-//                )
-
-
-//                Telemetry.putNumber(
-//                        "rotation PID + FF", pidVal
-//                        + rotationFF.calculate(rotationPID.setpoint - (Math.PI / 2.0), 0.0), RobotContainer.telemetry.trunkTelemetry
-//                )
 
 
                 if (Math.toDegrees(rotationPID.setpoint) < getRotation()) {
@@ -352,7 +331,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                     rotationMiniFF = MathUtil.clamp((Math.toRadians(rotationPID.setpoint) - getRotation() * (.1) * (.6)), -.8, 0.8)
                 }
 
-//                println("rotation mini FF: " + rotationMiniFF)
+                println("rotation mini FF: " + rotationMiniFF)
 
                 val twistVolts =  MathUtil.clamp((pidVal
                         + rotationFF.calculate(rotationPID.setpoint - (Math.PI / 2.0), 0.0)), -.5, 2.0)
@@ -360,11 +339,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                 Telemetry.putNumber(
                     "rotation PID + FF", twistVolts, RobotContainer.telemetry.trunkTelemetry
                 )
-
-//                io.setRotationVoltage(
-//                        (pidVal
-//                                + rotationFF.calculate(rotationPID.setpoint - (Math.PI / 2.0), 0.0))
-//                )
 
                                 io.setRotationVoltage(
                        twistVolts)
