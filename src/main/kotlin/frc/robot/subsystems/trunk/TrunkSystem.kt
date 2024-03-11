@@ -114,7 +114,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         io.setRotationSpeed(0.0)
         setPID(false)
         currentState = TrunkState.CALIBRATING
-        io.setElevatorSpeed(0.2)
+//        io.setElevatorSpeed(0.2)
         io.setPositionLimits(false)
     }
 
@@ -277,7 +277,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             ) {
                 isRotationSafe = true
             }
-            else {
+            else if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.INTAKE) {
                 isRotationSafe = false
             }
 
@@ -312,7 +312,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         Telemetry.putBoolean("Is PIDing", isPIDing, RobotContainer.telemetry.trunkTelemetry)
         if (isPIDing) {
 
-            io.setElevatorSpeed(posFF + positionPIDOut)
+//            io.setElevatorSpeed(posFF + positionPIDOut)
 
             if (isAnglePID) {
                 var pidVal: Double = rotationPID.calculate(Math.toRadians(getRotation()))
@@ -324,14 +324,15 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                     pidVal *= .5
                 }
 
-                var rotationMiniFF = 0.0
+//                var rotationMiniFF = 0.0
 
                 //The * (.1) is to convert to volts from the angle distance and the .6 is just a fudge
-                if (abs(pidVal) <= .2) {
-                    rotationMiniFF = MathUtil.clamp((Math.toRadians(rotationPID.setpoint) - getRotation() * (.1) * (.6)), -.8, 0.8)
-                }
+//                if (abs(pidVal) <= .4) {
+//                    rotationMiniFF = MathUtil.clamp(((Math.toDegrees(rotationPID.setpoint) - getRotation()) * .2), -.8, 0.8)
+//                }
 
-                println("rotation mini FF: " + rotationMiniFF)
+//                println("rotation mini ff " + rotationMiniFF)
+//                println("rotation target diff" + (Math.toDegrees(rotationPID.setpoint) - getRotation()))
 
                 val twistVolts =  MathUtil.clamp((pidVal
                         + rotationFF.calculate(rotationPID.setpoint - (Math.PI / 2.0), 0.0)), -.5, 2.0)
@@ -340,8 +341,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
                     "rotation PID + FF", twistVolts, RobotContainer.telemetry.trunkTelemetry
                 )
 
-                                io.setRotationVoltage(
-                       twistVolts)
+
+                //TODO: put stuff to the motors
+//                                io.setRotationVoltage(
+//                       twistVolts)
 
             }
         }

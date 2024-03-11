@@ -16,6 +16,7 @@ class AutoAimAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
     val waitForTwist: Boolean = true
+    var shooterAngle = 0.0
 
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
@@ -29,25 +30,18 @@ class AutoAimAndShoot : Command() {
 //                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
 //            }
 //        }
+
+        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
+
+        shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
+
     }
 
     override fun execute() {
-        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
-
-        //Handle the cannon aiming component
-        val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
-//        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)
-//        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
-//        RobotContainer.trunkSystem.goToCustom()
-        //Handle the cannon aiming component
-//        println("shooting angle " + shooterAngle)
         SmartDashboard.putNumber("shooter angle", shooterAngle)
         RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
-//        RobotContainer.trunkSystem.setShootingAngle(51.2)
-//        RobotContainer.trunkSystem.setShootingAngle(51.2)
-//
 
-        if (RobotContainer.stateMachine.trunkReady && !autoShoot.isScheduled) {
+        if (RobotContainer.xboxController.leftTrigger().asBoolean && !autoShoot.isScheduled) {
             autoShoot.schedule()
         }
     }
@@ -58,9 +52,9 @@ class AutoAimAndShoot : Command() {
 
     override fun end(interrupted: Boolean) {
         println("Shootyboi Done")
-        RobotContainer.stateMachine.shooterState = ShooterState.Stopped
+//        RobotContainer.stateMachine.shooterState = ShooterState.Stopped
 //        RobotContainer.stateMachine.driveState = DriveState.Teleop
-//        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
         RobotContainer.trunkSystem.goToCustom()
 
     }

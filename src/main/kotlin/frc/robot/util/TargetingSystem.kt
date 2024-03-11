@@ -105,7 +105,7 @@ class TargetingSystem {
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
-        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r - TargetingConstants.stupidConstant/shootingVelocity) * rad2deg
+        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2))) / vars.r - TargetingConstants.stupidConstant/shootingVelocity) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }

@@ -127,6 +127,7 @@ object RobotContainer {
         xboxController.y().onTrue(UnBreakTheIK())
         xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.leftBumper().onTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(2.89, 5.54), Rotation2d())))
+        xboxController.a().onTrue(AutoAimAndShoot())
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())

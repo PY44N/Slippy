@@ -59,7 +59,6 @@ class VisionSystem {
                             llMeasure.pose,
                             llMeasure.timestampSeconds
                         )
-
                 }
             }
         }

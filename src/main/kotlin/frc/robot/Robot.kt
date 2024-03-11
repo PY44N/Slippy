@@ -79,17 +79,28 @@ class Robot : LoggedRobot() {
 
         if (!DriverStation.isDisabled()) {
 //            RobotContainer.visionSystem.updateOdometry(1, true)
-            RobotContainer.visionSystem.updateOdometry(2, true)
+            RobotContainer.visionSystem.updateOdometry(1, false)
 
         }
         else {
 //            RobotContainer.visionSystem.updateOdometry(1, false)
             RobotContainer.visionSystem.updateOdometryFromDisabled()
         }
+
+
+        val shotSetup =  RobotContainer.targetingSystem.getShotNoVelocity()
+        SmartDashboard.putNumber("Mathed shooter angle", shotSetup.shooterAngle)
+        SmartDashboard.putNumber("Mathed robot angle", shotSetup.robotAngle)
+        SmartDashboard.putNumber("Current robot angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
         
         Telemetry.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady(), RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
+
+        SmartDashboard.putNumber("Swerve 0 Current", RobotContainer.swerveSystem.driveTrain.getModule(0).driveMotor.supplyCurrent.value)
+        SmartDashboard.putNumber("Swerve 1 Current", RobotContainer.swerveSystem.driveTrain.getModule(1).driveMotor.supplyCurrent.value)
+        SmartDashboard.putNumber("Swerve 2 Current", RobotContainer.swerveSystem.driveTrain.getModule(2).driveMotor.supplyCurrent.value)
+        SmartDashboard.putNumber("Swerve 3 Current", RobotContainer.swerveSystem.driveTrain.getModule(3).driveMotor.supplyCurrent.value)
     }
 
 
@@ -117,7 +128,7 @@ class Robot : LoggedRobot() {
 
         RobotContainer.autonomousCommand.cancel()
         RobotContainer.teleopSwerveCommand.schedule()
-        RobotContainer.trunkSystem.calibrate()
+//        RobotContainer.trunkSystem.calibrate()
 
 //        RobotContainer.trunkSystem.STOP()
 
