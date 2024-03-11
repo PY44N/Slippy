@@ -26,10 +26,10 @@ object MiscCalculations {
      */
     fun calculateDeadzone(input: Double, deadzoneValue: Double): Double {
         if (abs(input) > deadzoneValue) {
-            if (input > 0) {
-                return (input - deadzoneValue) * (1 / (1 - deadzoneValue))
+            if (input > 0.0) {
+                return (input - deadzoneValue) / (1.0 - deadzoneValue)
             } else {
-                return (input + deadzoneValue) * (1 / (1 - deadzoneValue))
+                return (input + deadzoneValue) / (1.0 - deadzoneValue)
             }
         } else {
             return 0.0
