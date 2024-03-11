@@ -72,8 +72,7 @@ class Robot : LoggedRobot() {
 
         if (armMotorsFree && !DriverStation.isTeleopEnabled() && !DriverStation.isTestEnabled() && !DriverStation.isAutonomousEnabled()) {
             RobotContainer.trunkSystem.freeMotors()
-        }
-        else if (!armMotorsFree && !DriverStation.isTeleopEnabled() && !DriverStation.isTestEnabled() && !DriverStation.isAutonomousEnabled()){
+        } else if (!armMotorsFree && !DriverStation.isTeleopEnabled() && !DriverStation.isTestEnabled() && !DriverStation.isAutonomousEnabled()) {
             RobotContainer.trunkSystem.brakeMotors()
         }
 
@@ -81,18 +80,17 @@ class Robot : LoggedRobot() {
 //            RobotContainer.visionSystem.updateOdometry(1, true)
             RobotContainer.visionSystem.updateOdometry(1, false)
 
-        }
-        else {
+        } else {
 //            RobotContainer.visionSystem.updateOdometry(1, false)
             RobotContainer.visionSystem.updateOdometryFromDisabled()
         }
 
 
-        val shotSetup =  RobotContainer.targetingSystem.getShotNoVelocity()
+        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
         SmartDashboard.putNumber("Mathed shooter angle", shotSetup.shooterAngle)
         SmartDashboard.putNumber("Mathed robot angle", shotSetup.robotAngle)
         SmartDashboard.putNumber("Current robot angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
-        
+
         Telemetry.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady(), RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
@@ -101,8 +99,9 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Swerve 1 Current", RobotContainer.swerveSystem.driveTrain.getModule(1).driveMotor.supplyCurrent.value)
         SmartDashboard.putNumber("Swerve 2 Current", RobotContainer.swerveSystem.driveTrain.getModule(2).driveMotor.supplyCurrent.value)
         SmartDashboard.putNumber("Swerve 3 Current", RobotContainer.swerveSystem.driveTrain.getModule(3).driveMotor.supplyCurrent.value)
-    }
 
+        SmartDashboard.putBoolean("Limelight has target?", LimelightHelpers.getTV(RobotContainer.intakeLimelight))
+    }
 
 
     override fun disabledInit() {}
@@ -141,11 +140,10 @@ class Robot : LoggedRobot() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
 
 
-        val scheduleClimbBool =SmartDashboard.getBoolean("Schedule Climb Command?", false)
+        val scheduleClimbBool = SmartDashboard.getBoolean("Schedule Climb Command?", false)
         if (scheduleClimbBool && autoClimbCommand.isScheduled() == false) {
             autoClimbCommand.schedule()
-        }
-        else if (autoClimbCommand.isScheduled == true && scheduleClimbBool == false) {
+        } else if (autoClimbCommand.isScheduled == true && scheduleClimbBool == false) {
             autoClimbCommand.cancel()
         }
 
