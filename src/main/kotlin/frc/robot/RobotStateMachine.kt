@@ -4,6 +4,9 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
+import frc.robot.commands.trunk.GoToPositionTrunk
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
@@ -44,16 +47,6 @@ enum class TrunkPosition(val angle: Double, val position: Double) {
     CalibrationAngle(110.0, TrunkConstants.STOW_POSITION);
 }
 
-
-enum class TrunkState() {
-    STOP,
-    CALIBRATING,
-    MANUAL,
-    CUSTOM,
-    AIMING,
-    SETPOINTSETUP,
-    TRAVELING,
-}
 
 //CURRENT states
 enum class GlobalZones(val range: Pair<Translation2d, Translation2d>) {
@@ -99,21 +92,12 @@ enum class ShootPosition(val position: Pose2d) {
 
 class RobotStateMachine {
 
-    var targetTrunkPose: TrunkPosition = TrunkPosition.STOW
-        set(value) =
-            if (!RobotContainer.trunkSystem.isMoving) {
-                field = value
-            } else {
-                field = field
-            }
-
-    val trunkState: TrunkState
-        get() = RobotContainer.trunkSystem.currentState
-
-
     var intakeState: IntakeState = IntakeState.Stopped
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored
+
+    var currentTrunkPosition: TrunkPosition = TrunkPosition.STOW
+    var currentTrunkCommand: Command = TrunkHoldCommand()
 
     var currentRobotZone: GlobalZones = GlobalZones.Wing
     var prevRobotZone: GlobalZones = GlobalZones.Wing
