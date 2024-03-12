@@ -15,10 +15,11 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.util.visualization
+package frc.robot.util.visualiztion
 
 import edu.wpi.first.networktables.*
 import edu.wpi.first.wpilibj.util.Color8Bit
+import frc.robot.util.visualization.MechanismRoot2d
 import org.littletonrobotics.junction.LogTable
 
 
@@ -39,11 +40,11 @@ import org.littletonrobotics.junction.LogTable
  * @see MechanismRoot2d
  */
 class Mechanism2d @JvmOverloads constructor(
-    width: Double,
-    height: Double,
-    backgroundColor: Color8Bit = Color8Bit(0, 0, 32)
+        width: Double,
+        height: Double,
+        backgroundColor: Color8Bit = Color8Bit(0, 0, 32)
 ) :
-    NTSendable, AutoCloseable {
+        NTSendable, AutoCloseable {
     private var m_table: NetworkTable? = null
     private val m_roots: MutableMap<String, MechanismRoot2d>
 

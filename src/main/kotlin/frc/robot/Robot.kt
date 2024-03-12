@@ -13,6 +13,7 @@ import frc.robot.constants.LimelightConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.TargetingSystem
+import frc.robot.util.visualiztion.Field2d
 import org.littletonrobotics.junction.LoggedRobot
 
 
@@ -95,12 +96,13 @@ class Robot : LoggedRobot() {
         Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
 
-        SmartDashboard.putNumber("Swerve 0 Current", RobotContainer.swerveSystem.driveTrain.getModule(0).driveMotor.supplyCurrent.value)
-        SmartDashboard.putNumber("Swerve 1 Current", RobotContainer.swerveSystem.driveTrain.getModule(1).driveMotor.supplyCurrent.value)
-        SmartDashboard.putNumber("Swerve 2 Current", RobotContainer.swerveSystem.driveTrain.getModule(2).driveMotor.supplyCurrent.value)
-        SmartDashboard.putNumber("Swerve 3 Current", RobotContainer.swerveSystem.driveTrain.getModule(3).driveMotor.supplyCurrent.value)
 
-        SmartDashboard.putBoolean("Limelight has target?", LimelightHelpers.getTV(RobotContainer.intakeLimelight))
+        SmartDashboard.putNumber("Robot X", RobotContainer.swerveSystem.getSwervePose().x)
+        SmartDashboard.putNumber("Robot Y", RobotContainer.swerveSystem.getSwervePose().y)
+        SmartDashboard.putNumber("Robot Angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
+
+//        val changedPosition = Field2d.toWPILIBFieldPosition(FieldPosition(fieldPosition.x, fieldPosition.y, gyro.getYaw()))
+//        field2d.get().setRobotPose(changedPosition.x, changedPosition.y, Rotation2d(changedPosition.angleRadians))
     }
 
 
@@ -112,8 +114,9 @@ class Robot : LoggedRobot() {
 
     override fun autonomousInit() {
 //        RobotContainer.autonomousCommand.schedule()
-        RobotContainer.swerveSystem.zeroGyro()
-        DriveBackAuto().schedule()
+//        RobotContainer.swerveSystem.zeroGyro()
+//        DriveBackAuto().schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Command Test").schedule()
     }
 
     override fun autonomousPeriodic() {}

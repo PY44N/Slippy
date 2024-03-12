@@ -26,6 +26,7 @@ class FloorIntakeAndSeek : Command() {
 //        autoIntake.schedule()
         initTime = Timer.getFPGATimestamp()
         RobotContainer.stateMachine.driveState = DriveState.Auto
+        SmartDashboard.putBoolean("Floor intake and seek scheduled", true)
     }
 
     override fun execute() {
@@ -48,11 +49,13 @@ class FloorIntakeAndSeek : Command() {
         if (firstTrackTime == -1.0) {
             val timeSinceInit = Timer.getFPGATimestamp() - initTime
             if (timeSinceInit > AutoConstants.llFloorSeekTime) {
+                SmartDashboard.putBoolean("Floor intake and seek finished", true)
                 return true
             }
         }
 
         //Doesn't use the auto intake just in case there is some sort of an issue with its ending and starting with a note already in the thing...idk - Milan
+        SmartDashboard.putBoolean("Floor intake and seek finished", RobotContainer.stateMachine.noteState == NoteState.Stored)
         return RobotContainer.stateMachine.noteState == NoteState.Stored
     }
 

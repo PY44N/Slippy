@@ -125,7 +125,8 @@ class RobotStateMachine {
             RobotAction.Chill
         }
     val shootPosition: ShootPosition = ShootPosition.StageFront
-//        get() = RobotContainer.shootPositionSendable.selected
+
+    //        get() = RobotContainer.shootPositionSendable.selected
 //    val trunkPosition: TrunkPosition
 //        get() = RobotContainer.trunkPositionSendable.selected
     var driveState: DriveState = DriveState.Teleop
@@ -144,8 +145,7 @@ class RobotStateMachine {
     val trunkReady: Boolean
         get() = if (trunkState == TrunkState.AIMING) {
             RobotContainer.trunkSystem.isMoving == false && RobotContainer.trunkSystem.isAtAngle == true
-        }
-        else {
+        } else {
             targetTrunkPose == RobotContainer.trunkSystem.prevTargetPose
         }
 //get() = targetTrunkPose == RobotContainer.trunkSystem.prevTargetPose

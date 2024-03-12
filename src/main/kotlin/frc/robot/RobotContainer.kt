@@ -1,5 +1,6 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
@@ -68,6 +69,7 @@ object RobotContainer {
 
     init {
         configureBindings()
+        configureAutoCommands()
 
         RobotAction.entries.forEach {
             robotActionSendable.addOption(it.name, it)
@@ -133,6 +135,10 @@ object RobotContainer {
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
+    }
+
+    private fun configureAutoCommands() {
+        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
     }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
