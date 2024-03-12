@@ -14,9 +14,8 @@ import frc.robot.TrunkPosition
 import frc.robot.TrunkState
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.Telemetry
-import frc.robot.util.visualization.Mechanism2d
+import frc.robot.util.visualiztion.Mechanism2d
 import frc.robot.util.visualization.MechanismLigament2d
-import kotlin.math.abs
 
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
