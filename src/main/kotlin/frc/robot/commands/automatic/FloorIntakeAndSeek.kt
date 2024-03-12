@@ -31,6 +31,8 @@ class FloorIntakeAndSeek : Command() {
             //Milan - everything needs to be negated bc the front is STUPID "sHoOtTeR sHoUlD be FrONt"
             RobotContainer.swerveSystem.driveTrain.applyRequest { RobotContainer.swerveSystem.forwardStraight.withVelocityX(1.0).withRotationalRate(-fudgedLLOffset) }
         }
+
+        println("Floor intake and seek finished: " + isFinished)
     }
 
     override fun isFinished(): Boolean {

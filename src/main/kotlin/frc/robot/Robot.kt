@@ -115,7 +115,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Drive By Test").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Command Test").schedule()
     }
 
     override fun autonomousPeriodic() {}
