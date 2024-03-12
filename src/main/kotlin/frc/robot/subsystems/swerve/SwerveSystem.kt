@@ -25,21 +25,21 @@ class SwerveSystem() : SubsystemBase() {
     private val PIDDeadzone = .005;
 
 
-    public val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
+    val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
-    public val brake: SwerveRequest.SwerveDriveBrake = SwerveRequest.SwerveDriveBrake();
-    public val forwardStraight: SwerveRequest.RobotCentric =
+    val brake: SwerveRequest.SwerveDriveBrake = SwerveRequest.SwerveDriveBrake();
+    val forwardStraight: SwerveRequest.RobotCentric =
         SwerveRequest.RobotCentric().withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
-    public val point: SwerveRequest.PointWheelsAt = SwerveRequest.PointWheelsAt();
+    val point: SwerveRequest.PointWheelsAt = SwerveRequest.PointWheelsAt();
 
     /* Path follower */
-//    public val runAuto: Command = driveTrain.getAutoPath("Tests");
+//    val runAuto: Command = driveTrain.getAutoPath("Tests");
 
-    public val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
+    val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
 
 
     val autoTwistController: AutoTwistController = AutoTwistController()
@@ -59,18 +59,12 @@ class SwerveSystem() : SubsystemBase() {
         )
     }
 
-    fun calculateJoyThrottle(joyThrottle: Double): Double {
-        //Milan: trust me bro this'll work totally definitely please don't question it
-        return ((joyThrottle * -1) + 1) / 2
-    }
+    // Milan: trust me bro this'll work totally definitely please don't question it
+    fun calculateJoyThrottle(joyThrottle: Double) = (-joyThrottle + 1.0) / 2.0
 
-    fun getSwervePose(): Pose2d {
-        return driveTrain.state.Pose ?: Pose2d()
-    }
+    fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
 
-    fun zeroGyro() {
-        driveTrain.seedFieldRelative()
-    }
+    fun zeroGyro() = driveTrain.seedFieldRelative()
 
     //Updates the swerve drive position zone in the state machine
     fun updateGlobalZone() {
@@ -110,8 +104,6 @@ class SwerveSystem() : SubsystemBase() {
     }
 
     override fun periodic() {
-
-
         updateGlobalZone()
     }
 

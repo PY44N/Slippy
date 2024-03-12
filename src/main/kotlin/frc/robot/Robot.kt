@@ -96,6 +96,7 @@ class Robot : LoggedRobot() {
         Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
 
+
         SmartDashboard.putNumber("Robot X", RobotContainer.swerveSystem.getSwervePose().x)
         SmartDashboard.putNumber("Robot Y", RobotContainer.swerveSystem.getSwervePose().y)
         SmartDashboard.putNumber("Robot Angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
