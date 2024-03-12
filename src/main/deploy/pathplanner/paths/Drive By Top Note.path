@@ -46,14 +46,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.55,
+      "waypointRelativePos": 0.3,
       "rotationDegrees": 180.0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.7,
       "rotationDegrees": -135.0,
       "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 1.65,
+      "rotationDegrees": -135.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
