@@ -26,10 +26,10 @@ object MiscCalculations {
      */
     fun calculateDeadzone(input: Double, deadzoneValue: Double): Double {
         if (abs(input) > deadzoneValue) {
-            if (input > 0) {
-                return (input - deadzoneValue) * (1 / (1 - deadzoneValue))
+            if (input > 0.0) {
+                return (input - deadzoneValue) / (1.0 - deadzoneValue)
             } else {
-                return (input + deadzoneValue) * (1 / (1 - deadzoneValue))
+                return (input + deadzoneValue) / (1.0 - deadzoneValue)
             }
         } else {
             return 0.0
@@ -40,10 +40,7 @@ object MiscCalculations {
      * Determines whether n_1 & n_2 are approximately equal (within a certain range). This range is inclusive
      */
     fun appxEqual(n1: Double, n2: Double, range: Double): Boolean {
-        if (abs(n1 - n2) <= range) {
-            return true;
-        }
-        return false;
+        return abs(n1 - n2) <= range
     }
 
     /**
@@ -57,10 +54,7 @@ object MiscCalculations {
     fun translation2dWithinRange(current: Translation2d, range: Pair<Translation2d, Translation2d>): Boolean {
         val range_start = range.first
         val range_end = range.second
-        if (current.x > range_start.x && current.y > range_start.y && current.x < range_end.x && current.y < range_end.y) {
-            return true
-        }
-        return false
+        return current.x > range_start.x && current.y > range_start.y && current.x < range_end.x && current.y < range_end.y
     }
 
     fun findMatchingTranslation2dRange(

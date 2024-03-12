@@ -117,6 +117,8 @@ object RobotContainer {
             }
         }))
 
+        rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
+
 
         xboxController.x().onTrue(Commands.runOnce({
             stateMachine.targetTrunkPose = TrunkPosition.STOW
