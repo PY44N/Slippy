@@ -19,7 +19,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     val elevatorPIDController: PIDController = PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
 
     init {
-
     }
 
     var isAtPose: Boolean = false
