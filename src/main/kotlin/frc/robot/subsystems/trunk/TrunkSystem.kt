@@ -13,10 +13,10 @@ import frc.robot.constants.TrunkConstants
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
-    val rotationPIDController: ProfiledPIDController = ProfiledPIDController(0.0, 0.0, 0.0, TrapezoidProfile.Constraints(0.0, 0.0))
-    val rotationFeedForward: ArmFeedforward = ArmFeedforward(0.0, 0.0, 0.0)
+    val rotationPIDController: ProfiledPIDController = ProfiledPIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD, TrapezoidProfile.Constraints(TrunkConstants.rotationMaxVelo, TrunkConstants.rotationMaxAcceleration))
+    val rotationFeedForward: ArmFeedforward = ArmFeedforward(TrunkConstants.rotationFFkS, TrunkConstants.rotationFFkG, TrunkConstants.rotationFFkV, TrunkConstants.rotationFFkA)
 
-    val elevatorPIDController: PIDController = PIDController(0.0, 0.0, 0.0)
+    val elevatorPIDController: PIDController = PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
 
     init {
 
