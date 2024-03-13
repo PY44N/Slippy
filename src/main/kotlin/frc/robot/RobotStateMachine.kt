@@ -128,6 +128,7 @@ class RobotStateMachine {
     val trunkReady: Boolean
         get() = RobotContainer.trunkSystem.isAtPose
 
+
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean
         get() = RobotContainer.cannonSystem.shooterReady()
