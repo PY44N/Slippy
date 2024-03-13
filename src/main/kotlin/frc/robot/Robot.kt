@@ -59,14 +59,6 @@ class Robot : LoggedRobot() {
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
 
-        if (RobotContainer.stateMachine.trunkState == TrunkState.MANUAL) {
-            RobotContainer.trunkSystem.elevate(-RobotContainer.xboxController.leftY)
-            RobotContainer.trunkSystem.rotate(-RobotContainer.xboxController.rightY * .1)
-        } else {
-//            if (!RobotContainer.trunkSystem.isMoving) {
-//                RobotContainer.trunkSystem.io.setDesiredRotation(RobotContainer.trunkSystem.io.getRotation() + (-RobotContainer.xboxController.rightY * .1))
-//            }
-        }
 
         val armMotorsFree = SmartDashboard.getBoolean("arm motors free?", false)
 

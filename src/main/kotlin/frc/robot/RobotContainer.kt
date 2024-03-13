@@ -1,8 +1,5 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -10,13 +7,12 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.TeleopSwerveDriveCommand
-import frc.robot.commands.UnBreakTheIK
 import frc.robot.commands.automatic.AutoAimAndShoot
-import frc.robot.commands.automatic.AutoAimAndShootFromPosition
 import frc.robot.commands.automatic.FloorIntakeAndSeek
-import frc.robot.commands.cannon.AutoAmp
-import frc.robot.commands.cannon.AutoIntake
+import frc.robot.commands.AutoAmp
+import frc.robot.commands.AutoIntake
 import frc.robot.commands.cannon.AutoSpit
+import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
@@ -49,6 +45,8 @@ object RobotContainer {
 
     val visionSystem: VisionSystem = VisionSystem()
 
+    var actuallyDoShoot: Boolean = false
+
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
@@ -80,29 +78,13 @@ object RobotContainer {
     }
 
     private fun configureBindings() {
-//        xboxController.a().toggleOnTrue(AutoIntake())
-//        xboxController.x().toggleOnTrue(AutoShootCommand())
-////        xboxController.x().onTrue(Commands.runOnce({
-////            println("x button pressed")
-////            cannonSystem.shoot()
-////        }))
-//        xboxController.b().onTrue(Commands.runOnce({
-//            cannonSystem.killShooter()
-//        }))
-//        xboxController.y().toggleOnTrue(AutoAmp())
-//        //MURDER...KILL IT ALL
-//        xboxController.start().onTrue(Commands.runOnce({
-//            cannonSystem.killShooter()
-//            cannonSystem.killIntake()
-//        }))
-
         rightJoystick.button(3).onTrue(Commands.runOnce({
             when (stateMachine.robotAction) {
                 RobotAction.Speaker -> {
                     if (stateMachine.shootPosition == ShootPosition.AutoAim) {
                         AutoAimAndShoot()
                     } else {
-                        AutoAimAndShootFromPosition(stateMachine.shootPosition.position)
+                        AutoAimAndShoot()
                     }
                 };
                 RobotAction.Amp -> AutoAmp();
@@ -114,11 +96,15 @@ object RobotContainer {
             }
         }))
 
+        xboxController.leftBumper().onTrue(Commands.runOnce({
+            actuallyDoShoot = true
+        }))
 
-        xboxController.y().onTrue(UnBreakTheIK())
+
         xboxController.b().toggleOnTrue(AutoIntake())
-        xboxController.leftBumper().onTrue(AutoAimAndShootFromPosition(Pose2d(Translation2d(2.89, 5.54), Rotation2d())))
-        xboxController.a().onTrue(AutoAimAndShoot())
+        xboxController.a().onTrue(AutoAmp())
+        xboxController.y().onTrue(AutoAimAndShoot())
+        xboxController.x().onTrue(Commands.runOnce({stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)}))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())

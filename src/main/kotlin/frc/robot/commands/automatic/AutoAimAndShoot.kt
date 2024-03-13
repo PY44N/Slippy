@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
+import frc.robot.commands.trunk.GoToPoseTrunk
+import frc.robot.commands.trunk.HoldPoseTrunk
+import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
@@ -15,21 +18,13 @@ import frc.robot.constants.TrunkConstants
 class AutoAimAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
-    val waitForTwist: Boolean = true
     var shooterAngle = 0.0
+
+    val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
-
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPose.SPEAKER
-        RobotContainer.trunkSystem.goToAim()
-//        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
-//            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
-//                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER_FROM_STAGE
-//            } else {
-//                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
-//            }
-//        }
+        RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
 
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
 
@@ -39,9 +34,9 @@ class AutoAimAndShoot : Command() {
 
     override fun execute() {
         SmartDashboard.putNumber("shooter angle", shooterAngle)
-        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
+        trunkCommand.desiredAngle = shooterAngle
 
-        if (RobotContainer.xboxController.leftTrigger().asBoolean && !autoShoot.isScheduled) {
+        if (RobotContainer.actuallyDoShoot && !autoShoot.isScheduled) {
             autoShoot.schedule()
         }
     }
@@ -51,11 +46,7 @@ class AutoAimAndShoot : Command() {
     }
 
     override fun end(interrupted: Boolean) {
-        println("Shootyboi Done")
-//        RobotContainer.stateMachine.shooterState = ShooterState.Stopped
-//        RobotContainer.stateMachine.driveState = DriveState.Teleop
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPose.STOW
-        RobotContainer.trunkSystem.goToCustom()
-
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
+        RobotContainer.actuallyDoShoot = false
     }
 }
