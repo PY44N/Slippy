@@ -1,13 +1,12 @@
 package frc.robot.commands.cannon
 
-import edu.wpi.first.wpilibj.Timer
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
+import frc.robot.commands.trunk.CoastAngleMovePosition
 import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.commands.trunk.TrunkCoast
+import frc.robot.commands.trunk.CoastTrunk
 
 class AutoIntake : Command() {
 
@@ -20,17 +19,17 @@ class AutoIntake : Command() {
         hasIntake = false
         hasAlmostSpit = false
 
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.INTAKE)
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
     }
 
     override fun execute() {
 
         if (RobotContainer.stateMachine.trunkReady) {
-            RobotContainer.stateMachine.currentTrunkCommand = TrunkCoast()
+            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE)
         }
 
         if (RobotContainer.stateMachine.noteState == NoteState.Stored && !hasIntake) {
-            RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
+            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.STOW).andThen(GoToPoseTrunk(TrunkPose.STOW))
             RobotContainer.cannonSystem.killIntake()
             RobotContainer.cannonSystem.spit()
             hasIntake = true
@@ -45,7 +44,6 @@ class AutoIntake : Command() {
         if (hasAlmostSpit) {
             RobotContainer.cannonSystem.noteEntryTime = -1.0
         }
-
     }
 
     override fun isFinished(): Boolean = RobotContainer.stateMachine.noteState == NoteState.Stored && hasIntake && hasAlmostSpit

@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.trunk.HoldPoseTrunk
-import frc.robot.commands.trunk.TrunkCommand
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
@@ -40,8 +39,8 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
 enum class TrunkPose(val angle: Double, val position: Double) {
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
-    SPEAKER_FROM_STAGE(TrunkConstants.SPEAKER_FROM_STAGE_ANGLE, TrunkConstants.SPEAKER_FROM_STAGE_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
+    INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
     CalibrationAngle(110.0, TrunkConstants.STOW_POSITION);
@@ -96,7 +95,7 @@ class RobotStateMachine {
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored
 
-    var currentTrunkCommand: TrunkCommand = HoldPoseTrunk(TrunkPose.STOW)
+    var currentTrunkCommand: Command = HoldPoseTrunk(TrunkPose.STOW)
             set(value) {
                 field.cancel()
                 field = value

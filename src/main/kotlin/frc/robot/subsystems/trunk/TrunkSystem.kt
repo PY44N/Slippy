@@ -43,6 +43,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         return MiscCalculations.appxEqual(pivotAngle, getRotation(), TrunkConstants.ANGLE_DEADZONE) && MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
     }
 
+    fun checkAtPosition(position: Double): Boolean {
+        return MiscCalculations.appxEqual(position, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
+    }
+
     fun getRotation(): Double {
         return frc.robot.util.Math.wrapAroundAngles((-io.getRawRotation() * 360.0) - TrunkConstants.rotationOffset)
     }

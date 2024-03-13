@@ -1,10 +1,9 @@
 package frc.robot.commands.trunk
 
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.RobotAction
 import frc.robot.RobotContainer
 
-class TrunkCoast: TrunkCommand() {
+class CoastTrunk: Command() {
     override fun initialize() {
         RobotContainer.trunkSystem.freeMotors()
     }
