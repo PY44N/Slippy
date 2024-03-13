@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.ArmFeedforward
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.RobotContainer
 import frc.robot.constants.TrunkConstants
@@ -23,16 +24,24 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     var isAtPose: Boolean = false
 
+    override fun periodic() {
+        SmartDashboard.putNumber("Angle val", getRotation())
+    }
+
+    fun setDesiredRotation(desiredRot: Double) {
+        rotationPIDController.goal = TrapezoidProfile.State(desiredRot, 0.0)
+    }
 
     fun calculateRotationOut(desiredRot: Double): Double {
-        val rotationPIDOut = RobotContainer.trunkSystem.rotationPIDController.calculate(RobotContainer.trunkSystem.getRotation(), desiredRot)
-        val rotationFFOut = RobotContainer.trunkSystem.rotationFeedForward.calculate(Math.toRadians(RobotContainer.trunkSystem.rotationPIDController.setpoint.position - 90), 0.0)
+        val rotationPIDOut = rotationPIDController.calculate(getRotation(), desiredRot)
+//        println("rotation PID out: " + rotationPIDOut)
+        val rotationFFOut = rotationFeedForward.calculate(Math.toRadians(desiredRot - 90), 0.0)
         return MathUtil.clamp(rotationPIDOut
                 + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
     }
 
     fun calculatePositionOut(desiredPosition: Double): Double {
-        val posPIDOut = RobotContainer.trunkSystem.elevatorPIDController.calculate(RobotContainer.trunkSystem.getRotation(), desiredPosition)
+        val posPIDOut = elevatorPIDController.calculate(getPosition(), desiredPosition)
         val posFF = TrunkConstants.positionFF
         return posPIDOut + posFF
     }

@@ -46,11 +46,9 @@ object TrunkConstants {
 
     val rotationEncoderID = 9
 
-//    var rotationKP = 7.0
-        var rotationKP = 5.0
-//        var rotationKI = 0.001
+        var rotationKP = 0.08
     var rotationKI = 0.0
-    var rotationKD = .125
+    var rotationKD = .0021
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
@@ -76,6 +74,6 @@ object TrunkConstants {
 
     val ELEVATOR_DEADZONE = .02
 
-    val MIN_ROT_VOLTS = -1.0
-    val MAX_ROT_VOLTS = 2.0
+    val MIN_ROT_VOLTS = -0.5
+    val MAX_ROT_VOLTS = 1.0
 }

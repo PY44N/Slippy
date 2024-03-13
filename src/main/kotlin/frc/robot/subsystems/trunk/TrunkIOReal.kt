@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
@@ -61,10 +62,12 @@ class TrunkIOReal : TrunkIO {
     override fun getRawRotation(): Double = rotationEncoder.absolutePosition
 
     override fun setElevatorSpeed(speed: Double) {
+        SmartDashboard.putNumber("set elevator speed: ", speed)
         elevatorMotor.set(-speed)
     }
 
     override fun setRotationVoltage(volts: Double) {
+        SmartDashboard.putNumber("set rotation voltage: ", MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS))
         mainRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
     }
 

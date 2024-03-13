@@ -1,5 +1,6 @@
 package frc.robot.commands.trunk
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
@@ -16,6 +17,7 @@ class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
 
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
+        RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
     }
 
 
@@ -23,14 +25,14 @@ class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
         if (isAngleSafe) {
             currentTargetAngle = desiredPose.angle
             currentTargetPosition = desiredPose.position
+            RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
         }
 
         val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle)
-
+        println("rotation volts: " + rotationVolts)
         RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
 
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(currentTargetPosition)
-
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
     }
 
@@ -42,6 +44,6 @@ class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
         if (interrupted == false) {
             RobotContainer.trunkSystem.isAtPose = true
         }
-        RobotContainer.stateMachine.currentTrunkCommand = HoldPoseTrunk(desiredPose)
+//        RobotContainer.stateMachine.currentTrunkCommand = HoldPoseTrunk(desiredPose)
     }
 }

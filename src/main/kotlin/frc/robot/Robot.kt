@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.commands.automatic.AutoClimbCommand
 import frc.robot.commands.autonomous.DriveBackAuto
+import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.util.Telemetry
 import frc.robot.constants.LimelightConstants
 import frc.robot.constants.TargetingConstants
@@ -109,6 +110,9 @@ class Robot : LoggedRobot() {
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
         RobotContainer.swerveSystem.driveTrain.getAutoPath("Command Test").schedule()
+
+        //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
+
     }
 
     override fun autonomousPeriodic() {}
@@ -116,6 +120,9 @@ class Robot : LoggedRobot() {
     override fun autonomousExit() {}
 
     override fun teleopInit() {
+        RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
+        RobotContainer.stateMachine.currentTrunkCommand.schedule()
+
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.cannonSystem.killIntake()
 

@@ -33,7 +33,6 @@ object RobotContainer {
 
     val telemetry = TelemetryToggles()
 
-
     val trunkSystem = TrunkSystem(TrunkIOReal())
 
     val stateMachine: RobotStateMachine = RobotStateMachine()

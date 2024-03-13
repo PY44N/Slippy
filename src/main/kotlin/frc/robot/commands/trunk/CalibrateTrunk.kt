@@ -6,10 +6,10 @@ import frc.robot.TrunkPose
 
 class CalibrateTrunk: Command() {
     override fun initialize() {
+        RobotContainer.trunkSystem.io.setElevatorSpeed(.2)
     }
 
     override fun execute() {
-        RobotContainer.trunkSystem.io.setElevatorSpeed(.2)
     }
 
     override fun isFinished(): Boolean {
@@ -19,6 +19,7 @@ class CalibrateTrunk: Command() {
     override fun end(interrupted: Boolean) {
         RobotContainer.trunkSystem.io.setZeroPosition()
         RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
+        RobotContainer.trunkSystem.rotationPIDController.reset(RobotContainer.trunkSystem.getRotation(), 0.0)
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
     }
 }
