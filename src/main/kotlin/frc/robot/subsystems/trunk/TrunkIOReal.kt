@@ -3,6 +3,7 @@ package frc.robot.subsystems.trunk
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
 import frc.robot.constants.TrunkConstants
@@ -63,12 +64,8 @@ class TrunkIOReal : TrunkIO {
         elevatorMotor.set(-speed)
     }
 
-    override fun setRotationSpeed(speed: Double) {
-        mainRotationMotor.set(speed)
-    }
-
     override fun setRotationVoltage(volts: Double) {
-        mainRotationMotor.setVoltage(volts);
+        mainRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
     }
 
     override fun periodic() {

@@ -75,4 +75,7 @@ object TrunkConstants {
     val SPEAKER_FROM_STAGE_POSITION = STOW_POSITION
 
     val ELEVATOR_DEADZONE = .02
+
+    val MIN_ROT_VOLTS = -1.0
+    val MAX_ROT_VOLTS = 2.0
 }

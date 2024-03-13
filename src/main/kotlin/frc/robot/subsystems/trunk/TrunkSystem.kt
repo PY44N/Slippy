@@ -28,7 +28,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         val rotationPIDOut = RobotContainer.trunkSystem.rotationPIDController.calculate(RobotContainer.trunkSystem.getRotation(), desiredRot)
         val rotationFFOut = RobotContainer.trunkSystem.rotationFeedForward.calculate(Math.toRadians(RobotContainer.trunkSystem.rotationPIDController.setpoint.position - 90), 0.0)
         return MathUtil.clamp(rotationPIDOut
-                + rotationFFOut, -.5, 2.0)
+                + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
     }
 
     fun calculatePositionOut(desiredPosition: Double): Double {
