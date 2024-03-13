@@ -5,8 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.commands.trunk.GoToPositionTrunk
+import frc.robot.commands.trunk.HoldPoseTrunk
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
@@ -37,7 +36,7 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
 }
 
 //this represents the DESIRED trunk statautoshooe
-enum class TrunkPosition(val angle: Double, val position: Double) {
+enum class TrunkPose(val angle: Double, val position: Double) {
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     SPEAKER_FROM_STAGE(TrunkConstants.SPEAKER_FROM_STAGE_ANGLE, TrunkConstants.SPEAKER_FROM_STAGE_POSITION),
@@ -96,8 +95,12 @@ class RobotStateMachine {
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored
 
-    var currentTrunkPosition: TrunkPosition = TrunkPosition.STOW
-    var currentTrunkCommand: Command = TrunkHoldCommand()
+    var currentTrunkCommand: Command = HoldPoseTrunk(TrunkPose.STOW)
+            set(value) {
+                field.cancel()
+                field = value
+                field.schedule()
+            }
 
     var currentRobotZone: GlobalZones = GlobalZones.Wing
     var prevRobotZone: GlobalZones = GlobalZones.Wing
@@ -126,13 +129,7 @@ class RobotStateMachine {
 
     //Is the trunk at the desired position?
     val trunkReady: Boolean
-        get() = if (trunkState == TrunkState.AIMING) {
-            RobotContainer.trunkSystem.isMoving == false && RobotContainer.trunkSystem.isAtAngle == true
-        }
-        else {
-            targetTrunkPose == RobotContainer.trunkSystem.prevTargetPose
-        }
-//get() = targetTrunkPose == RobotContainer.trunkSystem.prevTargetPose
+        get() = RobotContainer.trunkSystem.isAtPose
 
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean

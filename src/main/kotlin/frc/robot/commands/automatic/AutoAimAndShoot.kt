@@ -21,7 +21,7 @@ class AutoAimAndShoot : Command() {
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
 
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPose.SPEAKER
         RobotContainer.trunkSystem.goToAim()
 //        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
 //            if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
@@ -54,7 +54,7 @@ class AutoAimAndShoot : Command() {
         println("Shootyboi Done")
 //        RobotContainer.stateMachine.shooterState = ShooterState.Stopped
 //        RobotContainer.stateMachine.driveState = DriveState.Teleop
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPose.STOW
         RobotContainer.trunkSystem.goToCustom()
 
     }

@@ -2,7 +2,7 @@ package frc.robot.commands
 
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
-import frc.robot.TrunkPosition
+import frc.robot.TrunkPose
 import java.awt.Robot
 
 class UnBreakTheIK: Command() {
@@ -22,7 +22,7 @@ class UnBreakTheIK: Command() {
             stepOne = true
         }
         else if (!stepTwo) {
-            RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+            RobotContainer.stateMachine.targetTrunkPose = TrunkPose.STOW
             stepTwo = true
         }
         else if (!stepThree) {

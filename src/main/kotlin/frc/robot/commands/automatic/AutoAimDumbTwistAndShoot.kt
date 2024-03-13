@@ -18,11 +18,11 @@ class DumbAutoAimTwistAndShoot : Command() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
 
-        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
+        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPose.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPose.SPEAKER_FROM_STAGE) {
             if (RobotContainer.stateMachine.currentRobotZone == GlobalZones.Stage) {
-                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER_FROM_STAGE
+                RobotContainer.stateMachine.targetTrunkPose = TrunkPose.SPEAKER_FROM_STAGE
             } else {
-                RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+                RobotContainer.stateMachine.targetTrunkPose = TrunkPose.SPEAKER
             }
         }
 

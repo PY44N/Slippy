@@ -16,7 +16,7 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
     override fun initialize() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
 
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.SPEAKER
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPose.SPEAKER
         RobotContainer.trunkSystem.goToAim()
 
 //        if (RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER && RobotContainer.stateMachine.targetTrunkPose != TrunkPosition.SPEAKER_FROM_STAGE) {
@@ -75,7 +75,7 @@ class AutoAimAndShootFromPosition(val position: Pose2d) : Command() {
         println("Shootyboi Done")
         RobotContainer.stateMachine.shooterState = ShooterState.Stopped
         RobotContainer.stateMachine.driveState = DriveState.Teleop
-        RobotContainer.stateMachine.targetTrunkPose = TrunkPosition.STOW
+        RobotContainer.stateMachine.targetTrunkPose = TrunkPose.STOW
         RobotContainer.trunkSystem.goToCustom()
     }
 }
