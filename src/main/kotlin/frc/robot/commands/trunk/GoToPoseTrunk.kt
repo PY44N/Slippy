@@ -5,7 +5,7 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
 
-class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
+class GoToPoseTrunk(val desiredPose: TrunkPose): TrunkCommand() {
 
 
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE

@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.trunk.HoldPoseTrunk
+import frc.robot.commands.trunk.TrunkCommand
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
@@ -95,7 +96,7 @@ class RobotStateMachine {
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored
 
-    var currentTrunkCommand: Command = HoldPoseTrunk(TrunkPose.STOW)
+    var currentTrunkCommand: TrunkCommand = HoldPoseTrunk(TrunkPose.STOW)
             set(value) {
                 field.cancel()
                 field = value
