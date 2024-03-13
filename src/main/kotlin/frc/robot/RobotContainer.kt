@@ -67,7 +67,7 @@ object RobotContainer {
 
     init {
         configureBindings()
-        configureAutoCommands()
+//        configureAutoCommands()
 
         RobotAction.entries.forEach {
             robotActionSendable.addOption(it.name, it)
@@ -103,27 +103,25 @@ object RobotContainer {
 
         xboxController.leftBumper().onTrue(Commands.runOnce({
             actuallyDoShoot = true
-        rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
+        }))
+            rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
+
+            xboxController.b().toggleOnTrue(AutoIntake())
+            xboxController.a().onTrue(AutoAmp())
+            xboxController.y().onTrue(AutoAimAndShoot())
+            xboxController.x().onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW) }))
+            xboxController.rightBumper().toggleOnTrue(AutoSpit())
+
+            leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
 
 
-
-        xboxController.b().toggleOnTrue(AutoIntake())
-        xboxController.a().onTrue(AutoAmp())
-        xboxController.y().onTrue(AutoAimAndShoot())
-        xboxController.x().onTrue(Commands.runOnce({stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)}))
-        xboxController.rightBumper().toggleOnTrue(AutoSpit())
-
-        leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
-    }
-
-
-    private fun configureAutoCommands() {
-        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
-    }
+//    private fun configureAutoCommands() {
+//        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
+//    }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 //        SmartDashboard.putData("Auto Chooser", autoChooser)
-
+    }
 
 }
 
