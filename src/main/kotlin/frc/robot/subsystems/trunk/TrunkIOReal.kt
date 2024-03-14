@@ -1,7 +1,10 @@
 package frc.robot.subsystems.trunk
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.CoastOut
+import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
@@ -31,34 +34,28 @@ class TrunkIOReal : TrunkIO {
         }
     override var rotationBrake = true
         set(enabled) {
-            if (positionBrake != enabled) {
-                if (enabled) {
-                    mainRotationMotor.setControl(CoastOut())
-                    followerRotationMotor.setControl(CoastOut())
-                } else {
-                    mainRotationMotor.setControl()
-                }
-                mainRotationMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
-                mainRotationMotor.setControl(CoastOut())
-                followerRotationMotor.setControl(CoastOut())
-                followerRotationMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
+            if (field != enabled) {
+                mainRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
+                followerRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
             }
             field = enabled
         }
 
     init {
+        // factory reset to make it not be bad
         elevatorMotor.restoreFactoryDefaults()
-        mainRotationMotor.restoreFactoryDefaults()
-        followerRotationMotor.restoreFactoryDefaults()
+        mainRotationMotor.configurator.apply(TalonFXConfiguration())
+        followerRotationMotor.configurator.apply(TalonFXConfiguration())
 
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
-        mainRotationMotor.inverted = false
+        mainRotationMotor.inverted = TODO()
 
+        // ensure motors are initially braked
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        mainRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        followerRotationMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+        mainRotationMotor.setNeutralMode(NeutralModeValue.Brake)
+        followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
-        followerRotationMotor.follow(mainRotationMotor, true)
+        followerRotationMotor.setControl(Follower(22, true))
     }
 
     override fun setZeroPosition() {
