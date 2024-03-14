@@ -1,8 +1,10 @@
 package frc.robot.subsystems.trunk
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.CoastOut
 import com.ctre.phoenix6.controls.Follower
+import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.CANSparkBase
@@ -25,6 +27,7 @@ class TrunkIOReal : TrunkIO {
     private val rotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
 
     private val topLimit = DigitalInput(0)
+    private val voltageVelocityController = VelocityVoltage(0.0, 0.0, true, 0.0, 0, false, false, false)
 
     override var positionBrake = true
         set(enabled) {
@@ -32,6 +35,7 @@ class TrunkIOReal : TrunkIO {
                 elevatorMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
             field = enabled
         }
+
     override var rotationBrake = true
         set(enabled) {
             if (field != enabled) {
@@ -44,8 +48,17 @@ class TrunkIOReal : TrunkIO {
     init {
         // factory reset to make it not be bad
         elevatorMotor.restoreFactoryDefaults()
-        masterRotationMotor.configurator.apply(TalonFXConfiguration())
-        followerRotationMotor.configurator.apply(TalonFXConfiguration())
+        val pivotMotorConfiguration = TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+
+        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
+        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
+        pivotMotorConfiguration.Slot0.kD = TrunkConstants.rotationKD
+        pivotMotorConfiguration.Slot0.kV = 0.12; // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / Rotation per second
+        pivotMotorConfiguration.Voltage.PeakForwardVoltage = 8.0;
+        pivotMotorConfiguration.Voltage.PeakReverseVoltage = -8.0;
+
+        masterRotationMotor.configurator.apply(pivotMotorConfiguration)
+        followerRotationMotor.configurator.apply(pivotMotorConfiguration)
 
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
         masterRotationMotor.inverted = TODO()
@@ -75,7 +88,8 @@ class TrunkIOReal : TrunkIO {
 
     override fun setRotationVoltage(volts: Double) {
         SmartDashboard.putNumber("set rotation voltage: ", MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS))
-        masterRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
+//        masterRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
+        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }
 
     override fun periodic() {
