@@ -74,7 +74,7 @@ class TargetingSystem {
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
 
-    fun getShotNoVelocity(robotPose: Pose2d): ShotSetup {
+    fun getShotNoVelocity(robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(), robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds): ShotSetup {
         val vars = TargetingVariables()
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
@@ -90,6 +90,13 @@ class TargetingSystem {
 
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
         val vars = TargetingVariables(robotPose, robotVelocity)
-
+        val noVelShot = getShotNoVelocity(robotPose, robotVelocity)
+        val velShot = calculateShot(robotPose, robotVelocity)
+        println("vars:")
+        println(vars)
+        println("no velocity:")
+        println(noVelShot)
+        println("velocity:")
+        println(velShot)
     }
 }
