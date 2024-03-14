@@ -16,11 +16,11 @@ import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
 
-    private val elevatorMotor = CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless)
+    private val elevatorMotor = CANSparkMax(TrunkConstants.ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 
-    private val mainRotationMotor = TalonFX(22) // Right Motor
-    private val followerRotationMotor = TalonFX(21) // Left Motor
+    private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
+    private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
 
     private val rotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
 
@@ -35,7 +35,7 @@ class TrunkIOReal : TrunkIO {
     override var rotationBrake = true
         set(enabled) {
             if (field != enabled) {
-                mainRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
+                masterRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
                 followerRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
             }
             field = enabled
@@ -44,15 +44,15 @@ class TrunkIOReal : TrunkIO {
     init {
         // factory reset to make it not be bad
         elevatorMotor.restoreFactoryDefaults()
-        mainRotationMotor.configurator.apply(TalonFXConfiguration())
+        masterRotationMotor.configurator.apply(TalonFXConfiguration())
         followerRotationMotor.configurator.apply(TalonFXConfiguration())
 
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
-        mainRotationMotor.inverted = TODO()
+        masterRotationMotor.inverted = TODO()
 
         // ensure motors are initially braked
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        mainRotationMotor.setNeutralMode(NeutralModeValue.Brake)
+        masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
         followerRotationMotor.setControl(Follower(22, true))
@@ -75,7 +75,7 @@ class TrunkIOReal : TrunkIO {
 
     override fun setRotationVoltage(volts: Double) {
         SmartDashboard.putNumber("set rotation voltage: ", MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS))
-        mainRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
+        masterRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
     }
 
     override fun periodic() {

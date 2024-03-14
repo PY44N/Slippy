@@ -6,7 +6,12 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object TrunkConstants {
-    // someone rename these
+
+    const val ELEVATOR_MOTOR_ID = 20
+    const val FOLLOWER_PIVOT_MOTOR_ID = 21
+    const val MASTER_PIVOT_MOTOR_ID = 22
+
+
     const val ELEVATOR2M = -0.03980722784
     const val M2ELEVATOR = 1.0 / ELEVATOR2M
 
