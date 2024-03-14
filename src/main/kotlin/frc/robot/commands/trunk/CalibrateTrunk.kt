@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 
-class CalibrateTrunk: Command() {
+class CalibrateTrunk : Command() {
     override fun initialize() {
         RobotContainer.trunkSystem.io.setElevatorSpeed(.2)
     }
@@ -20,6 +20,7 @@ class CalibrateTrunk: Command() {
         RobotContainer.trunkSystem.io.setZeroPosition()
         RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
         RobotContainer.trunkSystem.rotationPIDController.reset(RobotContainer.trunkSystem.getRotation(), 0.0)
+//        RobotContainer.trunkSystem.rotationPIDController.reset()
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
     }
 }

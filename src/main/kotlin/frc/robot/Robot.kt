@@ -33,6 +33,7 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("shooter height", TargetingConstants.shooterZ)
         SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
         SmartDashboard.putNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
+        SmartDashboard.putNumber("Current Target Angle", 0.0)
         RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
         SmartDashboard.putNumber("shooter angle", 58.5)
@@ -96,6 +97,11 @@ class Robot : LoggedRobot() {
 
 //        val changedPosition = Field2d.toWPILIBFieldPosition(FieldPosition(fieldPosition.x, fieldPosition.y, gyro.getYaw()))
 //        field2d.get().setRobotPose(changedPosition.x, changedPosition.y, Rotation2d(changedPosition.angleRadians))
+
+        SmartDashboard.putString("Current Trunk Command", RobotContainer.stateMachine.currentTrunkCommand.name)
+        SmartDashboard.putNumber("Trunk Target Rotation", RobotContainer.trunkSystem.trunkDesiredRotation)
+        SmartDashboard.putNumber("Trunk Rotation", RobotContainer.trunkSystem.getRotation())
+        SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
     }
 
 

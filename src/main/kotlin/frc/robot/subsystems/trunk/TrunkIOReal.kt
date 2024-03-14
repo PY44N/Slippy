@@ -50,25 +50,25 @@ class TrunkIOReal : TrunkIO {
         elevatorMotor.restoreFactoryDefaults()
         val pivotMotorConfiguration = TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
 
-        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
-        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
-        pivotMotorConfiguration.Slot0.kD = TrunkConstants.rotationKD
-        pivotMotorConfiguration.Slot0.kV = 0.12; // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / Rotation per second
-        pivotMotorConfiguration.Voltage.PeakForwardVoltage = 8.0;
-        pivotMotorConfiguration.Voltage.PeakReverseVoltage = -8.0;
+//        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
+//        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
+//        pivotMotorConfiguration.Slot0.kD = TrunkConstants.rotationKD
+//        pivotMotorConfiguration.Slot0.kV = 0.12; // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / Rotation per second
+//        pivotMotorConfiguration.Voltage.PeakForwardVoltage = 8.0;
+//        pivotMotorConfiguration.Voltage.PeakReverseVoltage = -8.0;
 
         masterRotationMotor.configurator.apply(pivotMotorConfiguration)
         followerRotationMotor.configurator.apply(pivotMotorConfiguration)
 
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
-        masterRotationMotor.inverted = TODO()
+        masterRotationMotor.inverted = true
 
         // ensure motors are initially braked
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
-        followerRotationMotor.setControl(Follower(22, true))
+        followerRotationMotor.setControl(Follower(22, false))
     }
 
     override fun setZeroPosition() {
@@ -88,8 +88,8 @@ class TrunkIOReal : TrunkIO {
 
     override fun setRotationVoltage(volts: Double) {
         SmartDashboard.putNumber("set rotation voltage: ", MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS))
-//        masterRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
-        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
+        masterRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
+//        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }
 
     override fun periodic() {
