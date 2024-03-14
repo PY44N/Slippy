@@ -18,6 +18,7 @@ data class ShotSetup(var robotAngle: Double, var shooterAngle: Double) {
         shooterAngle = -shooterAngle + 90
     }
 }
+
 private class TargetingVariables(robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(), robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds) {
     val x: Double = robotPose.x - TargetingConstants.speakerX - TargetingConstants.endpointX
     val y: Double = robotPose.y - TargetingConstants.speakerY - TargetingConstants.endpointY
@@ -84,6 +85,21 @@ class TargetingSystem {
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
         val targetShooterAngle = atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
+
+        return ShotSetup(targetRobotAngle, targetShooterAngle)
+    }
+
+    fun getShotNoVelocityFromPosition(position: Pose2d): ShotSetup {
+        val vars = TargetingVariables(position)
+        Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
+
+        val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
+
+        val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
+//        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + .5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2)) / vars.r - TargetingConstants.stupidConstant/shootingVelocity) * rad2deg
+        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2))) / shootingVelocity.pow(2)) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }

@@ -6,13 +6,13 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
 
-class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
+class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
 
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
     var currentTargetPosition: Double = RobotContainer.trunkSystem.getPosition()
 
     val isAngleSafe: Boolean
-            get() = RobotContainer.trunkSystem.getRotation() >= TrunkConstants.SAFE_TRAVEL_ANGLE
+        get() = RobotContainer.trunkSystem.getRotation() >= TrunkConstants.SAFE_TRAVEL_ANGLE
 
 
     override fun initialize() {
@@ -22,6 +22,8 @@ class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
 
 
     override fun execute() {
+        SmartDashboard.putNumber("Current Target Angle", currentTargetAngle)
+
         if (isAngleSafe) {
             currentTargetAngle = desiredPose.angle
             currentTargetPosition = desiredPose.position
@@ -37,13 +39,13 @@ class GoToPoseTrunk(val desiredPose: TrunkPose): Command() {
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.rotationPIDController.goal.position, RobotContainer.trunkSystem.elevatorPIDController.setpoint)
+        return RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, RobotContainer.trunkSystem.elevatorPIDController.setpoint)
     }
 
     override fun end(interrupted: Boolean) {
         if (interrupted == false) {
             RobotContainer.trunkSystem.isAtPose = true
         }
-//        RobotContainer.stateMachine.currentTrunkCommand = HoldPoseTrunk(desiredPose)
+        RobotContainer.stateMachine.currentTrunkCommand = HoldPoseTrunk(desiredPose)
     }
 }

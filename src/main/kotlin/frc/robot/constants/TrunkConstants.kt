@@ -6,7 +6,12 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object TrunkConstants {
-    // someone rename these
+
+    const val ELEVATOR_MOTOR_ID = 20
+    const val FOLLOWER_PIVOT_MOTOR_ID = 21
+    const val MASTER_PIVOT_MOTOR_ID = 22
+
+
     const val ELEVATOR2M = -0.03980722784
     const val M2ELEVATOR = 1.0 / ELEVATOR2M
 
@@ -20,7 +25,7 @@ object TrunkConstants {
     var AMP_ANGLE: Double = 185.0
 
 
-    var INTAKE_POSITION: Double = 0.01
+    var INTAKE_POSITION: Double = 0.02
     var INTAKE_ANGLE: Double = 70.0
 
     var STOW_POSITION: Double = 0.381
@@ -31,7 +36,7 @@ object TrunkConstants {
 
     var TOP_BREAK_BEAM_POSITION: Double = .3810000
 
-    var rotationOffset: Double = -35.00
+    var rotationOffset: Double = -49.0
 
     var positionKP = 22.0
     var positionKI = 0.0
@@ -40,32 +45,32 @@ object TrunkConstants {
     var positionFF = 0.02
 
     val rotationFFkS = 0.03
-    val rotationFFkG = 0.48
-    val rotationFFkV = 2.44
+    val rotationFFkG = 0.33
+    val rotationFFkV = 2.25
     val rotationFFkA = 0.02
 
     val rotationEncoderID = 9
 
-        var rotationKP = 0.08
+    var rotationKP = 0.15
     var rotationKI = 0.0
     var rotationKD = .0021
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
-    var rotationMaxAcceleration = 40.0
+    var rotationMaxAcceleration = 50.0
 
     //degrees/sec
-    var rotationMaxVelo = 30.0
+    var rotationMaxVelo = 90.0
     var rotationMaxError = 5.0
 
     val ANGLE_DEADZONE = 2.5
 
-    val SAFE_TO_DROP_INTAKE_POSITION = 0.23
+    val SAFE_TO_DROP_INTAKE_POSITION = 0.35
 
     val UNDER_STAGE_SHOOTING_OFFSET = 0.0
     val SHOOTING_OFFSET = 0.0
 
-// TODO: actually tune
+    // TODO: actually tune
     val UNDER_STAGE_SHOOTING_HEIGHT = 0.3
     val SHOOTING_HEIGHT = 0.3
 
@@ -74,6 +79,6 @@ object TrunkConstants {
 
     val ELEVATOR_DEADZONE = .02
 
-    val MIN_ROT_VOLTS = -0.5
-    val MAX_ROT_VOLTS = 1.0
+    val MIN_ROT_VOLTS = -2.0
+    val MAX_ROT_VOLTS = 3.0
 }
