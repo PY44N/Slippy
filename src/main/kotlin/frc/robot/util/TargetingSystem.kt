@@ -2,6 +2,7 @@ package frc.robot.util
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.Robot
@@ -17,21 +18,13 @@ data class ShotSetup(var robotAngle: Double, var shooterAngle: Double) {
         shooterAngle = -shooterAngle + 90
     }
 }
-private class TargetingVariables(val robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose()) {
-    val x: Double
-    val y: Double
-    val vx: Double
-    val vy: Double
-    val r: Double
-    init {
-        val robotVelocity = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 
-        x = robotPose.x - TargetingConstants.speakerX - TargetingConstants.endpointX
-        y = robotPose.y - TargetingConstants.speakerY - TargetingConstants.endpointY
-        vx = robotVelocity.vxMetersPerSecond
-        vy = robotVelocity.vyMetersPerSecond
-        r = sqrt(x * x + y * y)
-    }
+private class TargetingVariables(robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(), robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds) {
+    val x: Double = robotPose.x - TargetingConstants.speakerX - TargetingConstants.endpointX
+    val y: Double = robotPose.y - TargetingConstants.speakerY - TargetingConstants.endpointY
+    val vx: Double = robotVelocity.vxMetersPerSecond
+    val vy: Double = robotVelocity.vyMetersPerSecond
+    val r: Double = sqrt(x * x + y * y)
 }
 
 class TargetingSystem {
@@ -48,8 +41,8 @@ class TargetingSystem {
 // dumb scaling dont think about it
     private val shootingVelocityScaling = 1.3
 
-    fun calculateShot(): ShotSetup {
-        val shooterVars = TargetingVariables()
+    fun calculateShot(robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(), robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds): ShotSetup {
+        val shooterVars = TargetingVariables(robotPose, robotVelocity)
 
         val targetRobotAngle = robotAngleFunction(shooterVars)
         val targetShooterAngle = shooterAngleFunction(shooterVars)
@@ -82,7 +75,7 @@ class TargetingSystem {
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
 
-    fun getShotNoVelocity(): ShotSetup {
+    fun getShotNoVelocity(robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(), robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds): ShotSetup {
         val vars = TargetingVariables()
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
@@ -91,7 +84,7 @@ class TargetingSystem {
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
         val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
-        val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2))) / vars.r - TargetingConstants.stupidConstant/shootingVelocity) * rad2deg
+        val targetShooterAngle = atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
     }
@@ -109,5 +102,17 @@ class TargetingSystem {
         val targetShooterAngle = TargetingConstants.constantStupidConstant + atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2))) / shootingVelocity.pow(2)) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
+    }
+
+    fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
+        val vars = TargetingVariables(robotPose, robotVelocity)
+        val noVelShot = getShotNoVelocity(robotPose, robotVelocity)
+        val velShot = calculateShot(robotPose, robotVelocity)
+        println("vars:")
+        println(vars)
+        println("no velocity:")
+        println(noVelShot)
+        println("velocity:")
+        println(velShot)
     }
 }
