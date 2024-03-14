@@ -1,5 +1,7 @@
 package frc.robot.subsystems.trunk
 
+import com.ctre.phoenix6.controls.CoastOut
+import com.ctre.phoenix6.hardware.TalonFX
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
@@ -14,8 +16,8 @@ class TrunkIOReal : TrunkIO {
     private val elevatorMotor = CANSparkMax(20, CANSparkLowLevel.MotorType.kBrushless)
     private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 
-    private val mainRotationMotor = CANSparkMax(22, CANSparkLowLevel.MotorType.kBrushless)
-    private val followerRotationMotor = CANSparkMax(21, CANSparkLowLevel.MotorType.kBrushless)
+    private val mainRotationMotor = TalonFX(22) // Right Motor
+    private val followerRotationMotor = TalonFX(21) // Left Motor
 
     private val rotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
 
@@ -30,7 +32,15 @@ class TrunkIOReal : TrunkIO {
     override var rotationBrake = true
         set(enabled) {
             if (positionBrake != enabled) {
+                if (enabled) {
+                    mainRotationMotor.setControl(CoastOut())
+                    followerRotationMotor.setControl(CoastOut())
+                } else {
+                    mainRotationMotor.setControl()
+                }
                 mainRotationMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
+                mainRotationMotor.setControl(CoastOut())
+                followerRotationMotor.setControl(CoastOut())
                 followerRotationMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
             }
             field = enabled
