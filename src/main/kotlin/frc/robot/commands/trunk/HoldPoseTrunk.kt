@@ -14,8 +14,6 @@ class HoldPoseTrunk(val pose: TrunkPose) : Command() {
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(pose.position)
 
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
-
-        println("Holding pose")
     }
 
     override fun isFinished(): Boolean {

@@ -2,7 +2,6 @@ package frc.robot.subsystems.trunk
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.CoastOut
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.TalonFX
@@ -24,7 +23,8 @@ class TrunkIOReal : TrunkIO {
     private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
     private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
 
-    private val rotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
+    private val shaftRotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
+    private val rotationEncoder = masterRotationMotor.position
 
     private val topLimit = DigitalInput(0)
     private val voltageVelocityController = VelocityVoltage(0.0, 0.0, true, 0.0, 0, false, false, false)
@@ -79,7 +79,7 @@ class TrunkIOReal : TrunkIO {
 
     override fun getRawPosition(): Double = positionEncoder.position
 
-    override fun getRawRotation(): Double = rotationEncoder.absolutePosition
+    override fun getRawRotation(): Double = shaftRotationEncoder.absolutePosition
 
     override fun setElevatorSpeed(speed: Double) {
         SmartDashboard.putNumber("set elevator speed: ", speed)
