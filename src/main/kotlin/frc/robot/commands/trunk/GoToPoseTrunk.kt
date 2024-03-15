@@ -9,20 +9,34 @@ import frc.robot.constants.TrunkConstants
 class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
 
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
-    var currentTargetPosition: Double = RobotContainer.trunkSystem.getPosition()
+    var currentTargetPosition: Double = TrunkConstants.LEGAL_PIVOT_POSITION_TARGET
 
     val isAngleSafe: Boolean
         get() = RobotContainer.trunkSystem.getRotation() >= TrunkConstants.SAFE_TRAVEL_ANGLE
 
+    val isPivotPositionLegal: Boolean
+        get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.LEGAL_PIVOT_POSITION
 
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
         RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
+
+        RobotContainer.trunkSystem.io.rotationBrake = isPivotPositionLegal
     }
 
 
     override fun execute() {
         SmartDashboard.putNumber("Current Target Angle", currentTargetAngle)
+
+        if (isPivotPositionLegal) {
+            RobotContainer.trunkSystem.io.rotationBrake = true
+            currentTargetPosition = RobotContainer.trunkSystem.getPosition()
+            RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
+
+            val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle)
+            println("rotation volts: " + rotationVolts)
+            RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
+        }
 
         if (isAngleSafe) {
             currentTargetAngle = desiredPose.angle
@@ -30,22 +44,23 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
             RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
         }
 
-        val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle)
-        println("rotation volts: " + rotationVolts)
-        RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
-
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(currentTargetPosition)
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, RobotContainer.trunkSystem.elevatorPIDController.setpoint)
+        if (RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, currentTargetPosition)) {
+            println("go to pose finished")
+            return true
+        } else {
+            println("go to pose not finished")
+            return false
+        }
     }
 
     override fun end(interrupted: Boolean) {
         if (interrupted == false) {
             RobotContainer.trunkSystem.isAtPose = true
         }
-        RobotContainer.stateMachine.currentTrunkCommand = HoldPoseTrunk(desiredPose)
     }
 }

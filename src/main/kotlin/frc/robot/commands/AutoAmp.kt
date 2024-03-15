@@ -4,21 +4,21 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
+import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 
 class AutoAmp : Command() {
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.AMP)
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.AMP)
     }
 
     override fun execute() {
 
         if (RobotContainer.xboxController.start().asBoolean) {
             RobotContainer.cannonSystem.ampSpit()
-        }
-        else {
+        } else {
             RobotContainer.cannonSystem.killIntake()
         }
     }

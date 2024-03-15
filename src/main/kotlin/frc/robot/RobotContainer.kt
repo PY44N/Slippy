@@ -15,7 +15,9 @@ import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.automatic.FloorIntakeAndSeek
 import frc.robot.commands.AutoAmp
 import frc.robot.commands.AutoIntake
+import frc.robot.commands.automatic.AutoAimDumbTwistAndShoot
 import frc.robot.commands.cannon.AutoSpit
+import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
@@ -103,15 +105,15 @@ object RobotContainer {
         xboxController.leftBumper().onTrue(Commands.runOnce({
             actuallyDoShoot = true
         }))
-            rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
+        rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
-            xboxController.b().toggleOnTrue(AutoIntake())
-            xboxController.a().onTrue(AutoAmp())
-            xboxController.y().onTrue(AutoAimAndShoot())
-            xboxController.x().onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW) }))
-            xboxController.rightBumper().toggleOnTrue(AutoSpit())
+        xboxController.b().toggleOnTrue(AutoIntake())
+        xboxController.a().onTrue(AutoAmp())
+        xboxController.y().onTrue(AutoAimDumbTwistAndShoot())
+        xboxController.x().onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+        xboxController.rightBumper().toggleOnTrue(AutoSpit())
 
-            leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
+        leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
 
 
 //    private fun configureAutoCommands() {

@@ -7,6 +7,7 @@ import frc.robot.TrunkPose
 import frc.robot.commands.trunk.CoastAngleMovePosition
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.CoastTrunk
+import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 
 class AutoIntake : Command() {
 
@@ -20,16 +21,21 @@ class AutoIntake : Command() {
         hasAlmostSpit = false
 
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
+
+//        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP).andThen(CoastAngleMovePosition(TrunkPose.INTAKE)).andThen(CoastAngleMovePosition(TrunkPose.INTAKE_PREP).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW)))
+
     }
 
     override fun execute() {
 
-        if (RobotContainer.stateMachine.trunkReady) {
+
+        if (RobotContainer.stateMachine.currentTrunkCommand.isFinished && !hasIntake) {
             RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE)
         }
 
         if (RobotContainer.stateMachine.noteState == NoteState.Stored && !hasIntake) {
-            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.STOW).andThen(GoToPoseTrunk(TrunkPose.STOW))
+            RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
+//            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE_PREP).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
             RobotContainer.cannonSystem.killIntake()
             RobotContainer.cannonSystem.spit()
             hasIntake = true
@@ -50,5 +56,6 @@ class AutoIntake : Command() {
 
     override fun end(interrupted: Boolean) {
         RobotContainer.cannonSystem.killIntake()
+//        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
     }
 }

@@ -102,6 +102,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Trunk Target Rotation", RobotContainer.trunkSystem.trunkDesiredRotation)
         SmartDashboard.putNumber("Trunk Rotation", RobotContainer.trunkSystem.getRotation())
         SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
+
+        SmartDashboard.putString("Cannon State", RobotContainer.stateMachine.intakeState.name)
     }
 
 

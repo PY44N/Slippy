@@ -30,6 +30,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     override fun periodic() {
         SmartDashboard.putNumber("Angle val", getRotation())
+        SmartDashboard.putNumber("position val", getPosition())
     }
 
     fun setDesiredRotation(desiredRot: Double) {

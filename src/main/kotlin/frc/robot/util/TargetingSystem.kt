@@ -36,9 +36,9 @@ class TargetingSystem {
     private val rad2deg = 180.0 / PI
 
     private val shootingVelocity = TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY * TargetingConstants.rpm2ups(
-        Units.inchesToMeters(1.5))
+            Units.inchesToMeters(1.5))
 
-// dumb scaling dont think about it
+    // dumb scaling dont think about it
     private val shootingVelocityScaling = 1.3
 
     fun calculateShot(robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(), robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds): ShotSetup {
@@ -67,10 +67,10 @@ class TargetingSystem {
         val h = FieldConstants.Speaker.centerSpeakerOpening.z - TrunkConstants.SHOOTING_HEIGHT
 
         return atan(
-            h * inverseR + g * vars.r /
-                    ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.r.pow(2) + h.pow(2))) + rDot).pow(
-                        2
-                    )
+                h * inverseR + g * vars.r /
+                        ((shootingVelocityScaling + .15 * rDot) * shootingVelocity * vars.r / (sqrt(vars.r.pow(2) + h.pow(2))) + rDot).pow(
+                                2
+                        )
         ) * rad2deg +
                 (40.0 * rDot) / (shootingVelocityScaling * shootingVelocity)
     }
@@ -83,7 +83,7 @@ class TargetingSystem {
 
         val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
 
-        val targetRobotAngle = acos(vars.x / vars.r) * rad2deg
+        val targetRobotAngle = atan2(vars.y, -vars.x) * rad2deg
         val targetShooterAngle = atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
 
         return ShotSetup(targetRobotAngle, targetShooterAngle)
