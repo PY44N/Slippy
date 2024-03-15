@@ -100,6 +100,10 @@ class TrunkIOReal : TrunkIO {
 //        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }
 
+    override fun setServoAngle(angle: Double) {
+
+    }
+
     override fun periodic() {
     }
 }

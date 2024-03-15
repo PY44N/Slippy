@@ -36,7 +36,7 @@ enum class IntakeState(var innerPercent: Double, var outerPercent: Double) {
     AmpSpitting(CannonConstants.INNER_AMP_PERCENT, CannonConstants.OUTER_AMP_PERCENT),
 }
 
-//this represents the DESIRED trunk statautoshooe
+//this represents the DESIRED trunk state
 enum class TrunkPose(var angle: Double, var position: Double) {
     AMP_GOING(TrunkConstants.AMP_ANGLE, 0.3),
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
@@ -46,7 +46,8 @@ enum class TrunkPose(var angle: Double, var position: Double) {
     INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
-    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION);
+    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION),
+    CLIMB(180.0, TrunkConstants.STOW_POSITION)
 }
 
 

@@ -42,9 +42,6 @@ class Robot : LoggedRobot() {
 
 
         RobotContainer
-
-
-//        SmartDashboard.putNumber("shooter angle", 0.0)
     }
 
     override fun robotPeriodic() {

@@ -45,14 +45,12 @@ object RobotContainer {
 
     var teleopSwerveCommand: Command = TeleopSwerveDriveCommand()
 
-
     val targetingSystem: TargetingSystem = TargetingSystem()
 
     val visionSystem: VisionSystem = VisionSystem()
 
     var actuallyDoShoot: Boolean = false
     var actuallyDoAmp: Boolean = false
-
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
