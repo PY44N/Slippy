@@ -1,21 +1,16 @@
 package frc.robot
 
-import edu.wpi.first.math.VecBuilder
-import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.commands.automatic.AutoClimbCommand
-import frc.robot.commands.autonomous.DriveBackAuto
 import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.constants.CannonConstants
 import frc.robot.util.Telemetry
-import frc.robot.constants.LimelightConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
-import frc.robot.util.TargetingSystem
-import frc.robot.util.visualiztion.Field2d
+import frc.robot.util.Math
 import org.littletonrobotics.junction.LoggedRobot
 
 
@@ -109,6 +104,11 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
 
         SmartDashboard.putString("Cannon State", RobotContainer.stateMachine.intakeState.name)
+
+        SmartDashboard.putNumber("Falcon Raw Rotation", RobotContainer.trunkSystem.io.getFalconRawRotation())
+        SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
+        SmartDashboard.putNumber("TB Rotation", Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset))
+        SmartDashboard.putNumber("Falcon Rotation", Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset))
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
         TrunkConstants.AMP_ANGLE = SmartDashboard.getNumber("Amp Angle", TrunkConstants.AMP_ANGLE)

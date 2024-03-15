@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.TrunkConstants
 
@@ -31,6 +32,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     override fun periodic() {
         SmartDashboard.putNumber("Angle val", getRotation())
         SmartDashboard.putNumber("position val", getPosition())
+
+//        if (atDesiredRotation()) {
+//            io.setFalconThroughBoreOffset()
+//        }
     }
 
     fun setDesiredRotation(desiredRot: Double) {
@@ -67,8 +72,13 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         return MiscCalculations.appxEqual(position, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
     }
 
+    fun atDesiredRotation(): Boolean {
+        return MiscCalculations.appxEqual(trunkDesiredRotation, getRotation(), TrunkConstants.ANGLE_DEADZONE)
+    }
+
     fun getRotation(): Double {
-        return frc.robot.util.Math.wrapAroundAngles((-io.getRawRotation() * 360.0) - TrunkConstants.rotationOffset)
+        return frc.robot.util.Math.wrapAroundAngles((-io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset)
+//        return frc.robot.util.Math.wrapAroundAngles(io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset)
     }
 
     fun getPosition(): Double {
@@ -84,5 +94,4 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         io.rotationBrake = true
         io.positionBrake = true
     }
-
 }

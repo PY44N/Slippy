@@ -24,8 +24,8 @@ class TrunkIOReal : TrunkIO {
     private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
 
     private val shaftRotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
-    private val rotationEncoder = masterRotationMotor.position
 
+    private var falconRotationOffset = 0.0
     private val topLimit = DigitalInput(0)
     private val voltageVelocityController = VelocityVoltage(0.0, 0.0, true, 0.0, 0, false, false, false)
 
@@ -69,6 +69,12 @@ class TrunkIOReal : TrunkIO {
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
         followerRotationMotor.setControl(Follower(22, false))
+
+//        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
+    }
+
+    override fun setFalconThroughBoreOffset() {
+//        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
     }
 
     override fun setZeroPosition() {
@@ -79,7 +85,9 @@ class TrunkIOReal : TrunkIO {
 
     override fun getRawPosition(): Double = positionEncoder.position
 
-    override fun getRawRotation(): Double = shaftRotationEncoder.absolutePosition
+    override fun getThroughBoreRawRotation(): Double = shaftRotationEncoder.absolutePosition
+
+    override fun getFalconRawRotation(): Double = (masterRotationMotor.position.value / 125.0) - falconRotationOffset
 
     override fun setElevatorSpeed(speed: Double) {
         SmartDashboard.putNumber("set elevator speed: ", speed)
