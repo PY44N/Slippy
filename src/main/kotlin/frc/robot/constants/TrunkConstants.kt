@@ -18,8 +18,8 @@ object TrunkConstants {
     var MAX_SHOOT_ANGLE = 90.0
     var MIN_SHOOT_ANGLE = 50.0
 
-    var AMP_POSITION: Double = 0.3281
-    var AMP_ANGLE: Double = 185.0
+    var AMP_POSITION: Double = 0.08
+    var AMP_ANGLE: Double = 200.0
 
 
     var INTAKE_POSITION: Double = 0.02

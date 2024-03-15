@@ -8,7 +8,7 @@ object TargetingConstants {
     var velocityMultiplier = 1.15
 
     // coords of point we're aiming at relative to center of base of the speaker board (board with the fiducials)
-    var endpointX = .2
+    var endpointX = .15
     var endpointY = 0.0
     var endpointZ = 2.03
 

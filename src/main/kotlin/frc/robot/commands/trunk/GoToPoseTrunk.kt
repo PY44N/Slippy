@@ -34,7 +34,6 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
             RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
 
             val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle)
-            println("rotation volts: " + rotationVolts)
             RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
         }
 
@@ -50,10 +49,8 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
 
     override fun isFinished(): Boolean {
         if (RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, currentTargetPosition)) {
-            println("go to pose finished")
             return true
         } else {
-            println("go to pose not finished")
             return false
         }
     }
