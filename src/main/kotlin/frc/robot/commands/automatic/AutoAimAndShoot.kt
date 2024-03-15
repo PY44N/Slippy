@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
+import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPoseTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
@@ -46,7 +47,7 @@ class AutoAimAndShoot : Command() {
     }
 
     override fun end(interrupted: Boolean) {
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         RobotContainer.actuallyDoShoot = false
     }
 }

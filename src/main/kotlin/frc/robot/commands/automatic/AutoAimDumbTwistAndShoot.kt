@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
 import frc.robot.commands.cannon.AutoShootCommand
+import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
@@ -75,7 +76,7 @@ class AutoAimDumbTwistAndShoot : Command() {
     }
 
     override fun end(interrupted: Boolean) {
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         RobotContainer.actuallyDoShoot = false
         RobotContainer.stateMachine.driveState = DriveState.Teleop
     }

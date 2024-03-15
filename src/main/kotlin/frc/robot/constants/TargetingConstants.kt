@@ -14,7 +14,7 @@ object TargetingConstants {
 
     // coords of center of speaker backboard
     var speakerX = 0.0
-    var speakerY = Units.inchesToMeters(243.654)
+    var speakerY = 5.5//Units.inchesToMeters(243.654)
 
     // height that we shoot from; technically varies a bit but lets just say it doesnt
     var shooterZ = Units.inchesToMeters(24.0)
