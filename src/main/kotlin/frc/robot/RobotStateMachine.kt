@@ -38,9 +38,9 @@ enum class IntakeState(var innerPercent: Double, var outerPercent: Double) {
 
 //this represents the DESIRED trunk statautoshooe
 enum class TrunkPose(var angle: Double, var position: Double) {
-    AMP_GOING(TrunkConstants.AMP_ANGLE, 0.25),
+    AMP_GOING(TrunkConstants.AMP_ANGLE, 0.3),
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
-    AMP_LEAVING(TrunkConstants.AMP_ANGLE - 10.0, TrunkConstants.AMP_POSITION),
+    AMP_LEAVING(TrunkConstants.AMP_ANGLE - 10.0, TrunkConstants.STOW_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
     INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),

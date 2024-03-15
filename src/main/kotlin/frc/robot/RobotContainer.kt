@@ -51,6 +51,7 @@ object RobotContainer {
     val visionSystem: VisionSystem = VisionSystem()
 
     var actuallyDoShoot: Boolean = false
+    var actuallyDoAmp: Boolean = false
 
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
@@ -104,6 +105,9 @@ object RobotContainer {
 
         xboxController.leftBumper().onTrue(Commands.runOnce({
             actuallyDoShoot = true
+        }))
+        xboxController.start().onTrue(Commands.runOnce({
+            actuallyDoAmp = true
         }))
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
