@@ -3,7 +3,6 @@ package frc.robot.subsystems.trunk
 import com.revrobotics.CANSparkBase
 
 interface TrunkIO {
-    // TODO: I have no wifi, so I can't see how to actually advantagekit this
     var positionBrake: Boolean
     var rotationBrake: Boolean
     fun getRawPosition(): Double
@@ -12,5 +11,6 @@ interface TrunkIO {
     fun setZeroPosition()
     fun setRotationVoltage(volts: Double)
     fun atTopLimit(): Boolean
+    fun setServoAngle(angle: Double)
     fun periodic()
 }

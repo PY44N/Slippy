@@ -36,7 +36,7 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
     AmpSpitting(CannonConstants.INNER_AMP_PERCENT, CannonConstants.OUTER_AMP_PERCENT),
 }
 
-//this represents the DESIRED trunk statautoshooe
+//this represents the DESIRED trunk state
 enum class TrunkPose(val angle: Double, val position: Double) {
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
@@ -44,7 +44,8 @@ enum class TrunkPose(val angle: Double, val position: Double) {
     INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
-    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION);
+    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION),
+    CLIMB(180.0, TrunkConstants.STOW_POSITION)
 }
 
 
