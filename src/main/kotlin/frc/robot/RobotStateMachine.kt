@@ -28,7 +28,7 @@ enum class NoteState {
 }
 
 //this represents the DESIRED intake state (functionally current since intake immediately spins up)
-enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
+enum class IntakeState(var innerPercent: Double, var outerPercent: Double) {
     Stopped(0.0, 0.0),
     Intaking(CannonConstants.INNER_INTAKE_PERCENT, CannonConstants.OUTER_INTAKE_PERCENT),
     Feeding(CannonConstants.INNER_FEED_PERCENT, CannonConstants.OUTER_FEED_PERCENT),
@@ -37,8 +37,10 @@ enum class IntakeState(val innerPercent: Double, val outerPercent: Double) {
 }
 
 //this represents the DESIRED trunk statautoshooe
-enum class TrunkPose(val angle: Double, val position: Double) {
+enum class TrunkPose(var angle: Double, var position: Double) {
+    AMP_GOING(TrunkConstants.AMP_ANGLE, 0.25),
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
+    AMP_LEAVING(TrunkConstants.AMP_ANGLE - 10.0, TrunkConstants.AMP_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
     INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),
@@ -97,11 +99,11 @@ class RobotStateMachine {
     var noteState: NoteState = NoteState.Stored
 
     var currentTrunkCommand: Command = CalibrateTrunk()
-            set(value) {
-                field.cancel()
-                field = value
-                field.schedule()
-            }
+        set(value) {
+            field.cancel()
+            field = value
+            field.schedule()
+        }
 
     var currentRobotZone: GlobalZones = GlobalZones.Wing
     var prevRobotZone: GlobalZones = GlobalZones.Wing

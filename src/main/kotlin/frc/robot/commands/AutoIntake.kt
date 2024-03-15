@@ -39,12 +39,12 @@ class AutoIntake : Command() {
             RobotContainer.cannonSystem.killIntake()
             RobotContainer.cannonSystem.spit()
             hasIntake = true
-            println("spitting back out")
+//            println("spitting back out")
         }
         if (RobotContainer.stateMachine.noteState == NoteState.Intaking && hasIntake && !hasAlmostSpit) {
             RobotContainer.cannonSystem.intake()
             hasAlmostSpit = true
-            println("intaking back up")
+//            println("intaking back up")
         }
 
         if (hasAlmostSpit) {

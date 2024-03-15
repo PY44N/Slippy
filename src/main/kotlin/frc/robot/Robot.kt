@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.commands.automatic.AutoClimbCommand
 import frc.robot.commands.autonomous.DriveBackAuto
 import frc.robot.commands.trunk.CalibrateTrunk
+import frc.robot.constants.CannonConstants
 import frc.robot.util.Telemetry
 import frc.robot.constants.LimelightConstants
 import frc.robot.constants.TargetingConstants
@@ -39,6 +40,10 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("shooter angle", 58.5)
 
         SmartDashboard.putBoolean("Shooter Ready & Aimed", false)
+
+        SmartDashboard.putNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
+        SmartDashboard.putNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
+        SmartDashboard.putNumber("Amp Position", TrunkConstants.AMP_POSITION)
 
 
         RobotContainer
@@ -104,6 +109,14 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
 
         SmartDashboard.putString("Cannon State", RobotContainer.stateMachine.intakeState.name)
+
+        CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
+        TrunkConstants.AMP_ANGLE = SmartDashboard.getNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
+        TrunkConstants.AMP_POSITION = SmartDashboard.getNumber("Amp Position", TrunkConstants.AMP_POSITION)
+        TrunkPose.AMP.angle = TrunkConstants.AMP_ANGLE
+        TrunkPose.AMP.position = TrunkConstants.AMP_POSITION
+        IntakeState.AmpSpitting.innerPercent = CannonConstants.INNER_AMP_PERCENT
+        IntakeState.AmpSpitting.outerPercent = CannonConstants.INNER_AMP_PERCENT
     }
 
 

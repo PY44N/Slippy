@@ -14,8 +14,8 @@ object CannonConstants {
     val OUTER_SPIT_PERCENT: Double = .8
     val INNER_SPIT_PERCENT: Double = -.8
 
-    val OUTER_AMP_PERCENT: Double = -.8
-    val INNER_AMP_PERCENT: Double = -.8
+    var OUTER_AMP_PERCENT: Double = -.7
+    var INNER_AMP_PERCENT: Double = -.7
 
     //percent of max rpm
 //    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = .8 * SHOOTER_MAX_RPM
