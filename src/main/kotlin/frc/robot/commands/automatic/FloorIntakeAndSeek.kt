@@ -41,7 +41,11 @@ class FloorIntakeAndSeek : Command() {
             SmartDashboard.putNumber("Limelight X Offset", xOffset)
             SmartDashboard.putNumber("Limelight Rotation Speed", fudgedLLOffset)
             //Milan - everything needs to be negated bc the front is STUPID "sHoOtTeR sHoUlD be FrONt"
-            RobotContainer.swerveSystem.driveTrain.applyRequest { RobotContainer.swerveSystem.forwardStraight.withVelocityX(-1.0).withRotationalRate(-fudgedLLOffset) }.execute()
+            RobotContainer.swerveSystem.driveTrain.applyRequest {
+                RobotContainer.swerveSystem.forwardStraight.withVelocityX(
+                    -1.0
+                ).withRotationalRate(-fudgedLLOffset)
+            }.execute()
         }
     }
 
@@ -55,7 +59,10 @@ class FloorIntakeAndSeek : Command() {
         }
 
         //Doesn't use the auto intake just in case there is some sort of an issue with its ending and starting with a note already in the thing...idk - Milan
-        SmartDashboard.putBoolean("Floor intake and seek finished", RobotContainer.stateMachine.noteState == NoteState.Stored)
+        SmartDashboard.putBoolean(
+            "Floor intake and seek finished",
+            RobotContainer.stateMachine.noteState == NoteState.Stored
+        )
         return RobotContainer.stateMachine.noteState == NoteState.Stored
     }
 

@@ -1,18 +1,10 @@
 package frc.robot.constants
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout
-import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.math.util.Units
-import edu.wpi.first.wpilibj.Filesystem
-import java.io.IOException
-import java.lang.RuntimeException
-import java.nio.file.Path
-import java.util.function.Supplier
-
 
 /**
  * Contains various field dimensions and useful reference points. Dimensions are in meters, and sets
@@ -140,6 +132,7 @@ object FieldConstants {
         val center: Pose2d = Pose2d(Units.inchesToMeters(192.55), Units.inchesToMeters(161.638), Rotation2d())
         val centerToChainDistance: Double = center.translation.getDistance(centerPodiumAmpChain.translation)
     }
+
     object Targeting {
 
     }

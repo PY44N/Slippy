@@ -24,7 +24,6 @@ class SwerveSystem() : SubsystemBase() {
 
     private val PIDDeadzone = .005;
 
-
     val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
@@ -41,9 +40,7 @@ class SwerveSystem() : SubsystemBase() {
 
     val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
 
-
     val autoTwistController: AutoTwistController = AutoTwistController()
-
 
     //Takes in joystick inputs
     fun calculateJoyTranslation(

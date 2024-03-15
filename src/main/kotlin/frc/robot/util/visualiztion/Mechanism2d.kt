@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit
 import frc.robot.util.visualization.MechanismRoot2d
 import org.littletonrobotics.junction.LogTable
 
-
 /**
  * Visual 2D representation of arms, elevators, and general mechanisms through a
  * node-based API.
@@ -40,11 +39,11 @@ import org.littletonrobotics.junction.LogTable
  * @see MechanismRoot2d
  */
 class Mechanism2d @JvmOverloads constructor(
-        width: Double,
-        height: Double,
-        backgroundColor: Color8Bit = Color8Bit(0, 0, 32)
+    width: Double,
+    height: Double,
+    backgroundColor: Color8Bit = Color8Bit(0, 0, 32)
 ) :
-        NTSendable, AutoCloseable {
+    NTSendable, AutoCloseable {
     private var m_table: NetworkTable? = null
     private val m_roots: MutableMap<String, MechanismRoot2d>
 

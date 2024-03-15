@@ -5,7 +5,7 @@ object TrunkConstants {
     const val ELEVATOR_MOTOR_ID = 20
     const val FOLLOWER_PIVOT_MOTOR_ID = 21
     const val MASTER_PIVOT_MOTOR_ID = 22
-
+    const val CLIMB_LATCH_ID: Int = 0 // please find real value
 
     const val ELEVATOR2M = -0.03980722784
     const val M2ELEVATOR = 1.0 / ELEVATOR2M
@@ -20,7 +20,6 @@ object TrunkConstants {
 
     var AMP_POSITION: Double = 0.08
     var AMP_ANGLE: Double = 200.0
-
 
     var INTAKE_POSITION: Double = 0.02
     var INTAKE_ANGLE: Double = 70.0
