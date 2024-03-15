@@ -14,7 +14,7 @@ import frc.robot.ShooterState
 import frc.robot.constants.CannonConstants
 import frc.robot.util.Telemetry
 
-class CannonSystem(private val io: CannonIO) : SubsystemBase() {
+class CannonSystem(val io: CannonIO) : SubsystemBase() {
     //Desired shooter velocities
     private var desiredLeftVel = 0.0
     private var desiredRightVel = 0.0
@@ -151,7 +151,6 @@ class CannonSystem(private val io: CannonIO) : SubsystemBase() {
         else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak() && RobotContainer.stateMachine.intakeState != IntakeState.Spitting && RobotContainer.stateMachine.intakeState != IntakeState.AmpSpitting) {
             RobotContainer.stateMachine.noteState = NoteState.Intaking;
             noteEntryTime = Timer.getFPGATimestamp()
-            println("entry beam break broken second if stat")
         } else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak()) {
             RobotContainer.stateMachine.noteState = NoteState.Intaking;
         }

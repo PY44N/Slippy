@@ -3,7 +3,7 @@ package frc.robot.constants
 object CannonConstants {
 
     val SHOOTER_MAX_RPM = 7000.0
-    val INTAKE_STOW_DELAY = .4
+    val INTAKE_STOW_DELAY = .3
 
     val OUTER_INTAKE_PERCENT: Double = -.8
     val INNER_INTAKE_PERCENT: Double = .8

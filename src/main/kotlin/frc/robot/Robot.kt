@@ -114,6 +114,9 @@ class Robot : LoggedRobot() {
         TrunkPose.AMP.position = TrunkConstants.AMP_POSITION
         IntakeState.AmpSpitting.innerPercent = CannonConstants.INNER_AMP_PERCENT
         IntakeState.AmpSpitting.outerPercent = CannonConstants.INNER_AMP_PERCENT
+
+        SmartDashboard.putBoolean("Stow Beam Break", RobotContainer.cannonSystem.io.getLoadedBeamBreak())
+        SmartDashboard.putBoolean("Intake Beam Break", RobotContainer.cannonSystem.io.getEntryBeamBreak())
     }
 
 
