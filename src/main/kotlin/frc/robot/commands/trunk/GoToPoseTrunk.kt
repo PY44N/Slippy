@@ -18,7 +18,7 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
         get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.LEGAL_PIVOT_POSITION
 
     val isPositionAlwaysSafe: Boolean
-        get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.SAFE_INTAKE_POSITION && desiredPose.position >= TrunkConstants.SAFE_INTAKE_POSITION
+        get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.SAFE_PIVOT_POSITION && desiredPose.position >= TrunkConstants.SAFE_PIVOT_POSITION
 
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
