@@ -17,6 +17,9 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
     val isPivotPositionLegal: Boolean
         get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.LEGAL_PIVOT_POSITION
 
+    val isPositionAlwaysSafe: Boolean
+        get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.SAFE_INTAKE_POSITION && desiredPose.position >= TrunkConstants.SAFE_INTAKE_POSITION
+
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
         RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
@@ -37,7 +40,7 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
             RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
         }
 
-        if (isAngleSafe) {
+        if (isAngleSafe || isPositionAlwaysSafe) {
             currentTargetAngle = desiredPose.angle
             currentTargetPosition = desiredPose.position
             RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)

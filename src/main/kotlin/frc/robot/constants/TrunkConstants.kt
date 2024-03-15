@@ -11,7 +11,7 @@ object TrunkConstants {
     const val M2ELEVATOR = 1.0 / ELEVATOR2M
 
     const val ELEVATOR_ANGLE = 28.8309683
-    var SAFE_TRAVEL_ANGLE: Double = 63.0
+    var SAFE_TRAVEL_ANGLE: Double = 65.0
     var LEGAL_PIVOT_POSITION = 0.1
     var LEGAL_PIVOT_POSITION_TARGET = 0.12
 
@@ -26,7 +26,7 @@ object TrunkConstants {
     var INTAKE_ANGLE: Double = 70.0
 
     var STOW_POSITION: Double = 0.381
-    var STOW_ANGLE: Double = 68.0
+    var STOW_ANGLE: Double = 50.0
 
     var TRAP_POSITION: Double = 0.7
     var TRAP_ANGLE: Double = 160.0
@@ -63,6 +63,7 @@ object TrunkConstants {
     val ANGLE_DEADZONE = 2.5
 
     val SAFE_TO_DROP_INTAKE_POSITION = 0.2
+    val SAFE_INTAKE_POSITION = 0.3
 
     val UNDER_STAGE_SHOOTING_OFFSET = 0.0
     val SHOOTING_OFFSET = 0.0
