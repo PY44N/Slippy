@@ -35,10 +35,11 @@ class TeleopSwerveDriveCommand : Command() {
         }
 
         var throttle = 0.0;
-        throttle = if (twoJoysticks)
-            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle)
-        else
-            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.rightJoystick.throttle)
+        if (twoJoysticks) {
+            throttle = RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle)
+        } else {
+            throttle = RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.rightJoystick.throttle)
+        }
 
 
         if (RobotContainer.rightJoystick.button(2).asBoolean) {
@@ -60,13 +61,13 @@ class TeleopSwerveDriveCommand : Command() {
         SmartDashboard.putNumber("drive in y", translation.y)
 
         var twist = 0.0
-        twist = if (twoJoysticks) {
-            -calculateDeadzone(
+        if (twoJoysticks) {
+            twist = -calculateDeadzone(
                 twistInput,
                 DriveConstants.TELEOP_DEADZONE_TWIST_TWO_JOY
             ) * throttle * DriveConstants.MAX_ANGLE_SPEED
         } else {
-            -calculateDeadzone(
+            twist = -calculateDeadzone(
                 twistInput,
                 DriveConstants.TELEOP_DEADZONE_TWIST_ONE_JOY
             ) * throttle * DriveConstants.MAX_ANGLE_SPEED

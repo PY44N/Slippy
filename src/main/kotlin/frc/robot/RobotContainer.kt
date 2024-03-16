@@ -1,5 +1,6 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -10,10 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.AutoAmp
 import frc.robot.commands.AutoIntake
 import frc.robot.commands.TeleopSwerveDriveCommand
-import frc.robot.commands.automatic.AutoAimAndShoot
-import frc.robot.commands.automatic.AutoAimDumbTwistAndShoot
-import frc.robot.commands.automatic.AutoClimbCommand
-import frc.robot.commands.automatic.FloorIntakeAndSeek
+import frc.robot.commands.automatic.*
 import frc.robot.commands.cannon.AutoSpit
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
@@ -74,7 +72,7 @@ object RobotContainer {
 
     init {
         configureBindings()
-//        configureAutoCommands()
+        configureAutoCommands()
 
         RobotAction.entries.forEach {
             robotActionSendable.addOption(it.name, it)
@@ -118,7 +116,7 @@ object RobotContainer {
 
         xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.a().onTrue(AutoAmp())
-        xboxController.y().onTrue(AutoAimDumbTwistAndShoot())
+        xboxController.y().onTrue(TeleopAimDumbTwistAndShoot())
         xboxController.x()
                 .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
@@ -128,14 +126,19 @@ object RobotContainer {
         }))
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
+    }
 
-//    private fun configureAutoCommands() {
-//        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
-//    }
+    private fun configureAutoCommands() {
+        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
+        NamedCommands.registerCommand("AutoIntake", AutoIntake())
+        NamedCommands.registerCommand("AutoAimDumbTwistAndShoot", AutoAimDumbTwistAndShoot())
+        NamedCommands.registerCommand("Stow", Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+        NamedCommands.registerCommand("AutoAimAndShootPrep", AutoAimAndShootPrep())
+    }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 //        SmartDashboard.putData("Auto Chooser", autoChooser)
-    }
+
 
 }
 

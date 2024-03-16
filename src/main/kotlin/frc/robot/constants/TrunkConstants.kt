@@ -11,9 +11,9 @@ object TrunkConstants {
     const val M2ELEVATOR = 1.0 / ELEVATOR2M
 
     const val ELEVATOR_ANGLE = 28.8309683
-    var SAFE_TRAVEL_ANGLE: Double = 67.0
+    var SAFE_TRAVEL_ANGLE: Double = 70.0
     var LEGAL_PIVOT_POSITION = 0.1
-    var LEGAL_PIVOT_POSITION_TARGET = 0.12
+    var LEGAL_PIVOT_POSITION_TARGET = 0.18
 
     var MAX_SHOOT_ANGLE = 90.0
     var MIN_SHOOT_ANGLE = 50.0
@@ -26,13 +26,15 @@ object TrunkConstants {
 
     var STOW_POSITION: Double = 0.381
     var STOW_ANGLE: Double = 50.0
+    var HIGH_STOW_ANGLE: Double = 67.0
 
     var TRAP_POSITION: Double = 0.7
     var TRAP_ANGLE: Double = 160.0
 
     var TOP_BREAK_BEAM_POSITION: Double = .3810000
 
-    var rotationOffset: Double = -49.0
+    var throughboreRotationOffset: Double = -49.0
+    var falconRotationOffset: Double = -61.0
 
     var positionKP = 22.0
     var positionKI = 0.0
@@ -40,24 +42,40 @@ object TrunkConstants {
 
     var positionFF = 0.02
 
-    val rotationFFkS = 0.03
-    val rotationFFkG = 0.33
-    val rotationFFkV = 2.25
-    val rotationFFkA = 0.02
+    val lowRotationFFkS = 0.03
+    val lowRotationFFkG = 0.33
+    val lowRotationFFkV = 2.25
+    val lowRotationFFkA = 0.02
 
     val rotationEncoderID = 9
 
-    var rotationKP = 0.15
-    var rotationKI = 0.0
-    var rotationKD = .01
+    var lowRotationKP = 0.3
+    var lowRotationKI = 0.0
+    var lowRotationKD = .0
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
-    var rotationMaxAcceleration = 75.0
+    var lowRotationMaxAcceleration = 80.0
 
     //degrees/sec
-    var rotationMaxVelo = 180.0
-    var rotationMaxError = 5.0
+    var lowRotationMaxVelo = 60.0
+
+    val highRotationFFkS = 0.03
+    val highRotationFFkG = 0.33
+    val highRotationFFkV = 2.25
+    val highRotationFFkA = 0.02
+
+    var highRotationKP = 0.1
+    var highRotationKI = 0.0
+    var highRotationKD = 0.0
+    //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
+
+    //Degrees/sec^2
+    var highRotationMaxAcceleration = 75.0
+
+    //degrees/sec
+    var highRotationMaxVelo = 180.0
+
 
     val ANGLE_DEADZONE = 2.5
 

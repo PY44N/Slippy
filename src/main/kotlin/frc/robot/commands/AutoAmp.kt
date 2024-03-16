@@ -15,6 +15,7 @@ class AutoAmp : Command() {
 
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.AMP_GOING).andThen(GoToPoseAndHoldTrunk(TrunkPose.AMP))
         RobotContainer.actuallyDoAmp = false
+        timer.reset()
     }
 
     override fun execute() {

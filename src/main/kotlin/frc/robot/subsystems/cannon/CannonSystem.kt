@@ -10,6 +10,7 @@ import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.ShooterState
 import frc.robot.constants.CannonConstants
+import frc.robot.util.TargetingSystem
 import frc.robot.util.Telemetry
 
 class CannonSystem(val io: CannonIO) : SubsystemBase() {
@@ -24,9 +25,9 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
     var noteEntryTime = -1.0
 
     val leftShooterPID =
-        PIDController(CannonConstants.leftShooterKP, CannonConstants.leftShooterKI, CannonConstants.leftShooterKD)
+            PIDController(CannonConstants.leftShooterKP, CannonConstants.leftShooterKI, CannonConstants.leftShooterKD)
     val rightShooterPID =
-        PIDController(CannonConstants.leftShooterKP, CannonConstants.leftShooterKI, CannonConstants.leftShooterKD)
+            PIDController(CannonConstants.leftShooterKP, CannonConstants.leftShooterKI, CannonConstants.leftShooterKD)
 
     private var exitBreakBeamTriggerTime: Double = -1.0; //
 
@@ -48,7 +49,10 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
     fun shoot() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting;
         println("called cannonsystem.shoot")
+    }
 
+    fun ampShoot() {
+        RobotContainer.stateMachine.shooterState = ShooterState.Amping
     }
 
     fun ampSpit() {
@@ -104,19 +108,19 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
     override fun periodic() {
         RobotContainer.telemetry.cannonTelemetry =
-            SmartDashboard.getBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
+                SmartDashboard.getBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
 
 //        Telemetry.putBoolean("Stow Beam Break", io.getLoadedBeamBreak(), RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putNumber(
-            "Current left Cannon Speed",
-            io.getLeftShooterVel(),
-            RobotContainer.telemetry.cannonTelemetry
+                "Current left Cannon Speed",
+                io.getLeftShooterVel(),
+                RobotContainer.telemetry.cannonTelemetry
         )
         Telemetry.putNumber("Desired left speed", desiredLeftVel, RobotContainer.telemetry.cannonTelemetry)
         Telemetry.putNumber(
-            "Current right cannon speed",
-            io.getRightShooterVel(),
-            RobotContainer.telemetry.cannonTelemetry
+                "Current right cannon speed",
+                io.getRightShooterVel(),
+                RobotContainer.telemetry.cannonTelemetry
         )
 //        Telemetry.putNumber("Left PID setpoint", leftShooterPID.setpoint, RobotContainer.telemetry.cannonTelemetry)
 

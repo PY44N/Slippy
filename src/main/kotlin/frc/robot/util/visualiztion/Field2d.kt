@@ -8,11 +8,11 @@ import edu.wpi.first.networktables.NetworkTable
 import edu.wpi.first.util.sendable.SendableRegistry
 
 class Field2d : NTSendable, AutoCloseable {
-//    companion object {
+    companion object {
 //        fun toWPILIBFieldPosition(pos: Pose2d): Pose2d {
 //            return if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
 ////                FieldPosition(pos.y, -pos.x, pos.angle)
-//                Pose2d(Translation2d(pos.))
+////                Pose2d(Translation2d(pos.y, -pos.x, pos.angle))
 //            } else {
 //                FieldPosition(16.54 - pos.y, pos.x, pos.angle + 180)
 //            }
@@ -25,7 +25,7 @@ class Field2d : NTSendable, AutoCloseable {
 //                FieldPosition(pos.y, -pos.x + 16.54, pos.angle - 180)
 //            }
 //        }
-//    }
+    }
 
     private var table: NetworkTable? = null
     val objectList: MutableList<FieldObject2d> = ArrayList()

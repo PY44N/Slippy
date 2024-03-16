@@ -83,6 +83,7 @@ class Timer {
      * <p>Make the timer startTime the current time so new requests will be relative now.
      */
     fun reset() {
+        isRunning = false
         m_accumulatedTime = 0.0;
         m_startTime = getMsClock();
     }
