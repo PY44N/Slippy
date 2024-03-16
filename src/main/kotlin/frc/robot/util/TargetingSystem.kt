@@ -43,10 +43,11 @@ class TargetingSystem {
 
     private val rad2deg = 180.0 / PI
 
-    private val shootingVelocity =
-        TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY * TargetingConstants.rpm2ups(
-            Units.inchesToMeters(1.5)
-        )
+    private val shootingVelocity = 16.0
+//    private val shootingVelocity =
+//        TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY * TargetingConstants.rpm2ups(
+//            Units.inchesToMeters(1.5)
+//        )
 
     fun calculateShot(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
@@ -61,7 +62,7 @@ class TargetingSystem {
     fun velocityRobotAngle() = velocityRobotAngleFunction(TargetingVariables())
 
     private fun velocityRobotAngleFunction(vars: TargetingVariables) =
-        atan2(vars.y-vars.vy*vars.t,vars.x-vars.vx*vars.t)
+        atan2(vars.y-vars.vy*vars.t,vars.x-vars.vx*vars.t) * rad2deg
 
     private fun velocityShooterAngleFunction(vars: TargetingVariables): Double {
         val rDot = (vars.x * vars.vx + vars.y * vars.vy) / vars.r
@@ -74,7 +75,7 @@ class TargetingSystem {
                 rDot /
                         ((1.1 + .03 * vars.r) * shootingVelocity * vars.z * k1)
             )
-        )
+        ) * rad2deg
     }
 
     fun getShotNoVelocity(
@@ -101,7 +102,7 @@ class TargetingSystem {
         val noVelShot = getShotNoVelocity(robotPose, robotVelocity)
         val velShot = calculateShot(robotPose, robotVelocity)
         println("vars:")
-        println(vars)
+        println("x="+vars.x+" y="+vars.y+" r="+vars.r+" vx="+vars.vx+" vy="+vars.vy+" r="+vars.r+" z="+vars.z+" t="+vars.t)
         println("no velocity:")
         println(noVelShot)
         println("velocity:")

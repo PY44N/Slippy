@@ -12,6 +12,7 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -133,7 +134,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 //    }
 
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
-        return m_kinematics.toChassisSpeeds(getState().ModuleStates);
+        return new ChassisSpeeds(0.0,0.0,0.0);
+//        return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
     private void startSimThread() {
