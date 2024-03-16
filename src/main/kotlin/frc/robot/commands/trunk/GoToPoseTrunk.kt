@@ -8,6 +8,7 @@ import frc.robot.constants.TrunkConstants
 
 class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
 
+
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
     var currentTargetPosition: Double = TrunkConstants.LEGAL_PIVOT_POSITION_TARGET
 
@@ -50,16 +51,11 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
     }
 
-    override fun isFinished(): Boolean {
-        if (RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, currentTargetPosition)) {
-            return true
-        } else {
-            return false
-        }
-    }
+    override fun isFinished() =
+        RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, currentTargetPosition)
 
     override fun end(interrupted: Boolean) {
-        if (interrupted == false) {
+        if (!interrupted) {
             RobotContainer.trunkSystem.isAtPose = true
         }
     }
