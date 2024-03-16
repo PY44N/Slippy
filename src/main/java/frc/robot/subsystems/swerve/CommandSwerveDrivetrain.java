@@ -134,8 +134,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 //    }
 
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
-        return new ChassisSpeeds(0.0,0.0,0.0);
-//        return m_kinematics.toChassisSpeeds(getState().ModuleStates);
+        return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
     private void startSimThread() {
