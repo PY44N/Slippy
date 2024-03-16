@@ -14,7 +14,7 @@ import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-data class ShotSetup(var robotAngle: Double, var shooterAngle: Double) {
+data class ShotSetup(val robotAngle: Double, var shooterAngle: Double) {
     init {
         shooterAngle = -shooterAngle + 90
     }
@@ -26,7 +26,8 @@ class TargetingVariables(
 ) {
     val x: Double = TargetingConstants.speakerX + TargetingConstants.endpointX - robotPose.x
     val y: Double = TargetingConstants.speakerY + TargetingConstants.endpointY - robotPose.y
-    val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ// + .02 * r.pow(1.5)
+    val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
+    // + .02 * r.pow(1.5)
 
     val vx: Double = robotVelocity.vxMetersPerSecond
     val vy: Double = robotVelocity.vyMetersPerSecond
@@ -62,12 +63,12 @@ class TargetingSystem {
     fun velocityRobotAngle() = velocityRobotAngleFunction(TargetingVariables())
 
     private fun velocityRobotAngleFunction(vars: TargetingVariables) =
-        atan2(vars.y-vars.vy*vars.t,vars.x-vars.vx*vars.t) * rad2deg
+        atan2(vars.y - vars.vy * vars.t, vars.x - vars.vx * vars.t) * rad2deg
 
     private fun velocityShooterAngleFunction(vars: TargetingVariables): Double {
         val rDot = (vars.x * vars.vx + vars.y * vars.vy) / vars.r
         val k1 = 1.0 / sqrt(vars.r.pow(2) + vars.z.pow(2))
-        val k2 = 2*(shootingVelocity*vars.r*k1+rDot).pow(2)
+        val k2 = 2.0 * (shootingVelocity * vars.r * k1 + rDot).pow(2)
         return atan(
             1.0 / (
                 vars.r * k2 /
