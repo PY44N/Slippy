@@ -20,7 +20,5 @@ class HoldPoseTrunk(val pose: TrunkPose) : Command() {
         println("holding pose trunk")
     }
 
-    override fun isFinished(): Boolean {
-        return false
-    }
+    override fun isFinished() = false
 }

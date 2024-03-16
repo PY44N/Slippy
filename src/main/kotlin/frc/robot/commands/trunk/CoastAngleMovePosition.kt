@@ -14,13 +14,10 @@ class CoastAngleMovePosition(val pose: TrunkPose) : Command() {
         RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
     }
 
-    override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPosition(pose.position)
-    }
+    override fun isFinished() = RobotContainer.trunkSystem.checkAtPosition(pose.position)
 
     override fun end(interrupted: Boolean) {
-        if (interrupted == false) {
+        if (!interrupted)
             RobotContainer.trunkSystem.isAtPose = true
-        }
     }
 }

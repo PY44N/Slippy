@@ -50,13 +50,11 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
     }
 
-    override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPose(
+    override fun isFinished() =
+        RobotContainer.trunkSystem.checkAtPose(
                 RobotContainer.trunkSystem.trunkDesiredRotation,
                 currentTargetPosition
         )
-
-    }
 
     override fun end(interrupted: Boolean) {
         if (!interrupted) {

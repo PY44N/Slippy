@@ -182,9 +182,9 @@ class Robot : LoggedRobot() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
 
         val scheduleClimbBool = SmartDashboard.getBoolean("Schedule Climb Command?", false)
-        if (scheduleClimbBool && autoClimbCommand.isScheduled() == false) {
+        if (scheduleClimbBool && !autoClimbCommand.isScheduled) {
             autoClimbCommand.schedule()
-        } else if (autoClimbCommand.isScheduled == true && scheduleClimbBool == false) {
+        } else if (autoClimbCommand.isScheduled && !scheduleClimbBool) {
             autoClimbCommand.cancel()
         }
 
