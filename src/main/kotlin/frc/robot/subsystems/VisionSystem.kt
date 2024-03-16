@@ -17,18 +17,20 @@ class VisionSystem {
                 return
             }
 
-            val llMeasure: LimelightHelpers.PoseEstimate = if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
-            } else {
-                LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
-            }
+            val llMeasure: LimelightHelpers.PoseEstimate =
+                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                    LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
+                } else {
+                    LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
+                }
 //            else {
 //                println("DS alliance invalid; skipping vision")
 //                return
 //            }
 
             if (llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
-                val poseDifference = llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
+                val poseDifference =
+                    llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
 
                 val distanceToTag = llMeasure.avgTagDist
 
@@ -51,11 +53,12 @@ class VisionSystem {
                     }
 
                     RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(
-                            VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds)))
+                        VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds))
+                    )
 //                        println("updating odometry with ll")
                     RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
-                            llMeasure.pose,
-                            llMeasure.timestampSeconds
+                        llMeasure.pose,
+                        llMeasure.timestampSeconds
                     )
                 }
             }
@@ -70,18 +73,20 @@ class VisionSystem {
                 return
             }
 
-            val llMeasure: LimelightHelpers.PoseEstimate = if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
-            } else {
-                LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
-            }
+            val llMeasure: LimelightHelpers.PoseEstimate =
+                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                    LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
+                } else {
+                    LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
+                }
 //            else {
 //                println("DS alliance invalid; skipping vision")
 //                return
 //            }
 
             if (llMeasure.tagCount >= tagCount && llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
-                val poseDifference = llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
+                val poseDifference =
+                    llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
                 if (!poseDifferenceCheck || poseDifference < LimelightConstants.MAX_DISTANCE_DIFFERENCE_METERS) {
                     val distanceToTag = llMeasure.avgTagDist
 
@@ -104,11 +109,12 @@ class VisionSystem {
                         }
 
                         RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(
-                                VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds)))
+                            VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds))
+                        )
 //                        println("updating odometry with ll")
                         RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
-                                llMeasure.pose,
-                                llMeasure.timestampSeconds
+                            llMeasure.pose,
+                            llMeasure.timestampSeconds
                         )
                     }
                 }

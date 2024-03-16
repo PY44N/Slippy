@@ -6,12 +6,10 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.commands.trunk.CalibrateTrunk
-import frc.robot.commands.trunk.HoldPoseTrunk
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.Telemetry
-
 
 //This represents the desired shooter state
 enum class ShooterState(val leftVel: Double, val rightVel: Double) {
@@ -47,9 +45,9 @@ enum class TrunkPose(var angle: Double, var position: Double) {
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
     CalibrationAngle(110.0, TrunkConstants.STOW_POSITION),
-    CLIMB(180.0, TrunkConstants.STOW_POSITION)
+    CLIMB(180.0, TrunkConstants.STOW_POSITION),
+    CLIMB_DOWN(180.0, TrunkConstants.INTAKE_POSITION)
 }
-
 
 //CURRENT states
 enum class GlobalZones(val range: Pair<Translation2d, Translation2d>) {
@@ -64,7 +62,6 @@ enum class GlobalSpecificPosition(val pos: Translation2d) {
     Amp(FieldPositions.AMP),
     Speaker(FieldPositions.SPEAKER)
 }
-
 
 //What do we want to do with our current note (or lack of note)?
 enum class RobotAction() {
@@ -99,11 +96,15 @@ class RobotStateMachine {
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored
 
+    var currentTrunkCommandLocked = false
+
     var currentTrunkCommand: Command = CalibrateTrunk()
         set(value) {
-            field.cancel()
-            field = value
-            field.schedule()
+            if (!currentTrunkCommandLocked) {
+                field.cancel()
+                field = value
+                field.schedule()
+            }
         }
 
     var currentRobotZone: GlobalZones = GlobalZones.Wing
@@ -121,7 +122,8 @@ class RobotStateMachine {
     var autoStateManagement: AutoStateManagement = AutoStateManagement.Disabled
 
     fun logStates() {
-        RobotContainer.telemetry.stateMachineTelemetry = SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
+        RobotContainer.telemetry.stateMachineTelemetry =
+                SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
         SmartDashboard.putBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
 
         Telemetry.putString("Note State", noteState.name, RobotContainer.telemetry.stateMachineTelemetry)
@@ -132,11 +134,9 @@ class RobotStateMachine {
     val trunkReady: Boolean
         get() = RobotContainer.trunkSystem.isAtPose
 
-
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean
         get() = RobotContainer.cannonSystem.shooterReady()
-
 
     //Should be called in teleop periodic
     fun TeleopAutomaticStateManagement() {

@@ -2,12 +2,10 @@ package frc.robot.util.visualiztion
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.networktables.NTSendable
 import edu.wpi.first.networktables.NTSendableBuilder
 import edu.wpi.first.networktables.NetworkTable
 import edu.wpi.first.util.sendable.SendableRegistry
-import edu.wpi.first.wpilibj.DriverStation
 
 class Field2d : NTSendable, AutoCloseable {
 //    companion object {

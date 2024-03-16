@@ -1,24 +1,24 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.NamedCommands
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.commands.TeleopSwerveDriveCommand
-import frc.robot.commands.automatic.AutoAimAndShoot
-import frc.robot.commands.automatic.FloorIntakeAndSeek
 import frc.robot.commands.AutoAmp
 import frc.robot.commands.AutoIntake
+import frc.robot.commands.TeleopSwerveDriveCommand
+import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.automatic.AutoAimDumbTwistAndShoot
+import frc.robot.commands.automatic.AutoClimbCommand
+import frc.robot.commands.automatic.FloorIntakeAndSeek
 import frc.robot.commands.cannon.AutoSpit
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
+import frc.robot.commands.trunk.HoldPoseTrunk
+import frc.robot.constants.TrunkConstants
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
@@ -41,9 +41,15 @@ object RobotContainer {
 
     val cannonSystem: CannonSystem = CannonSystem(CannonIOReal())
 
+//    val climbLatch: Servo = Servo(TrunkConstants.CLIMB_LATCH_ID)
+
     val autonomousCommand: Command = Commands.run({})
 
     var teleopSwerveCommand: Command = TeleopSwerveDriveCommand()
+
+//    val climbCommand: Command = GoToPoseTrunk(TrunkPose.CLIMB).andThen(GoToPoseTrunk(TrunkPose.CLIMB_DOWN)).andThen({
+//        //climbLatch.angle = 90.0 // tune before testing
+//    }).alongWith(HoldPoseTrunk(TrunkPose.CLIMB_DOWN))
 
     val targetingSystem: TargetingSystem = TargetingSystem()
 
@@ -51,6 +57,7 @@ object RobotContainer {
 
     var actuallyDoShoot: Boolean = false
     var actuallyDoAmp: Boolean = false
+    var actuallyDoClimb: Boolean = false
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
@@ -112,11 +119,12 @@ object RobotContainer {
         xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.a().onTrue(AutoAmp())
         xboxController.y().onTrue(AutoAimDumbTwistAndShoot())
-        xboxController.x().onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+        xboxController.x()
+                .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
+        xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
-
 
 //    private fun configureAutoCommands() {
 //        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())

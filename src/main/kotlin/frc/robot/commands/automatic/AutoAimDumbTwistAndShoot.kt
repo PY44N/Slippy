@@ -1,14 +1,15 @@
 package frc.robot.commands.automatic
 
-import MiscCalculations
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.*
+import frc.robot.DriveState
+import frc.robot.NoteState
+import frc.robot.RobotContainer
+import frc.robot.ShooterState
+import frc.robot.TrunkPose
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
-import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
@@ -37,25 +38,23 @@ class AutoAimDumbTwistAndShoot : Command() {
 //        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
         trunkCommand.desiredAngle = shooterAngle
 
-
         //Handle the twisting component
         val driveTwist = twistPIDController.calculate(
-                RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-                shotSetup.robotAngle
+            RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
+            shotSetup.robotAngle
         )
 
         val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
-                RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
-                RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
-                DriveConstants.TELEOP_DEADZONE_X,
-                DriveConstants.TELEOP_DEADZONE_Y
+            RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
+            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
+            DriveConstants.TELEOP_DEADZONE_X,
+            DriveConstants.TELEOP_DEADZONE_Y
         )
 
         RobotContainer.swerveSystem.driveTrain.applyRequest {
             RobotContainer.swerveSystem.drive.withVelocityX(driveTranslation.x).withVelocityY(driveTranslation.y)
-                    .withRotationalRate(Math.toRadians(driveTwist))
+                .withRotationalRate(Math.toRadians(driveTwist))
         }.execute()
-
 
         //Can we shoot?
 //        if (RobotContainer.stateMachine.trunkReady && MiscCalculations.appxEqual(

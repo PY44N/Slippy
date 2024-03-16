@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 
-class HoldPositionGoToAngleTrunk(val pose: TrunkPose): Command() {
+class HoldPositionGoToAngleTrunk(val pose: TrunkPose) : Command() {
 
     var desiredAngle: Double = pose.angle
 

@@ -7,12 +7,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.commands.automatic.AutoClimbCommand
 import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.constants.CannonConstants
-import frc.robot.util.Telemetry
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.Math
+import frc.robot.util.Telemetry
 import org.littletonrobotics.junction.LoggedRobot
-
 
 class Robot : LoggedRobot() {
     private lateinit var m_autonomousCommand: Command
@@ -22,6 +21,7 @@ class Robot : LoggedRobot() {
 
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
     override fun robotInit() {
+        SmartDashboard.putNumber("shooter angle setpoint", 90.0)
         SmartDashboard.putBoolean("arm motors free?", false)
         SmartDashboard.putNumber("varying shooter fudging constant", TargetingConstants.stupidConstant)
         SmartDashboard.putNumber("shooter endpoint x", TargetingConstants.endpointX)
@@ -40,7 +40,6 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
         SmartDashboard.putNumber("Amp Position", TrunkConstants.AMP_POSITION)
 
-
         RobotContainer
     }
 
@@ -49,16 +48,18 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
 
-        TargetingConstants.stupidConstant = SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
+        TargetingConstants.stupidConstant =
+                SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
         TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
-        TargetingConstants.constantStupidConstant = SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
-        TargetingConstants.velocityMultiplier = SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
+        TargetingConstants.constantStupidConstant =
+                SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
+        TargetingConstants.velocityMultiplier =
+                SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
-
 
         val armMotorsFree = SmartDashboard.getBoolean("arm motors free?", false)
 
@@ -77,15 +78,26 @@ class Robot : LoggedRobot() {
             RobotContainer.visionSystem.updateOdometryFromDisabled()
         }
 
-
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
         SmartDashboard.putNumber("Mathed shooter angle", shotSetup.shooterAngle)
         SmartDashboard.putNumber("Mathed robot angle", shotSetup.robotAngle)
         SmartDashboard.putNumber("Current robot angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
-        Telemetry.putBoolean("shooter ready", RobotContainer.cannonSystem.shooterReady(), RobotContainer.telemetry.cannonTelemetry)
-        Telemetry.putString("note state", RobotContainer.stateMachine.noteState.name, RobotContainer.telemetry.cannonTelemetry)
-        Telemetry.putString("intake state", RobotContainer.stateMachine.intakeState.name, RobotContainer.telemetry.cannonTelemetry)
+        Telemetry.putBoolean(
+                "shooter ready",
+                RobotContainer.cannonSystem.shooterReady(),
+                RobotContainer.telemetry.cannonTelemetry
+        )
+        Telemetry.putString(
+                "note state",
+                RobotContainer.stateMachine.noteState.name,
+                RobotContainer.telemetry.cannonTelemetry
+        )
+        Telemetry.putString(
+                "intake state",
+                RobotContainer.stateMachine.intakeState.name,
+                RobotContainer.telemetry.cannonTelemetry
+        )
 
 
         SmartDashboard.putNumber("Robot X", RobotContainer.swerveSystem.getSwervePose().x)
@@ -104,8 +116,14 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putNumber("Falcon Raw Rotation", RobotContainer.trunkSystem.io.getFalconRawRotation())
         SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
-        SmartDashboard.putNumber("TB Rotation", Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset))
-        SmartDashboard.putNumber("Falcon Rotation", Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset))
+        SmartDashboard.putNumber(
+                "TB Rotation",
+                Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset)
+        )
+        SmartDashboard.putNumber(
+                "Falcon Rotation",
+                Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset)
+        )
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
         TrunkConstants.AMP_ANGLE = SmartDashboard.getNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
@@ -114,8 +132,12 @@ class Robot : LoggedRobot() {
         TrunkPose.AMP.position = TrunkConstants.AMP_POSITION
         IntakeState.AmpSpitting.innerPercent = CannonConstants.INNER_AMP_PERCENT
         IntakeState.AmpSpitting.outerPercent = CannonConstants.INNER_AMP_PERCENT
-    }
 
+        SmartDashboard.putBoolean("Stow Beam Break", RobotContainer.cannonSystem.io.getLoadedBeamBreak())
+        SmartDashboard.putBoolean("Intake Beam Break", RobotContainer.cannonSystem.io.getEntryBeamBreak())
+        SmartDashboard.putNumber("Left Shooter Vel", RobotContainer.cannonSystem.io.getLeftShooterTBVel())
+        SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
+    }
 
     override fun disabledInit() {}
 
@@ -138,6 +160,7 @@ class Robot : LoggedRobot() {
     override fun autonomousExit() {}
 
     override fun teleopInit() {
+//        RobotContainer.climbLatch.angle = 0.0 // tune before testing
         RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
         RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
@@ -151,7 +174,6 @@ class Robot : LoggedRobot() {
 
 //        RobotContainer.trunkSystem.STOP()
 
-
         SmartDashboard.putBoolean("Schedule Climb Command?", false)
         SmartDashboard.putBoolean("Pulldown Climb?", false)
     }
@@ -159,14 +181,12 @@ class Robot : LoggedRobot() {
     override fun teleopPeriodic() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
 
-
         val scheduleClimbBool = SmartDashboard.getBoolean("Schedule Climb Command?", false)
         if (scheduleClimbBool && autoClimbCommand.isScheduled() == false) {
             autoClimbCommand.schedule()
         } else if (autoClimbCommand.isScheduled == true && scheduleClimbBool == false) {
             autoClimbCommand.cancel()
         }
-
 
         //        SmartDashboard.putNumber("JoyX", RobotContainer.rightJoystick.x)
         //        SmartDashboard.putNumber("JoyY", RobotContainer.rightJoystick.y)

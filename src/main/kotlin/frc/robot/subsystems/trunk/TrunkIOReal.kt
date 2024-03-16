@@ -48,7 +48,8 @@ class TrunkIOReal : TrunkIO {
     init {
         // factory reset to make it not be bad
         elevatorMotor.restoreFactoryDefaults()
-        val pivotMotorConfiguration = TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+        val pivotMotorConfiguration =
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
 
 //        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
 //        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
@@ -95,8 +96,17 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setRotationVoltage(volts: Double) {
-        SmartDashboard.putNumber("set rotation voltage: ", MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS))
-        masterRotationMotor.setVoltage(MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS));
+        SmartDashboard.putNumber(
+            "set rotation voltage: ",
+            MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
+        )
+        masterRotationMotor.setVoltage(
+            MathUtil.clamp(
+                volts,
+                TrunkConstants.MIN_ROT_VOLTS,
+                TrunkConstants.MAX_ROT_VOLTS
+            )
+        );
 //        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }
 

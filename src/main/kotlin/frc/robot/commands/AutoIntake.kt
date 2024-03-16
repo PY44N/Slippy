@@ -4,19 +4,22 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
+import frc.robot.commands.cannon.HalfSpitCannon
+import frc.robot.commands.cannon.IntakeCannon
 import frc.robot.commands.trunk.CoastAngleMovePosition
-import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.commands.trunk.CoastTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
+import frc.robot.commands.trunk.GoToPoseTrunk
 
 class AutoIntake : Command() {
 
     var hasIntake: Boolean = false
     var hasAlmostSpit: Boolean = false
 
+    var intakeCommand: Command = IntakeCannon()
+
     override fun initialize() {
-        RobotContainer.cannonSystem.intake()
         RobotContainer.cannonSystem.killShooter()
+        intakeCommand.schedule()
         hasIntake = false
         hasAlmostSpit = false
 
@@ -28,7 +31,6 @@ class AutoIntake : Command() {
 
     override fun execute() {
 
-
         if (RobotContainer.stateMachine.currentTrunkCommand.isFinished && !hasIntake) {
             RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE)
         }
@@ -37,14 +39,18 @@ class AutoIntake : Command() {
             RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
 //            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE_PREP).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
             RobotContainer.cannonSystem.killIntake()
-            RobotContainer.cannonSystem.spit()
+            intakeCommand.cancel()
+            intakeCommand = HalfSpitCannon()
+            intakeCommand.schedule()
             hasIntake = true
-//            println("spitting back out")
+            println("spitting back out")
         }
         if (RobotContainer.stateMachine.noteState == NoteState.Intaking && hasIntake && !hasAlmostSpit) {
-            RobotContainer.cannonSystem.intake()
+            intakeCommand.cancel()
+            intakeCommand = IntakeCannon()
+            intakeCommand.schedule()
             hasAlmostSpit = true
-//            println("intaking back up")
+            println("intaking back up")
         }
 
         if (hasAlmostSpit) {
@@ -52,9 +58,11 @@ class AutoIntake : Command() {
         }
     }
 
-    override fun isFinished(): Boolean = RobotContainer.stateMachine.noteState == NoteState.Stored && hasIntake && hasAlmostSpit
+    override fun isFinished(): Boolean =
+        RobotContainer.stateMachine.noteState == NoteState.Stored && hasIntake && hasAlmostSpit
 
     override fun end(interrupted: Boolean) {
+        intakeCommand.cancel()
         RobotContainer.cannonSystem.killIntake()
 //        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.STOW)
     }

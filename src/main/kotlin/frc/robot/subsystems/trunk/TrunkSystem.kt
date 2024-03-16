@@ -7,19 +7,28 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.TrunkConstants
 
-
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
-    val rotationPIDController: ProfiledPIDController = ProfiledPIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD, TrapezoidProfile.Constraints(TrunkConstants.rotationMaxVelo, TrunkConstants.rotationMaxAcceleration))
+    val rotationPIDController: ProfiledPIDController = ProfiledPIDController(
+        TrunkConstants.rotationKP,
+        TrunkConstants.rotationKI,
+        TrunkConstants.rotationKD,
+        TrapezoidProfile.Constraints(TrunkConstants.rotationMaxVelo, TrunkConstants.rotationMaxAcceleration)
+    )
 
     //    val rotationPIDController = PIDController(TrunkConstants.rotationKP, TrunkConstants.rotationKI, TrunkConstants.rotationKD)
-    val rotationFeedForward: ArmFeedforward = ArmFeedforward(TrunkConstants.rotationFFkS, TrunkConstants.rotationFFkG, TrunkConstants.rotationFFkV, TrunkConstants.rotationFFkA)
+    val rotationFeedForward: ArmFeedforward = ArmFeedforward(
+        TrunkConstants.rotationFFkS,
+        TrunkConstants.rotationFFkG,
+        TrunkConstants.rotationFFkV,
+        TrunkConstants.rotationFFkA
+    )
 
-    val elevatorPIDController: PIDController = PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
+    val elevatorPIDController: PIDController =
+        PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
 
     var trunkDesiredRotation = TrunkConstants.STOW_ANGLE
 
@@ -52,8 +61,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("Trunk Rotation PID", rotationPIDOut)
         SmartDashboard.putNumber("Trunk Rotation FF", rotationFFOut)
         SmartDashboard.putNumber("Uncapped rotation voltage: ", rotationPIDOut + rotationFFOut)
-        return MathUtil.clamp(rotationPIDOut
-                + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
+        return MathUtil.clamp(
+            rotationPIDOut
+                    + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS
+        )
     }
 
     fun calculatePositionOut(inputDesiredPosition: Double): Double {
@@ -63,9 +74,12 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         return posPIDOut + posFF
     }
 
-
     fun checkAtPose(pivotAngle: Double, elevatorPosition: Double): Boolean {
-        return MiscCalculations.appxEqual(pivotAngle, getRotation(), TrunkConstants.ANGLE_DEADZONE) && MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
+        return MiscCalculations.appxEqual(
+            pivotAngle,
+            getRotation(),
+            TrunkConstants.ANGLE_DEADZONE
+        ) && MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
     }
 
     fun checkAtPosition(position: Double): Boolean {
