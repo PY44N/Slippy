@@ -22,6 +22,7 @@ class Robot : LoggedRobot() {
 
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
     override fun robotInit() {
+        SmartDashboard.putNumber("shooter angle setpoint", 90.0)
         SmartDashboard.putBoolean("arm motors free?", false)
         SmartDashboard.putNumber("varying shooter fudging constant", TargetingConstants.stupidConstant)
         SmartDashboard.putNumber("shooter endpoint x", TargetingConstants.endpointX)
@@ -39,7 +40,6 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
         SmartDashboard.putNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
         SmartDashboard.putNumber("Amp Position", TrunkConstants.AMP_POSITION)
-
 
         RobotContainer
     }
@@ -114,6 +114,9 @@ class Robot : LoggedRobot() {
         TrunkPose.AMP.position = TrunkConstants.AMP_POSITION
         IntakeState.AmpSpitting.innerPercent = CannonConstants.INNER_AMP_PERCENT
         IntakeState.AmpSpitting.outerPercent = CannonConstants.INNER_AMP_PERCENT
+
+        SmartDashboard.putNumber("Left Shooter Vel", RobotContainer.cannonSystem.io.getLeftShooterTBVel())
+        SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
     }
 
 
