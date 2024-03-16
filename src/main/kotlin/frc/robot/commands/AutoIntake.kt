@@ -7,9 +7,8 @@ import frc.robot.TrunkPose
 import frc.robot.commands.cannon.HalfSpitCannon
 import frc.robot.commands.cannon.IntakeCannon
 import frc.robot.commands.trunk.CoastAngleMovePosition
-import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.commands.trunk.CoastTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
+import frc.robot.commands.trunk.GoToPoseTrunk
 
 class AutoIntake : Command() {
 
@@ -31,7 +30,6 @@ class AutoIntake : Command() {
     }
 
     override fun execute() {
-
 
         if (RobotContainer.stateMachine.currentTrunkCommand.isFinished && !hasIntake) {
             RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE)
@@ -60,7 +58,8 @@ class AutoIntake : Command() {
         }
     }
 
-    override fun isFinished(): Boolean = RobotContainer.stateMachine.noteState == NoteState.Stored && hasIntake && hasAlmostSpit
+    override fun isFinished(): Boolean =
+        RobotContainer.stateMachine.noteState == NoteState.Stored && hasIntake && hasAlmostSpit
 
     override fun end(interrupted: Boolean) {
         intakeCommand.cancel()

@@ -27,7 +27,6 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
         RobotContainer.trunkSystem.io.rotationBrake = isPivotPositionLegal
     }
 
-
     override fun execute() {
         SmartDashboard.putNumber("Current Target Angle", currentTargetAngle)
 
@@ -51,7 +50,11 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
     }
 
     override fun isFinished(): Boolean {
-        if (RobotContainer.trunkSystem.checkAtPose(RobotContainer.trunkSystem.trunkDesiredRotation, currentTargetPosition)) {
+        if (RobotContainer.trunkSystem.checkAtPose(
+                RobotContainer.trunkSystem.trunkDesiredRotation,
+                currentTargetPosition
+            )
+        ) {
             return true
         } else {
             return false
