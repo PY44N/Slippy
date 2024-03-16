@@ -11,16 +11,11 @@ class GoToPoseAndHoldTrunk(val desiredPose: TrunkPose) : Command() {
         goToPose.schedule()
     }
 
-    override fun execute() {}
-
-    override fun isFinished(): Boolean {
-        return goToPose.isFinished
-    }
+    override fun isFinished() = goToPose.isFinished
 
     override fun end(interrupted: Boolean) {
-        if (interrupted == false) {
+        if (!interrupted)
             RobotContainer.trunkSystem.isAtPose = true
-        }
         RobotContainer.stateMachine.currentTrunkCommand = HoldPoseTrunk(desiredPose)
         goToPose.cancel()
     }

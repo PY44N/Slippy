@@ -8,9 +8,7 @@ class CoastTrunk : Command() {
         RobotContainer.trunkSystem.freeMotors()
     }
 
-    override fun isFinished(): Boolean {
-        return false
-    }
+    override fun isFinished() = false
 
     override fun end(interrupted: Boolean) {
         RobotContainer.trunkSystem.brakeMotors()

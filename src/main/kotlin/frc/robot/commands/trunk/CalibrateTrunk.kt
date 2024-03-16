@@ -9,12 +9,7 @@ class CalibrateTrunk : Command() {
         RobotContainer.trunkSystem.io.setElevatorSpeed(.2)
     }
 
-    override fun execute() {
-    }
-
-    override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.io.atTopLimit()
-    }
+    override fun isFinished() = RobotContainer.trunkSystem.io.atTopLimit()
 
     override fun end(interrupted: Boolean) {
         RobotContainer.trunkSystem.io.setZeroPosition()

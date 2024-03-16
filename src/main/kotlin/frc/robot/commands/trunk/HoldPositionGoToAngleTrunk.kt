@@ -22,7 +22,5 @@ class HoldPositionGoToAngleTrunk(val pose: TrunkPose) : Command() {
         }
     }
 
-    override fun isFinished(): Boolean {
-        return false
-    }
+    override fun isFinished() = false
 }
