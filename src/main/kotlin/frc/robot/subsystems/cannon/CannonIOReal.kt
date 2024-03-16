@@ -4,6 +4,7 @@ package frc.robot.subsystems.cannon
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj.DigitalInput
+import edu.wpi.first.wpilibj.Encoder
 import frc.robot.constants.CannonConstants
 
 class CannonIOReal : CannonIO {
@@ -18,6 +19,9 @@ class CannonIOReal : CannonIO {
 
     val leftShooterMotorEncoder = leftShooterMotor.getEncoder();
     val rightShooterMotorEncoder = rightShooterMotor.getEncoder();
+
+    val rightShooterEncoder = Encoder(8, 7)
+    val leftShooterEncoder = Encoder(6, 5)
 
     val outerIntakeMotor: CANSparkMax =
             CANSparkMax(CannonConstants.OUTER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
@@ -52,14 +56,29 @@ class CannonIOReal : CannonIO {
         rightShooterMotor.inverted = true
 //        leftShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
 //        rightShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
+
+        rightShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+        leftShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
     }
 
     override fun getLeftShooterVel(): Double {
-        return leftShooterMotorEncoder.velocity * (40.0 / 27.0)
+//        return leftShooterMotorEncoder.velocity * (40.0 / 27.0)
+        return -leftShooterEncoder.rate
+    }
+
+    override fun getLeftShooterTBVel(): Double {
+        return leftShooterEncoder.rate
+
+    }
+
+    override fun getRightShooterTBVel(): Double {
+        return rightShooterEncoder.rate
+
     }
 
     override fun getRightShooterVel(): Double {
-        return rightShooterMotorEncoder.velocity * (40.0 / 27.0)
+//        return rightShooterMotorEncoder.velocity * (40.0 / 27.0)
+        return rightShooterEncoder.rate
     }
 
     override fun setLeftShooter(percent: Double) {
