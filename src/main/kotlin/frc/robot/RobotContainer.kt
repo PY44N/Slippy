@@ -12,6 +12,7 @@ import frc.robot.commands.AutoIntake
 import frc.robot.commands.TeleopSwerveDriveCommand
 import frc.robot.commands.automatic.AutoAimAndShoot
 import frc.robot.commands.automatic.AutoAimDumbTwistAndShoot
+import frc.robot.commands.automatic.AutoClimbCommand
 import frc.robot.commands.automatic.FloorIntakeAndSeek
 import frc.robot.commands.cannon.AutoSpit
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
@@ -40,15 +41,15 @@ object RobotContainer {
 
     val cannonSystem: CannonSystem = CannonSystem(CannonIOReal())
 
-    val climbLatch: Servo = Servo(TrunkConstants.CLIMB_LATCH_ID)
+//    val climbLatch: Servo = Servo(TrunkConstants.CLIMB_LATCH_ID)
 
     val autonomousCommand: Command = Commands.run({})
 
     var teleopSwerveCommand: Command = TeleopSwerveDriveCommand()
 
-    val climbCommand: Command = GoToPoseTrunk(TrunkPose.CLIMB).andThen(GoToPoseTrunk(TrunkPose.CLIMB_DOWN)).andThen({
-        climbLatch.angle = 90.0 // tune before testing
-    }).alongWith(HoldPoseTrunk(TrunkPose.CLIMB_DOWN))
+//    val climbCommand: Command = GoToPoseTrunk(TrunkPose.CLIMB).andThen(GoToPoseTrunk(TrunkPose.CLIMB_DOWN)).andThen({
+//        //climbLatch.angle = 90.0 // tune before testing
+//    }).alongWith(HoldPoseTrunk(TrunkPose.CLIMB_DOWN))
 
     val targetingSystem: TargetingSystem = TargetingSystem()
 
@@ -56,6 +57,7 @@ object RobotContainer {
 
     var actuallyDoShoot: Boolean = false
     var actuallyDoAmp: Boolean = false
+    var actuallyDoClimb: Boolean = false
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 
@@ -118,8 +120,9 @@ object RobotContainer {
         xboxController.a().onTrue(AutoAmp())
         xboxController.y().onTrue(AutoAimDumbTwistAndShoot())
         xboxController.x()
-            .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+                .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
+        xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
 

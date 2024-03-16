@@ -49,14 +49,14 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
 
         TargetingConstants.stupidConstant =
-            SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
+                SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
         TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
         TargetingConstants.constantStupidConstant =
-            SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
+                SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         TargetingConstants.velocityMultiplier =
-            SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
+                SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
@@ -84,19 +84,19 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Current robot angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
         Telemetry.putBoolean(
-            "shooter ready",
-            RobotContainer.cannonSystem.shooterReady(),
-            RobotContainer.telemetry.cannonTelemetry
+                "shooter ready",
+                RobotContainer.cannonSystem.shooterReady(),
+                RobotContainer.telemetry.cannonTelemetry
         )
         Telemetry.putString(
-            "note state",
-            RobotContainer.stateMachine.noteState.name,
-            RobotContainer.telemetry.cannonTelemetry
+                "note state",
+                RobotContainer.stateMachine.noteState.name,
+                RobotContainer.telemetry.cannonTelemetry
         )
         Telemetry.putString(
-            "intake state",
-            RobotContainer.stateMachine.intakeState.name,
-            RobotContainer.telemetry.cannonTelemetry
+                "intake state",
+                RobotContainer.stateMachine.intakeState.name,
+                RobotContainer.telemetry.cannonTelemetry
         )
 
 
@@ -117,12 +117,12 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Falcon Raw Rotation", RobotContainer.trunkSystem.io.getFalconRawRotation())
         SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
         SmartDashboard.putNumber(
-            "TB Rotation",
-            Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset)
+                "TB Rotation",
+                Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset)
         )
         SmartDashboard.putNumber(
-            "Falcon Rotation",
-            Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset)
+                "Falcon Rotation",
+                Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset)
         )
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
@@ -155,7 +155,7 @@ class Robot : LoggedRobot() {
     override fun autonomousExit() {}
 
     override fun teleopInit() {
-        RobotContainer.climbLatch.angle = 0.0 // tune before testing
+//        RobotContainer.climbLatch.angle = 0.0 // tune before testing
         RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
         RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

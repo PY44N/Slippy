@@ -96,11 +96,15 @@ class RobotStateMachine {
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored
 
+    var currentTrunkCommandLocked = false
+
     var currentTrunkCommand: Command = CalibrateTrunk()
         set(value) {
-            field.cancel()
-            field = value
-            field.schedule()
+            if (!currentTrunkCommandLocked) {
+                field.cancel()
+                field = value
+                field.schedule()
+            }
         }
 
     var currentRobotZone: GlobalZones = GlobalZones.Wing
@@ -119,7 +123,7 @@ class RobotStateMachine {
 
     fun logStates() {
         RobotContainer.telemetry.stateMachineTelemetry =
-            SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
+                SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
         SmartDashboard.putBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
 
         Telemetry.putString("Note State", noteState.name, RobotContainer.telemetry.stateMachineTelemetry)
