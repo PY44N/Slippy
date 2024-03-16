@@ -25,11 +25,13 @@ class TargetingVariables(
     robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
     robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 ) {
-    val x: Double = robotPose.x - TargetingConstants.speakerX - TargetingConstants.endpointX
-    val y: Double = robotPose.y - TargetingConstants.speakerY - TargetingConstants.endpointY
+    val x: Double = TargetingConstants.speakerX + TargetingConstants.endpointX - robotPose.x
+    val y: Double = TargetingConstants.speakerY + TargetingConstants.endpointY - robotPose.y
     val vx: Double = robotVelocity.vxMetersPerSecond
     val vy: Double = robotVelocity.vyMetersPerSecond
     val r: Double = sqrt(x * x + y * y)
+    // estimate based on things
+    val t = .05882 * r + .06886
     val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ// + .02 * r.pow(1.5)
 
 }
@@ -50,9 +52,6 @@ class TargetingSystem {
 
     private val shootingVelocityScaling = 1.3
 
-    // EVIL math, don't ask (average t value over (0,6)m)
-    private val rt = shootingVelocity * cos(0.774721373362)
-
     fun calculateShot(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
@@ -70,10 +69,7 @@ class TargetingSystem {
     fun velocityRobotAngle() = velocityRobotAngleFunction(TargetingVariables())
 
     private fun velocityRobotAngleFunction(vars: TargetingVariables) =
-        noVelocityRobotAngle(vars) + atan2(
-            vars.vx * vars.y - vars.vy * vars.x - vars.r / rt,
-            vars.x * vars.vx + vars.y * vars.vy
-        )
+        atan2(vars.y-vars.vy*vars.t,vars.x-vars.vx*vars.t)
 
     private fun velocityShooterAngleFunction(vars: TargetingVariables): Double {
         val inverseR = 1.0 / vars.r
@@ -103,7 +99,7 @@ class TargetingSystem {
         return ShotSetup(noVelocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }
 
-    fun noVelocityRobotAngle(vars: TargetingVariables) = atan2(-vars.y, -vars.x) * rad2deg
+    fun noVelocityRobotAngle(vars: TargetingVariables) = atan2(vars.y, vars.x) * rad2deg
 
     fun noVelocityShooterAngle(vars: TargetingVariables) =
             atan((vars.z + (.5 * g * (vars.r.pow(2) + vars.z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
