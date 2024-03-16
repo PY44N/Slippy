@@ -115,13 +115,10 @@ class Robot : LoggedRobot() {
         IntakeState.AmpSpitting.innerPercent = CannonConstants.INNER_AMP_PERCENT
         IntakeState.AmpSpitting.outerPercent = CannonConstants.INNER_AMP_PERCENT
 
-<<<<<<< HEAD
         SmartDashboard.putBoolean("Stow Beam Break", RobotContainer.cannonSystem.io.getLoadedBeamBreak())
         SmartDashboard.putBoolean("Intake Beam Break", RobotContainer.cannonSystem.io.getEntryBeamBreak())
-=======
         SmartDashboard.putNumber("Left Shooter Vel", RobotContainer.cannonSystem.io.getLeftShooterTBVel())
         SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
->>>>>>> a092fd4d3bfaf9b0130699087ceb1bf4963a366c
     }
 
 
