@@ -9,7 +9,7 @@ import frc.robot.constants.FieldConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 import kotlin.math.PI
-import kotlin.math.acos
+import kotlin.math.cos
 import kotlin.math.atan
 import kotlin.math.atan2
 import kotlin.math.pow
@@ -38,6 +38,9 @@ class TargetingSystem {
     //    private val g = 9.81
     // overaccount for gravity
     private val g = 11.0
+
+    private val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
+
     private val rad2deg = 180.0 / PI
 
     private val shootingVelocity =
@@ -45,8 +48,10 @@ class TargetingSystem {
             Units.inchesToMeters(1.5)
         )
 
-    // dumb scaling dont think about it
     private val shootingVelocityScaling = 1.3
+
+    // EVIL math, don't ask (average t value over (0,6)m)
+    private val rt = shootingVelocity * cos(0.774721373362)
 
     fun calculateShot(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
@@ -64,12 +69,11 @@ class TargetingSystem {
 
     fun velocityRobotAngle() = velocityRobotAngleFunction(TargetingVariables())
 
-    private fun velocityRobotAngleFunction(vars: TargetingVariables): Double {
-        return acos(
-            vars.x * ((vars.x * vars.x - vars.y * vars.y) * vars.vx + 2 * vars.x * vars.y * vars.vy) /
-                    (vars.r.pow(1.5) * sqrt(vars.vx * vars.vx + vars.vy * vars.vy))
-        ) * rad2deg
-    }
+    private fun velocityRobotAngleFunction(vars: TargetingVariables) =
+        noVelocityRobotAngle(vars) + atan2(
+            vars.vx * vars.y - vars.vy * vars.x - vars.r / rt,
+            vars.x * vars.vx + vars.y * vars.vy
+        )
 
     private fun velocityShooterAngleFunction(vars: TargetingVariables): Double {
         val inverseR = 1.0 / vars.r

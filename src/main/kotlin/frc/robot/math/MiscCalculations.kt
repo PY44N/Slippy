@@ -24,14 +24,14 @@ object MiscCalculations {
      * @return The deadzoned value.
      */
     fun calculateDeadzone(input: Double, deadzoneValue: Double): Double {
-        if (abs(input) > deadzoneValue) {
+        return if (abs(input) > deadzoneValue) {
             if (input > 0.0) {
-                return (input - deadzoneValue) / (1.0 - deadzoneValue)
+                (input - deadzoneValue) / (1.0 - deadzoneValue)
             } else {
-                return (input + deadzoneValue) / (1.0 - deadzoneValue)
+                (input + deadzoneValue) / (1.0 - deadzoneValue)
             }
         } else {
-            return 0.0
+            0.0
         }
     }
 
@@ -50,9 +50,9 @@ object MiscCalculations {
     fun getCurrentTime(): Double = WPIUtilJNI.now() * 1.0e-6
 
     fun translation2dWithinRange(current: Translation2d, range: Pair<Translation2d, Translation2d>): Boolean {
-        val range_start = range.first
-        val range_end = range.second
-        return current.x > range_start.x && current.y > range_start.y && current.x < range_end.x && current.y < range_end.y
+        val rangeStart = range.first
+        val rangeEnd = range.second
+        return current.x > rangeStart.x && current.y > rangeStart.y && current.x < rangeEnd.x && current.y < rangeEnd.y
     }
 
     fun findMatchingTranslation2dRange(
