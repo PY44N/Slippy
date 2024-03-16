@@ -7,6 +7,8 @@ interface CannonIO {
 
     fun getLeftShooterVel(): Double
     fun getRightShooterVel(): Double
+    fun getLeftShooterTBVel(): Double
+    fun getRightShooterTBVel(): Double
 
     fun setInnerIntakePercent(percent: Double)
     fun setOuterIntakePercent(percent: Double)

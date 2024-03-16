@@ -88,7 +88,9 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 //            io.getRightShooterVel(),
 //            CannonConstants.SHOOTER_VELOCITY_DEADZONE
 //        )
-        if (MiscCalculations.appxEqual(desiredLeftVel, io.getLeftShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)
+        SmartDashboard.putNumber("Desired Left Velo", desiredRightVel)
+        SmartDashboard.putNumber("Left Shooter Velo", io.getRightShooterVel())
+        if (MiscCalculations.appxEqual(desiredRightVel, io.getRightShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)
                 && desiredLeftVel != 0.0 && desiredRightVel != 0.0 && RobotContainer.stateMachine.shooterState == ShooterState.Shooting) {
             println("shooter ready")
             return true
@@ -188,32 +190,41 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 //            println("set inner and outer percents")
         }
 
+        if (RobotContainer.stateMachine.shooterState != ShooterState.Stopped) {
 
-        //Actually run the motors with the PIDs and the feed forwards
-        val currentLeftVelo = io.getLeftShooterVel()
-        val currentRightVelo = io.getRightShooterVel()
+            //Actually run the motors with the PIDs and the feed forwards
+            val currentLeftVelo = io.getLeftShooterVel()
+            val currentRightVelo = io.getRightShooterVel()
 
-        val leftFF = (desiredLeftVel) * 1.0
-        val rightFF = (desiredRightVel) * 1.0
+            SmartDashboard.putNumber("Velocity Desired Left", desiredLeftVel)
+            SmartDashboard.putNumber("Velocity Desired Right", desiredRightVel)
+            SmartDashboard.putNumber("Velocity Current Right", currentRightVelo)
+            SmartDashboard.putNumber("Velocity Current Left", currentLeftVelo)
 
-        val leftPIDOut = leftShooterPID.calculate(currentLeftVelo, desiredLeftVel)
-        val rightPIDOut = rightShooterPID.calculate(currentRightVelo, desiredRightVel)
+            val leftFF = (desiredLeftVel) * 1.0
+            val rightFF = (desiredRightVel) * 1.0
+
+            val leftPIDOut = leftShooterPID.calculate(currentLeftVelo, desiredLeftVel)
+            val rightPIDOut = rightShooterPID.calculate(currentRightVelo, desiredRightVel)
 
 //        println("currentLeftVelo " + io.getLeftShooterVel())
 //        println("left ff" + leftFF)
 //        println("left pid out" + leftPIDOut)
 
-        val leftPercent = (leftFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
-        val rightPercent = (rightFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+            val leftPercent = (leftFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+            val rightPercent = (rightFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
 
-        SmartDashboard.putNumber("left shooter pid", leftPIDOut)
+            SmartDashboard.putNumber("left shooter pid", leftPIDOut)
 //        SmartDashboard.putNumber("left shooter percent", leftPercent)
 
 //        Telemetry.putNumber("right percent", rightPercent, RobotContainer.telemetry.cannonTelemetry)
 
-        io.setLeftShooter(leftPercent)
-        io.setRightShooter(rightPercent)
+            io.setLeftShooter(leftPercent)
+            io.setRightShooter(rightPercent)
 //        println("Cannon periodic end; percent: " + leftPercent)
-
+        } else {
+            io.setLeftShooter(0.0)
+            io.setRightShooter(0.0)
+        }
     }
 }
