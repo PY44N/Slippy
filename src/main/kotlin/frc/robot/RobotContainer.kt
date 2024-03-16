@@ -123,6 +123,9 @@ object RobotContainer {
                 .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
         xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
+        xboxController.rightTrigger().onTrue(Commands.runOnce({
+            actuallyDoClimb = true
+        }))
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
 

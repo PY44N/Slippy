@@ -50,15 +50,11 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
     }
 
     override fun isFinished(): Boolean {
-        if (RobotContainer.trunkSystem.checkAtPose(
+        return RobotContainer.trunkSystem.checkAtPose(
                 RobotContainer.trunkSystem.trunkDesiredRotation,
                 currentTargetPosition
-            )
-        ) {
-            return true
-        } else {
-            return false
-        }
+        )
+
     }
 
     override fun end(interrupted: Boolean) {

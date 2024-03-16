@@ -46,7 +46,9 @@ enum class TrunkPose(var angle: Double, var position: Double) {
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
     CalibrationAngle(110.0, TrunkConstants.STOW_POSITION),
     CLIMB(180.0, TrunkConstants.STOW_POSITION),
-    CLIMB_DOWN(180.0, TrunkConstants.INTAKE_POSITION)
+    CLIMB_STAGE_1(180.0, .23), // We need to make it so we can do positions that aren't in this enum
+    CLIMB_STAGE_2(78.0, .23),
+    CLIMB_STAGE_FINAL(78.0, .31)
 }
 
 //CURRENT states
