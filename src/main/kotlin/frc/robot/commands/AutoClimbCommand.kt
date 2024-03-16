@@ -11,6 +11,7 @@ import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPoseTrunk
 import frc.robot.commands.trunk.LerpToPoseTrunk
+import frc.robot.constants.TrunkConstants
 
 class AutoClimbCommand : Command() {
     val holdCommand = HoldPoseTrunk(TrunkPose.CLIMB)
@@ -32,6 +33,7 @@ class AutoClimbCommand : Command() {
         RobotContainer.stateMachine.currentTrunkCommandLocked = true
         RobotContainer.actuallyDoClimb = false
         climbed = false
+        TrunkConstants.MIN_ROT_VOLTS = -4.0
     }
 
     override fun execute() {
@@ -43,7 +45,7 @@ class AutoClimbCommand : Command() {
 
         if (RobotContainer.actuallyDoClimb && !climbed) {
             RobotContainer.stateMachine.currentTrunkCommandLocked = false
-            RobotContainer.stateMachine.currentTrunkCommand = LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_1, 2.0)/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_1), WaitCommand(1.0)))*/.andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_2, 5.0))/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_2), WaitCommand(1.0)))*/.andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL, 2.0)).andThen(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL))
+            RobotContainer.stateMachine.currentTrunkCommand = LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_1, 0.5)/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_1), WaitCommand(1.0)))*/.andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_2, 2.0))/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_2), WaitCommand(1.0)))*/.andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL, 0.5)).andThen(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL))
             RobotContainer.stateMachine.currentTrunkCommandLocked = true
 
 
@@ -54,6 +56,7 @@ class AutoClimbCommand : Command() {
     override fun end(interrupted: Boolean) {
         RobotContainer.stateMachine.currentTrunkCommandLocked = false
         RobotContainer.actuallyDoClimb = false
+        TrunkConstants.MIN_ROT_VOLTS = -2.0
         SmartDashboard.putBoolean("Pulldown Climb?", false)
     }
 }

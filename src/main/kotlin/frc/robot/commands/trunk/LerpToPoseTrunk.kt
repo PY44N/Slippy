@@ -45,9 +45,6 @@ class LerpToPoseTrunk(val pose: TrunkPose, val LERP_TIME: Double = 3.0) : Comman
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPose(
-                pose.angle,
-                pose.position
-        )
+        return timer.hasElapsed(LERP_TIME)
     }
 }

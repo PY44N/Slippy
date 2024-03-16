@@ -76,7 +76,7 @@ object TrunkConstants {
 
     val ELEVATOR_DEADZONE = .02
 
-    val MIN_ROT_VOLTS = -2.0
+    var MIN_ROT_VOLTS = -2.0
 
     val MAX_ROT_VOLTS = 5.0
 }
