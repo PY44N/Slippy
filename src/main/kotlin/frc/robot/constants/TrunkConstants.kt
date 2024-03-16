@@ -49,14 +49,14 @@ object TrunkConstants {
 
     var rotationKP = 0.15
     var rotationKI = 0.0
-    var rotationKD = .0021
+    var rotationKD = .01
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
-    var rotationMaxAcceleration = 50.0
+    var rotationMaxAcceleration = 75.0
 
     //degrees/sec
-    var rotationMaxVelo = 90.0
+    var rotationMaxVelo = 180.0
     var rotationMaxError = 5.0
 
     val ANGLE_DEADZONE = 2.5
@@ -77,5 +77,6 @@ object TrunkConstants {
     val ELEVATOR_DEADZONE = .02
 
     val MIN_ROT_VOLTS = -2.0
-    val MAX_ROT_VOLTS = 3.0
+
+    val MAX_ROT_VOLTS = 5.0
 }

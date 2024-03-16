@@ -30,15 +30,14 @@ class TargetingVariables(
     val vx: Double = robotVelocity.vxMetersPerSecond
     val vy: Double = robotVelocity.vyMetersPerSecond
     val r: Double = sqrt(x * x + y * y)
+    val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ// + .02 * r.pow(1.5)
+
 }
 
 class TargetingSystem {
     //    private val g = 9.81
     // overaccount for gravity
     private val g = 11.0
-
-    private val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
-
     private val rad2deg = 180.0 / PI
 
     private val shootingVelocity =
@@ -87,9 +86,9 @@ class TargetingSystem {
     }
 
     fun getShotNoVelocity(
-        robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
-        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
-    ): ShotSetup {
+
+            robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
+            robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds): ShotSetup {
 
         val vars = TargetingVariables(robotPose, robotVelocity)
 
@@ -103,7 +102,7 @@ class TargetingSystem {
     fun noVelocityRobotAngle(vars: TargetingVariables) = atan2(-vars.y, -vars.x) * rad2deg
 
     fun noVelocityShooterAngle(vars: TargetingVariables) =
-        atan((z + (.5 * g * (vars.r.pow(2) + z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
+            atan((vars.z + (.5 * g * (vars.r.pow(2) + vars.z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
 
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
         val vars = TargetingVariables(robotPose, robotVelocity)
