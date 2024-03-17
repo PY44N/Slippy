@@ -29,7 +29,7 @@ class TargetingVariables(
     val x: Double =
         (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x) * if (red) -1 else 1
     val y: Double =
-        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y) * if (red) -1 else 1
+        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y)
     val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
     // + .02 * r.pow(1.5)
 
