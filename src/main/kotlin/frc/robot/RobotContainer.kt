@@ -117,14 +117,14 @@ object RobotContainer {
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
         xboxController.b().toggleOnTrue(AutoIntake())
-//        xboxController.a().onTrue(AutoAmp())
+        xboxController.a().onTrue(AutoAmp())
         xboxController.y().onTrue(TeleopAimDumbTwistAndShoot())
 //        xboxController.a().onTrue(Commands.runOnce({
 //            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
 //        }))
-        xboxController.a().onTrue(AutoIntakeAndShoot())
+//        xboxController.a().onTrue(AutoIntakeAndShoot())
         xboxController.x()
-                .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+            .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
         xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({
@@ -138,7 +138,10 @@ object RobotContainer {
         NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
         NamedCommands.registerCommand("AutoIntake", AutoIntake())
         NamedCommands.registerCommand("AutoAimDumbTwistAndShoot", AutoAimDumbTwistAndShoot())
-        NamedCommands.registerCommand("Stow", Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+        NamedCommands.registerCommand(
+            "Stow",
+            Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) })
+        )
         NamedCommands.registerCommand("AutoAimAndShootPrep", AutoAimAndShootPrep())
     }
 

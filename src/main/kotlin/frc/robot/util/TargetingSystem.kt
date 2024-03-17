@@ -3,6 +3,7 @@ package frc.robot.util
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.RobotContainer
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
@@ -24,8 +25,14 @@ class TargetingVariables(
     robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
     robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 ) {
-    val x: Double = TargetingConstants.speakerX + TargetingConstants.endpointX - robotPose.x
-    val y: Double = TargetingConstants.speakerY + TargetingConstants.endpointY - robotPose.y
+    val flippedRobotPose = AllianceFlip.apply(robotPose)
+
+    val red = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+
+    val x: Double =
+        (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x) * if (red) -1 else 1
+    val y: Double =
+        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y) * if (red) -1 else 1
     val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
     // + .02 * r.pow(1.5)
 
@@ -33,6 +40,7 @@ class TargetingVariables(
     val vy: Double = robotVelocity.vyMetersPerSecond
 
     val r: Double = sqrt(x * x + y * y)
+
     // estimate based on things
     val t = .05882 * r + .06886
 }
@@ -71,17 +79,17 @@ class TargetingSystem {
         val k2 = 2.0 * (shootingVelocity * vars.r * k1 + rDot).pow(2)
         return atan(
             1.0 / (
-                vars.r * k2 /
-                        (vars.z * k2 + g * vars.r.pow(2)) -
-                rDot /
-                        ((1.1 + .03 * vars.r) * shootingVelocity * vars.z * k1)
-            )
+                    vars.r * k2 /
+                            (vars.z * k2 + g * vars.r.pow(2)) -
+                            rDot /
+                            ((1.1 + .03 * vars.r) * shootingVelocity * vars.z * k1)
+                    )
         ) * rad2deg
     }
 
     fun getShotNoVelocity(
-            robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
-            robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
+        robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
+        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
 
         val vars = TargetingVariables(robotPose, robotVelocity)
@@ -96,14 +104,14 @@ class TargetingSystem {
     fun noVelocityRobotAngle(vars: TargetingVariables) = atan2(vars.y, vars.x) * rad2deg
 
     fun noVelocityShooterAngle(vars: TargetingVariables) =
-            atan((vars.z + (.5 * g * (vars.r.pow(2) + vars.z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
+        atan((vars.z + (.5 * g * (vars.r.pow(2) + vars.z.pow(2)) / shootingVelocity.pow(2))) / vars.r) * rad2deg
 
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
         val vars = TargetingVariables(robotPose, robotVelocity)
         val noVelShot = getShotNoVelocity(robotPose, robotVelocity)
         val velShot = calculateShot(robotPose, robotVelocity)
         println("vars:")
-        println("x="+vars.x+" y="+vars.y+" r="+vars.r+" vx="+vars.vx+" vy="+vars.vy+" r="+vars.r+" z="+vars.z+" t="+vars.t)
+        println("x=" + vars.x + " y=" + vars.y + " r=" + vars.r + " vx=" + vars.vx + " vy=" + vars.vy + " r=" + vars.r + " z=" + vars.z + " t=" + vars.t)
         println("no velocity:")
         println(noVelShot)
         println("velocity:")

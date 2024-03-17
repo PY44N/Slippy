@@ -72,9 +72,8 @@ class AutoAimDumbTwistAndShoot : Command() {
 //        ) {
 //            autoShoot.schedule()
 //        }
-        if (timer.hasElapsed(1.5) && !autoShoot.isScheduled) {
+        if (timer.hasElapsed(1.5) && !autoShoot.isScheduled)
             autoShoot.schedule()
-        }
     }
 
     override fun isFinished(): Boolean {
