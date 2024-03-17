@@ -4,31 +4,29 @@ import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.Encoder
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
 
 class CannonIOReal : CannonIO {
 
-    val leftShooterMotor: CANSparkMax =
+    private val leftShooterMotor: CANSparkMax =
             CANSparkMax(CannonConstants.LEFT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-    val rightShooterMotor: CANSparkMax =
+    private val rightShooterMotor: CANSparkMax =
             CANSparkMax(CannonConstants.RIGHT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
 
-//    val leftShooterEncoder = leftShooterMotor.getAlternateEncoder(8192);
-//    val rightShooterEncoder = rightShooterMotor.getAlternateEncoder(8192);
+//    val leftShooterMotorEncoder = leftShooterMotor.getEncoder();
+//    val rightShooterMotorEncoder = rightShooterMotor.getEncoder();
 
-    val leftShooterMotorEncoder = leftShooterMotor.getEncoder();
-    val rightShooterMotorEncoder = rightShooterMotor.getEncoder();
+    private val rightShooterEncoder = Encoder(8, 7)
+    private val leftShooterEncoder = Encoder(6, 5)
 
-    val rightShooterEncoder = Encoder(8, 7)
-    val leftShooterEncoder = Encoder(6, 5)
-
-    val outerIntakeMotor: CANSparkMax =
+    private val outerIntakeMotor: CANSparkMax =
             CANSparkMax(CannonConstants.OUTER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-    val innerIntakeMotor: CANSparkMax =
+    private val innerIntakeMotor: CANSparkMax =
             CANSparkMax(CannonConstants.INNER_INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
 
-    val entryBeamBreak: DigitalInput = DigitalInput(3)
-    val loadedBeamBreak: DigitalInput = DigitalInput(2)
+    private val entryBeamBreak: DigitalInput = DigitalInput(3)
+    private val loadedBeamBreak: DigitalInput = DigitalInput(2)
 
     init {
 //       leftShooterEncoder.setVelocityConversionFactor(1 / (8192.0 * (27/40)))
@@ -54,25 +52,23 @@ class CannonIOReal : CannonIO {
 //        leftShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
 //        rightShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
 
-        rightShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
-        leftShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+//        rightShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+//        leftShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+        rightShooterEncoder.distancePerPulse = .017
+        leftShooterEncoder.distancePerPulse = .017
+
+        SmartDashboard.putNumber("Shooter distance per pulse", .017)
     }
 
     override fun getLeftShooterVel(): Double {
-
 //        return leftShooterMotorEncoder.velocity * (40.0 / 27.0)
         return -leftShooterEncoder.rate
     }
 
-    override fun getLeftShooterTBVel(): Double {
-        return leftShooterEncoder.rate
+    override fun getLeftShooterTBVel() = leftShooterEncoder.rate
 
-    }
 
-    override fun getRightShooterTBVel(): Double {
-        return rightShooterEncoder.rate
-
-    }
+    override fun getRightShooterTBVel() = rightShooterEncoder.rate
 
     override fun getRightShooterVel(): Double {
 //        return rightShooterMotorEncoder.velocity * (40.0 / 27.0)
@@ -100,16 +96,12 @@ class CannonIOReal : CannonIO {
 //        TODO("Not yet implemented")
     }
 
-    override fun getEntryBeamBreak(): Boolean {
-        return !entryBeamBreak.get()
-    }
+    override fun getEntryBeamBreak() = !entryBeamBreak.get()
 
-    override fun getLoadedBeamBreak(): Boolean {
-        return !loadedBeamBreak.get()
-    }
+    override fun getLoadedBeamBreak() = !loadedBeamBreak.get()
 
-    override fun getIntakePosition(): Double {
-        return innerIntakeMotor.encoder.position
-    }
+    override fun getIntakePosition() = innerIntakeMotor.encoder.position
 
+    override fun periodic() {
+    }
 }

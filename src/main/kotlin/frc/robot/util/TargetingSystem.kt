@@ -1,5 +1,6 @@
 package frc.robot.util
 
+import MiscCalculations
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.util.Units
@@ -9,11 +10,7 @@ import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
-import kotlin.math.PI
-import kotlin.math.atan
-import kotlin.math.atan2
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 data class ShotSetup(val robotAngle: Double, var shooterAngle: Double) {
     init {
@@ -22,17 +19,17 @@ data class ShotSetup(val robotAngle: Double, var shooterAngle: Double) {
 }
 
 class TargetingVariables(
-    robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
+    robotPose: Pose2d = AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()),
     robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 ) {
-    val flippedRobotPose = AllianceFlip.apply(robotPose)
+    private val flippedRobotPose = AllianceFlip.apply(robotPose)
 
-    val red = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+    private val red = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
     val x: Double =
         (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x) * if (red) -1 else 1
     val y: Double =
-        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y) * if (red) -1 else 1
+        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y)
     val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
     // + .02 * r.pow(1.5)
 
@@ -52,13 +49,12 @@ class TargetingSystem {
 
     private val rad2deg = 180.0 / PI
 
-    private val shootingVelocity = 16.0
-//    private val shootingVelocity =
-//        TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY * TargetingConstants.rpm2ups(
-//            Units.inchesToMeters(1.5)
-//        )
+    private val shootingVelocity =
+        TargetingConstants.velocityMultiplier * CannonConstants.SHOOTER_SHOOT_VELOCITY * MiscCalculations.rpm2ups(
+            Units.inchesToMeters(1.5)
+        )
 
-    fun calculateShot(
+    fun getVelocityShot(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
@@ -91,7 +87,6 @@ class TargetingSystem {
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
-
         val vars = TargetingVariables(robotPose, robotVelocity)
 
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
@@ -109,7 +104,7 @@ class TargetingSystem {
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
         val vars = TargetingVariables(robotPose, robotVelocity)
         val noVelShot = getShotNoVelocity(robotPose, robotVelocity)
-        val velShot = calculateShot(robotPose, robotVelocity)
+        val velShot = getVelocityShot(robotPose, robotVelocity)
         println("vars:")
         println("x=" + vars.x + " y=" + vars.y + " r=" + vars.r + " vx=" + vars.vx + " vy=" + vars.vy + " r=" + vars.r + " z=" + vars.z + " t=" + vars.t)
         println("no velocity:")

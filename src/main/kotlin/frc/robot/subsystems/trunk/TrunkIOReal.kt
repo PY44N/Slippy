@@ -3,7 +3,6 @@ package frc.robot.subsystems.trunk
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
-import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.CANSparkBase
@@ -42,6 +41,8 @@ class TrunkIOReal : TrunkIO {
             field = enabled
         }
 
+    var positionEncoderOffset = 0.0
+
     init {
         // factory reset to make it not be bad
         elevatorMotor.restoreFactoryDefaults()
@@ -76,12 +77,16 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setZeroPosition() {
-        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+//        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+
+        positionEncoderOffset = TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR - getRawPosition()
     }
 
     override fun atTopLimit(): Boolean = topLimit.get()
 
-    override fun getRawPosition(): Double = positionEncoder.position
+    override fun getPosition(): Double = positionEncoder.position - positionEncoderOffset
+
+    private fun getRawPosition(): Double = positionEncoder.position
 
     override fun getThroughBoreRawRotation(): Double = shaftRotationEncoder.absolutePosition
 

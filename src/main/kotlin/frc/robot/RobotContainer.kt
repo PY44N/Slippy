@@ -118,7 +118,7 @@ object RobotContainer {
 
         xboxController.b().onTrue(AutoIntake())
         xboxController.a().onTrue(AutoAmp())
-        xboxController.y().onTrue(TeleopAimDumbTwistAndShoot())
+        xboxController.y().onTrue(TeleopAimTwistAndShoot())
 //        xboxController.a().onTrue(Commands.runOnce({
 //            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
 //        }))

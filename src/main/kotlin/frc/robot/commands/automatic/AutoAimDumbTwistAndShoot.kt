@@ -76,9 +76,7 @@ class AutoAimDumbTwistAndShoot : Command() {
             autoShoot.schedule()
     }
 
-    override fun isFinished(): Boolean {
-        return (autoShoot.isFinished) || RobotContainer.stateMachine.noteState == NoteState.Empty
-    }
+    override fun isFinished() = autoShoot.isFinished || RobotContainer.stateMachine.noteState == NoteState.Empty
 
     override fun end(interrupted: Boolean) {
 //        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.HIGH_STOW)
