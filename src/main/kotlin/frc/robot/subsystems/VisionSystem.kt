@@ -24,7 +24,7 @@ class VisionSystem {
 
             var llMeasure: LimelightHelpers.PoseEstimate =
 //                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
+                LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
 //                    } else {
 //                        LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
 //                    }

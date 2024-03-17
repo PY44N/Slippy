@@ -93,6 +93,7 @@ class TargetingSystem {
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
+        println(shootingVelocity)
 
         return ShotSetup(noVelocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }

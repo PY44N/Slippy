@@ -10,7 +10,6 @@ import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.ShooterState
 import frc.robot.constants.CannonConstants
-import frc.robot.util.TargetingSystem
 import frc.robot.util.Telemetry
 
 class CannonSystem(val io: CannonIO) : SubsystemBase() {
@@ -160,20 +159,40 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
             val currentLeftVel = io.getLeftShooterVel()
             val currentRightVel = io.getRightShooterVel()
 
+//            desiredShooterVel = SmartDashboard.getNumber("desired shooter velocity asdgerg", 0.0)
+//
+//            CannonConstants.shooterKP = SmartDashboard.getNumber("shooter kp", CannonConstants.shooterKP)
+//            CannonConstants.shooterKI = SmartDashboard.getNumber("shooter ki", CannonConstants.shooterKI)
+//            CannonConstants.shooterKD = SmartDashboard.getNumber("shooter kd", CannonConstants.shooterKD)
+//
+//            leftShooterPID.p = CannonConstants.shooterKP
+//            leftShooterPID.i = CannonConstants.shooterKI
+//            leftShooterPID.d = CannonConstants.shooterKD
+//
+//            rightShooterPID.p = CannonConstants.shooterKP
+//            rightShooterPID.i = CannonConstants.shooterKI
+//            rightShooterPID.d = CannonConstants.shooterKD
+//
+//            CannonConstants.shooterFFMultiplier = SmartDashboard.getNumber("shooter ff multiplier", CannonConstants.shooterFFMultiplier)
+
+
             SmartDashboard.putNumber("Shooter Velocity Desired", desiredShooterVel)
             SmartDashboard.putNumber("Shooter Velocity Current Right", currentRightVel)
             SmartDashboard.putNumber("Shooter Velocity Current Left", currentLeftVel)
 
-            val FF = desiredShooterVel
+            val shooterFF = desiredShooterVel * CannonConstants.shooterFFMultiplier
 
             val leftPIDOut = leftShooterPID.calculate(currentLeftVel, desiredShooterVel)
             val rightPIDOut = rightShooterPID.calculate(currentRightVel, desiredShooterVel)
 
-            val leftPercent = (FF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
-            val rightPercent = (FF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+            val leftPercent = (shooterFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+            val rightPercent = (shooterFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
 
             SmartDashboard.putNumber("left shooter pid", leftPIDOut)
             SmartDashboard.putNumber("right shooter pid", rightPIDOut)
+
+            SmartDashboard.putNumber("left percent", leftPercent)
+            SmartDashboard.putNumber("right percent", rightPercent)
 
             io.setLeftShooter(leftPercent)
             io.setRightShooter(rightPercent)

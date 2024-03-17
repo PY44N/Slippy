@@ -3,7 +3,7 @@ package frc.robot.constants
 object CannonConstants {
 
     //    val SHOOTER_MAX_RPM = 7000.0
-    val SHOOTER_MAX_RPM = 7000.0
+    val SHOOTER_MAX_RPM = 4300.0
     val INTAKE_STOW_DELAY = .3
 
     val OUTER_INTAKE_PERCENT: Double = -.8
@@ -19,9 +19,9 @@ object CannonConstants {
     var INNER_AMP_PERCENT: Double = -.7
 
     // rpm
-    const val SHOOTER_SHOOT_VELOCITY: Double = 4010.2032905044503
+    var SHOOTER_SHOOT_VELOCITY: Double = 4010.2032905044503
 
-    const val SHOOTER_PREP_VELOCITY: Double = .8 * SHOOTER_SHOOT_VELOCITY
+    var SHOOTER_PREP_VELOCITY: Double = .8 * SHOOTER_SHOOT_VELOCITY
 
     const val SHOOTER_VELOCITY_DEADZONE: Double = 150.0
     val SHOOTER_YAW_DEADZONE: Double = 1.0
@@ -41,8 +41,5 @@ object CannonConstants {
     var shooterKP = 1.2
     var shooterKI = 0.0
     var shooterKD = 0.0
-    var ShooterIz = 0.0
-    var ShooterFF = 0.0
-    var ShooterMax = -1.0
-    var ShooterMin = 1.0
+    var shooterFFMultiplier = .975
 }

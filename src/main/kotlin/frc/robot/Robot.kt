@@ -25,6 +25,13 @@ class Robot : LoggedRobot() {
 
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
     override fun robotInit() {
+        SmartDashboard.putNumber("desired shooter velocity asdgerg", 0.0)
+
+        SmartDashboard.putNumber("shooter kp", CannonConstants.shooterKP)
+        SmartDashboard.putNumber("shooter ki", CannonConstants.shooterKI)
+        SmartDashboard.putNumber("shooter kd", CannonConstants.shooterKD)
+        SmartDashboard.putNumber("shooter ff multiplier", CannonConstants.shooterFFMultiplier)
+
         SmartDashboard.putNumber("shooter angle setpoint", 90.0)
         SmartDashboard.putBoolean("arm motors free?", false)
         SmartDashboard.putNumber("varying shooter fudging constant", TargetingConstants.stupidConstant)
