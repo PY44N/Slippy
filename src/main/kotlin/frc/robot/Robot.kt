@@ -151,7 +151,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Amp Side 3 Piece").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Auto Testing").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

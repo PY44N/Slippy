@@ -41,21 +41,22 @@ class TeleopAimDumbTwistAndShoot : Command() {
 
         //Handle the twisting component
         val driveTwist = twistPIDController.calculate(
-                RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-                shotSetup.robotAngle
+            RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
+            shotSetup.robotAngle
         )
 
         val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
-                RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
-                RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
-                DriveConstants.TELEOP_DEADZONE_X,
-                DriveConstants.TELEOP_DEADZONE_Y
+            RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
+            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
+            DriveConstants.TELEOP_DEADZONE_X,
+            DriveConstants.TELEOP_DEADZONE_Y
         )
 
-        RobotContainer.swerveSystem.driveTrain.applyRequest {
-            RobotContainer.swerveSystem.drive.withVelocityX(driveTranslation.x).withVelocityY(driveTranslation.y)
-                    .withRotationalRate(Math.toRadians(driveTwist))
-        }.execute()
+        RobotContainer.swerveSystem.applyDriveRequest(
+            driveTranslation.x,
+            driveTranslation.y,
+            Math.toRadians(driveTwist)
+        ).execute()
 
         //Can we shoot?
 //        if (RobotContainer.stateMachine.trunkReady && MiscCalculations.appxEqual(

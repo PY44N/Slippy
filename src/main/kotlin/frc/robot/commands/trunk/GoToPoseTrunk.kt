@@ -7,8 +7,6 @@ import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
 
 class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
-
-
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
     var currentTargetPosition: Double = TrunkConstants.LEGAL_PIVOT_POSITION_TARGET
 

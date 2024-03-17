@@ -74,10 +74,6 @@ class TeleopSwerveDriveCommand : Command() {
         }
 //        println("driving")
 
-        RobotContainer.swerveSystem.driveTrain.applyRequest {
-            RobotContainer.swerveSystem.drive.withVelocityX(translation.x)
-                .withVelocityY(translation.y)
-                .withRotationalRate(twist)
-        }.execute()
+        RobotContainer.swerveSystem.applyDriveRequest(translation.x, translation.y, twist).execute()
     }
 }
