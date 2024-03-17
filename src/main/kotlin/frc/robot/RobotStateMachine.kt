@@ -15,7 +15,9 @@ import frc.robot.util.Telemetry
 enum class ShooterState(val leftVel: Double, val rightVel: Double) {
     Stopped(0.0, 0.0),
     Prepped(CannonConstants.LEFT_SHOOTER_PREP_VELOCITY, CannonConstants.RIGHT_SHOOTER_PREP_VELOCITY),
-    Shooting(CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY, CannonConstants.RIGHT_SHOOTER_SHOOT_VELOCITY)
+    Shooting(CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY, CannonConstants.RIGHT_SHOOTER_SHOOT_VELOCITY),
+    Amping(1500.0, 1500.0),
+    CloseShooting(3650.0, 3650.0)
 }
 
 //this represents the CURRENT note state
@@ -38,13 +40,15 @@ enum class IntakeState(var innerPercent: Double, var outerPercent: Double) {
 enum class TrunkPose(var angle: Double, var position: Double) {
     AMP_GOING(TrunkConstants.AMP_ANGLE, 0.3),
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
+    AMP_SHOOTING(50.0, 0.4),
     AMP_LEAVING(TrunkConstants.AMP_ANGLE - 10.0, TrunkConstants.STOW_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
     INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
+    HIGH_STOW(TrunkConstants.HIGH_STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
-    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION),
+    CalibrationAngle(90.0, TrunkConstants.STOW_POSITION),
     CLIMB(180.0, TrunkConstants.STOW_POSITION),
     CLIMB_STAGE_1(180.0, .23), // We need to make it so we can do positions that aren't in this enum
     CLIMB_STAGE_2(83.0, .23),

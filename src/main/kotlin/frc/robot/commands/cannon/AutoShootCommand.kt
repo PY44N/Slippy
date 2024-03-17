@@ -1,25 +1,26 @@
 package frc.robot.commands.cannon
 
-import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
+import frc.robot.util.Timer
 
 class AutoShootCommand : Command() {
+    val timer = Timer()
 
-    var shooterReadyTime = -1.0
+
     override fun initialize() {
         RobotContainer.cannonSystem.shoot()
-        shooterReadyTime = -1.0
+        timer.reset()
     }
 
     override fun execute() {
-        if (RobotContainer.stateMachine.shooterReady && shooterReadyTime < 0.0) {
-            shooterReadyTime = Timer.getFPGATimestamp()
+        if (RobotContainer.stateMachine.shooterReady && !timer.isRunning) {
+            timer.start()
         }
 
-        if (Timer.getFPGATimestamp() - shooterReadyTime > .15 && shooterReadyTime >= 0.0) {
+        if (timer.hasElapsed(.15)) {
             RobotContainer.cannonSystem.feed()
         }
 

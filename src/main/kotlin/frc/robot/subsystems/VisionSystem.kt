@@ -1,10 +1,14 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.VecBuilder
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.LimelightHelpers
 import frc.robot.RobotContainer
 import frc.robot.constants.LimelightConstants
+import frc.robot.util.visualiztion.Field2d
 
 class VisionSystem {
     val limelightNames: Array<String> = arrayOf("limelight-left", "limelight-right")
@@ -17,17 +21,21 @@ class VisionSystem {
                 return
             }
 
-            val llMeasure: LimelightHelpers.PoseEstimate =
-                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                    LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
-                } else {
-                    LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
-                }
+
+            var llMeasure: LimelightHelpers.PoseEstimate =
+//                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
+//                    } else {
+//                        LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
+//                    }
 //            else {
 //                println("DS alliance invalid; skipping vision")
 //                return
 //            }
 
+//            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+//                llMeasure = LimelightHelpers.PoseEstimate(Pose2d(llMeasure.pose.translation, llMeasure.pose.rotation.plus(Rotation2d(Math.toRadians(180.0)))), llMeasure.timestampSeconds, llMeasure.latency, llMeasure.tagCount, llMeasure.tagSpan, llMeasure.avgTagDist, llMeasure.avgTagArea)
+//            }
             if (llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
                 val poseDifference =
                     llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
@@ -73,17 +81,20 @@ class VisionSystem {
                 return
             }
 
-            val llMeasure: LimelightHelpers.PoseEstimate =
-                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                    LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
-                } else {
-                    LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
-                }
+            var llMeasure: LimelightHelpers.PoseEstimate =
+//                    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
+//                    } else {
+//                        LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
+//                    }
 //            else {
 //                println("DS alliance invalid; skipping vision")
 //                return
 //            }
 
+//            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+//                llMeasure = LimelightHelpers.PoseEstimate(Pose2d(llMeasure.pose.translation, llMeasure.pose.rotation.plus(Rotation2d(Math.toRadians(180.0)))), llMeasure.timestampSeconds, llMeasure.latency, llMeasure.tagCount, llMeasure.tagSpan, llMeasure.avgTagDist, llMeasure.avgTagArea)
+//            }
             if (llMeasure.tagCount >= tagCount && llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
                 val poseDifference =
                     llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)

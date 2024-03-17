@@ -10,7 +10,9 @@ class IntakeCannon() : Command() {
         RobotContainer.cannonSystem.intake()
     }
 
-    override fun execute() {}
+    override fun execute() {
+        println("Intaking")
+    }
 
     override fun isFinished(): Boolean {
         return RobotContainer.stateMachine.noteState == NoteState.Stored

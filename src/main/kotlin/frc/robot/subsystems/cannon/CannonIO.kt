@@ -16,4 +16,6 @@ interface CannonIO {
     fun getExitBeamBreak(): Boolean
     fun getEntryBeamBreak(): Boolean
     fun getLoadedBeamBreak(): Boolean
+
+    fun getIntakePosition(): Double
 }

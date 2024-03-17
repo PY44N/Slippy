@@ -7,20 +7,24 @@ import frc.robot.util.Timer
 
 class LerpToPoseTrunk(val pose: TrunkPose, val LERP_TIME: Double = 3.0) : Command() {
     var startPosition = RobotContainer.trunkSystem.getPosition()
-    var startRotation = RobotContainer.trunkSystem.getRotation()
+    var startRotation = RobotContainer.trunkSystem.getThroughboreRotation()
 
     var currentTargetPosition = startPosition
     var currentTargetRotation = startRotation
 
     val timer = Timer()
 
-    fun lerpPosition(t: Double) = startPosition + (pose.position - startPosition) * (t / LERP_TIME)
+    fun lerpPosition(t: Double): Double {
+        return startPosition + (pose.position - startPosition) * (t / LERP_TIME)
+    }
 
-    fun lerpRotation(t: Double) = startRotation + (pose.angle - startRotation) * (t / LERP_TIME)
+    fun lerpRotation(t: Double): Double {
+        return startRotation + (pose.angle - startRotation) * (t / LERP_TIME)
+    }
 
     override fun initialize() {
         startPosition = RobotContainer.trunkSystem.getPosition()
-        startRotation = RobotContainer.trunkSystem.getRotation()
+        startRotation = RobotContainer.trunkSystem.getThroughboreRotation()
         timer.reset()
         timer.start()
     }
@@ -40,5 +44,7 @@ class LerpToPoseTrunk(val pose: TrunkPose, val LERP_TIME: Double = 3.0) : Comman
         println("holding pose trunk")
     }
 
-    override fun isFinished() = timer.hasElapsed(LERP_TIME)
+    override fun isFinished(): Boolean {
+        return timer.hasElapsed(LERP_TIME)
+    }
 }

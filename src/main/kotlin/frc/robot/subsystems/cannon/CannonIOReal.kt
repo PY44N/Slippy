@@ -108,4 +108,8 @@ class CannonIOReal : CannonIO {
         return !loadedBeamBreak.get()
     }
 
+    override fun getIntakePosition(): Double {
+        return innerIntakeMotor.encoder.position
+    }
+
 }

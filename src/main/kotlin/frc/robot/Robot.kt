@@ -112,7 +112,7 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putString("Current Trunk Command", RobotContainer.stateMachine.currentTrunkCommand.name)
         SmartDashboard.putNumber("Trunk Target Rotation", RobotContainer.trunkSystem.trunkDesiredRotation)
-        SmartDashboard.putNumber("Trunk Rotation", RobotContainer.trunkSystem.getRotation())
+        SmartDashboard.putNumber("Trunk Rotation", RobotContainer.trunkSystem.getThroughboreRotation())
         SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
 
         SmartDashboard.putString("Cannon State", RobotContainer.stateMachine.intakeState.name)
@@ -121,11 +121,11 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
         SmartDashboard.putNumber(
                 "TB Rotation",
-                Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.rotationOffset)
+                Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.throughboreRotationOffset)
         )
         SmartDashboard.putNumber(
                 "Falcon Rotation",
-                Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.rotationOffset)
+                Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.falconRotationOffset)
         )
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
@@ -140,6 +140,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("Intake Beam Break", RobotContainer.cannonSystem.io.getEntryBeamBreak())
         SmartDashboard.putNumber("Left Shooter Vel", RobotContainer.cannonSystem.io.getLeftShooterTBVel())
         SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
+
+        SmartDashboard.putNumber("Intake Position", RobotContainer.cannonSystem.io.getIntakePosition())
     }
 
     override fun disabledInit() {}
@@ -152,7 +154,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Command Test").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Auto Testing").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
@@ -185,9 +187,9 @@ class Robot : LoggedRobot() {
         RobotContainer.stateMachine.TeleopAutomaticStateManagement()
 
         val scheduleClimbBool = SmartDashboard.getBoolean("Schedule Climb Command?", false)
-        if (scheduleClimbBool && !autoClimbCommand.isScheduled) {
+        if (scheduleClimbBool && autoClimbCommand.isScheduled() == false) {
             autoClimbCommand.schedule()
-        } else if (autoClimbCommand.isScheduled && !scheduleClimbBool) {
+        } else if (autoClimbCommand.isScheduled == true && scheduleClimbBool == false) {
             autoClimbCommand.cancel()
         }
 

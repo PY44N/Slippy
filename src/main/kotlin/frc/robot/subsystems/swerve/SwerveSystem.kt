@@ -6,7 +6,9 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.GlobalZones
 import frc.robot.RobotContainer
@@ -24,7 +26,7 @@ class SwerveSystem() : SubsystemBase() {
 
     private val PIDDeadzone = .005;
 
-    val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
+    private val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -97,6 +99,23 @@ class SwerveSystem() : SubsystemBase() {
             RobotContainer.stateMachine.currentRobotZone = currentZone
         } else {
 //            println("Not in a valid zone; current zone returned was not default; ERROR")
+        }
+    }
+
+    /*
+        public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
+        return run(() -> this.setControl(requestSupplier.get()));
+    }
+     */
+
+    fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
+        return if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()
+                .get() == DriverStation.Alliance.Red
+        ) {
+            driveTrain.applyRequest { drive.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotation) }
+        } else {
+            driveTrain.applyRequest { drive.withVelocityX(x).withVelocityY(y).withRotationalRate(rotation) }
+
         }
     }
 

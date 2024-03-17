@@ -15,24 +15,13 @@ import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.Timer
 
-class AutoAimDumbTwistAndShoot : Command() {
-    val autoShoot: AutoShootCommand = AutoShootCommand()
-
+class AutoAimAndShootPrep : Command() {
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
-    val twistPIDController: PIDController = PIDController(10.0, 0.0, 0.1)
-
-    val timer = Timer()
 
     override fun initialize() {
-        RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
         RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
-
-        twistPIDController.enableContinuousInput(0.0, 360.0);
-
-        timer.reset()
-        timer.start()
     }
 
     override fun execute() {
@@ -45,23 +34,6 @@ class AutoAimDumbTwistAndShoot : Command() {
         trunkCommand.desiredAngle = shooterAngle
 
         //Handle the twisting component
-        val driveTwist = twistPIDController.calculate(
-            RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-            shotSetup.robotAngle
-        )
-
-        val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
-            RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
-            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
-            DriveConstants.TELEOP_DEADZONE_X,
-            DriveConstants.TELEOP_DEADZONE_Y
-        )
-
-        RobotContainer.swerveSystem.applyDriveRequest(
-            driveTranslation.x,
-            driveTranslation.y,
-            Math.toRadians(driveTwist)
-        ).execute()
 
         //Can we shoot?
 //        if (RobotContainer.stateMachine.trunkReady && MiscCalculations.appxEqual(
@@ -72,18 +44,14 @@ class AutoAimDumbTwistAndShoot : Command() {
 //        ) {
 //            autoShoot.schedule()
 //        }
-        if (timer.hasElapsed(1.5) && !autoShoot.isScheduled) {
-            autoShoot.schedule()
-        }
+
     }
 
     override fun isFinished(): Boolean {
-        return (autoShoot.isFinished) || RobotContainer.stateMachine.noteState == NoteState.Empty
+        return RobotContainer.stateMachine.noteState == NoteState.Empty
     }
 
     override fun end(interrupted: Boolean) {
 //        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.HIGH_STOW)
-        RobotContainer.actuallyDoShoot = false
-        RobotContainer.stateMachine.driveState = DriveState.Teleop
     }
 }

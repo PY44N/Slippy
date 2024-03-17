@@ -13,26 +13,21 @@ import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
-import frc.robot.util.Timer
 
-class AutoAimDumbTwistAndShoot : Command() {
+class TeleopAimDumbTwistAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
     val twistPIDController: PIDController = PIDController(10.0, 0.0, 0.1)
 
-    val timer = Timer()
-
     override fun initialize() {
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
         RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
+        RobotContainer.actuallyDoShoot = false
 
         twistPIDController.enableContinuousInput(0.0, 360.0);
-
-        timer.reset()
-        timer.start()
     }
 
     override fun execute() {
@@ -72,7 +67,7 @@ class AutoAimDumbTwistAndShoot : Command() {
 //        ) {
 //            autoShoot.schedule()
 //        }
-        if (timer.hasElapsed(1.5) && !autoShoot.isScheduled) {
+        if (RobotContainer.actuallyDoShoot && !autoShoot.isScheduled) {
             autoShoot.schedule()
         }
     }
@@ -82,7 +77,7 @@ class AutoAimDumbTwistAndShoot : Command() {
     }
 
     override fun end(interrupted: Boolean) {
-//        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.HIGH_STOW)
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         RobotContainer.actuallyDoShoot = false
         RobotContainer.stateMachine.driveState = DriveState.Teleop
     }
