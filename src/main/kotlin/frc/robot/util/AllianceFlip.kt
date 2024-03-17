@@ -6,7 +6,7 @@ import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
 
 object AllianceFlip {
-    private val fieldLength = Units.inchesToMeters(651.223)
+    val fieldLength = Units.inchesToMeters(651.223)
 
     private fun apply(xPos: Double) =
         if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red)
