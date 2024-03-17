@@ -3,7 +3,7 @@ package frc.robot.subsystems.trunk
 interface TrunkIO {
     var positionBrake: Boolean
     var rotationBrake: Boolean
-    fun getRawPosition(): Double
+    fun getPosition(): Double
     fun getThroughBoreRawRotation(): Double
     fun getFalconRawRotation(): Double
     fun setFalconThroughBoreOffset()

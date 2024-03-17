@@ -23,7 +23,7 @@ class HalfSpitCannon() : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return intakeStartPos - RobotContainer.cannonSystem.io.getIntakePosition() >= 5.0
+        return intakeStartPos - RobotContainer.cannonSystem.io.getIntakePosition() >= 3.0
     }
 
     override fun end(interrupted: Boolean) {

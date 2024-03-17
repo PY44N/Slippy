@@ -87,13 +87,11 @@ class TargetingSystem {
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
-
         val vars = TargetingVariables(robotPose, robotVelocity)
 
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
         Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
-        println(shootingVelocity)
 
         return ShotSetup(noVelocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }
