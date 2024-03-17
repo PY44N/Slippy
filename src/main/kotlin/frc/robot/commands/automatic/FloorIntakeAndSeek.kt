@@ -57,12 +57,12 @@ class FloorIntakeAndSeek : Command() {
                 return true
             }
         }
-
-        //Doesn't use the auto intake just in case there is some sort of an issue with its ending and starting with a note already in the thing...idk - Milan
-        SmartDashboard.putBoolean(
-            "Floor intake and seek finished",
-            RobotContainer.stateMachine.noteState == NoteState.Stored
-        )
+//
+//        //Doesn't use the auto intake just in case there is some sort of an issue with its ending and starting with a note already in the thing...idk - Milan
+//        SmartDashboard.putBoolean(
+//            "Floor intake and seek finished",
+//            RobotContainer.stateMachine.noteState == NoteState.Stored
+//        )
         return RobotContainer.stateMachine.noteState == NoteState.Stored
     }
 

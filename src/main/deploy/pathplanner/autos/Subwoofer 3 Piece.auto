@@ -1,0 +1,81 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Subwoofer to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimDumbTwistAndShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FloorIntakeAndSeek"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimDumbTwistAndShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Note to Centerline Top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Centerline Top To Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimDumbTwistAndShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

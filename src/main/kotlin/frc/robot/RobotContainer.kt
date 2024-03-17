@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.AutoAmp
 import frc.robot.commands.AutoIntake
+import frc.robot.commands.AutoIntakeAndShoot
 import frc.robot.commands.TeleopSwerveDriveCommand
 import frc.robot.commands.automatic.*
+import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.cannon.AutoSpit
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
@@ -117,8 +119,12 @@ object RobotContainer {
         xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.a().onTrue(AutoAmp())
         xboxController.y().onTrue(TeleopAimDumbTwistAndShoot())
+//        xboxController.a().onTrue(Commands.runOnce({
+//            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+//        }))
+//        xboxController.a().onTrue(AutoIntakeAndShoot())
         xboxController.x()
-                .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+            .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().toggleOnTrue(AutoSpit())
         xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({
@@ -132,7 +138,10 @@ object RobotContainer {
         NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
         NamedCommands.registerCommand("AutoIntake", AutoIntake())
         NamedCommands.registerCommand("AutoAimDumbTwistAndShoot", AutoAimDumbTwistAndShoot())
-        NamedCommands.registerCommand("Stow", Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+        NamedCommands.registerCommand(
+            "Stow",
+            Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) })
+        )
         NamedCommands.registerCommand("AutoAimAndShootPrep", AutoAimAndShootPrep())
     }
 

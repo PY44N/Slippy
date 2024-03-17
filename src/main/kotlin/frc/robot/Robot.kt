@@ -1,5 +1,8 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -9,6 +12,7 @@ import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.AllianceFlip
 import frc.robot.util.Math
 import frc.robot.util.Telemetry
 import org.littletonrobotics.junction.LoggedRobot
@@ -49,14 +53,14 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
 
         TargetingConstants.stupidConstant =
-                SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
+            SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
         TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
         TargetingConstants.constantStupidConstant =
-                SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
+            SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         TargetingConstants.velocityMultiplier =
-                SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
+            SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
@@ -84,19 +88,19 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Current robot angle", RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
         Telemetry.putBoolean(
-                "shooter ready",
-                RobotContainer.cannonSystem.shooterReady(),
-                RobotContainer.telemetry.cannonTelemetry
+            "shooter ready",
+            RobotContainer.cannonSystem.shooterReady(),
+            RobotContainer.telemetry.cannonTelemetry
         )
         Telemetry.putString(
-                "note state",
-                RobotContainer.stateMachine.noteState.name,
-                RobotContainer.telemetry.cannonTelemetry
+            "note state",
+            RobotContainer.stateMachine.noteState.name,
+            RobotContainer.telemetry.cannonTelemetry
         )
         Telemetry.putString(
-                "intake state",
-                RobotContainer.stateMachine.intakeState.name,
-                RobotContainer.telemetry.cannonTelemetry
+            "intake state",
+            RobotContainer.stateMachine.intakeState.name,
+            RobotContainer.telemetry.cannonTelemetry
         )
 
 
@@ -117,12 +121,12 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Falcon Raw Rotation", RobotContainer.trunkSystem.io.getFalconRawRotation())
         SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
         SmartDashboard.putNumber(
-                "TB Rotation",
-                Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.throughboreRotationOffset)
+            "TB Rotation",
+            Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.throughboreRotationOffset)
         )
         SmartDashboard.putNumber(
-                "Falcon Rotation",
-                Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.falconRotationOffset)
+            "Falcon Rotation",
+            Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.falconRotationOffset)
         )
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
@@ -139,6 +143,11 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
 
         SmartDashboard.putNumber("Intake Position", RobotContainer.cannonSystem.io.getIntakePosition())
+
+        SmartDashboard.putNumber(
+            "Robot Pos X Flipped",
+            AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()).x
+        )
     }
 
     override fun disabledInit() {}
@@ -151,7 +160,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Amp Side 3 Piece").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Subwoofer 3 Piece").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

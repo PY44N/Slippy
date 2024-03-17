@@ -54,8 +54,10 @@ class CannonIOReal : CannonIO {
 //        leftShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
 //        rightShooterEncoder.setVelocityConversionFactor(1 / 8192.0)
 
-        rightShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
-        leftShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+//        rightShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+//        leftShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
+        rightShooterEncoder.distancePerPulse = .017
+        leftShooterEncoder.distancePerPulse = .017
     }
 
     override fun getLeftShooterVel(): Double {
@@ -112,4 +114,7 @@ class CannonIOReal : CannonIO {
         return innerIntakeMotor.encoder.position
     }
 
+    override fun periodic() {
+
+    }
 }

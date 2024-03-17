@@ -16,7 +16,8 @@ enum class ShooterState(val shooterVel: Double) {
     Stopped(0.0),
     Prepped(CannonConstants.SHOOTER_PREP_VELOCITY),
     Shooting(CannonConstants.SHOOTER_SHOOT_VELOCITY),
-    Amping(1500.0)
+    Amping(1500.0),
+    CloseShooting(3650.0),
 }
 
 //this represents the CURRENT note state
@@ -47,7 +48,7 @@ enum class TrunkPose(var angle: Double, var position: Double) {
     STOW(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     HIGH_STOW(TrunkConstants.HIGH_STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
-    CalibrationAngle(110.0, TrunkConstants.STOW_POSITION),
+    CalibrationAngle(90.0, TrunkConstants.STOW_POSITION),
     CLIMB(180.0, TrunkConstants.STOW_POSITION),
     CLIMB_STAGE_1(180.0, .23), // We need to make it so we can do positions that aren't in this enum
     CLIMB_STAGE_2(83.0, .23),

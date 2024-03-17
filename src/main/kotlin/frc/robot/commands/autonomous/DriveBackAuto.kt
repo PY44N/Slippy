@@ -11,11 +11,7 @@ class DriveBackAuto : Command() {
     }
 
     override fun execute() {
-        RobotContainer.swerveSystem.driveTrain.applyRequest {
-            RobotContainer.swerveSystem.drive.withVelocityX(0.5)
-                .withVelocityY(0.0)
-                .withRotationalRate(0.0)
-        }.execute()
+        RobotContainer.swerveSystem.applyDriveRequest(0.5, 0.0, 0.0).execute()
     }
 
     override fun isFinished(): Boolean {
@@ -23,10 +19,6 @@ class DriveBackAuto : Command() {
     }
 
     override fun end(interrupted: Boolean) {
-        RobotContainer.swerveSystem.driveTrain.applyRequest {
-            RobotContainer.swerveSystem.drive.withVelocityX(0.0)
-                .withVelocityY(0.0)
-                .withRotationalRate(0.0)
-        }.execute()
+        RobotContainer.swerveSystem.applyDriveRequest(0.0, 0.0, 0.0).execute()
     }
 }

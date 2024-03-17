@@ -80,6 +80,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     fun setDesiredRotation(desiredRot: Double) {
         lowRotationPIDController.goal = TrapezoidProfile.State(desiredRot, 0.0)
+        highRotationPIDController.goal = TrapezoidProfile.State(desiredRot, 0.0)
         trunkDesiredRotation = desiredRot
     }
 
@@ -87,6 +88,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         trunkDesiredRotation = desiredRot
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Desired Rot", trunkDesiredRotation)
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Rot", getFalconRotation())
+        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID TB Rot", getThroughboreRotation())
         val rotationPIDOut = if (trunkDesiredRotation > 100.0) {
             highRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
         } else {
