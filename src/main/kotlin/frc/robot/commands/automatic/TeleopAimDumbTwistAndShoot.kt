@@ -80,5 +80,6 @@ class TeleopAimDumbTwistAndShoot : Command() {
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         RobotContainer.actuallyDoShoot = false
         RobotContainer.stateMachine.driveState = DriveState.Teleop
+        RobotContainer.cannonSystem.killShooter()
     }
 }
