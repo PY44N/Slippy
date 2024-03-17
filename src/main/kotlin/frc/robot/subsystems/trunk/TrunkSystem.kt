@@ -53,6 +53,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         PIDController(TrunkConstants.positionKP, TrunkConstants.positionKI, TrunkConstants.positionKD)
 
     var trunkDesiredRotation = TrunkConstants.STOW_ANGLE
+    var lastTrunkDesiredRotation = TrunkConstants.STOW_ANGLE
 
     init {
         SmartDashboard.putNumber("Trunk Target Position", TrunkConstants.TOP_BREAK_BEAM_POSITION)
@@ -96,7 +97,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Desired Rot", trunkDesiredRotation)
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Rot", getFalconRotation())
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID TB Rot", getThroughboreRotation())
-        val rotationPIDOut = if (trunkDesiredRotation > 100.0) {
+        val rotationPIDOut = if (trunkDesiredRotation > 100.0 || lastTrunkDesiredRotation > 100.0) {
             highRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
         } else {
             lowRotationPIDController.calculate(getThroughboreRotation(), trunkDesiredRotation)
@@ -104,7 +105,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("Trunk Trapezoid Velocity Error", lowRotationPIDController.velocityError)
 
 //        println("rotation PID out: " + rotationPIDOut)
-        val rotationFFOut = if (trunkDesiredRotation > 100.0) {
+        val rotationFFOut = if (trunkDesiredRotation > 100.0 || lastTrunkDesiredRotation > 100.0) {
             highRotationFeedForward.calculate(Math.toRadians(trunkDesiredRotation - 90.0), 0.0)
         } else {
             lowRotationFeedForward.calculate(Math.toRadians(trunkDesiredRotation - 90.0), 0.0)
@@ -113,6 +114,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("SOMETHING STUPID Trunk Rotation Error", highRotationPIDController.positionError)
         SmartDashboard.putNumber("SOMETHING STUPID Trunk Rotation FF", rotationFFOut)
         SmartDashboard.putNumber("SOMETHING STUPID Uncapped rotation voltage: ", rotationPIDOut + rotationFFOut)
+        if (lastTrunkDesiredRotation != trunkDesiredRotation) {
+            lastTrunkDesiredRotation = trunkDesiredRotation
+        }
         return MathUtil.clamp(
             rotationPIDOut
                     + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS
