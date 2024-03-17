@@ -1,6 +1,9 @@
 package frc.robot.commands
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import frc.robot.NoteState
 import frc.robot.RobotContainer
@@ -16,7 +19,8 @@ class AutoIntake : Command() {
     var hasIntake: Boolean = false
     var hasAlmostSpit: Boolean = false
 
-    var intakeCommand: Command = IntakeCannon().andThen(HalfSpitCannon()).andThen(WaitCommand(.1)).andThen(IntakeCannon())
+//    var intakeCommand: Command =  IntakeCannon().andThen(HalfSpitCannon()).andThen(WaitCommand(.1)).andThen(IntakeCannon())
+    var intakeCommand = SequentialCommandGroup(IntakeCannon(), HalfSpitCannon(), WaitCommand(.1), IntakeCannon(), Commands.runOnce({cancelCommand()}))
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
@@ -28,6 +32,10 @@ class AutoIntake : Command() {
 
 //        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP).andThen(CoastAngleMovePosition(TrunkPose.INTAKE)).andThen(CoastAngleMovePosition(TrunkPose.INTAKE_PREP).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW)))
 
+    }
+
+    private fun cancelCommand() {
+        intakeCommand.cancel()
     }
 
     override fun execute() {
@@ -56,8 +64,11 @@ class AutoIntake : Command() {
         }
     }
 
-    override fun isFinished(): Boolean =
-            RobotContainer.stateMachine.noteState == NoteState.Stored && intakeCommand.isFinished // && hasIntake && hasAlmostSpit
+    override fun isFinished(): Boolean {
+        SmartDashboard.putBoolean("Intake Command Finished", intakeCommand.isFinished)
+        return RobotContainer.stateMachine.noteState == NoteState.Stored && intakeCommand.isFinished // && hasIntake && hasAlmostSpit
+
+    }
 
     override fun end(interrupted: Boolean) {
         intakeCommand.cancel()

@@ -116,7 +116,7 @@ object RobotContainer {
         }))
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
-        xboxController.b().onTrue(AutoIntake())
+        xboxController.b().toggleOnTrue(AutoIntake())
         xboxController.a().onTrue(AutoAmp())
         xboxController.y().onTrue(TeleopAimTwistAndShoot())
 //        xboxController.a().onTrue(Commands.runOnce({

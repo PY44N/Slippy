@@ -77,14 +77,14 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setZeroPosition() {
-//        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
 
-        positionEncoderOffset = TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR - getRawPosition()
+//        positionEncoderOffset = TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR - getRawPosition()
     }
 
     override fun atTopLimit(): Boolean = topLimit.get()
 
-    override fun getPosition(): Double = positionEncoder.position - positionEncoderOffset
+    override fun getPosition(): Double = positionEncoder.position// - positionEncoderOffset
 
     private fun getRawPosition(): Double = positionEncoder.position
 
