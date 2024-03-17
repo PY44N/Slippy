@@ -64,6 +64,7 @@ class VisionSystem {
                         VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds))
                     )
 //                        println("updating odometry with ll")
+//                    println("Updating with LL ${llName}: X = " + llMeasure.pose.x + " Y = " + llMeasure.pose.y)
                     RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
                         llMeasure.pose,
                         llMeasure.timestampSeconds
@@ -75,7 +76,6 @@ class VisionSystem {
 
     fun updateOdometry(tagCount: Int, poseDifferenceCheck: Boolean) {
         for (llName in limelightNames) {
-
             if (DriverStation.getAlliance().isEmpty) {
                 println("DS alliance is empty; skipping vision")
                 return
@@ -123,6 +123,8 @@ class VisionSystem {
                             VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds))
                         )
 //                        println("updating odometry with ll")
+//                        println("Updating with LL ${llName}: X = " + llMeasure.pose.x + " Y = " + llMeasure.pose.y)
+
                         RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
                             llMeasure.pose,
                             llMeasure.timestampSeconds
