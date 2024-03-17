@@ -18,22 +18,12 @@ object CannonConstants {
     var OUTER_AMP_PERCENT: Double = -.7
     var INNER_AMP_PERCENT: Double = -.7
 
-    //percent of max rpm
-//    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = .8 * SHOOTER_MAX_RPM
-//    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = .8 * SHOOTER_MAX_RPM
-//    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = 4010.2032905044503
-    val LEFT_SHOOTER_SHOOT_VELOCITY: Double = 6000.0
+    // rpm
+    const val SHOOTER_SHOOT_VELOCITY: Double = 4010.2032905044503
 
-//        val LEFT_SHOOTER_SHOOT_VELOCITY: Double = 3350.0
-//    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = 3350.0
+    const val SHOOTER_PREP_VELOCITY: Double = .8 * SHOOTER_SHOOT_VELOCITY
 
-    //    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = 4010.2032905044503
-    val RIGHT_SHOOTER_SHOOT_VELOCITY: Double = 6000.0
-
-    val RIGHT_SHOOTER_PREP_VELOCITY: Double = .8 * RIGHT_SHOOTER_SHOOT_VELOCITY
-    val LEFT_SHOOTER_PREP_VELOCITY: Double = .8 * LEFT_SHOOTER_SHOOT_VELOCITY
-
-    val SHOOTER_VELOCITY_DEADZONE: Double = 150.0
+    const val SHOOTER_VELOCITY_DEADZONE: Double = 150.0
     val SHOOTER_YAW_DEADZONE: Double = 1.0
     val SHOOTER_PITCH_DEADZONE: Double = 1.0
 
@@ -48,20 +38,11 @@ object CannonConstants {
     val outerIntakePercent = .5
     val innerIntakePercent = .5
 
-    var leftShooterKP = 1.2
-    var leftShooterKI = 0.0
-    var leftShooterKD = 0.0
-    var leftShooterIz = 0.0
-    var leftShooterFF = 0.0
-    var leftShooterMax = -1.0
-    var leftShooterMin = 1.0
-
-    var rightShooterKP = 1.2
-    var rightShooterKI = 0.0
-    var rightShooterKD = 0.0
-    var rightShooterIz = 0.0
-    var rightShooterFF = 0.0
-    var rightShooterMax = -1.0
-    var rightShooterMin = 1.0
-
+    var shooterKP = 1.2
+    var shooterKI = 0.0
+    var shooterKD = 0.0
+    var ShooterIz = 0.0
+    var ShooterFF = 0.0
+    var ShooterMax = -1.0
+    var ShooterMin = 1.0
 }

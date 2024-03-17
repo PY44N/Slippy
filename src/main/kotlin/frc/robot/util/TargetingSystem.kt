@@ -1,8 +1,10 @@
 package frc.robot.util
 
+import MiscCalculations
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.RobotContainer
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
@@ -22,7 +24,7 @@ data class ShotSetup(var robotAngle: Double, var shooterAngle: Double) {
 }
 
 class TargetingVariables(
-    robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
+    robotPose: Pose2d = AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()),
     robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 ) {
     val x: Double = robotPose.x - TargetingConstants.speakerX - TargetingConstants.endpointX
@@ -44,7 +46,7 @@ class TargetingSystem {
     private val rad2deg = 180.0 / PI
 
     private val shootingVelocity =
-        TargetingConstants.velocityMultiplier * CannonConstants.LEFT_SHOOTER_SHOOT_VELOCITY * TargetingConstants.rpm2ups(
+        TargetingConstants.velocityMultiplier * CannonConstants.SHOOTER_SHOOT_VELOCITY * MiscCalculations.rpm2ups(
             Units.inchesToMeters(1.5)
         )
 

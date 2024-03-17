@@ -2,6 +2,7 @@
 
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.util.WPIUtilJNI
+import kotlin.math.PI
 import kotlin.math.abs
 
 /** Miscellaneous calculations. */
@@ -90,4 +91,9 @@ object MiscCalculations {
 //        return closest
 //    }
 
+
+    // rpm to units per sec conversion factor
+    // (rpm) * 2pi (rad/r) * r (r units/rad) * 1/60 (min/s)
+    fun rpm2ups(r: Double): Double = PI * r / 30.0
+    fun ups2rpm(r: Double): Double = 30.0 / (PI * r)
 }

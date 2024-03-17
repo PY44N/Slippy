@@ -5,7 +5,7 @@ import kotlin.math.PI
 
 object TargetingConstants {
     // shooter velocity transfer proportion
-    var velocityMultiplier = 4.0
+    var velocityMultiplier = 1.0
 
     // coords of point we're aiming at relative to center of base of the speaker board (board with the fiducials)
     var endpointX = 0.15
@@ -28,9 +28,4 @@ object TargetingConstants {
 //    var shooterZ = 0.0
 
     val ROBOT_ANGLE_DEADZONE = 5.0
-
-    // rpm to units per sec conversion factor
-    // (rpm) * 2pi (rad/r) * r (r units/rad) * 1/60 (min/s)
-    fun rpm2ups(r: Double): Double = PI * r / 30.0
-    fun ups2rpm(r: Double): Double = 30.0 / (PI * r)
 }
