@@ -22,9 +22,9 @@ class TargetingVariables(
     robotPose: Pose2d = AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()),
     robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
 ) {
-    val flippedRobotPose = AllianceFlip.apply(robotPose)
+    private val flippedRobotPose = AllianceFlip.apply(robotPose)
 
-    val red = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+    private val red = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
     val x: Double =
         (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x) * if (red) -1 else 1
@@ -54,12 +54,7 @@ class TargetingSystem {
             Units.inchesToMeters(1.5)
         )
 
-    private val shootingVelocityScaling = 1.3
-
-    // EVIL math, don't ask (average t value over (0,6)m)
-    private val rt = shootingVelocity * cos(0.774721373362)
-
-    fun calculateShot(
+    fun getVelocityShot(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
@@ -110,7 +105,7 @@ class TargetingSystem {
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
         val vars = TargetingVariables(robotPose, robotVelocity)
         val noVelShot = getShotNoVelocity(robotPose, robotVelocity)
-        val velShot = calculateShot(robotPose, robotVelocity)
+        val velShot = getVelocityShot(robotPose, robotVelocity)
         println("vars:")
         println("x=" + vars.x + " y=" + vars.y + " r=" + vars.r + " vx=" + vars.vx + " vy=" + vars.vy + " r=" + vars.r + " z=" + vars.z + " t=" + vars.t)
         println("no velocity:")

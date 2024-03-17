@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.Encoder
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
 
 class CannonIOReal : CannonIO {
@@ -58,6 +59,8 @@ class CannonIOReal : CannonIO {
 //        leftShooterEncoder.distancePerPulse = 60.0 / 8192.0 * 4
         rightShooterEncoder.distancePerPulse = .017
         leftShooterEncoder.distancePerPulse = .017
+
+        SmartDashboard.putNumber("Shooter distance per pulse", .017)
     }
 
     override fun getLeftShooterVel(): Double {
@@ -66,15 +69,10 @@ class CannonIOReal : CannonIO {
         return -leftShooterEncoder.rate
     }
 
-    override fun getLeftShooterTBVel(): Double {
-        return leftShooterEncoder.rate
+    override fun getLeftShooterTBVel() = leftShooterEncoder.rate
 
-    }
 
-    override fun getRightShooterTBVel(): Double {
-        return rightShooterEncoder.rate
-
-    }
+    override fun getRightShooterTBVel() = rightShooterEncoder.rate
 
     override fun getRightShooterVel(): Double {
 //        return rightShooterMotorEncoder.velocity * (40.0 / 27.0)
@@ -102,19 +100,15 @@ class CannonIOReal : CannonIO {
 //        TODO("Not yet implemented")
     }
 
-    override fun getEntryBeamBreak(): Boolean {
-        return !entryBeamBreak.get()
-    }
+    override fun getEntryBeamBreak() = !entryBeamBreak.get()
 
-    override fun getLoadedBeamBreak(): Boolean {
-        return !loadedBeamBreak.get()
-    }
+    override fun getLoadedBeamBreak() = !loadedBeamBreak.get()
 
-    override fun getIntakePosition(): Double {
-        return innerIntakeMotor.encoder.position
-    }
+    override fun getIntakePosition() = innerIntakeMotor.encoder.position
 
     override fun periodic() {
-
+        val distancePerPulse = SmartDashboard.getNumber("Shooter distance per pulse", .017)
+        rightShooterEncoder.distancePerPulse = distancePerPulse
+        leftShooterEncoder.distancePerPulse = distancePerPulse
     }
 }
