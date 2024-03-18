@@ -83,6 +83,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
         lastVelocity = velocity
         clock.restart()
+
+        if (io.atTopLimit() && getPosition() < 0.35) {
+            io.setZeroPosition()
+        }
     }
 
     fun setDesiredRotation(desiredRot: Double) {
