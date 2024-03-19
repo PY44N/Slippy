@@ -4,9 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 
-class CoastAngleMovePosition(val pose: TrunkPose) : Command() {
+class CoastAngleHoldPosition(val pose: TrunkPose) : Command() {
     override fun execute() {
         RobotContainer.trunkSystem.io.rotationBrake = false
+        RobotContainer.trunkSystem.isAtPose = false
 
 //        SmartDashboard.putNumber("Coast Angle Move Position", pose.position)
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(pose.position)
@@ -15,10 +16,11 @@ class CoastAngleMovePosition(val pose: TrunkPose) : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPosition(pose.position)
+        return false
     }
 
     override fun end(interrupted: Boolean) {
+        RobotContainer.trunkSystem.io.rotationBrake = true
         if (interrupted == false) {
             RobotContainer.trunkSystem.isAtPose = true
         }

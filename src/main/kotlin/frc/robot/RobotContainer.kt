@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.commands.AutoAmp
-import frc.robot.commands.AutoIntake
-import frc.robot.commands.AutoIntakeAndShoot
-import frc.robot.commands.TeleopSwerveDriveCommand
+import frc.robot.commands.*
 import frc.robot.commands.automatic.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.cannon.AutoSpit
@@ -116,7 +113,7 @@ object RobotContainer {
         }))
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
-        xboxController.b().toggleOnTrue(AutoIntake())
+        xboxController.b().onTrue(AutoIntake())
         xboxController.a().onTrue(AutoAmp())
         xboxController.y().onTrue(TeleopAimTwistAndShoot())
 //        xboxController.a().onTrue(Commands.runOnce({

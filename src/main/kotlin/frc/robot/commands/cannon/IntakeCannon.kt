@@ -4,18 +4,24 @@ import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
+import frc.robot.util.Timer
 
 class IntakeCannon() : Command() {
+
+    val intakeTimer = Timer()
     override fun initialize() {
         RobotContainer.cannonSystem.intake()
+        intakeTimer.reset()
     }
 
     override fun execute() {
-        println("Intaking")
+        if (RobotContainer.stateMachine.noteState == NoteState.Stored && !intakeTimer.isRunning) {
+            intakeTimer.start()
+        }
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.stateMachine.noteState == NoteState.Stored
+        return intakeTimer.hasElapsed(.05)
     }
 
     override fun end(interrupted: Boolean) {

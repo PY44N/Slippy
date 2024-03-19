@@ -136,10 +136,6 @@ class RobotStateMachine {
         Telemetry.putString("Shooter State", shooterState.name, RobotContainer.telemetry.stateMachineTelemetry)
     }
 
-    //Is the trunk at the desired position?
-    val trunkReady: Boolean
-        get() = RobotContainer.trunkSystem.isAtPose
-
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean
         get() = RobotContainer.cannonSystem.shooterReady()

@@ -66,6 +66,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     val clock = Timer()
 
+    var lastBrakeMode = true
+
     override fun periodic() {
         SmartDashboard.putNumber("Angle val", getThroughboreRotation())
         SmartDashboard.putNumber("position val", getPosition())
@@ -86,6 +88,12 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
         if (io.atTopLimit() && getPosition() < 0.35) {
             io.setZeroPosition()
+        }
+
+        if (lastBrakeMode != io.rotationBrake) {
+            lowRotationPIDController.reset(getThroughboreRotation())
+
+            lastBrakeMode = io.rotationBrake
         }
     }
 

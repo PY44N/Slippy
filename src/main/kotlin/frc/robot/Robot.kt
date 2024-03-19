@@ -50,7 +50,7 @@ class Robot : LoggedRobot() {
     override fun robotPeriodic() {
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
-        SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
+        SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
 
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
@@ -166,8 +166,8 @@ class Robot : LoggedRobot() {
 
     override fun teleopInit() {
 //        RobotContainer.climbLatch.angle = 0.0 // tune before testing
-        RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
-        RobotContainer.stateMachine.currentTrunkCommand.schedule()
+       RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
+       RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.cannonSystem.killIntake()

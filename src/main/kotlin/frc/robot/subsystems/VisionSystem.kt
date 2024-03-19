@@ -19,7 +19,7 @@ class VisionSystem {
         for (llName in limelightNames) {
 
             if (DriverStation.getAlliance().isEmpty) {
-                println("DS alliance is empty; skipping vision")
+//                println("DS alliance is empty; skipping vision")
                 return
             }
 
@@ -95,7 +95,7 @@ class VisionSystem {
     fun updateOdometry(tagCount: Int, poseDifferenceCheck: Boolean) {
         for (llName in limelightNames) {
             if (DriverStation.getAlliance().isEmpty) {
-                println("DS alliance is empty; skipping vision")
+//                println("DS alliance is empty; skipping vision")
                 return
             }
 
