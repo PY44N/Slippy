@@ -25,21 +25,14 @@ class Robot : LoggedRobot() {
 
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
     override fun robotInit() {
-        SmartDashboard.putNumber("desired shooter velocity asdgerg", 0.0)
 
-        SmartDashboard.putNumber("shooter kp", CannonConstants.shooterKP)
-        SmartDashboard.putNumber("shooter ki", CannonConstants.shooterKI)
-        SmartDashboard.putNumber("shooter kd", CannonConstants.shooterKD)
-        SmartDashboard.putNumber("shooter ff multiplier", CannonConstants.shooterFFMultiplier)
+        SmartDashboard.putNumber("g", 11.0)
 
-        SmartDashboard.putNumber("shooter angle setpoint", 90.0)
         SmartDashboard.putBoolean("arm motors free?", false)
-        SmartDashboard.putNumber("varying shooter fudging constant", TargetingConstants.stupidConstant)
         SmartDashboard.putNumber("shooter endpoint x", TargetingConstants.endpointX)
         SmartDashboard.putNumber("shooter endpoint z", TargetingConstants.endpointZ)
         SmartDashboard.putNumber("shooter height", TargetingConstants.shooterZ)
         SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
-        SmartDashboard.putNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
         SmartDashboard.putNumber("Current Target Angle", 0.0)
         RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
@@ -59,15 +52,9 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
 
-        TargetingConstants.stupidConstant =
-            SmartDashboard.getNumber("shooter fudging constant", TargetingConstants.stupidConstant)
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
         TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
-        TargetingConstants.constantStupidConstant =
-            SmartDashboard.getNumber("constant shooter fudging constant", TargetingConstants.constantStupidConstant)
-        TargetingConstants.velocityMultiplier =
-            SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
