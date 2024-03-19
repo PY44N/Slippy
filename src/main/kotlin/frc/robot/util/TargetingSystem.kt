@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.RobotContainer
 import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
@@ -45,7 +46,7 @@ class TargetingVariables(
 class TargetingSystem {
     //    private val g = 9.81
     // overaccount for gravity
-    private val g = 11.0
+    private var g = 10.0
 
     private val rad2deg = 180.0 / PI
 
@@ -59,6 +60,9 @@ class TargetingSystem {
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
         val vars = TargetingVariables(robotPose, robotVelocity)
+        Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
+        Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
         return ShotSetup(velocityRobotAngleFunction(vars), velocityShooterAngleFunction(vars))
     }
 
@@ -70,7 +74,9 @@ class TargetingSystem {
         atan2(vars.y - vars.vy * vars.t, vars.x - vars.vx * vars.t) * rad2deg
 
     private fun velocityShooterAngleFunction(vars: TargetingVariables): Double {
+        g = SmartDashboard.getNumber("g", 11.0)
         val rDot = (vars.x * vars.vx + vars.y * vars.vy) / vars.r
+        Telemetry.putNumber("robot r Dot", rDot, RobotContainer.telemetry.trunkTelemetry)
         val k1 = 1.0 / sqrt(vars.r.pow(2) + vars.z.pow(2))
         val k2 = 2.0 * (shootingVelocity * vars.r * k1 + rDot).pow(2)
         return atan(
@@ -88,11 +94,6 @@ class TargetingSystem {
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
     ): ShotSetup {
         val vars = TargetingVariables(robotPose, robotVelocity)
-
-        Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
-        Telemetry.putNumber("robot speaker rel pos y", vars.y, RobotContainer.telemetry.trunkTelemetry)
-        Telemetry.putNumber("robot distance to speaker", vars.r, RobotContainer.telemetry.trunkTelemetry)
-
         return ShotSetup(noVelocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }
 
