@@ -47,7 +47,7 @@ class TrunkIOReal : TrunkIO {
         // factory reset to make it not be bad
         elevatorMotor.restoreFactoryDefaults()
         val pivotMotorConfiguration =
-                TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
 
 //        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
 //        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
@@ -60,14 +60,14 @@ class TrunkIOReal : TrunkIO {
         followerRotationMotor.configurator.apply(pivotMotorConfiguration)
 
         elevatorMotor.inverted = false // elevator likes to not be inverted idk why
-        masterRotationMotor.inverted = true
+        masterRotationMotor.inverted = false
 
         // ensure motors are initially braked
         elevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
         masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
-        followerRotationMotor.setControl(Follower(22, false))
+        followerRotationMotor.setControl(Follower(22, true))
 
 //        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
     }
@@ -103,15 +103,15 @@ class TrunkIOReal : TrunkIO {
 
     override fun setRotationVoltage(volts: Double) {
         SmartDashboard.putNumber(
-                "set rotation voltage: ",
-                MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
+            "set rotation voltage: ",
+            MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
         )
         masterRotationMotor.setVoltage(
-                MathUtil.clamp(
-                        volts,
-                        TrunkConstants.MIN_ROT_VOLTS,
-                        TrunkConstants.MAX_ROT_VOLTS
-                )
+            MathUtil.clamp(
+                volts,
+                TrunkConstants.MIN_ROT_VOLTS,
+                TrunkConstants.MAX_ROT_VOLTS
+            )
         );
 //        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }

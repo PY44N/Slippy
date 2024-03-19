@@ -129,11 +129,11 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
         SmartDashboard.putNumber(
             "TB Rotation",
-            Math.wrapAroundAngles((-RobotContainer.trunkSystem.io.getThroughBoreRawRotation() * 360.0) - TrunkConstants.throughboreRotationOffset)
+            RobotContainer.trunkSystem.getThroughboreRotation()
         )
         SmartDashboard.putNumber(
             "Falcon Rotation",
-            Math.wrapAroundAngles(RobotContainer.trunkSystem.io.getFalconRawRotation() * 360.0 - TrunkConstants.falconRotationOffset)
+            RobotContainer.trunkSystem.getFalconRotation()
         )
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)

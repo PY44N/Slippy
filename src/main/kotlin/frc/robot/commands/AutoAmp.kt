@@ -13,7 +13,8 @@ class AutoAmp : Command() {
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
 
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.AMP_GOING).andThen(GoToPoseAndHoldTrunk(TrunkPose.AMP))
+        RobotContainer.stateMachine.currentTrunkCommand =
+            GoToPoseTrunk(TrunkPose.AMP_GOING).andThen(GoToPoseAndHoldTrunk(TrunkPose.AMP))
         RobotContainer.actuallyDoAmp = false
         timer.reset()
     }
@@ -27,6 +28,7 @@ class AutoAmp : Command() {
         if (RobotContainer.actuallyDoAmp && !timer.isRunning) {
             timer.start()
             RobotContainer.cannonSystem.ampSpit()
+            RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         }
     }
 
@@ -39,6 +41,5 @@ class AutoAmp : Command() {
         timer.reset()
         RobotContainer.cannonSystem.killIntake()
         RobotContainer.actuallyDoAmp = false
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
     }
 }

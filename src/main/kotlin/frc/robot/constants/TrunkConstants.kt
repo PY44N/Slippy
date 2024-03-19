@@ -33,8 +33,8 @@ object TrunkConstants {
 
     var TOP_BREAK_BEAM_POSITION: Double = .3810000
 
-    var throughboreRotationOffset: Double = -49.0
-    var falconRotationOffset: Double = -61.0
+    var throughboreRotationOffset: Double = 221.8
+    var falconRotationOffset: Double = -64.6
 
     var positionKP = 22.0
     var positionKI = 0.0
