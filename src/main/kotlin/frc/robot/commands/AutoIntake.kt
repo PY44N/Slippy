@@ -19,8 +19,14 @@ class AutoIntake : Command() {
     var hasIntake: Boolean = false
     var hasAlmostSpit: Boolean = false
 
-//    var intakeCommand: Command =  IntakeCannon().andThen(HalfSpitCannon()).andThen(WaitCommand(.1)).andThen(IntakeCannon())
-    var intakeCommand = SequentialCommandGroup(IntakeCannon(), HalfSpitCannon(), WaitCommand(.1), IntakeCannon(), Commands.runOnce({cancelCommand()}))
+    //    var intakeCommand: Command =  IntakeCannon().andThen(HalfSpitCannon()).andThen(WaitCommand(.1)).andThen(IntakeCannon())
+    var intakeCommand = SequentialCommandGroup(
+        IntakeCannon(),
+        HalfSpitCannon(),
+        WaitCommand(.1),
+        IntakeCannon(),
+        Commands.runOnce({ cancelCommand() })
+    )
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
@@ -45,8 +51,10 @@ class AutoIntake : Command() {
         }
 
         if (RobotContainer.stateMachine.noteState == NoteState.Stored && !hasIntake) {
-            RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
-//            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE_PREP).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
+//            RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
+            RobotContainer.stateMachine.currentTrunkCommand =
+                CoastAngleMovePosition(TrunkPose.STOW).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
+            //            RobotContainer.stateMachine.currentTrunkCommand = CoastAngleMovePosition(TrunkPose.INTAKE_PREP).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
 //            RobotContainer.cannonSystem.killIntake()
 //            intakeCommand.cancel()
 //            intakeCommand = HalfSpitCannon().andThen(IntakeCannon())
