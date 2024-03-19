@@ -5,6 +5,8 @@
       "/Pose": "Field2d",
       "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/High Profiled PID": "ProfiledPIDController",
+      "/SmartDashboard/Low Profiled PID": "ProfiledPIDController",
       "/SmartDashboard/Pigeon 2 (v6) [30]": "Gyro",
       "/SmartDashboard/Trunk Mechanism": "Mechanism2d"
     },
