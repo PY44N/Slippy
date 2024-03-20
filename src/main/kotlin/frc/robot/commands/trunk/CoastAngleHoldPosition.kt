@@ -13,6 +13,10 @@ class CoastAngleHoldPosition(val pose: TrunkPose) : Command() {
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(pose.position)
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
         RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
+
+        if (RobotContainer.trunkSystem.checkAtPosition(pose.position)) {
+            RobotContainer.trunkSystem.isAtPose = true
+        }
     }
 
     override fun isFinished(): Boolean {

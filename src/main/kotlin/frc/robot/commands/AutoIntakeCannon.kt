@@ -16,11 +16,13 @@ import frc.robot.commands.trunk.GoToPoseTrunk
 
 class AutoIntakeCannon : Command() {
 
+    val intakeCannonCommand = IntakeCannon()
+
     var intakeCommand = SequentialCommandGroup(
         IntakeCannon(),
         HalfSpitCannon(),
         WaitCommand(.05),
-        IntakeCannon(),
+        intakeCannonCommand,
     )
 
     override fun initialize() {
@@ -36,7 +38,7 @@ class AutoIntakeCannon : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return intakeCommand.isFinished
+        return intakeCannonCommand.isFinished
     }
 
     override fun end(interrupted: Boolean) {

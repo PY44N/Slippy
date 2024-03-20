@@ -154,7 +154,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Subwoofer 3 Piece").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Amp Side 3 Piece").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
@@ -166,8 +166,8 @@ class Robot : LoggedRobot() {
 
     override fun teleopInit() {
 //        RobotContainer.climbLatch.angle = 0.0 // tune before testing
-       RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
-       RobotContainer.stateMachine.currentTrunkCommand.schedule()
+        RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
+        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
         RobotContainer.cannonSystem.killShooter()
         RobotContainer.cannonSystem.killIntake()
@@ -206,6 +206,7 @@ class Robot : LoggedRobot() {
         //        RobotContainer.trunkSystem.elevate(-RobotContainer.xboxController.leftY)
         //        RobotContainer.trunkSystem.rotate(-RobotContainer.xboxController.rightY*.3)
 
+//        println("Current trunk command: " + RobotContainer.stateMachine.currentTrunkCommand.name)
     }
 
     override fun teleopExit() {}

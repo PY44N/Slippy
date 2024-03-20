@@ -10,42 +10,44 @@ import edu.wpi.first.wpilibj.RobotController
  * get() won't return a negative duration.
  */
 class Timer {
-    /**
-     * Return the system clock time in seconds. Return the time from the FPGA hardware clock in
-     * seconds since the FPGA started.
-     *
-     * @return Robot running time in seconds.
-     */
-    fun getFPGATimestamp(): Double {
-        return RobotController.getFPGATime() / 1000000.0;
-    }
+    companion object {
+        /**
+         * Return the system clock time in seconds. Return the time from the FPGA hardware clock in
+         * seconds since the FPGA started.
+         *
+         * @return Robot running time in seconds.
+         */
+        fun getFPGATimestamp(): Double {
+            return RobotController.getFPGATime() / 1000000.0;
+        }
 
-    /**
-     * Return the approximate match time. The FMS does not send an official match time to the robots,
-     * but does send an approximate match time. The value will count down the time remaining in the
-     * current period (auto or teleop). Warning: This is not an official time (so it cannot be used to
-     * dispute ref calls or guarantee that a function will trigger before the match ends) The Practice
-     * Match function of the DS approximates the behavior seen on the field.
-     *
-     * @return Time remaining in current match period (auto or teleop) in seconds
-     */
-    fun getMatchTime(): Double {
-        return DriverStation.getMatchTime();
-    }
+        /**
+         * Return the approximate match time. The FMS does not send an official match time to the robots,
+         * but does send an approximate match time. The value will count down the time remaining in the
+         * current period (auto or teleop). Warning: This is not an official time (so it cannot be used to
+         * dispute ref calls or guarantee that a function will trigger before the match ends) The Practice
+         * Match function of the DS approximates the behavior seen on the field.
+         *
+         * @return Time remaining in current match period (auto or teleop) in seconds
+         */
+        fun getMatchTime(): Double {
+            return DriverStation.getMatchTime();
+        }
 
-    /**
-     * Pause the thread for a specified time. Pause the execution of the thread for a specified period
-     * of time given in seconds. Motors will continue to run at their last assigned values, and
-     * sensors will continue to update. Only the task containing the wait will pause until the wait
-     * time is expired.
-     *
-     * @param seconds Length of time to pause
-     */
-    fun delay(seconds: Double) {
-        try {
-            Thread.sleep((seconds * 1e3) as Long);
-        } catch (ex: InterruptedException) {
-            Thread.currentThread().interrupt();
+        /**
+         * Pause the thread for a specified time. Pause the execution of the thread for a specified period
+         * of time given in seconds. Motors will continue to run at their last assigned values, and
+         * sensors will continue to update. Only the task containing the wait will pause until the wait
+         * time is expired.
+         *
+         * @param seconds Length of time to pause
+         */
+        fun delay(seconds: Double) {
+            try {
+                Thread.sleep((seconds * 1e3) as Long);
+            } catch (ex: InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 

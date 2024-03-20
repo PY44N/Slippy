@@ -58,6 +58,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("Trunk Target Position", TrunkConstants.TOP_BREAK_BEAM_POSITION)
         SmartDashboard.putData("High Profiled PID", highRotationPIDController)
         SmartDashboard.putData("Low Profiled PID", lowRotationPIDController)
+        SmartDashboard.putData("Position PID", elevatorPIDController)
     }
 
     var isAtPose: Boolean = false

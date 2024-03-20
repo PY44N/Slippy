@@ -120,9 +120,17 @@ object RobotContainer {
 //            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
 //        }))
 //        xboxController.a().onTrue(AutoIntakeAndShoot())
+//        val calibrationAngleCommand = HoldPoseTrunk(TrunkPose.CalibrationAngle)
+//        xboxController.a()
+//            .onTrue(Commands.runOnce({
+//                stateMachine.currentTrunkCommand =
+//                    GoToPoseTrunk(TrunkPose.CalibrationAngle).andThen(calibrationAngleCommand)
+//            }))
+//        xboxController.b().onTrue(Commands.runOnce({ calibrationAngleCommand.currentTargetPosition = 0.1 }))
+//        xboxController.y().onTrue(Commands.runOnce({ calibrationAngleCommand.currentTargetPosition = 0.381 }))
         xboxController.x()
             .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
-        xboxController.rightBumper().toggleOnTrue(AutoSpit())
+        xboxController.rightBumper().onTrue(AutoSpit())
         xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({
             actuallyDoClimb = true
@@ -132,7 +140,7 @@ object RobotContainer {
     }
 
     private fun configureAutoCommands() {
-        NamedCommands.registerCommand("FloorIntakeAndSeek", FloorIntakeAndSeek())
+        NamedCommands.registerCommand("AutoFloorIntakeAndSeek", AutoFloorIntakeAndSeek())
         NamedCommands.registerCommand("AutoIntake", AutoIntake())
         NamedCommands.registerCommand("AutoAimDumbTwistAndShoot", AutoAimDumbTwistAndShoot())
         NamedCommands.registerCommand(

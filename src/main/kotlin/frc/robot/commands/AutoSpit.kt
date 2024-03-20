@@ -8,28 +8,35 @@ import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.TrunkPose
 import frc.robot.Robot
 import frc.robot.IntakeState
+import frc.robot.util.Timer
 
 class AutoSpit : Command() {
-    val goToSpitPose = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+    //    val goToSpitPose = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+    val timer = Timer()
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
 
-        RobotContainer.stateMachine.currentTrunkCommand = goToSpitPose
+//        RobotContainer.stateMachine.currentTrunkCommand = goToSpitPose
+        timer.reset()
     }
 
     override fun execute() {
         if (RobotContainer.trunkSystem.isAtPose && RobotContainer.stateMachine.intakeState != IntakeState.Spitting) {
-            RobotContainer.cannonSystem.spit()
+            RobotContainer.cannonSystem.ampSpit()
+        }
+
+        if (RobotContainer.stateMachine.noteState == NoteState.Empty && !timer.isRunning) {
+            timer.start()
         }
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.stateMachine.noteState == NoteState.Empty
+        return timer.hasElapsed(.5)
     }
 
     override fun end(interrupted: Boolean) {
-        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
+//        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         RobotContainer.cannonSystem.killIntake()
     }
 }
