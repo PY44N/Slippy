@@ -66,7 +66,7 @@ enum class GlobalZones(val range: Pair<Translation2d, Translation2d>) {
 enum class GlobalSpecificPosition(val pos: Translation2d) {
     Source(FieldPositions.SOURCE),
     Amp(FieldPositions.AMP),
-    Speaker(FieldPositions.SPEAKER)
+    Speaker(FieldPositions.SPEAKER),
 }
 
 //What do we want to do with our current note (or lack of note)?
@@ -76,24 +76,24 @@ enum class RobotAction() {
     Trap,
     FloorIntake,
     SourceIntake,
-    Chill
+    Chill,
 }
 
 enum class DriveState() {
     Teleop,
     TranslationTeleop,
-    Auto
+    Auto,
 }
 
 enum class AutoStateManagement {
     Enabled,
-    Disabled
+    Disabled,
 }
 
 enum class ShootPosition(val position: Pose2d) {
     AutoAim(Pose2d()),
     StageFront(Pose2d(Translation2d(2.75, 4.0), Rotation2d(-32.0))), // Angle might not be measured correctly
-    StageSide(Pose2d(Translation2d(3.36, 4.83), Rotation2d(-32.0))) // Angle might not be measured correctly
+    StageSide(Pose2d(Translation2d(3.36, 4.83), Rotation2d(-32.0))), // Angle might not be measured correctly
 }
 
 class RobotStateMachine {
