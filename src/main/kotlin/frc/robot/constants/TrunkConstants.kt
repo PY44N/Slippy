@@ -76,7 +76,7 @@ object TrunkConstants {
     //degrees/sec
     var highRotationMaxVelo = 180.0
 
-    var climbRotationKP = 0.15
+    var climbRotationKP = 0.1
     var climbRotationKI = 0.0
     var climbRotationKD = 0.01
     //    var rotationTrapConstraints = TrapezoidProfile.Constraints()

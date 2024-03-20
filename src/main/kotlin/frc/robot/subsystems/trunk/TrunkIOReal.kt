@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 
@@ -24,6 +25,8 @@ class TrunkIOReal : TrunkIO {
 
     private val shaftRotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
     private val topLimit = DigitalInput(0)
+
+    val climbServo = Servo(0)
 
     override var positionBrake = true
         set(enabled) {
@@ -117,7 +120,11 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setServoAngle(angle: Double) {
+        climbServo.angle = angle
+    }
 
+    override fun getServoAngle(): Double {
+        return climbServo.angle
     }
 
     override fun periodic() {

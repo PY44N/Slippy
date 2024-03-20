@@ -13,5 +13,6 @@ interface TrunkIO {
     fun setRotationVoltage(volts: Double)
     fun atTopLimit(): Boolean
     fun setServoAngle(angle: Double)
+    fun getServoAngle(): Double
     fun periodic()
 }

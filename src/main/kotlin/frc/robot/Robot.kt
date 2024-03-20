@@ -142,6 +142,8 @@ class Robot : LoggedRobot() {
             "Robot Pos X Flipped",
             AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()).x
         )
+
+        SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
     }
 
     override fun disabledInit() {}

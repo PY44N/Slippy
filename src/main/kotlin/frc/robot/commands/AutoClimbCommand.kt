@@ -7,15 +7,14 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
-import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
-import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.commands.trunk.HoldPoseTrunk
-import frc.robot.commands.trunk.LerpToPoseTrunk
+import frc.robot.commands.trunk.*
 import frc.robot.constants.TrunkConstants
 
 class AutoClimbCommand : Command() {
     val holdCommand = HoldPoseTrunk(TrunkPose.CLIMB)
-    val climbCommand = GoToPoseTrunk(TrunkPose.CLIMB).andThen(holdCommand)
+
+    val climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(holdCommand)
+//    val climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(holdCommand)
 
     var climbed = false
 
@@ -40,16 +39,27 @@ class AutoClimbCommand : Command() {
         val positionSpeed = -MiscCalculations.calculateDeadzone(RobotContainer.xboxController.rightX, 0.1) / 1000.0
         val rotationSpeed = -MiscCalculations.calculateDeadzone(RobotContainer.xboxController.leftX, 0.1)
         //        climbCommand.goToPose.currentTargetPosition += speed
-        holdCommand.currentTargetPosition += positionSpeed
-        holdCommand.currentTargetRotation += rotationSpeed
+//        holdCommand.currentTargetPosition += positionSpeed
+//        holdCommand.currentTargetRotation += rotationSpeed
 
         if (RobotContainer.actuallyDoClimb && !climbed) {
             RobotContainer.stateMachine.currentTrunkCommandLocked = false
-            RobotContainer.stateMachine.currentTrunkCommand = LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_1, 0.5)/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_1), WaitCommand(1.0)))*/.andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_2, 2.0))/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_2), WaitCommand(1.0)))*/.andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL, 0.5)).andThen(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL))
+            RobotContainer.stateMachine.currentTrunkCommand = LerpToPoseTrunk(
+                TrunkPose.CLIMB_STAGE_1,
+                0.5
+            )/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_1), WaitCommand(1.0)))*/.andThen(
+                LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_2, 2.0)
+            )/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_2), WaitCommand(1.0)))*/
+                .andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL, 0.5))
+                .andThen(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL))
             RobotContainer.stateMachine.currentTrunkCommandLocked = true
 
 
             climbed = true
+        }
+
+        if (RobotContainer.trunkSystem.isAtPose && RobotContainer.trunkSystem.trunkDesiredRotation == TrunkPose.CLIMB_STAGE_FINAL.angle) {
+            RobotContainer.trunkSystem.positionLocked = true
         }
     }
 
