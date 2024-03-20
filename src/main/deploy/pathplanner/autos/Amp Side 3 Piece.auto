@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side to Shooting Position"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "AutoAimDumbTwistAndShoot"
@@ -28,19 +34,25 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 2.5
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp Side to Top Preload"
+                        "pathName": "Amp Side Shooting Pos to Top Preload"
                       }
                     }
                   ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -60,9 +72,22 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Top To Centerline Top"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Top To Centerline Top"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoFloorIntakeAndSeek"
+                      }
+                    }
+                  ]
                 }
               }
             ]

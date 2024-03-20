@@ -8,6 +8,10 @@ class HoldPoseTrunk(val pose: TrunkPose) : Command() {
     var currentTargetPosition = pose.position
     var currentTargetRotation = pose.angle
 
+    override fun initialize() {
+        RobotContainer.trunkSystem.isAtPose = true
+    }
+
     override fun execute() {
         val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetRotation)
 
@@ -16,6 +20,10 @@ class HoldPoseTrunk(val pose: TrunkPose) : Command() {
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(currentTargetPosition)
 
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
+
+        if (RobotContainer.trunkSystem.checkAtPose(currentTargetRotation, pose.position)) {
+            RobotContainer.trunkSystem.isAtPose = true
+        }
     }
 
     override fun isFinished(): Boolean {

@@ -50,7 +50,7 @@ class Robot : LoggedRobot() {
     override fun robotPeriodic() {
         RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
-        SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.stateMachine.trunkReady)
+        SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
 
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
@@ -142,6 +142,8 @@ class Robot : LoggedRobot() {
             "Robot Pos X Flipped",
             AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()).x
         )
+
+        SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
     }
 
     override fun disabledInit() {}
@@ -154,7 +156,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Subwoofer 3 Piece").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Amp Side 3 Piece").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
@@ -206,6 +208,7 @@ class Robot : LoggedRobot() {
         //        RobotContainer.trunkSystem.elevate(-RobotContainer.xboxController.leftY)
         //        RobotContainer.trunkSystem.rotate(-RobotContainer.xboxController.rightY*.3)
 
+//        println("Current trunk command: " + RobotContainer.stateMachine.currentTrunkCommand.name)
     }
 
     override fun teleopExit() {}

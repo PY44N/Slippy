@@ -13,32 +13,35 @@ import frc.robot.commands.cannon.IntakeCannon
 import frc.robot.commands.trunk.CoastAngleMovePosition
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.commands.AutoIntakeCannon
-import frc.robot.commands.AutoIntakeTrunk
 
-class AutoIntake : Command() {
+class AutoIntakeCannon : Command() {
 
-    var cannonIntake: AutoIntakeCannon = AutoIntakeCannon()
-    var trunkIntake: AutoIntakeTrunk = AutoIntakeTrunk()
+    val intakeCannonCommand = IntakeCannon()
+
+    var intakeCommand = SequentialCommandGroup(
+        IntakeCannon(),
+        HalfSpitCannon(),
+        WaitCommand(.05),
+        intakeCannonCommand,
+    )
 
     override fun initialize() {
-        cannonIntake = AutoIntakeCannon()
-        trunkIntake = AutoIntakeTrunk()
+        RobotContainer.cannonSystem.killShooter()
+        intakeCommand.schedule()
+    }
 
-
-        cannonIntake.schedule()
-        trunkIntake.schedule()
+    private fun cancelCommand() {
+        intakeCommand.cancel()
     }
 
     override fun execute() {
     }
 
     override fun isFinished(): Boolean {
-        return cannonIntake.isFinished && trunkIntake.isFinished
+        return intakeCannonCommand.isFinished
     }
 
     override fun end(interrupted: Boolean) {
-        cannonIntake.cancel()
-        trunkIntake.cancel()
+        intakeCommand.cancel()
     }
 }

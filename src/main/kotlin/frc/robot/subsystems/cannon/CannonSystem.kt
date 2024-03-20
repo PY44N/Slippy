@@ -23,9 +23,9 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
     var noteEntryTime = -1.0
 
     val leftShooterPID =
-            PIDController(CannonConstants.shooterKP, CannonConstants.shooterKI, CannonConstants.shooterKD)
+        PIDController(CannonConstants.shooterKP, CannonConstants.shooterKI, CannonConstants.shooterKD)
     val rightShooterPID =
-            PIDController(CannonConstants.shooterKP, CannonConstants.shooterKI, CannonConstants.shooterKD)
+        PIDController(CannonConstants.shooterKP, CannonConstants.shooterKI, CannonConstants.shooterKD)
 
     private var exitBreakBeamTriggerTime: Double = -1.0
 
@@ -78,13 +78,21 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
     //Shooter up to speed
     fun shooterReady() =
-        MiscCalculations.appxEqual(desiredShooterVel, io.getRightShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE) &&
-        MiscCalculations.appxEqual(desiredShooterVel, io.getLeftShooterVel(), CannonConstants.SHOOTER_VELOCITY_DEADZONE)
+        MiscCalculations.appxEqual(
+            desiredShooterVel,
+            io.getRightShooterVel(),
+            CannonConstants.SHOOTER_VELOCITY_DEADZONE
+        ) &&
+                MiscCalculations.appxEqual(
+                    desiredShooterVel,
+                    io.getLeftShooterVel(),
+                    CannonConstants.SHOOTER_VELOCITY_DEADZONE
+                )
                 && desiredShooterVel != 0.0 && RobotContainer.stateMachine.shooterState == ShooterState.Shooting
 
     override fun periodic() {
         RobotContainer.telemetry.cannonTelemetry =
-                SmartDashboard.getBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
+            SmartDashboard.getBoolean("Cannon Telemetry", RobotContainer.telemetry.cannonTelemetry)
 
 //        println("stow beam break " + io.getLoadedBeamBreak())
 //        println("note state " + RobotContainer.stateMachine.noteState)
@@ -103,24 +111,18 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 //        if (io.getExitBeamBreak()) {
 //            exitBreakBeamTriggerTime = Timer.getFPGATimestamp()
 //        }
-        //Note is stored
 
-        if (noteEntryTime > 0.0)
-            SmartDashboard.putNumber("entry time - time now", Timer.getFPGATimestamp() - noteEntryTime)
-        if (io.getLoadedBeamBreak() && (Timer.getFPGATimestamp() - noteEntryTime) >= CannonConstants.INTAKE_STOW_DELAY) {
-            noteEntryTime = -1.0
-            RobotContainer.stateMachine.noteState = NoteState.Stored
-        } else if (io.getLoadedBeamBreak() && noteEntryTime <= -1.0)
-            RobotContainer.stateMachine.noteState = NoteState.Stored
+
         //Note is not stored
-        else if (!io.getLoadedBeamBreak() && RobotContainer.stateMachine.shooterState != ShooterState.Shooting && !io.getEntryBeamBreak())
+        if (!io.getLoadedBeamBreak() && RobotContainer.stateMachine.shooterState != ShooterState.Shooting && !io.getEntryBeamBreak())
             RobotContainer.stateMachine.noteState = NoteState.Empty
         //Note is intaking
-        else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak() && RobotContainer.stateMachine.intakeState != IntakeState.Spitting && RobotContainer.stateMachine.intakeState != IntakeState.AmpSpitting) {
+        else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak()) {
             RobotContainer.stateMachine.noteState = NoteState.Intaking
-            noteEntryTime = Timer.getFPGATimestamp()
-        } else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak())
-            RobotContainer.stateMachine.noteState = NoteState.Intaking
+        }
+        else if (io.getLoadedBeamBreak()) {
+            RobotContainer.stateMachine.noteState = NoteState.Stored
+        }
 
         //Note is shot delay handling
         if (exitBreakBeamTriggerTime > 0.0) {
@@ -148,7 +150,6 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
             io.setInnerIntakePercent(desiredInnerPercent)
             io.setOuterIntakePercent(desiredOuterPercent)
-
 //            println("set inner and outer percents")
         }
 

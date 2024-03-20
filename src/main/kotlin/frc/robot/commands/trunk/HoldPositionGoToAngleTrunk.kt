@@ -8,6 +8,10 @@ class HoldPositionGoToAngleTrunk(val pose: TrunkPose) : Command() {
 
     var desiredAngle: Double = pose.angle
 
+    override fun initialize() {
+        RobotContainer.trunkSystem.isAtPose = false
+    }
+
     override fun execute() {
         val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(desiredAngle)
 

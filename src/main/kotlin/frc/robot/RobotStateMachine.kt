@@ -34,7 +34,7 @@ enum class IntakeState(var innerPercent: Double, var outerPercent: Double) {
     Feeding(CannonConstants.INNER_FEED_PERCENT, CannonConstants.OUTER_FEED_PERCENT),
     Spitting(CannonConstants.INNER_SPIT_PERCENT, CannonConstants.OUTER_SPIT_PERCENT),
     AmpSpitting(CannonConstants.INNER_AMP_PERCENT, CannonConstants.OUTER_AMP_PERCENT),
-    }
+}
 
 //this represents the DESIRED trunk state
 enum class TrunkPose(var angle: Double, var position: Double) {
@@ -49,7 +49,7 @@ enum class TrunkPose(var angle: Double, var position: Double) {
     HIGH_STOW(TrunkConstants.HIGH_STOW_ANGLE, TrunkConstants.STOW_POSITION),
     TRAP(TrunkConstants.TRAP_ANGLE, TrunkConstants.TRAP_POSITION),
     CalibrationAngle(90.0, TrunkConstants.STOW_POSITION),
-    CLIMB(180.0, TrunkConstants.STOW_POSITION),
+    CLIMB(190.0, TrunkConstants.STOW_POSITION),
     CLIMB_STAGE_1(180.0, .23), // We need to make it so we can do positions that aren't in this enum
     CLIMB_STAGE_2(83.0, .23),
     CLIMB_STAGE_FINAL(78.0, .31)
@@ -129,16 +129,12 @@ class RobotStateMachine {
 
     fun logStates() {
         RobotContainer.telemetry.stateMachineTelemetry =
-                SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
+            SmartDashboard.getBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
         SmartDashboard.putBoolean("State Machine Telemetry", RobotContainer.telemetry.stateMachineTelemetry)
 
         Telemetry.putString("Note State", noteState.name, RobotContainer.telemetry.stateMachineTelemetry)
         Telemetry.putString("Shooter State", shooterState.name, RobotContainer.telemetry.stateMachineTelemetry)
     }
-
-    //Is the trunk at the desired position?
-    val trunkReady: Boolean
-        get() = RobotContainer.trunkSystem.isAtPose
 
     //Is the shooter at the desired velocity?
     val shooterReady: Boolean

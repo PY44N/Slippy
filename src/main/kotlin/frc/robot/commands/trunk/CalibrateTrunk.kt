@@ -20,8 +20,12 @@ class CalibrateTrunk : Command() {
     override fun end(interrupted: Boolean) {
         RobotContainer.trunkSystem.io.setZeroPosition()
         RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
-        RobotContainer.trunkSystem.lowRotationPIDController.reset(RobotContainer.trunkSystem.getThroughboreRotation(), 0.0)
+        RobotContainer.trunkSystem.lowRotationPIDController.reset(
+            RobotContainer.trunkSystem.getThroughboreRotation(),
+            0.0
+        )
         RobotContainer.trunkSystem.highRotationPIDController.reset(RobotContainer.trunkSystem.getFalconRotation(), 0.0)
+        RobotContainer.trunkSystem.climbRotationPIDController.reset(RobotContainer.trunkSystem.getFalconRotation(), 0.0)
         //        RobotContainer.trunkSystem.rotationPIDController.reset()
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
     }

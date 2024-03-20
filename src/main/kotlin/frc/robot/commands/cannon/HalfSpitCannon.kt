@@ -9,21 +9,20 @@ import kotlin.math.abs
 
 class HalfSpitCannon() : Command() {
     val timer = Timer()
-    var intakeStartPos = RobotContainer.cannonSystem.io.getIntakePosition()
 
     override fun initialize() {
         RobotContainer.cannonSystem.spit()
         timer.reset()
-        timer.start()
-        intakeStartPos = RobotContainer.cannonSystem.io.getIntakePosition()
     }
 
     override fun execute() {
-        println("Half Spitting")
+        if (RobotContainer.stateMachine.noteState == NoteState.Intaking && !timer.isRunning) {
+            timer.start()
+        }
     }
 
     override fun isFinished(): Boolean {
-        return intakeStartPos - RobotContainer.cannonSystem.io.getIntakePosition() >= 3.0
+        return timer.hasElapsed(.02)
     }
 
     override fun end(interrupted: Boolean) {
