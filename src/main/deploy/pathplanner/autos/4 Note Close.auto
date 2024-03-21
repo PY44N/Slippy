@@ -138,9 +138,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.5
+            "pathName": "Bottom preload to shooting"
           }
         },
         {
