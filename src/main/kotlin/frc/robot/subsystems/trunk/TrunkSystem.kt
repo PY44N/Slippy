@@ -65,6 +65,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     var trunkDesiredRotation = TrunkConstants.STOW_ANGLE
 
+    var falconRotationOffset = 0.0
+    var falconRotationZeroed = false
+
     init {
         SmartDashboard.putNumber("Trunk Target Position", TrunkConstants.TOP_BREAK_BEAM_POSITION)
         SmartDashboard.putData("High Profiled PID", highRotationPIDController)
@@ -109,6 +112,11 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             lowRotationPIDController.reset(getThroughboreRotation())
 
             lastBrakeMode = io.rotationBrake
+        }
+
+        if (!io.rotationBrake && atDesiredRotation() && !falconRotationZeroed) {
+            falconRotationOffset = getRawFalconRotation() - getThroughboreRotation()
+            falconRotationZeroed = true
         }
     }
 
@@ -203,7 +211,11 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
 
     fun getFalconRotation(): Double {
-        return frc.robot.util.Math.wrapAroundAngles((io.getFalconRawRotation() * 360.0) - TrunkConstants.falconRotationOffset)
+        return frc.robot.util.Math.wrapAroundAngles((io.getFalconRawRotation() * 360.0) - falconRotationOffset)
+    }
+
+    private fun getRawFalconRotation(): Double {
+        return frc.robot.util.Math.wrapAroundAngles((io.getFalconRawRotation() * 360.0))
     }
 
     fun getPosition(): Double {
