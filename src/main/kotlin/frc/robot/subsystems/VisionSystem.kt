@@ -13,9 +13,16 @@ import frc.robot.util.AllianceFlip
 import frc.robot.util.visualiztion.Field2d
 
 class VisionSystem {
-    val limelightNames: Array<String> = arrayOf("limelight-left", "limelight-right")
+//    val limelightNames: Array<String> =
+//        arrayOf("limelight-left", "limelight-right", "limelight-rightsi", "limelight-leftsi", "limelight-center")
+
+    val limelightNames: Array<String> =
+        arrayOf("limelight-left", "limelight-right")
+
 
     fun updateOdometryFromDisabled() {
+
+
         for (llName in limelightNames) {
 
             if (DriverStation.getAlliance().isEmpty) {
@@ -141,18 +148,34 @@ class VisionSystem {
                         var xyStds: Double
                         var degStds: Double
 
-                        if (llMeasure.tagCount >= 2) {
-                            xyStds = 0.5
-                            degStds = 6.0
-                        } else if (llMeasure.avgTagArea > 0.8 && poseDifference < 0.5) {
-                            xyStds = 1.0
-                            degStds = 12.0
-                        } else if (llMeasure.avgTagArea > 0.1 && poseDifference < 0.3) {
-                            xyStds = 2.0
-                            degStds = 30.0
+                        if (llName == "limelight-rightsi") {
+                            if (llMeasure.tagCount >= 2) {
+                                xyStds = 1.0
+                                degStds = 12.0
+                            } else if (llMeasure.avgTagArea > 0.8 && poseDifference < 0.5) {
+                                xyStds = 2.0
+                                degStds = 30.0
+                            } else if (llMeasure.avgTagArea > 0.1 && poseDifference < 0.3) {
+                                xyStds = 4.0
+                                degStds = 50.0
+                            } else {
+                                xyStds = 6.0
+                                degStds = 80.0
+                            }
                         } else {
-                            xyStds = 4.0
-                            degStds = 50.0
+                            if (llMeasure.tagCount >= 2) {
+                                xyStds = 0.5
+                                degStds = 6.0
+                            } else if (llMeasure.avgTagArea > 0.8 && poseDifference < 0.5) {
+                                xyStds = 1.0
+                                degStds = 12.0
+                            } else if (llMeasure.avgTagArea > 0.1 && poseDifference < 0.3) {
+                                xyStds = 2.0
+                                degStds = 30.0
+                            } else {
+                                xyStds = 4.0
+                                degStds = 50.0
+                            }
                         }
 
                         RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(

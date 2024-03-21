@@ -10,6 +10,7 @@ import frc.robot.ShooterState
 import frc.robot.TrunkPose
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
+import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
@@ -24,7 +25,7 @@ class TeleopAimTwistAndShoot : Command() {
     override fun initialize() {
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
-        RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
+        RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.SPEAKER).andThen(trunkCommand);
         RobotContainer.actuallyDoShoot = false
 
         twistPIDController.enableContinuousInput(0.0, 360.0);

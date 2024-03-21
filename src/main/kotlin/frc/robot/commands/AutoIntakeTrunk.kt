@@ -17,7 +17,7 @@ import frc.robot.commands.trunk.GoToPoseTrunk
 
 class AutoIntakeTrunk : Command() {
 
-    val intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
+    var intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
     val coastOutCommand = CoastAngleMovePosition(TrunkPose.INTAKE).andThen(CoastAngleHoldPosition(TrunkPose.INTAKE))
     val stowCommand = CoastAngleMovePosition(TrunkPose.STOW).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
     // val stowCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
@@ -26,6 +26,8 @@ class AutoIntakeTrunk : Command() {
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
+
+        intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
 
         RobotContainer.stateMachine.currentTrunkCommand = intakePrepCommand
         stowing = false
@@ -45,7 +47,7 @@ class AutoIntakeTrunk : Command() {
         if (stowing && RobotContainer.trunkSystem.isAtPose) {
             return true
         }
-        println("trunk intake is finished is at pose: ${RobotContainer.trunkSystem.isAtPose}, current trunk command: ${RobotContainer.stateMachine.currentTrunkCommand.name}")
+//        println("trunk intake is finished is at pose: ${RobotContainer.trunkSystem.isAtPose}, current trunk command: ${RobotContainer.stateMachine.currentTrunkCommand.name}")
         return false
     }
 
@@ -54,6 +56,8 @@ class AutoIntakeTrunk : Command() {
             stowCommand.cancel()
             coastOutCommand.cancel()
             intakePrepCommand.cancel()
+
+            stowCommand.schedule()
         }
     }
 }

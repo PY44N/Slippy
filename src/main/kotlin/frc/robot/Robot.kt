@@ -107,8 +107,8 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putString("Current Trunk Command", RobotContainer.stateMachine.currentTrunkCommand.name)
         SmartDashboard.putNumber("Trunk Target Rotation", RobotContainer.trunkSystem.trunkDesiredRotation)
-        SmartDashboard.putNumber("Trunk Rotation", RobotContainer.trunkSystem.getThroughboreRotation())
-        SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
+//        SmartDashboard.putNumber("Trunk Rotation", RobotContainer.trunkSystem.getThroughboreRotation())
+//        SmartDashboard.putNumber("Trunk Position", RobotContainer.trunkSystem.getPosition())
 
         SmartDashboard.putString("Cannon State", RobotContainer.stateMachine.intakeState.name)
 
@@ -144,6 +144,8 @@ class Robot : LoggedRobot() {
         )
 
         SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
+
+        SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
     }
 
     override fun disabledInit() {}
@@ -156,7 +158,8 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Amp Side 3 Piece").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
+//        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

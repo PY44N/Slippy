@@ -26,6 +26,11 @@ class SwerveSystem() : SubsystemBase() {
 
     private val PIDDeadzone = .005;
 
+    private val driveRobotRelative = SwerveRequest.RobotCentric()
+        .withDeadband(DriveConstants.MAX_SPEED * 0.1)
+        .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
+        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
+
     private val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
@@ -107,6 +112,12 @@ class SwerveSystem() : SubsystemBase() {
         return run(() -> this.setControl(requestSupplier.get()));
     }
      */
+
+    fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
+        return driveTrain.applyRequest {
+            driveRobotRelative.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotation)
+        }
+    }
 
     fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
         return if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()

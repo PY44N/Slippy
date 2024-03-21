@@ -12,6 +12,7 @@ import frc.robot.commands.*
 import frc.robot.commands.automatic.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.cannon.AutoSpit
+import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPoseTrunk
@@ -22,6 +23,7 @@ import frc.robot.subsystems.cannon.CannonSystem
 import frc.robot.subsystems.swerve.SwerveSystem
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkSystem
+import frc.robot.util.ControllerUtil
 import frc.robot.util.TargetingSystem
 import frc.robot.util.TelemetryToggles
 
@@ -113,9 +115,9 @@ object RobotContainer {
         }))
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
-        xboxController.b().onTrue(AutoIntake())
-        xboxController.a().onTrue(AutoAmp())
-        xboxController.y().onTrue(TeleopAimTwistAndShoot())
+        ControllerUtil.betterToggleOnTrue(xboxController.b(), AutoIntake())
+        ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
+        ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
 //        xboxController.a().onTrue(Commands.runOnce({
 //            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
 //        }))
@@ -131,12 +133,15 @@ object RobotContainer {
         xboxController.x()
             .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().onTrue(AutoSpit())
-        xboxController.leftTrigger().toggleOnTrue(AutoClimbCommand())
+        ControllerUtil.betterToggleOnTrue(xboxController.leftTrigger(), AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({
             actuallyDoClimb = true
         }))
+        xboxController.back().whileTrue(KillTrunk())
 
         leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
+
+//        leftJoystick.button(10).toggleOnTrue(KillTrunk())
     }
 
     private fun configureAutoCommands() {

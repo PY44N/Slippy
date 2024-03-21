@@ -50,6 +50,8 @@ class TeleopSwerveDriveCommand : Command() {
             return
         }
 
+        var disableFieldOrientation = RobotContainer.rightJoystick.button(1).asBoolean
+
         val translation = RobotContainer.swerveSystem.calculateJoyTranslation(
             RobotContainer.rightJoystick.x,
             RobotContainer.rightJoystick.y,
@@ -72,8 +74,11 @@ class TeleopSwerveDriveCommand : Command() {
                 DriveConstants.TELEOP_DEADZONE_TWIST_ONE_JOY
             ) * throttle * DriveConstants.MAX_ANGLE_SPEED
         }
-//        println("driving")
 
-        RobotContainer.swerveSystem.applyDriveRequest(translation.x, translation.y, twist).execute()
+        if (disableFieldOrientation) {
+            RobotContainer.swerveSystem.applyRobotRelativeDriveRequest(translation.x, translation.y, twist).execute()
+        } else {
+            RobotContainer.swerveSystem.applyDriveRequest(translation.x, translation.y, twist).execute()
+        }
     }
 }

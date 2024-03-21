@@ -24,8 +24,8 @@ object TrunkConstants {
     var INTAKE_POSITION: Double = 0.02
     var INTAKE_ANGLE: Double = 70.0
 
-    var STOW_POSITION: Double = 0.381
-    var STOW_ANGLE: Double = 50.0
+    var STOW_POSITION: Double = 0.385
+    var STOW_ANGLE: Double = 53.0
     var HIGH_STOW_ANGLE: Double = 67.0
 
     var TRAP_POSITION: Double = 0.7
@@ -90,7 +90,7 @@ object TrunkConstants {
 
     val ANGLE_DEADZONE = 1.0
 
-    val SAFE_TO_DROP_INTAKE_POSITION = 0.2
+    val SAFE_TO_DROP_INTAKE_POSITION = 0.15
     val SAFE_PIVOT_POSITION = 0.378
 
     val UNDER_STAGE_SHOOTING_OFFSET = 0.0

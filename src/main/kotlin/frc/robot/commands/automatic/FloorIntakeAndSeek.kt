@@ -12,7 +12,7 @@ import frc.robot.constants.AutoConstants
 import kotlin.math.abs
 
 class FloorIntakeAndSeek : Command() {
-    val autoIntake: AutoIntake = AutoIntake()
+//    val autoIntake: AutoIntake = AutoIntake()
 
     var initTime: Double = -1.0
     var firstTrackTime: Double = -1.0
@@ -68,8 +68,8 @@ class FloorIntakeAndSeek : Command() {
 
     override fun end(interrupted: Boolean) {
         RobotContainer.stateMachine.driveState = DriveState.Teleop
-        if (!autoIntake.isScheduled) {
-            autoIntake.cancel()
-        }
+//        if (!autoIntake.isScheduled) {
+//            autoIntake.cancel()
+//        }
     }
 }
