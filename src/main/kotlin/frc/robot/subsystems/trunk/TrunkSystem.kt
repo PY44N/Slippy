@@ -102,9 +102,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         lastVelocity = velocity
         clock.restart()
 
-        if (io.atTopLimit() && getPosition() < 0.35) {
-            io.setZeroPosition()
-        }
+//        if (io.atTopLimit() && getPosition() < 0.35) {
+//            io.setZeroPosition()
+//        }
 
         if (lastBrakeMode != io.rotationBrake) {
             lowRotationPIDController.reset(getThroughboreRotation())

@@ -28,6 +28,8 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putNumber("g", 11.0)
 
+        SmartDashboard.putBoolean("use new limelights", false)
+
         SmartDashboard.putBoolean("arm motors free?", false)
         SmartDashboard.putNumber("shooter endpoint x", TargetingConstants.endpointX)
         SmartDashboard.putNumber("shooter endpoint z", TargetingConstants.endpointZ)
@@ -159,9 +161,10 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side Shot").schedule()
+//        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side Shot").schedule()
 //            RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
-        //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
+//        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note Center").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

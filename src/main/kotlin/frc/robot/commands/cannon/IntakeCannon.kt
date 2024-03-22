@@ -21,7 +21,7 @@ class IntakeCannon() : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return intakeTimer.hasElapsed(.05)
+        return intakeTimer.hasElapsed(.0001)
     }
 
     override fun end(interrupted: Boolean) {

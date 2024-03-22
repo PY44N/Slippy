@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
+import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
@@ -18,7 +19,8 @@ import frc.robot.constants.TrunkConstants
 class TrunkIOReal : TrunkIO {
 
     private val elevatorMotor = CANSparkMax(TrunkConstants.ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
+//    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
+    private val positionEncoder = Encoder(1, 4)
 
     private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
     private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
@@ -27,6 +29,8 @@ class TrunkIOReal : TrunkIO {
     private val topLimit = DigitalInput(0)
 
     val climbServo = Servo(0)
+
+    var positionEncoderOffset = 0.0
 
     override var positionBrake = true
         set(enabled) {
@@ -43,8 +47,6 @@ class TrunkIOReal : TrunkIO {
             }
             field = enabled
         }
-
-    var positionEncoderOffset = 0.0
 
     init {
         // factory reset to make it not be bad
@@ -79,17 +81,24 @@ class TrunkIOReal : TrunkIO {
 //        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
     }
 
+    private fun getEncoderRawPosition(): Double {
+        return positionEncoder.get() / 1024.0
+    }
+
     override fun setZeroPosition() {
-        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+//        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+        positionEncoderOffset = getEncoderRawPosition() - (TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+            // val = raw - off
+            // off = raw - val
 
 //        positionEncoderOffset = TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR - getRawPosition()
     }
 
     override fun atTopLimit(): Boolean = topLimit.get()
 
-    override fun getPosition(): Double = positionEncoder.position// - positionEncoderOffset
+    override fun getPosition(): Double = getEncoderRawPosition() - positionEncoderOffset// - positionEncoderOffset
 
-    private fun getRawPosition(): Double = positionEncoder.position
+    private fun getRawPosition(): Double = getEncoderRawPosition() - positionEncoderOffset
 
     override fun getThroughBoreRawRotation(): Double = shaftRotationEncoder.absolutePosition
 

@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.LimelightHelpers
 import frc.robot.RobotContainer
 import frc.robot.constants.FieldConstants
@@ -20,10 +21,22 @@ class VisionSystem {
         arrayOf("limelight-left", "limelight-right")
 
 
+    val sideLimelightNames: Array<String> = arrayOf("limelight-rightsi", "limelight-leftsi")
+
     fun updateOdometryFromDisabled() {
 
+        var namesToSearch: Array<String>;
 
-        for (llName in limelightNames) {
+
+        if (SmartDashboard.getBoolean("use new limelights", false)) {
+            namesToSearch = limelightNames.plus(sideLimelightNames)
+        }
+        else {
+            namesToSearch = limelightNames
+        }
+
+
+        for (llName in namesToSearch) {
 
             if (DriverStation.getAlliance().isEmpty) {
 //                println("DS alliance is empty; skipping vision")
@@ -101,7 +114,18 @@ class VisionSystem {
     }
 
     fun updateOdometry(tagCount: Int, poseDifferenceCheck: Boolean) {
-        for (llName in limelightNames) {
+
+        var namesToSearch: Array<String>;
+
+
+        if (SmartDashboard.getBoolean("use new limelights", false)) {
+            namesToSearch = limelightNames.plus(sideLimelightNames)
+        }
+        else {
+            namesToSearch = limelightNames
+        }
+
+        for (llName in namesToSearch) {
             if (DriverStation.getAlliance().isEmpty) {
 //                println("DS alliance is empty; skipping vision")
                 return

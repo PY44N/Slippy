@@ -32,7 +32,7 @@ class AutoAmp : Command() {
             RobotContainer.cannonSystem.ampSpit()
         }
 
-        if (startTimer.hasElapsed(0.4) && !endTimer.isRunning) {
+        if (startTimer.hasElapsed(0.3) && !endTimer.isRunning) {
             endTimer.start()
             RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
         }
