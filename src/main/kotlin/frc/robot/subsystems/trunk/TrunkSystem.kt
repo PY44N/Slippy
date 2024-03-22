@@ -114,10 +114,18 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             lastBrakeMode = io.rotationBrake
         }
 
-        if (!io.rotationBrake && atDesiredRotation() && !falconRotationZeroed) {
+        if (io.rotationBrake && atDesiredRotation() && !falconRotationZeroed) {
             falconRotationOffset = getRawFalconRotation() - getThroughboreRotation()
             falconRotationZeroed = true
+            println("Zeroed falcon rotation")
         }
+
+        SmartDashboard.putNumber("Falcon Offset", falconRotationOffset)
+
+        SmartDashboard.putBoolean("Falcon Rotation Zeroed", falconRotationZeroed)
+        SmartDashboard.putBoolean("Trunk Rotation Brake", io.rotationBrake)
+        SmartDashboard.putBoolean("Trunk At Desired Rotation", atDesiredRotation())
+
     }
 
     fun setDesiredRotation(desiredRot: Double) {

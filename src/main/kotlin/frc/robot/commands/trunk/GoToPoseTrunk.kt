@@ -37,8 +37,8 @@ class GoToPoseTrunk(val desiredPose: TrunkPose) : Command() {
         }
 
 
-        print("is angle safe? $isAngleSafe")
-        print("is position always safe? $isPositionAlwaysSafe")
+//        print("is angle safe? $isAngleSafe")
+//        print("is position always safe? $isPositionAlwaysSafe")
 
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(currentTargetPosition)
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
