@@ -53,8 +53,7 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
 
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
-        TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
-        TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
+        SmartDashboard.putNumber("shooter endpoint z", TargetingConstants.endpointZ)
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()
@@ -146,6 +145,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
         SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
+
+        SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
     }
 
     override fun disabledInit() {}
@@ -158,8 +159,9 @@ class Robot : LoggedRobot() {
 //        RobotContainer.autonomousCommand.schedule()
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
-//        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
+        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side Shot").schedule()
+//            RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
+        //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

@@ -25,7 +25,8 @@ class TargetingVariables(
 ) {
     private val flippedRobotPose = AllianceFlip.apply(robotPose)
 
-    private val red = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+    private val red =
+        DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
     val x: Double =
         (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x) * if (red) -1 else 1

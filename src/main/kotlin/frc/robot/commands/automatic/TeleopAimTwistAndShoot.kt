@@ -16,13 +16,16 @@ import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
 
 class TeleopAimTwistAndShoot : Command() {
-    val autoShoot: AutoShootCommand = AutoShootCommand()
+    var autoShoot: AutoShootCommand = AutoShootCommand()
 
-    val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
+    var trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
     val twistPIDController: PIDController = PIDController(10.0, 0.0, 0.1)
 
     override fun initialize() {
+       trunkCommand = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
+       autoShoot = AutoShootCommand()
+
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseTrunk(TrunkPose.SPEAKER).andThen(trunkCommand);
@@ -53,11 +56,11 @@ class TeleopAimTwistAndShoot : Command() {
             DriveConstants.TELEOP_DEADZONE_Y
         )
 
-        RobotContainer.swerveSystem.applyDriveRequest(
-            driveTranslation.x,
-            driveTranslation.y,
-            Math.toRadians(driveTwist)
-        ).execute()
+//        RobotContainer.swerveSystem.applyDriveRequest(
+//            driveTranslation.x,
+//            driveTranslation.y,
+//            Math.toRadians(driveTwist)
+//        ).execute()
 
         //Can we shoot?
 //        if (RobotContainer.stateMachine.trunkReady && MiscCalculations.appxEqual(

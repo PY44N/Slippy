@@ -51,12 +51,10 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
     var positionLocked = false
         set(value) {
-            if (value) {
-                io.setServoAngle(90.0)
-            } else {
+            if (value)
                 io.setServoAngle(0.0)
-            }
-
+            else
+                io.setServoAngle(90.0)
             field = value
         }
 

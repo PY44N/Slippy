@@ -16,6 +16,7 @@ import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPoseTrunk
+import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
@@ -118,6 +119,18 @@ object RobotContainer {
         ControllerUtil.betterToggleOnTrue(xboxController.b(), AutoIntake())
         ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
         ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
+//        xboxController.y().onTrue(AutoShootCommand())
+        xboxController.povUp().onTrue(Commands.runOnce({ TargetingConstants.endpointZ += .01 }))
+        xboxController.povDown().onTrue(Commands.runOnce({ TargetingConstants.endpointZ -= .01 }))
+//        xboxController.b().onTrue(Commands.runOnce({
+//            RobotContainer.trunkSystem.io.setServoAngle(0.0)
+//        }))
+//        xboxController.a().onTrue(Commands.runOnce({
+//            RobotContainer.trunkSystem.io.setServoAngle(45.0)
+//        }))
+//        xboxController.y().onTrue(Commands.runOnce({
+//            RobotContainer.trunkSystem.io.setServoAngle(90.0)
+//        }))
 //        xboxController.a().onTrue(Commands.runOnce({
 //            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
 //        }))

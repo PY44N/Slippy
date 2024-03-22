@@ -15,6 +15,7 @@ import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
 
 class TeleopAimDumbTwistAndShoot : Command() {
+
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)

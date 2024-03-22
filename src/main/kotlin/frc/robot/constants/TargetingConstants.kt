@@ -1,6 +1,7 @@
 package frc.robot.constants
 
 import edu.wpi.first.math.util.Units
+import frc.robot.util.AllianceFlip
 import kotlin.math.PI
 
 object TargetingConstants {
@@ -10,7 +11,7 @@ object TargetingConstants {
     // coords of point we're aiming at relative to center of base of the speaker board (board with the fiducials)
     var endpointX = 0.125
     var endpointY = 0.0
-    var endpointZ = 1.75 // Desmod says 1.75 change if time exists
+    var endpointZ = if (AllianceFlip.isRed()) 1.77 else 2.05
 
     // coords of center of speaker backboard
     var speakerX = 0.0
