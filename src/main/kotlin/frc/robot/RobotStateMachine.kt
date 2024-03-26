@@ -76,6 +76,7 @@ enum class RobotAction() {
     Trap,
     FloorIntake,
     SourceIntake,
+    Climb,
     Chill,
 }
 
