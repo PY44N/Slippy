@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "CalibrateTrunk"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Amp Side to Shooting Position"
@@ -15,6 +21,12 @@
           "type": "named",
           "data": {
             "name": "AutoAimDumbTwistAndShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -59,6 +71,12 @@
           "type": "named",
           "data": {
             "name": "AutoAimDumbTwistAndShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {

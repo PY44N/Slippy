@@ -203,6 +203,14 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         ) && MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
     }
 
+    fun checkAtClimbPose(pivotAngle: Double, elevatorPosition: Double): Boolean {
+        return MiscCalculations.appxEqual(
+            pivotAngle,
+            getFalconRotation(),
+            TrunkConstants.ANGLE_DEADZONE
+        ) && MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
+    }
+
     fun checkAtPosition(position: Double): Boolean {
         return MiscCalculations.appxEqual(position, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
     }

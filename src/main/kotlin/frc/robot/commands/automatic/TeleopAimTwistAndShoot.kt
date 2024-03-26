@@ -56,11 +56,11 @@ class TeleopAimTwistAndShoot : Command() {
             DriveConstants.TELEOP_DEADZONE_Y
         )
 
-//        RobotContainer.swerveSystem.applyDriveRequest(
-//            driveTranslation.x,
-//            driveTranslation.y,
-//            Math.toRadians(driveTwist)
-//        ).execute()
+        RobotContainer.swerveSystem.applyDriveRequest(
+            driveTranslation.x,
+            driveTranslation.y,
+            Math.toRadians(driveTwist)
+        ).execute()
 
         //Can we shoot?
 //        if (RobotContainer.stateMachine.trunkReady && MiscCalculations.appxEqual(

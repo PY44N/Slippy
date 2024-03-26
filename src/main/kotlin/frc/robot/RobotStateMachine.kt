@@ -104,6 +104,8 @@ class RobotStateMachine {
 
     var currentTrunkCommandLocked = false
 
+    var limelightReset = false
+
     var currentTrunkCommand: Command = CalibrateTrunk()
         set(value) {
             if (!currentTrunkCommandLocked) {

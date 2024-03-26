@@ -49,7 +49,7 @@ class GoToClimbPoseTrunk(val desiredPose: TrunkPose) : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return RobotContainer.trunkSystem.checkAtPose(
+        return RobotContainer.trunkSystem.checkAtClimbPose(
             RobotContainer.trunkSystem.trunkDesiredRotation,
             currentTargetPosition
         )

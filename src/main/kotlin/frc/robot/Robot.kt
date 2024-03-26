@@ -24,6 +24,8 @@ class Robot : LoggedRobot() {
     private var lastShootPosition: ShootPosition = RobotContainer.stateMachine.shootPosition
 
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
+
+    private var calibrateTrunkAuto: CalibrateTrunk = CalibrateTrunk()
     override fun robotInit() {
 
         SmartDashboard.putNumber("g", 11.0)
@@ -68,7 +70,7 @@ class Robot : LoggedRobot() {
             RobotContainer.trunkSystem.brakeMotors()
         }
 
-        if (!DriverStation.isDisabled()) {
+        if (!DriverStation.isDisabled() && !RobotContainer.stateMachine.limelightReset) {
 //            RobotContainer.visionSystem.updateOdometry(1, true)
             RobotContainer.visionSystem.updateOdometry(1, false)
 
@@ -162,7 +164,13 @@ class Robot : LoggedRobot() {
 //        RobotContainer.swerveSystem.zeroGyro()
 //        DriveBackAuto().schedule()
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side Shot").schedule()
-//            RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
+
+//        RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
+//        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Shoot and Taxi").schedule()
+//        RobotContainer.stateMachine.currentTrunkCommand = calibrateTrunkAuto.andThen(RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close"))
+
+//        calibrateTrunkAuto.schedule()
+
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
         RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note Center").schedule()
 
@@ -170,7 +178,13 @@ class Robot : LoggedRobot() {
 
     }
 
-    override fun autonomousPeriodic() {}
+    override fun autonomousPeriodic() {
+
+//        if (calibrateTrunkAuto.isFinished && !RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").isScheduled()) {
+////            RobotContainer.swerveSystem.driveTrain.getAutoPath("3 Note Close").schedule()
+//            println("scheduling the auto path")
+//        }
+    }
 
     override fun autonomousExit() {}
 

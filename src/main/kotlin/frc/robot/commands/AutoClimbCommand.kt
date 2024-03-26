@@ -11,9 +11,7 @@ import frc.robot.commands.trunk.*
 import frc.robot.constants.TrunkConstants
 
 class AutoClimbCommand : Command() {
-    val holdCommand = HoldPoseTrunk(TrunkPose.CLIMB)
-
-    val climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(holdCommand)
+    var climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(HoldPoseTrunk(TrunkPose.CLIMB))
 //    val climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(holdCommand)
 
     var climbed = false
@@ -33,6 +31,7 @@ class AutoClimbCommand : Command() {
         RobotContainer.actuallyDoClimb = false
         climbed = false
         TrunkConstants.MIN_ROT_VOLTS = -4.0
+        climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(HoldPoseTrunk(TrunkPose.CLIMB))
     }
 
     override fun execute() {

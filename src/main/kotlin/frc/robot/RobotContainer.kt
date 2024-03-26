@@ -151,8 +151,16 @@ object RobotContainer {
             actuallyDoClimb = true
         }))
         xboxController.back().whileTrue(KillTrunk())
+//        xboxController.povRight().onTrue()
 
-        leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
+//        leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
+
+        leftJoystick.button(4).onTrue(Commands.runOnce({
+            stateMachine.limelightReset = true
+        }))
+        leftJoystick.button(4).onFalse(Commands.runOnce({
+            stateMachine.limelightReset = false
+        }))
 
 //        leftJoystick.button(10).toggleOnTrue(KillTrunk())
     }
@@ -166,6 +174,7 @@ object RobotContainer {
             Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) })
         )
         NamedCommands.registerCommand("AutoAimAndShootPrep", AutoAimAndShootPrep())
+        NamedCommands.registerCommand("CalibrateTrunk", CalibrateTrunk())
     }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
