@@ -1,6 +1,8 @@
 package frc.robot.subsystems.trunk
 
 import MiscCalculations
+import com.ctre.phoenix6.controls.NeutralOut
+import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.ArmFeedforward
 import edu.wpi.first.math.controller.PIDController

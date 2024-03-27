@@ -3,6 +3,8 @@ package frc.robot.subsystems.trunk
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
+import com.ctre.phoenix6.controls.NeutralOut
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.CANSparkBase
@@ -19,7 +21,8 @@ import frc.robot.constants.TrunkConstants
 class TrunkIOReal : TrunkIO {
 
     private val elevatorMotor = CANSparkMax(TrunkConstants.ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
-//    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
+
+    //    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
     private val positionEncoder = Encoder(1, 4)
 
     private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
@@ -31,6 +34,9 @@ class TrunkIOReal : TrunkIO {
     val climbServo = Servo(0)
 
     var positionEncoderOffset = 0.0
+
+    val falconVoltageControl = VoltageOut(0.0).withEnableFOC(true)
+    val falconNeutralOut = NeutralOut()
 
     override var positionBrake = true
         set(enabled) {
@@ -44,6 +50,9 @@ class TrunkIOReal : TrunkIO {
             if (field != enabled) {
                 masterRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
                 followerRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
+                if (!enabled) {
+                    masterRotationMotor.setControl(falconNeutralOut)
+                }
             }
             field = enabled
         }
@@ -87,9 +96,10 @@ class TrunkIOReal : TrunkIO {
 
     override fun setZeroPosition() {
 //        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
-        positionEncoderOffset = getEncoderRawPosition() - (TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
-            // val = raw - off
-            // off = raw - val
+        positionEncoderOffset =
+            getEncoderRawPosition() - (TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+        // val = raw - off
+        // off = raw - val
 
 //        positionEncoderOffset = TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR - getRawPosition()
     }
@@ -118,13 +128,26 @@ class TrunkIOReal : TrunkIO {
             "set rotation voltage: ",
             MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
         )
-        masterRotationMotor.setVoltage(
-            MathUtil.clamp(
-                volts,
-                TrunkConstants.MIN_ROT_VOLTS,
-                TrunkConstants.MAX_ROT_VOLTS
+//        masterRotationMotor.setVoltage(
+//            MathUtil.clamp(
+//                volts,
+//                TrunkConstants.MIN_ROT_VOLTS,
+//                TrunkConstants.MAX_ROT_VOLTS
+//            )
+//        );
+        if (!rotationBrake) {
+            return
+        }
+
+        masterRotationMotor.setControl(
+            falconVoltageControl.withOutput(
+                MathUtil.clamp(
+                    volts,
+                    TrunkConstants.MIN_ROT_VOLTS,
+                    TrunkConstants.MAX_ROT_VOLTS
+                )
             )
-        );
+        )
 //        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }
 
