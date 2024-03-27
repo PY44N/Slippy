@@ -51,7 +51,7 @@ object TrunkConstants {
 
     var lowRotationKP = 0.32
     var lowRotationKI = 0.0
-    var lowRotationKD = .0006
+    var lowRotationKD = .0001
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
