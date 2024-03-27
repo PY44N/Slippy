@@ -2,6 +2,8 @@ package frc.robot.commands.automatic
 
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.controller.ProfiledPIDController
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.DriveState
 import frc.robot.NoteState
@@ -14,17 +16,20 @@ import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.ProfiledPID
 
 class TeleopAimTwistAndShoot : Command() {
     var autoShoot: AutoShootCommand = AutoShootCommand()
 
     var trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
-    val twistPIDController: PIDController = PIDController(10.0, 0.0, 0.1)
+    val twistPIDController = ProfiledPID(10.0, 0.0, 0.1, TrapezoidProfile.Constraints(100.0, 50.0))
+
+    private var lastRobotAngle = 0.0
 
     override fun initialize() {
-       trunkCommand = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
-       autoShoot = AutoShootCommand()
+        trunkCommand = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
+        autoShoot = AutoShootCommand()
 
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
@@ -32,6 +37,7 @@ class TeleopAimTwistAndShoot : Command() {
         RobotContainer.actuallyDoShoot = false
 
         twistPIDController.enableContinuousInput(0.0, 360.0);
+        twistPIDController.goal = lastRobotAngle
     }
 
     override fun execute() {
@@ -43,10 +49,13 @@ class TeleopAimTwistAndShoot : Command() {
 //        RobotContainer.trunkSystem.setShootingAngle(shooterAngle)
         trunkCommand.desiredAngle = shooterAngle
 
+        if (lastRobotAngle != shotSetup.robotAngle) {
+            twistPIDController.goal = shotSetup.robotAngle
+        }
+
         //Handle the twisting component
         val driveTwist = twistPIDController.calculate(
             RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-            shotSetup.robotAngle
         )
 
         val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
@@ -74,6 +83,8 @@ class TeleopAimTwistAndShoot : Command() {
         if (RobotContainer.actuallyDoShoot && !autoShoot.isScheduled) {
             autoShoot.schedule()
         }
+
+        lastRobotAngle = shotSetup.robotAngle
     }
 
     override fun isFinished(): Boolean {

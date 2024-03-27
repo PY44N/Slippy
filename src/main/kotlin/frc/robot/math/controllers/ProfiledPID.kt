@@ -1,5 +1,6 @@
 package frc.robot.util
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.util.sendable.Sendable
@@ -15,6 +16,9 @@ class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstrain
     var currentTrapState = TrapezoidProfile.State()
     private var lastMeasurement = 0.0
 
+    private var minimumInput = 0.0
+    private var maximumInput = 0.0
+
     var goal = 0.0
         set(value) {
             desiredTrapState = TrapezoidProfile.State(value, 0.0)
@@ -22,7 +26,29 @@ class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstrain
             field = value
         }
 
+    fun enableContinuousInput(min: Double, max: Double) {
+        pidController.enableContinuousInput(min, max)
+        minimumInput = min
+        maximumInput = max
+    }
+
     fun calculate(measured: Double): Double {
+        if (pidController.isContinuousInputEnabled) {
+            // Get error which is the smallest distance between goal and measurement
+            val errorBound = (maximumInput - minimumInput) / 2.0;
+            val goalMinDistance =
+                MathUtil.inputModulus(desiredTrapState.position - measured, -errorBound, errorBound);
+            val setpointMinDistance =
+                MathUtil.inputModulus(currentTrapState.position - measured, -errorBound, errorBound);
+
+            // Recompute the profile goal with the smallest error, thus giving the shortest path. The goal
+            // may be outside the input range after this operation, but that's OK because the controller
+            // will still go there and report an error of zero. In other words, the setpoint only needs to
+            // be offset from the measurement by the input range modulus; they don't need to be equal.
+            desiredTrapState.position = goalMinDistance + measured;
+            currentTrapState.position = setpointMinDistance + measured;
+        }
+
         lastMeasurement = measured
         currentTrapState = trapezoidProfile.calculate(pidController.period, currentTrapState, desiredTrapState)
 
