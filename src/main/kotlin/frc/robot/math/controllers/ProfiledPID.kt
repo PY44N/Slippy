@@ -18,11 +18,14 @@ class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstrain
 
     private var minimumInput = 0.0
     private var maximumInput = 0.0
+    private val trapTimer = Timer()
 
     var goal = 0.0
         set(value) {
             desiredTrapState = TrapezoidProfile.State(value, 0.0)
             currentTrapState = TrapezoidProfile.State(value, 0.0)
+            trapTimer.reset()
+            trapTimer.start()
             field = value
         }
 
@@ -52,11 +55,15 @@ class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstrain
         lastMeasurement = measured
         currentTrapState = trapezoidProfile.calculate(pidController.period, currentTrapState, desiredTrapState)
 
+        SmartDashboard.putNumber("ProfiledPID Period", pidController.period)
+
         return pidController.calculate(measured, currentTrapState.position)
     }
 
     fun reset(measuredPosition: Double, measuredVelocity: Double = 0.0) {
         pidController.reset();
+        trapTimer.reset()
+        trapTimer.start()
         currentTrapState = TrapezoidProfile.State(measuredPosition, measuredVelocity)
     }
 

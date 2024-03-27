@@ -55,10 +55,10 @@ object TrunkConstants {
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 
     //Degrees/sec^2
-    var lowRotationMaxAcceleration = 5.0
+    var lowRotationMaxAcceleration = 150.0
 
     //degrees/sec
-    var lowRotationMaxVelo = 10.0
+    var lowRotationMaxVelo = 200.0
 
     val highRotationFFkS = 0.03
     val highRotationFFkG = 0.33

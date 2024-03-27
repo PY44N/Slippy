@@ -16,7 +16,7 @@ import frc.robot.util.Timer
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
-    val lowRotationPIDController = ProfiledPID(
+    val lowRotationPIDController = ProfiledPIDController(
         TrunkConstants.lowRotationKP,
         TrunkConstants.lowRotationKI,
         TrunkConstants.lowRotationKD,
@@ -127,12 +127,12 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putBoolean("Trunk Rotation Brake", io.rotationBrake)
         SmartDashboard.putBoolean("Trunk At Desired Rotation", atDesiredRotation())
 
-        lowRotationPIDController.logStates("Low Rotation PID")
+//        lowRotationPIDController.logStates("Low Rotation PID")
 
     }
 
     fun setDesiredRotation(desiredRot: Double) {
-        lowRotationPIDController.goal = desiredRot
+        lowRotationPIDController.goal = TrapezoidProfile.State(desiredRot, 0.0)
         highRotationPIDController.goal = TrapezoidProfile.State(desiredRot, 0.0)
         climbRotationPIDController.goal = TrapezoidProfile.State(desiredRot, 0.0)
         trunkDesiredRotation = desiredRot
