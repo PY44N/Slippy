@@ -10,9 +10,11 @@ import java.util.function.DoubleSupplier
 class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstraints: TrapezoidProfile.Constraints) :
     Sendable {
     val pidController = PIDController(p, i, d)
-    val trapezoidProfile = TrapezoidProfile(trapConstraints)
+    var trapezoidProfile = TrapezoidProfile(trapConstraints)
     var desiredTrapState = TrapezoidProfile.State()
     var currentTrapState = TrapezoidProfile.State()
+    private var lastMeasurement = 0.0
+
     var goal = 0.0
         set(value) {
             desiredTrapState = TrapezoidProfile.State(value, 0.0)
@@ -21,9 +23,21 @@ class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstrain
         }
 
     fun calculate(measured: Double): Double {
+        lastMeasurement = measured
         currentTrapState = trapezoidProfile.calculate(pidController.period, currentTrapState, desiredTrapState)
 
         return pidController.calculate(measured, currentTrapState.position)
+    }
+
+    fun reset(measuredPosition: Double, measuredVelocity: Double = 0.0) {
+        pidController.reset();
+        currentTrapState = TrapezoidProfile.State(measuredPosition, measuredVelocity)
+    }
+
+    fun logStates(name: String) {
+        SmartDashboard.putNumber("${name} Position Error", pidController.positionError)
+        SmartDashboard.putNumber("${name} Position", lastMeasurement)
+        SmartDashboard.putNumber("${name} Current Desired Position", currentTrapState.position)
     }
 
     override fun initSendable(builder: SendableBuilder) {
@@ -34,11 +48,18 @@ class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstrain
         builder.addDoubleProperty(
             "Acceleration",
             { trapConstraints.maxAcceleration },
-            { trapConstraints = TrapezoidProfile.Constraints(trapConstraints.maxVelocity, it) })
+            {
+                trapConstraints = TrapezoidProfile.Constraints(trapConstraints.maxVelocity, it)
+                trapezoidProfile = TrapezoidProfile(trapConstraints)
+            })
+
         builder.addDoubleProperty(
             "Velocity",
             { trapConstraints.maxVelocity },
-            { trapConstraints = TrapezoidProfile.Constraints(it, trapConstraints.maxAcceleration) })
+            {
+                trapConstraints = TrapezoidProfile.Constraints(it, trapConstraints.maxAcceleration)
+                trapezoidProfile = TrapezoidProfile(trapConstraints)
+            })
         builder.addDoubleProperty("goal", { goal }, { goal = it })
     }
 }

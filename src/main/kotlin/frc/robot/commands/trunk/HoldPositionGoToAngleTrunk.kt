@@ -7,9 +7,14 @@ import frc.robot.TrunkPose
 class HoldPositionGoToAngleTrunk(val pose: TrunkPose) : Command() {
 
     var desiredAngle: Double = pose.angle
+        set(value) {
+            RobotContainer.trunkSystem.setDesiredRotation(value)
+            field = value
+        }
 
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
+        RobotContainer.trunkSystem.setDesiredRotation(desiredAngle)
     }
 
     override fun execute() {

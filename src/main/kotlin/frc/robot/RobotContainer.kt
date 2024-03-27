@@ -128,9 +128,13 @@ object RobotContainer {
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
         ControllerUtil.betterToggleOnTrue(xboxController.b(), AutoIntake())
-        ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
-        ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
-//        xboxController.y().onTrue(AutoShootCommand())
+        xboxController.a().onTrue(Commands.runOnce({
+            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+        }))
+//        ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
+//        ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
+        ControllerUtil.betterToggleOnTrue(xboxController.y(), AutoAimAndShoot())
+        //        xboxController.y().onTrue(AutoShootCommand())
         xboxController.povUp().onTrue(Commands.runOnce({ TargetingConstants.endpointZ += .01 }))
         xboxController.povDown().onTrue(Commands.runOnce({ TargetingConstants.endpointZ -= .01 }))
 //        xboxController.b().onTrue(Commands.runOnce({
