@@ -41,7 +41,7 @@ class TeleopAimTwistAndShoot : Command() {
     }
 
     override fun execute() {
-        val shotSetup = RobotContainer.targetingSystem.getBoontus()
+        val shotSetup = RobotContainer.targetingSystem.getShotVelocityRobotNoVelocityShooter()
 
         //Handle the cannon aiming component
         val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)

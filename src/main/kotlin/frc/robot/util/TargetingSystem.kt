@@ -103,15 +103,19 @@ class TargetingSystem {
     fun noVelocityRobotAngle(vars: TargetingVariables) = atan2(vars.y, vars.x) * rad2deg
 
     fun noVelocityShooterAngle(vars: TargetingVariables) = atan2(
-        shootingVelocity.pow(2)-sqrt(shootingVelocity.pow(4)-2*real_g*vars.z*shootingVelocity.pow(2)-real_g.pow(2)*vars.r.pow(2)), real_g*vars.r
+        shootingVelocity.pow(2) - sqrt(
+            shootingVelocity.pow(4) - 2 * real_g * vars.z * shootingVelocity.pow(2) - real_g.pow(
+                2
+            ) * vars.r.pow(2)
+        ), real_g * vars.r
     )
 
-    fun getBoontus(
-        slorp: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
-        bunkus: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds,
+    fun getShotVelocityRobotNoVelocityShooter(
+        robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
+        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds,
     ): ShotSetup {
-        val minkus = TargetingVariables(slorp, bunkus)
-        return ShotSetup(velocityRobotAngle(minkus), noVelocityShooterAngle(minkus))
+        val vars = TargetingVariables(robotPose, robotVelocity)
+        return ShotSetup(velocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }
 
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
