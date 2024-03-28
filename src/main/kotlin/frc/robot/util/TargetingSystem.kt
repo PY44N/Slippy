@@ -110,8 +110,8 @@ class TargetingSystem {
         slorp: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         bunkus: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds,
     ): ShotSetup {
-        val mungus = TargetingVariables(slorp, bunkus)
-        return ShotSetup(velocityRobotAngle(mungus), noVelocityShooterAngle(mungus))
+        val minkus = TargetingVariables(slorp, bunkus)
+        return ShotSetup(velocityRobotAngle(minkus), noVelocityShooterAngle(minkus))
     }
 
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {
