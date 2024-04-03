@@ -3,6 +3,7 @@ package frc.robot.subsystems.trunk
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
+import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.CANSparkBase
@@ -25,7 +26,8 @@ class TrunkIOReal : TrunkIO {
 
 
 //    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
-    private val positionEncoder = Encoder(1, 4)
+//    private val positionEncoder = Encoder(1, 4)
+    private val positionEncoder = CANcoder(TrunkConstants.ELEVATOR_ENCODER_ID)
 
     private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
     private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
@@ -96,7 +98,7 @@ class TrunkIOReal : TrunkIO {
     }
 
     private fun getEncoderRawPosition(): Double {
-        return positionEncoder.get() / 1024.0
+        return positionEncoder.position.value / 4096.0
     }
 
     override fun setZeroPosition() {

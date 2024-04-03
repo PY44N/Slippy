@@ -4,6 +4,8 @@ object TrunkConstants {
 
     const val MASTER_ELEVATOR_MOTOR_ID = 20
     const val FOLLOWER_ELEVATOR_MOTOR_ID = 9999
+    const val ELEVATOR_ENCODER_ID = 999999
+
     const val FOLLOWER_PIVOT_MOTOR_ID = 21
     const val MASTER_PIVOT_MOTOR_ID = 22
     const val CLIMB_LATCH_ID: Int = 0 // please find real value
