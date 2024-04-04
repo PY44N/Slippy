@@ -16,8 +16,6 @@ enum class ShooterState(val rightShooterVel: Double, val leftShooterVel: Double)
     Stopped(0.0, 0.0),
     Prepped(3200.0, 3200.0),
     Shooting(3250.0, 4000.0),
-    Amping(1500.0, 1500.0),
-    CloseShooting(3650.0, 3650.0),
 }
 
 //this represents the CURRENT note state
@@ -40,8 +38,6 @@ enum class IntakeState(var innerPercent: Double, var outerPercent: Double) {
 enum class TrunkPose(var angle: Double, var position: Double) {
     AMP_GOING(TrunkConstants.AMP_ANGLE, 0.3),
     AMP(TrunkConstants.AMP_ANGLE, TrunkConstants.AMP_POSITION),
-    AMP_SHOOTING(50.0, 0.4),
-    AMP_LEAVING(TrunkConstants.AMP_ANGLE - 20.0, TrunkConstants.STOW_POSITION),
     SPEAKER(TrunkConstants.STOW_ANGLE, TrunkConstants.STOW_POSITION),
     INTAKE(TrunkConstants.INTAKE_ANGLE, TrunkConstants.INTAKE_POSITION),
     INTAKE_PREP(TrunkConstants.SAFE_TRAVEL_ANGLE, TrunkConstants.SAFE_TO_DROP_INTAKE_POSITION),

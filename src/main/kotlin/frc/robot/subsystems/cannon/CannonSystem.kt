@@ -49,14 +49,6 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
         println("called cannonsystem.shoot")
     }
 
-    fun ampShoot() {
-        RobotContainer.stateMachine.shooterState = ShooterState.Amping
-    }
-
-    fun closeShoot() {
-        RobotContainer.stateMachine.shooterState = ShooterState.CloseShooting
-    }
-
     fun ampSpit() {
         RobotContainer.stateMachine.intakeState = IntakeState.AmpSpitting
     }

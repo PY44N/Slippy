@@ -24,9 +24,9 @@ import frc.robot.subsystems.cannon.CannonSystem
 import frc.robot.subsystems.swerve.SwerveSystem
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkSystem
-import frc.robot.util.ControllerUtil
 import frc.robot.util.TargetingSystem
 import frc.robot.util.TelemetryToggles
+import frc.robot.util.betterToggleOnTrue
 
 object RobotContainer {
     val leftJoystick: CommandJoystick = CommandJoystick(0)
@@ -119,6 +119,13 @@ object RobotContainer {
             }
         }))
 
+        leftJoystick.button(4).onTrue(Commands.runOnce({
+            stateMachine.limelightReset = true
+        }))
+        leftJoystick.button(4).onFalse(Commands.runOnce({
+            stateMachine.limelightReset = false
+        }))
+
         xboxController.leftBumper().onTrue(Commands.runOnce({
             actuallyDoShoot = true
         }))
@@ -127,56 +134,23 @@ object RobotContainer {
         }))
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
-        ControllerUtil.betterToggleOnTrue(xboxController.b(), AutoIntake())
+        xboxController.b().betterToggleOnTrue(AutoIntake())
         xboxController.a().onTrue(Commands.runOnce({
             stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
         }))
-//        ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
-//        ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
-        ControllerUtil.betterToggleOnTrue(xboxController.y(), AutoAimAndShoot())
-        //        xboxController.y().onTrue(AutoShootCommand())
+        xboxController.a().betterToggleOnTrue(AutoAmp())
+
+        xboxController.y().betterToggleOnTrue(AutoAimAndShoot())
         xboxController.povUp().onTrue(Commands.runOnce({ TargetingConstants.endpointZ += .01 }))
         xboxController.povDown().onTrue(Commands.runOnce({ TargetingConstants.endpointZ -= .01 }))
-//        xboxController.b().onTrue(Commands.runOnce({
-//            RobotContainer.trunkSystem.io.setServoAngle(0.0)
-//        }))
-//        xboxController.a().onTrue(Commands.runOnce({
-//            RobotContainer.trunkSystem.io.setServoAngle(45.0)
-//        }))
-//        xboxController.y().onTrue(Commands.runOnce({
-//            RobotContainer.trunkSystem.io.setServoAngle(90.0)
-//        }))
-//        xboxController.a().onTrue(Commands.runOnce({
-//            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
-//        }))
-//        xboxController.a().onTrue(AutoIntakeAndShoot())
-//        val calibrationAngleCommand = HoldPoseTrunk(TrunkPose.CalibrationAngle)
-//        xboxController.a()
-//            .onTrue(Commands.runOnce({
-//                stateMachine.currentTrunkCommand =
-//                    GoToPoseTrunk(TrunkPose.CalibrationAngle).andThen(calibrationAngleCommand)
-//            }))
-//        xboxController.b().onTrue(Commands.runOnce({ calibrationAngleCommand.currentTargetPosition = 0.1 }))
-//        xboxController.y().onTrue(Commands.runOnce({ calibrationAngleCommand.currentTargetPosition = 0.381 }))
         xboxController.x()
             .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
         xboxController.rightBumper().onTrue(AutoSpit())
-        ControllerUtil.betterToggleOnTrue(xboxController.leftTrigger(), AutoClimbCommand())
+        xboxController.leftTrigger().betterToggleOnTrue(AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({
             actuallyDoClimb = true
         }))
         xboxController.back().whileTrue(KillTrunk())
-//        xboxController.povRight().onTrue()
-
-//        leftJoystick.button(2).whileTrue(FloorIntakeAndSeek())
-
-        leftJoystick.button(4).onTrue(Commands.runOnce({
-            stateMachine.limelightReset = true
-        }))
-        leftJoystick.button(4).onFalse(Commands.runOnce({
-            stateMachine.limelightReset = false
-        }))
-
 //        leftJoystick.button(10).toggleOnTrue(KillTrunk())
     }
 
