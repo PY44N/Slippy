@@ -22,9 +22,9 @@ import frc.robot.util.EmptyMotorController
 
 class TrunkIOReal : TrunkIO {
     private val masterElevatorMotor =
-        TalonFX(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID)
+        EmptyMotorController(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID)
     private val followerElevatorMotor =
-        TalonFX(TrunkConstants.FOLLOWER_ELEVATOR_MOTOR_ID)
+        EmptyMotorController(TrunkConstants.FOLLOWER_ELEVATOR_MOTOR_ID)
 
     //    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 //    private val positionEncoder = Encoder(1, 4)
@@ -96,8 +96,8 @@ class TrunkIOReal : TrunkIO {
         masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
-        followerElevatorMotor.setControl(Follower(masterElevatorMotor.deviceID, true))
-        followerRotationMotor.setControl(Follower(masterRotationMotor.deviceId, true))
+        followerElevatorMotor.setControl(Follower(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID, true))
+        followerRotationMotor.setControl(Follower(TrunkConstants.MASTER_PIVOT_MOTOR_ID, true))
 
 //        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
     }

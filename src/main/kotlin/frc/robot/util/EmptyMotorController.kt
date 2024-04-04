@@ -20,11 +20,12 @@ class EmptyMotorController(id: Int, motorType: MotorType = MotorType.kBrushless)
     var position = EmptyPositionValue()
     var velocity = EmptyPositionValue()
     var configurator = EmptyConfigurator()
-    var deviceId = 0
 
     fun setIdleMode(mode: IdleMode) {}
 
     fun setNeutralMode(value: NeutralModeValue) {}
 
     fun setControl(request: ControlRequest) {}
+
+    fun set(percent: Double) {}
 }
