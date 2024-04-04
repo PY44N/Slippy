@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.EmptyMotorController
 
 class TrunkIOReal : TrunkIO {
     private val masterElevatorMotor =
@@ -29,8 +30,8 @@ class TrunkIOReal : TrunkIO {
 //    private val positionEncoder = Encoder(1, 4)
     private val positionEncoder = CANcoder(TrunkConstants.ELEVATOR_ENCODER_ID)
 
-    private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
-    private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
+    private val masterRotationMotor = EmptyMotorController(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
+    private val followerRotationMotor = EmptyMotorController(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
 
     private val shaftRotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
     private val topLimit = DigitalInput(0)
@@ -44,8 +45,10 @@ class TrunkIOReal : TrunkIO {
 
     override var positionBrake = true
         set(enabled) {
-            if (positionBrake != enabled)
+            if (positionBrake != enabled) {
                 masterElevatorMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
+                followerElevatorMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
+            }
             field = enabled
         }
 
@@ -79,16 +82,15 @@ class TrunkIOReal : TrunkIO {
         followerRotationMotor.configurator.apply(pivotMotorConfiguration)
 
         masterElevatorMotor.inverted = false // elevator likes to not be inverted idk why
-        followerElevatorMotor.inverted = true // elevator likes to not be inverted idk why
         masterRotationMotor.inverted = false
 
         // ensure motors are initially braked
         masterElevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        followerElevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
+        followerElevatorMotor.setIdleMode(CANSparkBase.IdleMode.kCoast)
         masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
-        followerElevatorMotor.follow(masterElevatorMotor)
+        followerElevatorMotor.follow(masterElevatorMotor, true)
         followerRotationMotor.setControl(Follower(22, true))
 
 //        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
@@ -99,13 +101,13 @@ class TrunkIOReal : TrunkIO {
     }
 
     private fun getEncoderRawPosition(): Double {
-        return positionEncoder.position.value / 4096.0
+        return positionEncoder.position.value
     }
 
     override fun setZeroPosition() {
 //        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
         positionEncoderOffset =
-            getEncoderRawPosition() - (TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
+            getEncoderRawPosition() - (TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.METERS_TO_ELEVATOR_ROTATIONS)
         // val = raw - off
         // off = raw - val
 

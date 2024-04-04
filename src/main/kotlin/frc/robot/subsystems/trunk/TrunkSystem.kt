@@ -238,7 +238,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     }
 
     fun getPosition(): Double {
-        return io.getPosition() * TrunkConstants.ELEVATOR2M
+        return io.getPosition() * TrunkConstants.ELEVATOR_ROTATIONS_TO_METERS
     }
 
     fun freeMotors() {
