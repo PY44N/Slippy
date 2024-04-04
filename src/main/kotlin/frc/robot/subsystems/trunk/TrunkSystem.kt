@@ -1,6 +1,8 @@
 package frc.robot.subsystems.trunk
 
 import MiscCalculations
+import com.ctre.phoenix6.controls.NeutralOut
+import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.ArmFeedforward
 import edu.wpi.first.math.controller.PIDController
@@ -9,18 +11,19 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.ProfiledPID
 import frc.robot.util.Timer
 
 class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
-    val lowRotationPIDController: ProfiledPIDController = ProfiledPIDController(
+    val lowRotationPIDController = ProfiledPIDController(
         TrunkConstants.lowRotationKP,
         TrunkConstants.lowRotationKI,
         TrunkConstants.lowRotationKD,
         TrapezoidProfile.Constraints(TrunkConstants.lowRotationMaxVelo, TrunkConstants.lowRotationMaxAcceleration)
     )
 
-    val highRotationPIDController: ProfiledPIDController = ProfiledPIDController(
+    val highRotationPIDController = ProfiledPIDController(
         TrunkConstants.highRotationKP,
         TrunkConstants.highRotationKI,
         TrunkConstants.highRotationKD,
@@ -124,6 +127,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putBoolean("Trunk Rotation Brake", io.rotationBrake)
         SmartDashboard.putBoolean("Trunk At Desired Rotation", atDesiredRotation())
 
+//        lowRotationPIDController.logStates("Low Rotation PID")
+
     }
 
     fun setDesiredRotation(desiredRot: Double) {
@@ -143,9 +148,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         } else if (trunkDesiredRotation > 100.0) {// || getThroughboreRotation() > 100.0) {
             highRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
         } else {
-            lowRotationPIDController.calculate(getThroughboreRotation(), trunkDesiredRotation)
+            lowRotationPIDController.calculate(getThroughboreRotation())
         }
-        SmartDashboard.putNumber("Trunk Trapezoid Velocity Error", lowRotationPIDController.velocityError)
+//        SmartDashboard.putNumber("Trunk Trapezoid Velocity Error", `lowRotationPIDController`.velocityError)
 
 //        println("rotation PID out: " + rotationPIDOut)
         val rotationFFOut = if (trunkDesiredRotation > 100.0) {// || getThroughboreRotation() > 100.0) {

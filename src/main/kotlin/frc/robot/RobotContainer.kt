@@ -87,22 +87,33 @@ object RobotContainer {
         TrunkPose.entries.forEach {
             trunkPoseSendable.addOption(it.name, it)
         }
+
+        robotActionSendable.setDefaultOption("FloorIntake", RobotAction.FloorIntake)
+        SmartDashboard.putData("Robot Action", robotActionSendable)
     }
 
     private fun configureBindings() {
         rightJoystick.button(3).onTrue(Commands.runOnce({
             when (stateMachine.robotAction) {
-                RobotAction.Speaker -> {
-                    if (stateMachine.shootPosition == ShootPosition.AutoAim) {
-                        AutoAimAndShoot()
-                    } else {
-                        AutoAimAndShoot()
-                    }
-                };
-                RobotAction.Amp -> AutoAmp();
-                RobotAction.SourceIntake -> TODO("Not yet implemented");
-                RobotAction.FloorIntake -> AutoIntake()
-                RobotAction.Trap -> TODO("Not yet implemented")
+                RobotAction.Speaker -> TeleopAimTwistAndShoot().schedule()
+                RobotAction.Amp -> AutoAmp().schedule();
+                RobotAction.SourceIntake -> println("Tried to source intake (not yet implemented)")
+                RobotAction.FloorIntake -> AutoIntake().schedule()
+                RobotAction.Trap -> println("Tried to trap score (not yet implemented)")
+                RobotAction.Climb -> AutoClimbCommand().schedule()
+                //Does literally nothing
+                RobotAction.Chill -> println("*Hits blunt* Yoooooooo sup bra (currently in chill mode)")
+            }
+        }))
+
+        leftJoystick.button(3).onTrue(Commands.runOnce({
+            when (stateMachine.robotAction) {
+                RobotAction.Speaker -> actuallyDoShoot = true
+                RobotAction.Amp -> actuallyDoAmp = true
+                RobotAction.SourceIntake -> println("Tried to trigger source intake (not yet implemented)")
+                RobotAction.FloorIntake -> print("Tried to trigger floor intake (why?)")
+                RobotAction.Trap -> println("Tried to trigger trap score (not yet implemented)")
+                RobotAction.Climb -> actuallyDoClimb = true
                 //Does literally nothing
                 RobotAction.Chill -> println("*Hits blunt* Yoooooooo sup bra (currently in chill mode)")
             }
@@ -117,9 +128,13 @@ object RobotContainer {
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
         ControllerUtil.betterToggleOnTrue(xboxController.b(), AutoIntake())
-        ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
-        ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
-//        xboxController.y().onTrue(AutoShootCommand())
+        xboxController.a().onTrue(Commands.runOnce({
+            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+        }))
+//        ControllerUtil.betterToggleOnTrue(xboxController.a(), AutoAmp())
+//        ControllerUtil.betterToggleOnTrue(xboxController.y(), TeleopAimTwistAndShoot())
+        ControllerUtil.betterToggleOnTrue(xboxController.y(), AutoAimAndShoot())
+        //        xboxController.y().onTrue(AutoShootCommand())
         xboxController.povUp().onTrue(Commands.runOnce({ TargetingConstants.endpointZ += .01 }))
         xboxController.povDown().onTrue(Commands.runOnce({ TargetingConstants.endpointZ -= .01 }))
 //        xboxController.b().onTrue(Commands.runOnce({

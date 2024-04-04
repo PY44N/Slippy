@@ -14,7 +14,8 @@ import frc.robot.util.Telemetry
 
 class CannonSystem(val io: CannonIO) : SubsystemBase() {
     //Desired shooter velocities
-    private var desiredShooterVel = 0.0
+    private var desiredRightShooterVel = 0.0
+    private var desiredLeftShooterVel = 0.0
 
     //Desired intake percentages
     private var desiredOuterPercent = 0.0
@@ -79,16 +80,16 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
     //Shooter up to speed
     fun shooterReady() =
         MiscCalculations.appxEqual(
-            desiredShooterVel,
+            desiredRightShooterVel,
             io.getRightShooterVel(),
             CannonConstants.SHOOTER_VELOCITY_DEADZONE
         ) &&
                 MiscCalculations.appxEqual(
-                    desiredShooterVel,
+                    desiredLeftShooterVel,
                     io.getLeftShooterVel(),
                     CannonConstants.SHOOTER_VELOCITY_DEADZONE
                 )
-                && desiredShooterVel != 0.0 && RobotContainer.stateMachine.shooterState == ShooterState.Shooting
+                && desiredRightShooterVel != 0.0 && desiredLeftShooterVel != 0.0 && RobotContainer.stateMachine.shooterState == ShooterState.Shooting
 
     override fun periodic() {
         RobotContainer.telemetry.cannonTelemetry =
@@ -119,8 +120,7 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
         //Note is intaking
         else if (io.getEntryBeamBreak() && !io.getLoadedBeamBreak()) {
             RobotContainer.stateMachine.noteState = NoteState.Intaking
-        }
-        else if (io.getLoadedBeamBreak()) {
+        } else if (io.getLoadedBeamBreak()) {
             RobotContainer.stateMachine.noteState = NoteState.Stored
         }
 
@@ -136,9 +136,13 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
         /*-----------------
             Shooter
            ---------------- */
-        if (desiredShooterVel != RobotContainer.stateMachine.shooterState.shooterVel) {
-            desiredShooterVel = RobotContainer.stateMachine.shooterState.shooterVel
+        if (desiredRightShooterVel != RobotContainer.stateMachine.shooterState.rightShooterVel) {
+            desiredRightShooterVel = RobotContainer.stateMachine.shooterState.rightShooterVel
 //            println("shooter velocity setpoint changed")
+        }
+
+        if (desiredLeftShooterVel != RobotContainer.stateMachine.shooterState.leftShooterVel) {
+            desiredLeftShooterVel = RobotContainer.stateMachine.shooterState.leftShooterVel
         }
 
         /*----------------
@@ -177,17 +181,18 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 //            CannonConstants.shooterFFMultiplier = SmartDashboard.getNumber("shooter ff multiplier", CannonConstants.shooterFFMultiplier)
 
 
-            SmartDashboard.putNumber("Shooter Velocity Desired", desiredShooterVel)
+            SmartDashboard.putNumber("Shooter Velocity Desired", desiredRightShooterVel)
             SmartDashboard.putNumber("Shooter Velocity Current Right", currentRightVel)
             SmartDashboard.putNumber("Shooter Velocity Current Left", currentLeftVel)
 
-            val shooterFF = desiredShooterVel * CannonConstants.shooterFFMultiplier
+            val rightShooterFF = desiredRightShooterVel * CannonConstants.shooterFFMultiplier
+            val leftShooterFF = desiredLeftShooterVel * CannonConstants.shooterFFMultiplier
 
-            val leftPIDOut = leftShooterPID.calculate(currentLeftVel, desiredShooterVel)
-            val rightPIDOut = rightShooterPID.calculate(currentRightVel, desiredShooterVel)
+            val leftPIDOut = leftShooterPID.calculate(currentLeftVel, desiredLeftShooterVel)
+            val rightPIDOut = rightShooterPID.calculate(currentRightVel, desiredRightShooterVel)
 
-            val leftPercent = (shooterFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
-            val rightPercent = (shooterFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+            val leftPercent = (leftShooterFF + leftPIDOut) / CannonConstants.SHOOTER_MAX_RPM
+            val rightPercent = (rightShooterFF + rightPIDOut) / CannonConstants.SHOOTER_MAX_RPM
 
             SmartDashboard.putNumber("left shooter pid", leftPIDOut)
             SmartDashboard.putNumber("right shooter pid", rightPIDOut)

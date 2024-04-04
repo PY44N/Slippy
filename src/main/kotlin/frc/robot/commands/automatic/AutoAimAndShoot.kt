@@ -26,12 +26,11 @@ class AutoAimAndShoot : Command() {
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
 
         shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
-
+        trunkCommand.desiredAngle = 65.0
     }
 
     override fun execute() {
         SmartDashboard.putNumber("shooter angle", shooterAngle)
-        trunkCommand.desiredAngle = shooterAngle
 
         if (RobotContainer.actuallyDoShoot && !autoShoot.isScheduled) {
             autoShoot.schedule()

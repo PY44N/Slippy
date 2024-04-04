@@ -12,12 +12,12 @@ import frc.robot.constants.TrunkConstants
 import frc.robot.util.Telemetry
 
 //This represents the desired shooter state
-enum class ShooterState(val shooterVel: Double) {
-    Stopped(0.0),
-    Prepped(CannonConstants.SHOOTER_PREP_VELOCITY),
-    Shooting(CannonConstants.SHOOTER_SHOOT_VELOCITY),
-    Amping(1500.0),
-    CloseShooting(3650.0),
+enum class ShooterState(val rightShooterVel: Double, val leftShooterVel: Double) {
+    Stopped(0.0, 0.0),
+    Prepped(3200.0, 3200.0),
+    Shooting(3250.0, 4000.0),
+    Amping(1500.0, 1500.0),
+    CloseShooting(3650.0, 3650.0),
 }
 
 //this represents the CURRENT note state
@@ -76,6 +76,7 @@ enum class RobotAction() {
     Trap,
     FloorIntake,
     SourceIntake,
+    Climb,
     Chill,
 }
 

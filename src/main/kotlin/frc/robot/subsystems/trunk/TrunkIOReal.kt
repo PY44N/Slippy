@@ -4,6 +4,8 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.hardware.CANcoder
+import com.ctre.phoenix6.controls.NeutralOut
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.CANSparkBase
@@ -18,7 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 
 class TrunkIOReal : TrunkIO {
-
     private val masterElevatorMotor =
         CANSparkMax(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
     private val followerElevatorMotor =
@@ -38,6 +39,9 @@ class TrunkIOReal : TrunkIO {
 
     var positionEncoderOffset = 0.0
 
+    val falconVoltageControl = VoltageOut(0.0).withEnableFOC(true)
+    val falconNeutralOut = NeutralOut()
+
     override var positionBrake = true
         set(enabled) {
             if (positionBrake != enabled)
@@ -50,6 +54,9 @@ class TrunkIOReal : TrunkIO {
             if (field != enabled) {
                 masterRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
                 followerRotationMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
+                if (!enabled) {
+                    masterRotationMotor.setControl(falconNeutralOut)
+                }
             }
             field = enabled
         }
@@ -129,13 +136,26 @@ class TrunkIOReal : TrunkIO {
             "set rotation voltage: ",
             MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
         )
-        masterRotationMotor.setVoltage(
-            MathUtil.clamp(
-                volts,
-                TrunkConstants.MIN_ROT_VOLTS,
-                TrunkConstants.MAX_ROT_VOLTS
+//        masterRotationMotor.setVoltage(
+//            MathUtil.clamp(
+//                volts,
+//                TrunkConstants.MIN_ROT_VOLTS,
+//                TrunkConstants.MAX_ROT_VOLTS
+//            )
+//        );
+        if (!rotationBrake) {
+            return
+        }
+
+        masterRotationMotor.setControl(
+            falconVoltageControl.withOutput(
+                MathUtil.clamp(
+                    volts,
+                    TrunkConstants.MIN_ROT_VOLTS,
+                    TrunkConstants.MAX_ROT_VOLTS
+                )
             )
-        );
+        )
 //        masterRotationMotor.setControl(voltageVelocityController.withVelocity(volts))
     }
 
