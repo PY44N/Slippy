@@ -1,6 +1,7 @@
 package frc.robot.util
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.controls.ControlRequest
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.NeutralOut
 import com.ctre.phoenix6.controls.VoltageOut
@@ -19,13 +20,11 @@ class EmptyMotorController(id: Int, motorType: MotorType = MotorType.kBrushless)
     var position = EmptyPositionValue()
     var velocity = EmptyPositionValue()
     var configurator = EmptyConfigurator()
+    var deviceId = 0
 
     fun setIdleMode(mode: IdleMode) {}
 
     fun setNeutralMode(value: NeutralModeValue) {}
 
-    fun setControl(out: NeutralOut) {}
-
-    fun setControl(follower: Follower) {}
-    fun setControl(voltage: VoltageOut) {}
+    fun setControl(request: ControlRequest) {}
 }

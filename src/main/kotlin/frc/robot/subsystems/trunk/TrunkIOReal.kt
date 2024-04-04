@@ -22,9 +22,9 @@ import frc.robot.util.EmptyMotorController
 
 class TrunkIOReal : TrunkIO {
     private val masterElevatorMotor =
-        CANSparkMax(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+        TalonFX(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID)
     private val followerElevatorMotor =
-        CANSparkMax(TrunkConstants.FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)
+        TalonFX(TrunkConstants.FOLLOWER_ELEVATOR_MOTOR_ID)
 
     //    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 //    private val positionEncoder = Encoder(1, 4)
@@ -42,12 +42,16 @@ class TrunkIOReal : TrunkIO {
 
     val falconVoltageControl = VoltageOut(0.0).withEnableFOC(true)
     val falconNeutralOut = NeutralOut()
+//    val falconPercentControl =
 
     override var positionBrake = true
         set(enabled) {
             if (positionBrake != enabled) {
-                masterElevatorMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
-                followerElevatorMotor.setIdleMode(if (enabled) CANSparkBase.IdleMode.kBrake else CANSparkBase.IdleMode.kCoast)
+                masterElevatorMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
+                followerElevatorMotor.setNeutralMode(if (enabled) NeutralModeValue.Brake else NeutralModeValue.Coast)
+            }
+            if (!enabled) {
+                masterElevatorMotor.setControl(falconNeutralOut)
             }
             field = enabled
         }
@@ -66,9 +70,9 @@ class TrunkIOReal : TrunkIO {
 
     init {
         // factory reset to make it not be bad
-        masterElevatorMotor.restoreFactoryDefaults()
-        followerElevatorMotor.restoreFactoryDefaults()
         val pivotMotorConfiguration =
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+        val elevatorMotorConfiguration =
             TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
 
 //        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
@@ -80,18 +84,20 @@ class TrunkIOReal : TrunkIO {
 
         masterRotationMotor.configurator.apply(pivotMotorConfiguration)
         followerRotationMotor.configurator.apply(pivotMotorConfiguration)
+        masterElevatorMotor.configurator.apply(elevatorMotorConfiguration)
+        followerElevatorMotor.configurator.apply(elevatorMotorConfiguration)
 
         masterElevatorMotor.inverted = false // elevator likes to not be inverted idk why
         masterRotationMotor.inverted = false
 
         // ensure motors are initially braked
-        masterElevatorMotor.setIdleMode(CANSparkBase.IdleMode.kBrake)
-        followerElevatorMotor.setIdleMode(CANSparkBase.IdleMode.kCoast)
+        masterElevatorMotor.setNeutralMode(NeutralModeValue.Brake)
+        followerElevatorMotor.setNeutralMode(NeutralModeValue.Brake)
         masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
 
-        followerElevatorMotor.follow(masterElevatorMotor, true)
-        followerRotationMotor.setControl(Follower(22, true))
+        followerElevatorMotor.setControl(Follower(masterElevatorMotor.deviceID, true))
+        followerRotationMotor.setControl(Follower(masterRotationMotor.deviceId, true))
 
 //        falconRotationOffset = (masterRotationMotor.position.value / 125.0) - shaftRotationEncoder.absolutePosition
     }
