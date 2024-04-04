@@ -30,8 +30,7 @@ class VisionSystem {
 
         if (SmartDashboard.getBoolean("use new limelights", false)) {
             namesToSearch = limelightNames.plus(sideLimelightNames)
-        }
-        else {
+        } else {
             namesToSearch = limelightNames
         }
 
@@ -99,12 +98,12 @@ class VisionSystem {
                     }
 
 
-                    RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(
+                    RobotContainer.swerveSystem.setVisionMeasurementStdDevs(
                         VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds))
                     )
 //                        println("updating odometry with ll")
 //                    println("Updating with LL ${llName}: X = " + llMeasure.pose.x + " Y = " + llMeasure.pose.y)
-                    RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
+                    RobotContainer.swerveSystem.addVisionMeasurement(
                         llMeasure.pose,
                         llMeasure.timestampSeconds
                     )
@@ -120,8 +119,7 @@ class VisionSystem {
 
         if (SmartDashboard.getBoolean("use new limelights", false)) {
             namesToSearch = limelightNames.plus(sideLimelightNames)
-        }
-        else {
+        } else {
             namesToSearch = limelightNames
         }
 
@@ -202,13 +200,13 @@ class VisionSystem {
                             }
                         }
 
-                        RobotContainer.swerveSystem.driveTrain.setVisionMeasurementStdDevs(
+                        RobotContainer.swerveSystem.setVisionMeasurementStdDevs(
                             VecBuilder.fill(xyStds, xyStds, Math.toRadians(degStds))
                         )
 //                        println("updating odometry with ll")
 //                        println("Updating with LL ${llName}: X = " + llMeasure.pose.x + " Y = " + llMeasure.pose.y)
 
-                        RobotContainer.swerveSystem.driveTrain.addVisionMeasurement(
+                        RobotContainer.swerveSystem.addVisionMeasurement(
                             llMeasure.pose,
                             llMeasure.timestampSeconds
                         )

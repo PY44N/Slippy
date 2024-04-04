@@ -38,7 +38,7 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("shooter height", TargetingConstants.shooterZ)
         SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
         SmartDashboard.putNumber("Current Target Angle", 0.0)
-        RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
+//        RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
         SmartDashboard.putNumber("shooter angle", 58.5)
 
@@ -52,7 +52,6 @@ class Robot : LoggedRobot() {
     }
 
     override fun robotPeriodic() {
-        RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
 
@@ -172,7 +171,7 @@ class Robot : LoggedRobot() {
 //        calibrateTrunkAuto.schedule()
 
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note Center").schedule()
+        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

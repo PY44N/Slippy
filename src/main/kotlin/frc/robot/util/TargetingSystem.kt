@@ -21,7 +21,7 @@ data class ShotSetup(val robotAngle: Double, var shooterAngle: Double) {
 
 class TargetingVariables(
     robotPose: Pose2d = AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()),
-    robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
+    robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds
 ) {
     private val flippedRobotPose = AllianceFlip.apply(robotPose)
 
@@ -60,7 +60,7 @@ class TargetingSystem {
 
     fun getVelocityShot(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
-        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
+        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds
     ): ShotSetup {
         val vars = TargetingVariables(robotPose, robotVelocity)
         Telemetry.putNumber("robot speaker rel pos x", vars.x, RobotContainer.telemetry.trunkTelemetry)
@@ -94,7 +94,7 @@ class TargetingSystem {
 
     fun getShotNoVelocity(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
-        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds
+        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds
     ): ShotSetup {
         val vars = TargetingVariables(robotPose, robotVelocity)
         return ShotSetup(noVelocityRobotAngle(vars), noVelocityShooterAngle(vars))
@@ -112,7 +112,7 @@ class TargetingSystem {
 
     fun getShotVelocityRobotNoVelocityShooter(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
-        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.driveTrain.currentRobotChassisSpeeds,
+        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds,
     ): ShotSetup {
         val vars = TargetingVariables(robotPose, robotVelocity)
         return ShotSetup(velocityRobotAngle(vars), noVelocityShooterAngle(vars))
