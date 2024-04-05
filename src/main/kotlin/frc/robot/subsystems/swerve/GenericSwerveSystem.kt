@@ -13,16 +13,6 @@ interface GenericSwerveSystem {
 
     fun getSwervePose(): Pose2d
 
-    fun calculateJoyTranslation(
-        rightX: Double,
-        rightY: Double,
-        throttle: Double,
-        deadzoneX: Double,
-        deadzoneY: Double
-    ): Translation2d
-
-    fun calculateJoyThrottle(joyThrottle: Double): Double
-
     fun zeroGyro()
 
     fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command

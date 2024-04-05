@@ -55,23 +55,6 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
 
     val autoTwistController: AutoTwistController = AutoTwistController()
 
-    //Takes in joystick inputs
-    override fun calculateJoyTranslation(
-        rightX: Double,
-        rightY: Double,
-        throttle: Double,
-        deadzoneX: Double,
-        deadzoneY: Double
-    ): Translation2d {
-        return Translation2d(
-            -MiscCalculations.calculateDeadzone(rightY, deadzoneX) * DriveConstants.MAX_SPEED * throttle,
-            -MiscCalculations.calculateDeadzone(rightX, deadzoneY) * DriveConstants.MAX_SPEED * throttle
-        )
-    }
-
-    // Milan: trust me bro this'll work totally definitely please don't question it
-    override fun calculateJoyThrottle(joyThrottle: Double) = (-joyThrottle + 1.0) / 2.0
-
     override fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
 
     override fun zeroGyro() = driveTrain.seedFieldRelative()

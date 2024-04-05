@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.DriveState
 import frc.robot.RobotContainer
 import frc.robot.constants.DriveConstants
+import frc.robot.util.ControllerUtil
 
 class TeleopSwerveDriveCommand : Command() {
     init {
@@ -36,9 +37,9 @@ class TeleopSwerveDriveCommand : Command() {
 
         var throttle = 0.0;
         if (twoJoysticks) {
-            throttle = RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle)
+            throttle = ControllerUtil.calculateJoyThrottle(RobotContainer.leftJoystick.throttle)
         } else {
-            throttle = RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.rightJoystick.throttle)
+            throttle = ControllerUtil.calculateJoyThrottle(RobotContainer.rightJoystick.throttle)
         }
 
 
@@ -52,7 +53,7 @@ class TeleopSwerveDriveCommand : Command() {
 
         var disableFieldOrientation = RobotContainer.rightJoystick.button(1).asBoolean
 
-        val translation = RobotContainer.swerveSystem.calculateJoyTranslation(
+        val translation = ControllerUtil.calculateJoyTranslation(
             RobotContainer.rightJoystick.x,
             RobotContainer.rightJoystick.y,
             throttle,
