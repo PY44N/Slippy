@@ -1,16 +1,22 @@
 package frc.robot.subsystems.swerve
 
 import edu.wpi.first.math.Matrix
+import edu.wpi.first.math.Nat
+import edu.wpi.first.math.Vector
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.numbers.N1
+import edu.wpi.first.math.numbers.N2
 import edu.wpi.first.math.numbers.N3
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.util.Timer
+import kotlin.math.cos
+import kotlin.math.sin
 
 class SwerveSystemSim(private var robotPose: Pose2d = Pose2d()) : SubsystemBase(), GenericSwerveSystem {
     private var currentSpeed = ChassisSpeeds()
@@ -26,11 +32,16 @@ class SwerveSystemSim(private var robotPose: Pose2d = Pose2d()) : SubsystemBase(
     }
 
     override fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
-        return Commands.runOnce({ println("Trying to drive robot oriented (not implemented yet)") })
+        return run {
+            currentSpeed = ChassisSpeeds(x, y, rotation)
+        }
     }
 
     override fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
-        return Commands.runOnce({ currentSpeed = ChassisSpeeds(x, y, rotation) })
+        return run {
+            currentSpeed =
+                ChassisSpeeds(x, y, rotation)
+        }
     }
 
     // For out simulation use case we probably don't need to implement these
@@ -45,13 +56,16 @@ class SwerveSystemSim(private var robotPose: Pose2d = Pose2d()) : SubsystemBase(
         val currentTime = Timer.getFPGATimestamp()
         val dtSeconds = currentTime - lastLoopTime
 
-        robotPose.plus(
+        robotPose = robotPose.plus(
             Transform2d(
                 currentSpeed.vxMetersPerSecond * dtSeconds,
                 currentSpeed.vyMetersPerSecond * dtSeconds,
                 Rotation2d(currentSpeed.omegaRadiansPerSecond * dtSeconds)
             )
         )
+
+        SmartDashboard.putNumber("Robot ChassisSpeed X", currentSpeed.vxMetersPerSecond)
+        SmartDashboard.putNumber("Robot ChassisSpeed Y", currentSpeed.vyMetersPerSecond)
 
         lastLoopTime = currentTime
     }
