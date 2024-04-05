@@ -21,7 +21,8 @@ import frc.robot.constants.TrunkConstants
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
-import frc.robot.subsystems.swerve.SwerveSystem
+import frc.robot.subsystems.swerve.GenericSwerveSystem
+import frc.robot.subsystems.swerve.SwerveSystemReal
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkSystem
 import frc.robot.util.TargetingSystem
@@ -68,7 +69,7 @@ object RobotContainer {
     val shootPositionSendable: SendableChooser<ShootPosition> = SendableChooser<ShootPosition>()
     val trunkPoseSendable: SendableChooser<TrunkPose> = SendableChooser<TrunkPose>()
 
-    val swerveSystem: SwerveSystem = SwerveSystem()
+    val swerveSystem: GenericSwerveSystem = SwerveSystemReal()
 
     val intakeLimelight = "limelight-back"
 

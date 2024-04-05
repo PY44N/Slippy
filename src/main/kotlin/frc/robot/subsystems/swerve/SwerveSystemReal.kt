@@ -19,7 +19,7 @@ import frc.robot.constants.DriveConstants
 import frc.robot.constants.TunerConstants
 import frc.robot.util.AutoTwistController
 
-class SwerveSystem() : SubsystemBase() {
+class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
     private val driveTrain: CommandSwerveDrivetrain = TunerConstants.DriveTrain
 
     var inputRotation: Double = 0.0
@@ -29,7 +29,7 @@ class SwerveSystem() : SubsystemBase() {
 
     private val PIDDeadzone = .005;
 
-    val currentRobotChassisSpeeds
+    override val currentRobotChassisSpeeds
         get() = driveTrain.currentRobotChassisSpeeds
 
     private val driveRobotRelative = SwerveRequest.RobotCentric()
@@ -56,7 +56,7 @@ class SwerveSystem() : SubsystemBase() {
     val autoTwistController: AutoTwistController = AutoTwistController()
 
     //Takes in joystick inputs
-    fun calculateJoyTranslation(
+    override fun calculateJoyTranslation(
         rightX: Double,
         rightY: Double,
         throttle: Double,
@@ -70,11 +70,11 @@ class SwerveSystem() : SubsystemBase() {
     }
 
     // Milan: trust me bro this'll work totally definitely please don't question it
-    fun calculateJoyThrottle(joyThrottle: Double) = (-joyThrottle + 1.0) / 2.0
+    override fun calculateJoyThrottle(joyThrottle: Double) = (-joyThrottle + 1.0) / 2.0
 
-    fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
+    override fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
 
-    fun zeroGyro() = driveTrain.seedFieldRelative()
+    override fun zeroGyro() = driveTrain.seedFieldRelative()
 
     //Updates the swerve drive position zone in the state machine
     fun updateGlobalZone() {
@@ -119,13 +119,13 @@ class SwerveSystem() : SubsystemBase() {
     }
      */
 
-    fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
+    override fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
         return driveTrain.applyRequest {
             driveRobotRelative.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotation)
         }
     }
 
-    fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
+    override fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
         return if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()
                 .get() == DriverStation.Alliance.Red
         ) {
@@ -136,15 +136,15 @@ class SwerveSystem() : SubsystemBase() {
         }
     }
 
-    fun addVisionMeasurement(visionRobotPoseMeters: Pose2d, timestampSeconds: Double) {
+    override fun addVisionMeasurement(visionRobotPoseMeters: Pose2d, timestampSeconds: Double) {
         driveTrain.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds)
     }
 
-    fun setVisionMeasurementStdDevs(visionMeasurementStdDevs: Matrix<N3, N1>) {
+    override fun setVisionMeasurementStdDevs(visionMeasurementStdDevs: Matrix<N3, N1>) {
         driveTrain.setVisionMeasurementStdDevs(visionMeasurementStdDevs)
     }
 
-    fun getAutoPath(name: String): Command {
+    override fun getAutoPath(name: String): Command {
         return driveTrain.getAutoPath(name)
     }
 
@@ -154,6 +154,6 @@ class SwerveSystem() : SubsystemBase() {
 
     init {
         driveTrain.daqThread.setThreadPriority(99)
-        RobotContainer.swerveSystem.logger.telemeterize(driveTrain.state)
+        logger.telemeterize(driveTrain.state)
     }
 }
