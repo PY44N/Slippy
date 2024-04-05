@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -23,6 +24,7 @@ import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
 import frc.robot.subsystems.swerve.GenericSwerveSystem
 import frc.robot.subsystems.swerve.SwerveSystemReal
+import frc.robot.subsystems.swerve.SwerveSystemSim
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkSystem
 import frc.robot.util.TargetingSystem
@@ -30,6 +32,8 @@ import frc.robot.util.TelemetryToggles
 import frc.robot.util.betterToggleOnTrue
 
 object RobotContainer {
+    val robotType = RobotType.Simulated
+
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
     val xboxController: CommandXboxController = CommandXboxController(2)
@@ -69,7 +73,10 @@ object RobotContainer {
     val shootPositionSendable: SendableChooser<ShootPosition> = SendableChooser<ShootPosition>()
     val trunkPoseSendable: SendableChooser<TrunkPose> = SendableChooser<TrunkPose>()
 
-    val swerveSystem: GenericSwerveSystem = SwerveSystemReal()
+    val swerveSystem: GenericSwerveSystem = when (robotType) {
+        RobotType.Real -> SwerveSystemReal()
+        RobotType.Simulated -> SwerveSystemSim()
+    }
 
     val intakeLimelight = "limelight-back"
 

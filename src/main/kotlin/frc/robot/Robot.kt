@@ -3,6 +3,7 @@ package frc.robot
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -26,6 +27,9 @@ class Robot : LoggedRobot() {
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
 
     private var calibrateTrunkAuto: CalibrateTrunk = CalibrateTrunk()
+
+    val robotPosePublisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", Pose2d.struct).publish();
+
     override fun robotInit() {
 
         SmartDashboard.putNumber("g", 11.0)
@@ -150,6 +154,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
 
         SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
+
+        robotPosePublisher.set(RobotContainer.swerveSystem.getSwervePose())
     }
 
     override fun disabledInit() {}
