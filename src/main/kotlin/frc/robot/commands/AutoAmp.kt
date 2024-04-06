@@ -1,6 +1,7 @@
 package frc.robot.commands
 
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
@@ -15,7 +16,8 @@ class AutoAmp : Command() {
         RobotContainer.cannonSystem.killShooter()
 
         RobotContainer.stateMachine.currentTrunkCommand =
-            GoToPoseTrunk(TrunkPose.AMP_GOING).andThen(GoToPoseAndHoldTrunk(TrunkPose.AMP))
+            GoToPoseTrunk(TrunkPose.AMP_GOING).andThen(GoToPoseAndHoldTrunk(TrunkPose.AMP, 2.0))
+                .andThen(Commands.runOnce({ println("Go To Amp done") }))
         RobotContainer.actuallyDoAmp = false
         endTimer.reset()
         startTimer.reset()

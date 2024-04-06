@@ -11,6 +11,7 @@ class CoastAngleMovePosition(val pose: TrunkPose) : Command() {
 
     override fun execute() {
         RobotContainer.trunkSystem.io.rotationBrake = false
+        RobotContainer.trunkSystem.setDesiredPosition(pose.position)
 
 //        SmartDashboard.putNumber("Coast Angle Move Position", pose.position)
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(pose.position)

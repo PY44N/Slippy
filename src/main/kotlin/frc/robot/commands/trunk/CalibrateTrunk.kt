@@ -26,6 +26,7 @@ class CalibrateTrunk : Command() {
         )
         RobotContainer.trunkSystem.highRotationPIDController.reset(RobotContainer.trunkSystem.getFalconRotation(), 0.0)
         RobotContainer.trunkSystem.climbRotationPIDController.reset(RobotContainer.trunkSystem.getFalconRotation(), 0.0)
+        RobotContainer.trunkSystem.elevatorPIDController.reset(RobotContainer.trunkSystem.getPosition(), 0.0)
         //        RobotContainer.trunkSystem.rotationPIDController.reset()
         RobotContainer.stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
     }

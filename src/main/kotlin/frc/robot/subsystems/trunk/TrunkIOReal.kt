@@ -71,9 +71,9 @@ class TrunkIOReal : TrunkIO {
     init {
         // factory reset to make it not be bad
         val pivotMotorConfiguration =
-            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(30.0))
         val elevatorMotorConfiguration =
-            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(30.0))
 
 //        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
 //        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
@@ -107,7 +107,7 @@ class TrunkIOReal : TrunkIO {
     }
 
     private fun getEncoderRawPosition(): Double {
-        return positionEncoder.position.value
+        return positionEncoder.position.value * 2.0
     }
 
     override fun setZeroPosition() {
@@ -136,7 +136,7 @@ class TrunkIOReal : TrunkIO {
 
     override fun setElevatorSpeed(speed: Double) {
         SmartDashboard.putNumber("set elevator speed: ", speed)
-        masterElevatorMotor.set(-speed)
+        masterElevatorMotor.setControl(falconVoltageControl.withOutput(-speed * 12.0))
     }
 
     override fun setRotationVoltage(volts: Double) {
