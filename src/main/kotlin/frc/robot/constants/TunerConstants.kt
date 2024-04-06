@@ -35,7 +35,7 @@ object TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private const val kSlipCurrentA = 300.0
+    private const val kSlipCurrentA = 80.0
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
