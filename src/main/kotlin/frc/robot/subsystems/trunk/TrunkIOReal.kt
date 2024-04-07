@@ -152,7 +152,7 @@ class TrunkIOReal : TrunkIO {
 
     override fun setElevatorSpeed(speed: Double) {
         SmartDashboard.putNumber("set elevator speed: ", speed)
-        masterElevatorMotor.setControl(falconVoltageControl.withOutput(-speed * 12.0))
+//        masterElevatorMotor.setControl(falconVoltageControl.withOutput(-speed * 12.0))
     }
 
     override fun setRotationVoltage(volts: Double) {

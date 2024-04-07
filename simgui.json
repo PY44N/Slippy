@@ -9,7 +9,8 @@
       "/SmartDashboard/High Profiled PID": "ProfiledPIDController",
       "/SmartDashboard/Low Profiled PID": "ProfiledPIDController",
       "/SmartDashboard/Pigeon 2 (v6) [30]": "Gyro",
-      "/SmartDashboard/Position PID": "PIDController",
+      "/SmartDashboard/Position PID": "ProfiledPIDController",
+      "/SmartDashboard/Robot Action": "String Chooser",
       "/SmartDashboard/Trunk Mechanism": "Mechanism2d"
     },
     "windows": {
