@@ -6,7 +6,7 @@ import frc.robot.TrunkPose
 
 class CalibrateTrunk : Command() {
     override fun initialize() {
-        RobotContainer.trunkSystem.io.setElevatorSpeed(0.3)
+        RobotContainer.trunkSystem.io.setElevatorSpeed(.3)
         RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
     }
 

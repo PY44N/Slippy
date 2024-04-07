@@ -14,8 +14,8 @@ object TrunkConstants {
     const val METERS_TO_ELEVATOR_ROTATIONS = 1.0 / ELEVATOR_ROTATIONS_TO_METERS
 
     const val ELEVATOR_ANGLE = 28.8309683
-    var SAFE_TRAVEL_ANGLE: Double = 65.0
-    var SAFE_TO_MOVE_ANGLE = 63.0
+    var SAFE_TRAVEL_ANGLE: Double = 56.0
+    var SAFE_TO_MOVE_ANGLE = 52.0
     var LEGAL_PIVOT_POSITION = 0.1
     var LEGAL_PIVOT_POSITION_TARGET = 0.18
 
@@ -41,9 +41,9 @@ object TrunkConstants {
     var throughboreRotationOffset: Double = 119.7
     var falconRotationOffset: Double = -64.6
 
-    var positionKP = 15.0
+    var positionKP = 8.5
     var positionKI = 0.0
-    var positionKD = 0.7
+    var positionKD = 0.0
 
     var positionFF = 0.0275
 

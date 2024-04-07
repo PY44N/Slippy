@@ -30,8 +30,8 @@ class TrunkIOReal : TrunkIO {
 //    private val positionEncoder = Encoder(1, 4)
     private val positionEncoder = CANcoder(TrunkConstants.ELEVATOR_ENCODER_ID)
 
-    private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
-    private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
+    public val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID)
+    private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID)
 
     private val shaftRotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
     private val stowLimit = DigitalInput(0)
@@ -44,6 +44,17 @@ class TrunkIOReal : TrunkIO {
     val falconVoltageControl = VoltageOut(0.0).withEnableFOC(true)
     val falconNeutralOut = NeutralOut()
 //    val falconPercentControl =
+
+    override fun directlySetPercentElevatorFollower(percent: Double) {
+        followerElevatorMotor.set(percent)
+    }
+
+    override fun directlySetPercentElevatorMaster(percent: Double) {
+//        masterElevatorMotor.setControl(falconVoltageControl.withOutput(1.0))
+        masterElevatorMotor.set(percent)
+//        masterElevatorMotor.setControl(falconVoltageControl.withOutput(MathUtil.clamp(-.3 * 12.0, -0.5, 0.5)))
+
+    }
 
     override var positionBrake = true
         set(enabled) {
@@ -91,12 +102,13 @@ class TrunkIOReal : TrunkIO {
         masterElevatorMotor.inverted = false // elevator likes to not be inverted idk why
         masterRotationMotor.inverted = false
 
-        // ensure motors are initially braked
+        //THIS GODDAMN LINE WASTED TWO WHOLE DAYS OF MY LIFE I HATE IT SO MUCH WHY DOES THIS LINE MAKE IT KILL ITSELF NOW I WANT TO KILL MYSELF - Milan
         masterElevatorMotor.setNeutralMode(NeutralModeValue.Brake)
         followerElevatorMotor.setNeutralMode(NeutralModeValue.Brake)
+
         masterRotationMotor.setNeutralMode(NeutralModeValue.Brake)
         followerRotationMotor.setNeutralMode(NeutralModeValue.Brake)
-
+//
         followerElevatorMotor.setControl(Follower(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID, true))
         followerRotationMotor.setControl(Follower(TrunkConstants.MASTER_PIVOT_MOTOR_ID, true))
 
@@ -151,8 +163,11 @@ class TrunkIOReal : TrunkIO {
     }
 
     override fun setElevatorSpeed(speed: Double) {
-        SmartDashboard.putNumber("set elevator speed: ", speed)
-//        masterElevatorMotor.setControl(falconVoltageControl.withOutput(-speed * 12.0))
+//        SmartDashboard.putNumber("Elevator velocity/voltage", getElevatorVelocity() / (speed * 12.0))
+//        println("Elevator Speed: $speed")
+
+//        masterElevatorMotor.set(speed)
+        masterElevatorMotor.setControl(falconVoltageControl.withOutput(-speed * 12.0))
     }
 
     override fun setRotationVoltage(volts: Double) {
@@ -160,6 +175,16 @@ class TrunkIOReal : TrunkIO {
             "set rotation voltage: ",
             MathUtil.clamp(volts, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS)
         )
+
+//        SmartDashboard.putNumber(
+//            "Rotation velocity/volts",
+//            (masterRotationMotor.velocity.value / 125.0) / MathUtil.clamp(
+//                volts,
+//                TrunkConstants.MIN_ROT_VOLTS,
+//                TrunkConstants.MAX_ROT_VOLTS
+//            )
+//        )
+
 //        masterRotationMotor.setVoltage(
 //            MathUtil.clamp(
 //                volts,

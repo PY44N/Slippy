@@ -51,6 +51,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
         SmartDashboard.putNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
         SmartDashboard.putNumber("Amp Position", TrunkConstants.AMP_POSITION)
+        SmartDashboard.putNumber("Safe To Move Angle", TrunkConstants.SAFE_TO_MOVE_ANGLE)
+
 
         RobotContainer
     }
@@ -118,16 +120,16 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putString("Cannon State", RobotContainer.stateMachine.intakeState.name)
 
-        SmartDashboard.putNumber("Falcon Raw Rotation", RobotContainer.trunkSystem.io.getFalconRawRotation())
-        SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
-        SmartDashboard.putNumber(
-            "TB Rotation",
-            RobotContainer.trunkSystem.getThroughboreRotation()
-        )
-        SmartDashboard.putNumber(
-            "Falcon Rotation",
-            RobotContainer.trunkSystem.getFalconRotation()
-        )
+//        SmartDashboard.putNumber("Falcon Raw Rotation", RobotContainer.trunkSystem.io.getFalconRawRotation())
+//        SmartDashboard.putNumber("TB Raw Rotation", RobotContainer.trunkSystem.io.getThroughBoreRawRotation())
+//        SmartDashboard.putNumber(
+//            "TB Rotation",
+//            RobotContainer.trunkSystem.getThroughboreRotation()
+//        )
+//        SmartDashboard.putNumber(
+//            "Falcon Rotation",
+//            RobotContainer.trunkSystem.getFalconRotation()
+//        )
 
         CannonConstants.INNER_AMP_PERCENT = SmartDashboard.getNumber("Amp Speed", CannonConstants.INNER_AMP_PERCENT)
         TrunkConstants.AMP_ANGLE = SmartDashboard.getNumber("Amp Angle", TrunkConstants.AMP_ANGLE)
@@ -137,26 +139,30 @@ class Robot : LoggedRobot() {
         IntakeState.AmpSpitting.innerPercent = CannonConstants.INNER_AMP_PERCENT
         IntakeState.AmpSpitting.outerPercent = CannonConstants.INNER_AMP_PERCENT
 
-        SmartDashboard.putBoolean("Stow Beam Break", RobotContainer.cannonSystem.io.getLoadedBeamBreak())
-        SmartDashboard.putBoolean("Intake Beam Break", RobotContainer.cannonSystem.io.getEntryBeamBreak())
-        SmartDashboard.putNumber("Left Shooter Vel", RobotContainer.cannonSystem.io.getLeftShooterTBVel())
-        SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
+//        SmartDashboard.putBoolean("Stow Beam Break", RobotContainer.cannonSystem.io.getLoadedBeamBreak())
+//        SmartDashboard.putBoolean("Intake Beam Break", RobotContainer.cannonSystem.io.getEntryBeamBreak())
+//        SmartDashboard.putNumber("Left Shooter Vel", RobotContainer.cannonSystem.io.getLeftShooterTBVel())
+//        SmartDashboard.putNumber("Right Shooter Vel", RobotContainer.cannonSystem.io.getRightShooterTBVel())
 
-        SmartDashboard.putNumber("Intake Position", RobotContainer.cannonSystem.io.getIntakePosition())
+//        SmartDashboard.putNumber("Intake Position", RobotContainer.cannonSystem.io.getIntakePosition())
 
         SmartDashboard.putNumber(
             "Robot Pos X Flipped",
             AllianceFlip.apply(RobotContainer.swerveSystem.getSwervePose()).x
         )
 
-        SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
+//        SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
-        SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atStowLimit())
+//        SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atStowLimit())
 
-        SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
+//        SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
         robotPosePublisher.set(RobotContainer.swerveSystem.getSwervePose())
-        SmartDashboard.putBoolean("Top Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
+//        SmartDashboard.putBoolean("Top Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
+
+        TrunkConstants.SAFE_TO_MOVE_ANGLE =
+            SmartDashboard.getNumber("Safe To Move Angle", TrunkConstants.SAFE_TO_MOVE_ANGLE)
+
     }
 
     override fun disabledInit() {}
@@ -178,6 +184,8 @@ class Robot : LoggedRobot() {
 //        calibrateTrunkAuto.schedule()
 
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
+
+
         RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
@@ -196,6 +204,10 @@ class Robot : LoggedRobot() {
 
     override fun teleopInit() {
 //        RobotContainer.climbLatch.angle = 0.0 // tune before testing
+
+//        RobotContainer.trunkSystem.brakeMotors()
+
+
         RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
         RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
@@ -246,7 +258,9 @@ class Robot : LoggedRobot() {
     }
 
     override fun testPeriodic() {
+//        RobotContainer.trunkSystem.io.directlySetPercentElevatorFollower(.1)
 
+        RobotContainer.trunkSystem.io.directlySetPercentElevatorMaster(.1)
 //        RobotContainer.targetingSystem.test()
     }
 

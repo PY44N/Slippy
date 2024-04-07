@@ -173,9 +173,9 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 //            CannonConstants.shooterFFMultiplier = SmartDashboard.getNumber("shooter ff multiplier", CannonConstants.shooterFFMultiplier)
 
 
-            SmartDashboard.putNumber("Shooter Velocity Desired", desiredRightShooterVel)
-            SmartDashboard.putNumber("Shooter Velocity Current Right", currentRightVel)
-            SmartDashboard.putNumber("Shooter Velocity Current Left", currentLeftVel)
+//            SmartDashboard.putNumber("Shooter Velocity Desired", desiredRightShooterVel)
+//            SmartDashboard.putNumber("Shooter Velocity Current Right", currentRightVel)
+//            SmartDashboard.putNumber("Shooter Velocity Current Left", currentLeftVel)
 
             val rightShooterFF = desiredRightShooterVel * CannonConstants.shooterFFMultiplier
             val leftShooterFF = desiredLeftShooterVel * CannonConstants.shooterFFMultiplier

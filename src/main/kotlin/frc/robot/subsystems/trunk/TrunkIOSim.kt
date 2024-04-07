@@ -24,17 +24,42 @@ class TrunkIOSim() : TrunkIO {
     override fun setFalconThroughBoreOffset() {}
 
     override fun setElevatorSpeed(speed: Double) {
-
+        println("Elevator Speed: $speed")
     }
 
     override fun getPivotVelocity(): Double {
         return rotationVelocity
     }
 
-    override fun setZeroPosition() {}
+    override fun directlySetPercentElevatorFollower(percent: Double) {
+        TODO("Not yet implemented")
+    }
+
+    override fun directlySetPercentElevatorMaster(percent: Double) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setZeroPosition(top: Boolean) {
+//        TODO("Not yet implemented")
+    }
 
     override fun setRotationVoltage(volts: Double) {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
+    }
+
+    override fun getElevatorVelocity(): Double {
+//        TODO("Not yet implemented")
+        return 0.0
+    }
+
+    override fun getElevatorMotorAccel(): Double {
+//        TODO("Not yet implemented")
+        return 0.0
+    }
+
+    override fun atStowLimit(): Boolean {
+//        TODO("Not yet implemented")
+        return false
     }
 
     override fun atTopLimit(): Boolean = position == TrunkConstants.TOP_BREAK_BEAM_POSITION

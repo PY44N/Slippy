@@ -11,20 +11,23 @@ import frc.robot.TrunkPose
 import frc.robot.commands.cannon.HalfSpitCannon
 import frc.robot.commands.cannon.IntakeCannon
 import frc.robot.commands.trunk.*
+import frc.robot.util.Timer
 
 class AutoIntakeTrunk : Command() {
 
     //    var intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
 //    val coastOutCommand = CoastAngleMovePosition(TrunkPose.INTAKE).andThen(CoastAngleHoldPosition(TrunkPose.INTAKE))
-    var intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.38)
+    var intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.36)
     val stowCommand = CoastAngleMovePosition(TrunkPose.STOW).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
     // val stowCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
 
     var stowing = false
 
+
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
-        intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.3)
+        intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.36)
+
 
 //        intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
 
@@ -40,6 +43,7 @@ class AutoIntakeTrunk : Command() {
             RobotContainer.stateMachine.currentTrunkCommand = stowCommand
             stowing = true
         }
+
     }
 
     override fun isFinished(): Boolean {
@@ -59,5 +63,6 @@ class AutoIntakeTrunk : Command() {
 
             stowCommand.schedule()
         }
+
     }
 }

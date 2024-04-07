@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.Timer
 
 class GoToPoseAndCoast(val desiredPose: TrunkPose, val coastPos: Double) : Command() {
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
@@ -18,11 +19,18 @@ class GoToPoseAndCoast(val desiredPose: TrunkPose, val coastPos: Double) : Comma
 
     var coasting = false
 
+    var timer = Timer()
+
+
     override fun initialize() {
         RobotContainer.trunkSystem.brakeMotors()
 
         RobotContainer.trunkSystem.isAtPose = false
         RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
+
+        timer.reset()
+        timer.start()
+
         RobotContainer.trunkSystem.setDesiredPosition(currentTargetPosition)
 
         currentTargetPosition = RobotContainer.trunkSystem.getPosition()
@@ -81,5 +89,7 @@ class GoToPoseAndCoast(val desiredPose: TrunkPose, val coastPos: Double) : Comma
         RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
         RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
 
+
+        SmartDashboard.putNumber("Go to pose and coast time: ", timer.get())
     }
 }

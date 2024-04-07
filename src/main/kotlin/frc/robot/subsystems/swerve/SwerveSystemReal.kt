@@ -35,12 +35,12 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
     private val driveRobotRelative = SwerveRequest.RobotCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
-        .withDriveRequestType(SwerveModule.DriveRequestType.Velocity)
+        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
 
     private val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
-        .withDriveRequestType(SwerveModule.DriveRequestType.Velocity); // I want field-centric
+        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
     val brake: SwerveRequest.SwerveDriveBrake = SwerveRequest.SwerveDriveBrake();

@@ -66,7 +66,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             TrunkConstants.positionKP,
             TrunkConstants.positionKI,
             TrunkConstants.positionKD,
-            TrapezoidProfile.Constraints(1.0, 2.0)
+            TrapezoidProfile.Constraints(1.5, 3.0)
         )
 
     var trunkDesiredRotation = TrunkConstants.STOW_ANGLE
@@ -86,6 +86,9 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("Elevator FF", TrunkConstants.positionFF)
 
         positionLocked = false
+
+//        brakeMotors()
+
     }
 
     var isAtPose: Boolean = false
@@ -106,28 +109,28 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 //        if (atDesiredRotation()) {
 //            io.setFalconThroughBoreOffset()
 //        }
-        var time = clock.get()
-        time = if (time > 0.0) time else 1.0
-        val velocity = io.getPivotVelocity()
-        val acceleration = (velocity - lastVelocity) / time
-
-        SmartDashboard.putNumber("Pivot Velocity", velocity)
-        SmartDashboard.putNumber("Pivot Acceleration", acceleration)
+//        var time = clock.get()
+//        time = if (time > 0.0) time else 1.0
+//        val velocity = io.getPivotVelocity()
+//        val acceleration = (velocity - lastVelocity) / time
+//
+//        SmartDashboard.putNumber("Pivot Velocity", velocity)
+//        SmartDashboard.putNumber("Pivot Acceleration", acceleration)
 
 
         TrunkConstants.positionFF = SmartDashboard.getNumber("Elevator FF", 0.01)
 
-        SmartDashboard.putNumber(
-            "Elevator velocity",
-            io.getElevatorVelocity() * TrunkConstants.ELEVATOR_ROTATIONS_TO_METERS
-        )
+//        SmartDashboard.putNumber(
+//            "Elevator velocity",
+//            io.getElevatorVelocity() * TrunkConstants.ELEVATOR_ROTATIONS_TO_METERS
+//        )
+//
+//        SmartDashboard.putNumber(
+//            "Elevator Acceleration",
+//            io.getElevatorMotorAccel() * (2.0 / 15.0) * TrunkConstants.ELEVATOR_ROTATIONS_TO_METERS
+//        )
 
-        SmartDashboard.putNumber(
-            "Elevator Acceleration",
-            io.getElevatorMotorAccel() * (2.0 / 15.0) * TrunkConstants.ELEVATOR_ROTATIONS_TO_METERS
-        )
-
-        lastVelocity = velocity
+//        lastVelocity = velocity
         clock.restart()
 
 //        if (io.atTopLimit() && getPosition() < 0.35) {
@@ -156,7 +159,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
 
         SmartDashboard.putBoolean("Falcon Rotation Zeroed", falconRotationZeroed)
         SmartDashboard.putBoolean("Trunk Rotation Brake", io.rotationBrake)
-        SmartDashboard.putBoolean("Trunk At Desired Rotation", atDesiredRotation())
+//        SmartDashboard.putBoolean("Trunk At Desired Rotation", atDesiredRotation())
 
 //        lowRotationPIDController.logStates("Low Rotation PID")
 
@@ -179,8 +182,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
     fun calculateRotationOut(desiredRot: Double, climb: Boolean = false): Double {
         trunkDesiredRotation = desiredRot
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Desired Rot", trunkDesiredRotation)
-        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Rot", getFalconRotation())
-        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID TB Rot", getThroughboreRotation())
+//        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Rot", getFalconRotation())
+//        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID TB Rot", getThroughboreRotation())
         val rotationPIDOut = if (climb) {
             climbRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
 //        } else if (trunkDesiredRotation > 100.0) {// || getThroughboreRotation() > 100.0) {
@@ -253,18 +256,18 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         elevatorPosition: Double,
         angleDeadzone: Double = TrunkConstants.ANGLE_DEADZONE
     ): Boolean {
-        SmartDashboard.putBoolean(
-            "Pivot at Pose", MiscCalculations.appxEqual(
-                pivotAngle,
-                getThroughboreRotation(),
-                angleDeadzone
-            )
-        )
-        SmartDashboard.putNumber("Pivot Angle Diff", pivotAngle - getThroughboreRotation())
-        SmartDashboard.putBoolean(
-            "Elevator at Pose",
-            MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
-        )
+//        SmartDashboard.putBoolean(
+//            "Pivot at Pose", MiscCalculations.appxEqual(
+//                pivotAngle,
+//                getThroughboreRotation(),
+//                angleDeadzone
+//            )
+//        )
+//        SmartDashboard.putNumber("Pivot Angle Diff", pivotAngle - getThroughboreRotation())
+//        SmartDashboard.putBoolean(
+//            "Elevator at Pose",
+//            MiscCalculations.appxEqual(elevatorPosition, getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
+//        )
         SmartDashboard.putNumber("Angle Deadzone", angleDeadzone)
         return MiscCalculations.appxEqual(
             pivotAngle,

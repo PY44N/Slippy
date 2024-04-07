@@ -1,6 +1,9 @@
 package frc.robot.subsystems.trunk
 
 interface TrunkIO {
+    fun directlySetPercentElevatorFollower(percent: Double)
+
+    fun directlySetPercentElevatorMaster(percent: Double)
     var positionBrake: Boolean
     var rotationBrake: Boolean
     fun getPosition(): Double

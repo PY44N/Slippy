@@ -26,13 +26,14 @@ import frc.robot.subsystems.swerve.GenericSwerveSystem
 import frc.robot.subsystems.swerve.SwerveSystemReal
 import frc.robot.subsystems.swerve.SwerveSystemSim
 import frc.robot.subsystems.trunk.TrunkIOReal
+import frc.robot.subsystems.trunk.TrunkIOSim
 import frc.robot.subsystems.trunk.TrunkSystem
 import frc.robot.util.TargetingSystem
 import frc.robot.util.TelemetryToggles
 import frc.robot.util.betterToggleOnTrue
 
 object RobotContainer {
-    val robotType = RobotType.Simulated
+    val robotType = RobotType.Real
 
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
@@ -40,7 +41,12 @@ object RobotContainer {
 
     val telemetry = TelemetryToggles()
 
-    val trunkSystem = TrunkSystem(TrunkIOReal())
+    val trunkSystem = TrunkSystem(
+        when (robotType) {
+            RobotType.Real -> TrunkIOReal()
+            RobotType.Simulated -> TrunkIOReal()
+        }
+    )
 
     val stateMachine: RobotStateMachine = RobotStateMachine()
 
@@ -143,9 +149,9 @@ object RobotContainer {
         rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
 
         xboxController.b().betterToggleOnTrue(AutoIntake())
-        xboxController.a().onTrue(Commands.runOnce({
-            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
-        }))
+//        xboxController.a().onTrue(Commands.runOnce({
+//            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+//        }))
         xboxController.a().betterToggleOnTrue(AutoAmp())
 
         xboxController.y().betterToggleOnTrue(AutoAimAndShoot())
