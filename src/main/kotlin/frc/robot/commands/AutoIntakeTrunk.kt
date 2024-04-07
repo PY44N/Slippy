@@ -10,15 +10,13 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.commands.cannon.HalfSpitCannon
 import frc.robot.commands.cannon.IntakeCannon
-import frc.robot.commands.trunk.CoastAngleMovePosition
-import frc.robot.commands.trunk.CoastAngleHoldPosition
-import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
-import frc.robot.commands.trunk.GoToPoseTrunk
+import frc.robot.commands.trunk.*
 
 class AutoIntakeTrunk : Command() {
 
-    var intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
-    val coastOutCommand = CoastAngleMovePosition(TrunkPose.INTAKE).andThen(CoastAngleHoldPosition(TrunkPose.INTAKE))
+    //    var intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
+//    val coastOutCommand = CoastAngleMovePosition(TrunkPose.INTAKE).andThen(CoastAngleHoldPosition(TrunkPose.INTAKE))
+    var intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.38)
     val stowCommand = CoastAngleMovePosition(TrunkPose.STOW).andThen(GoToPoseAndHoldTrunk(TrunkPose.STOW))
     // val stowCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW)
 
@@ -26,18 +24,19 @@ class AutoIntakeTrunk : Command() {
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
+        intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.3)
 
-        intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
+//        intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)
 
-        RobotContainer.stateMachine.currentTrunkCommand = intakePrepCommand
+        RobotContainer.stateMachine.currentTrunkCommand = intakeOutCommand
         stowing = false
     }
 
 
     override fun execute() {
-        if (intakePrepCommand.isFinished && RobotContainer.stateMachine.currentTrunkCommand == intakePrepCommand) {
+        /*if (intakePrepCommand.isFinished && RobotContainer.stateMachine.currentTrunkCommand == intakePrepCommand) {
             RobotContainer.stateMachine.currentTrunkCommand = coastOutCommand
-        } else if (RobotContainer.stateMachine.currentTrunkCommand == coastOutCommand && (RobotContainer.stateMachine.noteState == NoteState.Stored)) {
+        } else*/ if (RobotContainer.stateMachine.currentTrunkCommand == intakeOutCommand && (RobotContainer.stateMachine.noteState == NoteState.Stored)) {
             RobotContainer.stateMachine.currentTrunkCommand = stowCommand
             stowing = true
         }
@@ -54,8 +53,9 @@ class AutoIntakeTrunk : Command() {
     override fun end(interrupted: Boolean) {
         if (interrupted) {
             stowCommand.cancel()
-            coastOutCommand.cancel()
-            intakePrepCommand.cancel()
+//            coastOutCommand.cancel()
+//            intakePrepCommand.cancel()
+            intakeOutCommand.cancel()
 
             stowCommand.schedule()
         }

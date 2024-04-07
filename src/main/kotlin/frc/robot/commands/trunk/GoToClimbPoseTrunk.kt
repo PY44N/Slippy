@@ -22,6 +22,7 @@ class GoToClimbPoseTrunk(val desiredPose: TrunkPose) : Command() {
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
         RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
+        RobotContainer.trunkSystem.setDesiredPosition(currentTargetPosition)
 
         RobotContainer.trunkSystem.io.rotationBrake = isPivotPositionLegal
     }
@@ -32,6 +33,7 @@ class GoToClimbPoseTrunk(val desiredPose: TrunkPose) : Command() {
         if (isPivotPositionLegal) {
             RobotContainer.trunkSystem.io.rotationBrake = true
             currentTargetPosition = RobotContainer.trunkSystem.getPosition()
+            RobotContainer.trunkSystem.setDesiredPosition(currentTargetPosition)
             RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
 
             val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle, true)
@@ -42,6 +44,7 @@ class GoToClimbPoseTrunk(val desiredPose: TrunkPose) : Command() {
             currentTargetAngle = desiredPose.angle
             currentTargetPosition = desiredPose.position
             RobotContainer.trunkSystem.setDesiredRotation(currentTargetAngle)
+            RobotContainer.trunkSystem.setDesiredPosition(currentTargetPosition)
         }
 
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(currentTargetPosition)

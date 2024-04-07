@@ -11,6 +11,7 @@ class HoldPoseTrunk(val pose: TrunkPose) : Command() {
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = true
         RobotContainer.trunkSystem.setDesiredRotation(currentTargetRotation)
+        RobotContainer.trunkSystem.setDesiredPosition(currentTargetPosition)
     }
 
     override fun execute() {

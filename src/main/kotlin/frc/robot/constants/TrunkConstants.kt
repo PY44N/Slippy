@@ -15,6 +15,7 @@ object TrunkConstants {
 
     const val ELEVATOR_ANGLE = 28.8309683
     var SAFE_TRAVEL_ANGLE: Double = 65.0
+    var SAFE_TO_MOVE_ANGLE = 63.0
     var LEGAL_PIVOT_POSITION = 0.1
     var LEGAL_PIVOT_POSITION_TARGET = 0.18
 
@@ -34,16 +35,17 @@ object TrunkConstants {
     var TRAP_POSITION: Double = 0.7
     var TRAP_ANGLE: Double = 160.0
 
-    var TOP_BREAK_BEAM_POSITION: Double = .3810000
+    var STOW_BREAK_BEAM_POSITION: Double = .3810000
+    var TOP_BREAK_BEAM_POSITION: Double = 0.4318
 
-    var throughboreRotationOffset: Double = 239.4
+    var throughboreRotationOffset: Double = 119.7
     var falconRotationOffset: Double = -64.6
 
-    var positionKP = 10.0
+    var positionKP = 15.0
     var positionKI = 0.0
-    var positionKD = 0.1
+    var positionKD = 0.7
 
-    var positionFF = 0.01
+    var positionFF = 0.0275
 
     val lowRotationFFkS = 0.03
     val lowRotationFFkG = 0.33
@@ -53,7 +55,7 @@ object TrunkConstants {
     val rotationEncoderID = 9
 
     var lowRotationKP = 0.3
-    var lowRotationKI = 0.0
+    var lowRotationKI = 0.000000001
     var lowRotationKD = .000001
 //    var rotationTrapConstraints = TrapezoidProfile.Constraints()
 

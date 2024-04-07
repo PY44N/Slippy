@@ -151,11 +151,12 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putNumber("Climb Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
-        SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
+        SmartDashboard.putBoolean("Trunk Stowed Beam Break", RobotContainer.trunkSystem.io.atStowLimit())
 
         SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
         robotPosePublisher.set(RobotContainer.swerveSystem.getSwervePose())
+        SmartDashboard.putBoolean("Top Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
     }
 
     override fun disabledInit() {}

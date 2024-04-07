@@ -15,6 +15,7 @@ class HoldPositionGoToAngleTrunk(val pose: TrunkPose) : Command() {
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = false
         RobotContainer.trunkSystem.setDesiredRotation(desiredAngle)
+        RobotContainer.trunkSystem.setDesiredPosition(pose.position)
     }
 
     override fun execute() {

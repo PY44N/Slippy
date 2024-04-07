@@ -22,19 +22,20 @@ import frc.robot.util.EmptyMotorController
 
 class TrunkIOReal : TrunkIO {
     private val masterElevatorMotor =
-        EmptyMotorController(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID)
+        TalonFX(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID)
     private val followerElevatorMotor =
-        EmptyMotorController(TrunkConstants.FOLLOWER_ELEVATOR_MOTOR_ID)
+        TalonFX(TrunkConstants.FOLLOWER_ELEVATOR_MOTOR_ID)
 
     //    private val positionEncoder = elevatorMotor.getAlternateEncoder(8192)
 //    private val positionEncoder = Encoder(1, 4)
     private val positionEncoder = CANcoder(TrunkConstants.ELEVATOR_ENCODER_ID)
 
-    private val masterRotationMotor = EmptyMotorController(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
-    private val followerRotationMotor = EmptyMotorController(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
+    private val masterRotationMotor = TalonFX(TrunkConstants.MASTER_PIVOT_MOTOR_ID) // Right Motor
+    private val followerRotationMotor = TalonFX(TrunkConstants.FOLLOWER_PIVOT_MOTOR_ID) // Left Motor
 
     private val shaftRotationEncoder = DutyCycleEncoder(TrunkConstants.rotationEncoderID)
-    private val topLimit = DigitalInput(0)
+    private val stowLimit = DigitalInput(0)
+    private val topLimit = DigitalInput(1)
 
     val climbServo = Servo(0)
 
@@ -71,9 +72,9 @@ class TrunkIOReal : TrunkIO {
     init {
         // factory reset to make it not be bad
         val pivotMotorConfiguration =
-            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(30.0))
         val elevatorMotorConfiguration =
-            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(40.0))
+            TalonFXConfiguration().withCurrentLimits(CurrentLimitsConfigs().withSupplyCurrentLimit(30.0))
 
 //        pivotMotorConfiguration.Slot0.kP = TrunkConstants.rotationKP
 //        pivotMotorConfiguration.Slot0.kI = TrunkConstants.rotationKI
@@ -107,18 +108,25 @@ class TrunkIOReal : TrunkIO {
     }
 
     private fun getEncoderRawPosition(): Double {
-        return positionEncoder.position.value
+        return positionEncoder.position.value * 2.0
     }
 
-    override fun setZeroPosition() {
+    override fun setZeroPosition(top: Boolean) {
 //        positionEncoder.setPosition(TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR)
-        positionEncoderOffset =
+        positionEncoderOffset = if (top) {
             getEncoderRawPosition() - (TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.METERS_TO_ELEVATOR_ROTATIONS)
+        } else {
+            getEncoderRawPosition() - (TrunkConstants.STOW_BREAK_BEAM_POSITION * TrunkConstants.METERS_TO_ELEVATOR_ROTATIONS)
+
+        }
+
         // val = raw - off
         // off = raw - val
 
 //        positionEncoderOffset = TrunkConstants.TOP_BREAK_BEAM_POSITION * TrunkConstants.M2ELEVATOR - getRawPosition()
     }
+
+    override fun atStowLimit(): Boolean = stowLimit.get()
 
     override fun atTopLimit(): Boolean = topLimit.get()
 
@@ -134,9 +142,17 @@ class TrunkIOReal : TrunkIO {
         return masterRotationMotor.velocity.value * 360.0 / 125.0
     }
 
+    override fun getElevatorMotorAccel(): Double {
+        return masterElevatorMotor.acceleration.value
+    }
+
+    override fun getElevatorVelocity(): Double {
+        return positionEncoder.velocity.value * 2.0
+    }
+
     override fun setElevatorSpeed(speed: Double) {
         SmartDashboard.putNumber("set elevator speed: ", speed)
-        masterElevatorMotor.set(-speed)
+//        masterElevatorMotor.setControl(falconVoltageControl.withOutput(-speed * 12.0))
     }
 
     override fun setRotationVoltage(volts: Double) {

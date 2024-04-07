@@ -34,6 +34,7 @@ class LerpToPoseTrunk(val pose: TrunkPose, val LERP_TIME: Double = 3.0) : Comman
         currentTargetRotation = lerpRotation(timer.get())
 
         RobotContainer.trunkSystem.setDesiredRotation(currentTargetRotation)
+        RobotContainer.trunkSystem.setDesiredPosition(currentTargetPosition)
 
         val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetRotation, true)
 

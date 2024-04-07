@@ -6,7 +6,7 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
 
-class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = TrunkConstants.ANGLE_DEADZONE) : Command() {
+class GoToPoseAndCoast(val desiredPose: TrunkPose, val coastPos: Double) : Command() {
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
     var currentTargetPosition: Double = RobotContainer.trunkSystem.getPosition()
 
@@ -15,6 +15,8 @@ class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = Trun
 
     val isPositionAlwaysSafe: Boolean
         get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.SAFE_PIVOT_POSITION && desiredPose.position >= TrunkConstants.SAFE_PIVOT_POSITION
+
+    var coasting = false
 
     override fun initialize() {
         RobotContainer.trunkSystem.brakeMotors()
@@ -25,6 +27,7 @@ class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = Trun
 
         currentTargetPosition = RobotContainer.trunkSystem.getPosition()
         currentTargetAngle = TrunkConstants.SAFE_TRAVEL_ANGLE
+        coasting = false
     }
 
     override fun execute() {
@@ -39,25 +42,33 @@ class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = Trun
         }
 
 
-//        print("is angle safe? $isAngleSafe")
-//        print("is position always safe? $isPositionAlwaysSafe")
+        //        print("is angle safe? $isAngleSafe")
+        //        print("is position always safe? $isPositionAlwaysSafe")
 
         val elevatorPercent = RobotContainer.trunkSystem.calculatePositionOut(currentTargetPosition)
         RobotContainer.trunkSystem.io.setElevatorSpeed(elevatorPercent)
-//        RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
+        //        RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
 
 
-        val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle)
-        RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
-//        RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
+        if (RobotContainer.trunkSystem.getPosition() < coastPos && !coasting) {
+            RobotContainer.trunkSystem.io.rotationBrake = false
+            RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
+            println("Coasting")
+            coasting = true
+        }
 
+        if (!coasting) {
+            val rotationVolts = RobotContainer.trunkSystem.calculateRotationOut(currentTargetAngle)
+            RobotContainer.trunkSystem.io.setRotationVoltage(rotationVolts)
+        }
+
+        //        RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
     }
 
     override fun isFinished(): Boolean {
         return RobotContainer.trunkSystem.checkAtPose(
             currentTargetAngle,
             currentTargetPosition,
-            angleDeadzone
         )
 
     }
@@ -66,6 +77,7 @@ class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = Trun
         if (!interrupted) {
             RobotContainer.trunkSystem.isAtPose = true
         }
+        RobotContainer.trunkSystem.io.rotationBrake = true
         RobotContainer.trunkSystem.io.setRotationVoltage(0.0)
         RobotContainer.trunkSystem.io.setElevatorSpeed(0.0)
 
