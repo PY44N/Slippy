@@ -3,9 +3,12 @@ package frc.robot.subsystems.swerve
 import MiscCalculations
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest
+import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.numbers.N1
+import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -16,8 +19,8 @@ import frc.robot.constants.DriveConstants
 import frc.robot.constants.TunerConstants
 import frc.robot.util.AutoTwistController
 
-class SwerveSystem() : SubsystemBase() {
-    val driveTrain: CommandSwerveDrivetrain = TunerConstants.DriveTrain
+class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
+    private val driveTrain: CommandSwerveDrivetrain = TunerConstants.DriveTrain
 
     var inputRotation: Double = 0.0
 
@@ -25,6 +28,9 @@ class SwerveSystem() : SubsystemBase() {
     private val yPID: PIDController = PIDController(.1, 0.0, 0.01)
 
     private val PIDDeadzone = .005;
+
+    override val currentRobotChassisSpeeds
+        get() = driveTrain.currentRobotChassisSpeeds
 
     private val driveRobotRelative = SwerveRequest.RobotCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
@@ -45,30 +51,13 @@ class SwerveSystem() : SubsystemBase() {
     /* Path follower */
 //    val runAuto: Command = driveTrain.getAutoPath("Tests");
 
-    val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
+    private val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
 
     val autoTwistController: AutoTwistController = AutoTwistController()
 
-    //Takes in joystick inputs
-    fun calculateJoyTranslation(
-        rightX: Double,
-        rightY: Double,
-        throttle: Double,
-        deadzoneX: Double,
-        deadzoneY: Double
-    ): Translation2d {
-        return Translation2d(
-            -MiscCalculations.calculateDeadzone(rightY, deadzoneX) * DriveConstants.MAX_SPEED * throttle,
-            -MiscCalculations.calculateDeadzone(rightX, deadzoneY) * DriveConstants.MAX_SPEED * throttle
-        )
-    }
+    override fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
 
-    // Milan: trust me bro this'll work totally definitely please don't question it
-    fun calculateJoyThrottle(joyThrottle: Double) = (-joyThrottle + 1.0) / 2.0
-
-    fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
-
-    fun zeroGyro() = driveTrain.seedFieldRelative()
+    override fun zeroGyro() = driveTrain.seedFieldRelative()
 
     //Updates the swerve drive position zone in the state machine
     fun updateGlobalZone() {
@@ -113,13 +102,13 @@ class SwerveSystem() : SubsystemBase() {
     }
      */
 
-    fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
+    override fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
         return driveTrain.applyRequest {
             driveRobotRelative.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotation)
         }
     }
 
-    fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
+    override fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
         return if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()
                 .get() == DriverStation.Alliance.Red
         ) {
@@ -130,8 +119,24 @@ class SwerveSystem() : SubsystemBase() {
         }
     }
 
+    override fun addVisionMeasurement(visionRobotPoseMeters: Pose2d, timestampSeconds: Double) {
+        driveTrain.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds)
+    }
+
+    override fun setVisionMeasurementStdDevs(visionMeasurementStdDevs: Matrix<N3, N1>) {
+        driveTrain.setVisionMeasurementStdDevs(visionMeasurementStdDevs)
+    }
+
+    override fun getAutoPath(name: String): Command {
+        return driveTrain.getAutoPath(name)
+    }
+
     override fun periodic() {
         updateGlobalZone()
     }
 
+    init {
+        driveTrain.daqThread.setThreadPriority(99)
+        logger.telemeterize(driveTrain.state)
+    }
 }

@@ -11,6 +11,11 @@ import frc.robot.constants.FieldPositions
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.Telemetry
 
+enum class RobotType {
+    Real,
+    Simulated
+}
+
 //This represents the desired shooter state
 enum class ShooterState(val rightShooterVel: Double, val leftShooterVel: Double) {
     Stopped(0.0, 0.0),
@@ -95,7 +100,6 @@ enum class ShootPosition(val position: Pose2d) {
 }
 
 class RobotStateMachine {
-
     var intakeState: IntakeState = IntakeState.Stopped
     var shooterState: ShooterState = ShooterState.Stopped
     var noteState: NoteState = NoteState.Stored

@@ -16,6 +16,7 @@ import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.ControllerUtil
 import frc.robot.util.ProfiledPID
 
 class TeleopAimTwistAndShoot : Command() {
@@ -58,9 +59,9 @@ class TeleopAimTwistAndShoot : Command() {
             RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
         )
 
-        val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
+        val driveTranslation = ControllerUtil.calculateJoyTranslation(
             RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
-            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
+            ControllerUtil.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
             DriveConstants.TELEOP_DEADZONE_X,
             DriveConstants.TELEOP_DEADZONE_Y
         )

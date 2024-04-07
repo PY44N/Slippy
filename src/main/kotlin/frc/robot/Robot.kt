@@ -3,6 +3,7 @@ package frc.robot
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -26,6 +27,9 @@ class Robot : LoggedRobot() {
     private val autoClimbCommand: AutoClimbCommand = AutoClimbCommand()
 
     private var calibrateTrunkAuto: CalibrateTrunk = CalibrateTrunk()
+
+    val robotPosePublisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", Pose2d.struct).publish();
+
     override fun robotInit() {
 
         SmartDashboard.putNumber("g", 11.0)
@@ -38,7 +42,7 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("shooter height", TargetingConstants.shooterZ)
         SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
         SmartDashboard.putNumber("Current Target Angle", 0.0)
-        RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
+//        RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
         SmartDashboard.putNumber("shooter angle", 58.5)
 
@@ -52,7 +56,6 @@ class Robot : LoggedRobot() {
     }
 
     override fun robotPeriodic() {
-        RobotContainer.swerveSystem.logger.telemeterize(RobotContainer.swerveSystem.driveTrain.state)
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
 
@@ -152,6 +155,7 @@ class Robot : LoggedRobot() {
 
         SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
+        robotPosePublisher.set(RobotContainer.swerveSystem.getSwervePose())
         SmartDashboard.putBoolean("Top Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
     }
 
@@ -174,7 +178,7 @@ class Robot : LoggedRobot() {
 //        calibrateTrunkAuto.schedule()
 
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
-        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note Center").schedule()
+        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

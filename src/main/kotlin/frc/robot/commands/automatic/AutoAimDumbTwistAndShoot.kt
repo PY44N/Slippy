@@ -13,6 +13,7 @@ import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
+import frc.robot.util.ControllerUtil
 import frc.robot.util.Timer
 
 class AutoAimDumbTwistAndShoot : Command() {
@@ -50,9 +51,9 @@ class AutoAimDumbTwistAndShoot : Command() {
             shotSetup.robotAngle
         )
 
-        val driveTranslation = RobotContainer.swerveSystem.calculateJoyTranslation(
+        val driveTranslation = ControllerUtil.calculateJoyTranslation(
             RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
-            RobotContainer.swerveSystem.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
+            ControllerUtil.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
             DriveConstants.TELEOP_DEADZONE_X,
             DriveConstants.TELEOP_DEADZONE_Y
         )
