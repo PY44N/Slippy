@@ -66,7 +66,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
             TrunkConstants.positionKP,
             TrunkConstants.positionKI,
             TrunkConstants.positionKD,
-            TrapezoidProfile.Constraints(0.5, 2.0)
+            TrapezoidProfile.Constraints(1.0, 2.0)
         )
 
     var trunkDesiredRotation = TrunkConstants.STOW_ANGLE
@@ -82,6 +82,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putData("Low Profiled PID", lowRotationPIDController)
         SmartDashboard.putData("Climb Profiled PID", climbRotationPIDController)
         SmartDashboard.putData("Position PID", elevatorPIDController)
+
+        SmartDashboard.putNumber("Elevator FF", TrunkConstants.positionFF)
 
         positionLocked = false
     }
@@ -112,6 +114,8 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("Pivot Velocity", velocity)
         SmartDashboard.putNumber("Pivot Acceleration", acceleration)
 
+
+        TrunkConstants.positionFF = SmartDashboard.getNumber("Elevator FF", 0.01)
 
         SmartDashboard.putNumber(
             "Elevator velocity",
@@ -237,7 +241,6 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         val posPIDOut = elevatorPIDController.calculate(getPosition())
         SmartDashboard.putNumber("Elevator PID Out", posPIDOut)
         val posFF = TrunkConstants.positionFF
-        SmartDashboard.putNumber("Elevator FF", posFF)
         SmartDashboard.putNumber("Elevator Out", posPIDOut + posFF)
         SmartDashboard.putNumber("Elevator Velocity Error", elevatorPIDController.velocityError)
 

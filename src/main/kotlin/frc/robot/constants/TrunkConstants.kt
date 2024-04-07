@@ -41,11 +41,11 @@ object TrunkConstants {
     var throughboreRotationOffset: Double = 119.7
     var falconRotationOffset: Double = -64.6
 
-    var positionKP = 50.0
+    var positionKP = 15.0
     var positionKI = 0.0
-    var positionKD = 0.9
+    var positionKD = 0.7
 
-    var positionFF = 0.01
+    var positionFF = 0.0275
 
     val lowRotationFFkS = 0.03
     val lowRotationFFkG = 0.33
