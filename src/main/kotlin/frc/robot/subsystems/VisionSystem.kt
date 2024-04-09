@@ -47,32 +47,32 @@ class VisionSystem {
             }
 
             var llMeasure: LimelightHelpers.PoseEstimate =
-                if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()
-                        .get() == DriverStation.Alliance.Blue
-                ) {
-                    LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
-                } else {
-                    LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
-                }
+//                if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()
+//                        .get() == DriverStation.Alliance.Blue
+//                ) {
+                LimelightHelpers.getBotPoseEstimate_wpiBlue(llName)
+//                } else {
+//                    LimelightHelpers.getBotPoseEstimate_wpiRed(llName)
+//                }
 
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-                llMeasure = LimelightHelpers.PoseEstimate(
-                    Pose2d(
-                        Translation2d(
-                            FieldConstants.fieldLength - llMeasure.pose.x,
-                            FieldConstants.fieldWidth - llMeasure.pose.y
-                        ),
-                        llMeasure.pose.rotation.plus(Rotation2d(Math.PI))
-                    ),
-                    llMeasure.timestampSeconds,
-                    llMeasure.latency,
-                    llMeasure.tagCount,
-                    llMeasure.tagSpan,
-                    llMeasure.avgTagDist,
-                    llMeasure.avgTagArea,
-                    llMeasure.rawFiducials
-                )
-            }
+//            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+//                llMeasure = LimelightHelpers.PoseEstimate(
+//                    Pose2d(
+//                        Translation2d(
+//                            FieldConstants.fieldLength - llMeasure.pose.x,
+//                            FieldConstants.fieldWidth - llMeasure.pose.y
+//                        ),
+//                        llMeasure.pose.rotation.plus(Rotation2d(Math.PI))
+//                    ),
+//                    llMeasure.timestampSeconds,
+//                    llMeasure.latency,
+//                    llMeasure.tagCount,
+//                    llMeasure.tagSpan,
+//                    llMeasure.avgTagDist,
+//                    llMeasure.avgTagArea,
+//                    llMeasure.rawFiducials
+//                )
+//            }
             if (llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
 
                 val distanceToTag = llMeasure.avgTagDist
@@ -82,17 +82,17 @@ class VisionSystem {
                     var degStds: Double
 
                     if (llMeasure.tagCount >= 2) {
-                        xyStds = 0.1
+                        xyStds = .5
                         degStds = 6.0
                     } else if (llMeasure.avgTagArea > 0.8) {
-                        xyStds = .3
-                        degStds = 8.0
+                        xyStds = 1.0
+                        degStds = 15.0
                     } else if (llMeasure.avgTagArea > 0.1) {
-                        xyStds = .5
-                        degStds = 13.0
-                    } else {
-                        xyStds = .8
+                        xyStds = 2.0
                         degStds = 25.0
+                    } else {
+                        xyStds = 3.0
+                        degStds = 35.0
                     }
 
 
@@ -150,30 +150,30 @@ class VisionSystem {
             )
 
             var llMeasure: LimelightHelpers.PoseEstimate =
-                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-                    LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName)
-                } else {
-                    LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(llName)
-                }
+//                if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+                LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName)
+//                } else {
+//                    LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(llName)
+//                }
 
-            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-                llMeasure = LimelightHelpers.PoseEstimate(
-                    Pose2d(
-                        Translation2d(
-                            FieldConstants.fieldLength - llMeasure.pose.x,
-                            FieldConstants.fieldWidth - llMeasure.pose.y
-                        ),
-                        llMeasure.pose.rotation.plus(Rotation2d(Math.PI))
-                    ),
-                    llMeasure.timestampSeconds,
-                    llMeasure.latency,
-                    llMeasure.tagCount,
-                    llMeasure.tagSpan,
-                    llMeasure.avgTagDist,
-                    llMeasure.avgTagArea,
-                    llMeasure.rawFiducials
-                )
-            }
+//            if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+//                llMeasure = LimelightHelpers.PoseEstimate(
+//                    Pose2d(
+//                        Translation2d(
+//                            FieldConstants.fieldLength - llMeasure.pose.x,
+//                            FieldConstants.fieldWidth - llMeasure.pose.y
+//                        ),
+//                        llMeasure.pose.rotation.plus(Rotation2d(Math.PI))
+//                    ),
+//                    llMeasure.timestampSeconds,
+//                    llMeasure.latency,
+//                    llMeasure.tagCount,
+//                    llMeasure.tagSpan,
+//                    llMeasure.avgTagDist,
+//                    llMeasure.avgTagArea,
+//                    llMeasure.rawFiducials
+//                )
+//            }
             if (llMeasure.tagCount >= tagCount && llMeasure.pose.x != 0.0 && llMeasure.pose.y != 0.0) {
                 val poseDifference =
                     llMeasure.pose.translation.getDistance(RobotContainer.swerveSystem.getSwervePose().translation)
@@ -210,7 +210,7 @@ class VisionSystem {
 
                         RobotContainer.swerveSystem.addVisionMeasurement(
                             llMeasure.pose,
-                            Timer.getFPGATimestamp()
+                            Timer.getFPGATimestamp() // This is wrong, but I kinda don't want to touch it
                         )
                     }
                 }

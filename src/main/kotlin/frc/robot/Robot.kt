@@ -188,7 +188,9 @@ class Robot : LoggedRobot() {
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
 
 
-        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
+        RobotContainer.swerveSystem.getAutoPath("Drive Around Centerline").schedule()
+
+//        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 
