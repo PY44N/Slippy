@@ -87,7 +87,7 @@ class AutoAimDumbTwistAndShoot : Command() {
         if (MiscCalculations.appxEqual(
                 RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
                 shotSetup.robotAngle,
-                2.5
+                1.0
             )
         ) {
             autoShoot.schedule()

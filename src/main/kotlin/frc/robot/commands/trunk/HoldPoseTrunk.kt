@@ -1,12 +1,19 @@
 package frc.robot.commands.trunk
 
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 
-class HoldPoseTrunk(val pose: TrunkPose) : Command() {
+class HoldPoseTrunk(var pose: TrunkPose) : Command() {
     var currentTargetPosition = pose.position
     var currentTargetRotation = pose.angle
+
+    init {
+        if (pose == TrunkPose.STOW && DriverStation.isAutonomous()) {
+            pose = TrunkPose.HIGH_STOW
+        }
+    }
 
     override fun initialize() {
         RobotContainer.trunkSystem.isAtPose = true

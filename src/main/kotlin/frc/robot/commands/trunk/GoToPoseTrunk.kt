@@ -1,12 +1,13 @@
 package frc.robot.commands.trunk
 
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
 
-class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = TrunkConstants.ANGLE_DEADZONE) : Command() {
+class GoToPoseTrunk(var desiredPose: TrunkPose, val angleDeadzone: Double = TrunkConstants.ANGLE_DEADZONE) : Command() {
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE
     var currentTargetPosition: Double = RobotContainer.trunkSystem.getPosition()
 
@@ -15,6 +16,12 @@ class GoToPoseTrunk(val desiredPose: TrunkPose, val angleDeadzone: Double = Trun
 
     val isPositionAlwaysSafe: Boolean
         get() = RobotContainer.trunkSystem.getPosition() >= TrunkConstants.SAFE_PIVOT_POSITION && desiredPose.position >= TrunkConstants.SAFE_PIVOT_POSITION
+
+    init {
+        if (desiredPose == TrunkPose.STOW && DriverStation.isAutonomous()) {
+            desiredPose = TrunkPose.HIGH_STOW
+        }
+    }
 
     override fun initialize() {
         RobotContainer.trunkSystem.brakeMotors()
