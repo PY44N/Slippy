@@ -39,6 +39,8 @@ class AutoAimDumbTwistAndShoot : Command() {
     override fun execute() {
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
 
+        println("Shooter Angle: ${shotSetup.shooterAngle}")
+
         //Handle the cannon aiming component
         val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
 //        SmartDashboard.putBoolean("shot is possible?", shooterAngle == shotSetup.shooterAngle)

@@ -11,6 +11,7 @@ import frc.robot.constants.CannonConstants
 import frc.robot.constants.FieldConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
+import java.lang.Math
 import kotlin.math.*
 
 data class ShotSetup(val robotAngle: Double, var shooterAngle: Double) {
@@ -102,12 +103,14 @@ class TargetingSystem {
 
     fun noVelocityRobotAngle(vars: TargetingVariables) = atan2(vars.y, vars.x) * rad2deg
 
-    fun noVelocityShooterAngle(vars: TargetingVariables) = atan2(
-        shootingVelocity.pow(2) - sqrt(
-            shootingVelocity.pow(4) - 2 * real_g * vars.z * shootingVelocity.pow(2) - real_g.pow(
-                2
-            ) * vars.r.pow(2)
-        ), real_g * vars.r
+    fun noVelocityShooterAngle(vars: TargetingVariables) = Math.toDegrees(
+        atan2(
+            shootingVelocity.pow(2) - sqrt(
+                shootingVelocity.pow(4) - 2 * real_g * vars.z * shootingVelocity.pow(2) - real_g.pow(
+                    2
+                ) * vars.r.pow(2)
+            ), real_g * vars.r
+        )
     )
 
     fun getShotVelocityRobotNoVelocityShooter(
@@ -115,6 +118,11 @@ class TargetingSystem {
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds,
     ): ShotSetup {
         val vars = TargetingVariables(robotPose, robotVelocity)
+
+        SmartDashboard.putNumber("Robot Speaker X:", vars.x)
+        SmartDashboard.putNumber("Robot Speaker Y:", vars.y)
+        SmartDashboard.putNumber("Robot Speaker Z:", vars.z)
+
         return ShotSetup(velocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }
 

@@ -186,9 +186,10 @@ class Robot : LoggedRobot() {
 //        calibrateTrunkAuto.schedule()
 
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
+        RobotContainer.swerveSystem.setGyroRotation(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
 
-        RobotContainer.swerveSystem.getAutoPath("Drive Around Centerline").schedule()
+        RobotContainer.swerveSystem.getAutoPath("Amp Side 3 Piece").schedule()
 
 //        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
 

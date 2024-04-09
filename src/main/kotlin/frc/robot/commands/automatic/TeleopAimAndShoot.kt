@@ -12,7 +12,7 @@ import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.TrunkConstants
 
-class AutoAimAndShoot : Command() {
+class TeleopAimAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()
 
     var shooterAngle = 0.0

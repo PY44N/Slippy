@@ -25,7 +25,7 @@ object TrunkConstants {
     var AMP_POSITION: Double = 0.08
     var AMP_ANGLE: Double = 190.0
 
-    var INTAKE_POSITION: Double = 0.02
+    var INTAKE_POSITION: Double = 0.0
     var INTAKE_ANGLE: Double = 70.0
 
     var STOW_POSITION: Double = 0.385

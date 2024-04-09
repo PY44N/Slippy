@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "CalibrateTrunk"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Amp Side to Shooting Position"
@@ -79,12 +85,6 @@
                       "type": "path",
                       "data": {
                         "pathName": "Top To Centerline Top"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoFloorIntakeAndSeek"
                       }
                     }
                   ]

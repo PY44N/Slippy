@@ -1,7 +1,11 @@
 package frc.robot.commands.automatic
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.controller.ProfiledPIDController
+import edu.wpi.first.math.trajectory.TrapezoidProfile
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.DriveState
 import frc.robot.NoteState
@@ -21,7 +25,12 @@ class TeleopAimDumbTwistAndShoot : Command() {
 
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
-    val twistPIDController: PIDController = PIDController(10.0, 0.0, 0.1)
+    val twistPIDController =
+        ProfiledPIDController(5.0, 0.0, 0.1, TrapezoidProfile.Constraints(300.0, 600.0))
+
+    init {
+        SmartDashboard.putData("Twist PID Controller", twistPIDController)
+    }
 
     override fun initialize() {
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
@@ -29,11 +38,16 @@ class TeleopAimDumbTwistAndShoot : Command() {
         RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
         RobotContainer.actuallyDoShoot = false
 
+        twistPIDController.reset(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
         twistPIDController.enableContinuousInput(0.0, 360.0);
     }
 
     override fun execute() {
-        val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
+        val shotSetup = RobotContainer.targetingSystem.getShotVelocityRobotNoVelocityShooter()
+
+        println("Shot Angle: ${shotSetup.shooterAngle}")
+
+        SmartDashboard.putNumber("Swerve Twist PID Velocity Error", twistPIDController.velocityError)
 
         //Handle the cannon aiming component
         val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
@@ -42,10 +56,14 @@ class TeleopAimDumbTwistAndShoot : Command() {
         trunkCommand.desiredAngle = shooterAngle
 
         //Handle the twisting component
-        val driveTwist = twistPIDController.calculate(
-            RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-            shotSetup.robotAngle
+        val driveTwist = MathUtil.clamp(
+            twistPIDController.calculate(
+                RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
+                shotSetup.robotAngle
+            ), -400.0, 400.0
         )
+
+        SmartDashboard.putNumber("Drive Twist", driveTwist)
 
         val driveTranslation = ControllerUtil.calculateJoyTranslation(
             RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
