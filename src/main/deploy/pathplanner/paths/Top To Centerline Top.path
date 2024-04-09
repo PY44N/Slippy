@@ -16,21 +16,83 @@
     },
     {
       "anchor": {
-        "x": 7.977763794007398,
-        "y": 7.30256890442522
+        "x": 8.281950694955455,
+        "y": 7.425788070946796
       },
       "prevControl": {
-        "x": 6.027812150636178,
-        "y": 5.918103237631654
+        "x": 7.4602107435825324,
+        "y": 7.852460738004058
+      },
+      "nextControl": {
+        "x": 9.498142756969274,
+        "y": 6.794303731057604
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.188996640101542,
+        "y": 6.1979018544931685
+      },
+      "prevControl": {
+        "x": 4.7780653651866345,
+        "y": 6.591933749607732
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": 165.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.2,
+      "rotationDegrees": 165.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoAimAndShootPrep"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -39,7 +101,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -167.24246783912332,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,

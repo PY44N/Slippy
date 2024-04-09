@@ -81,48 +81,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoIntake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Top To Centerline Top"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoAimAndShootPrep"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Centerline Top To Shoot"
-                }
-              }
-            ]
+            "pathName": "Top To Centerline Top"
           }
         },
         {
