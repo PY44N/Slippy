@@ -1,6 +1,8 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -151,7 +153,10 @@ object RobotContainer {
         xboxController.start().onTrue(Commands.runOnce({
             actuallyDoAmp = true
         }))
-        rightJoystick.button(4).toggleOnTrue(FloorIntakeAndSeek())
+        rightJoystick.button(4).betterToggleOnTrue(FloorIntakeAndSeek())
+
+        // Align to amp
+        rightJoystick.button(5).betterToggleOnTrue(AutoDriveToPose(Pose2d(1.82, 7.6, Rotation2d.fromDegrees(-90.0))))
 
         xboxController.b().betterToggleOnTrue(AutoIntake())
 //        xboxController.a().onTrue(Commands.runOnce({

@@ -1,5 +1,8 @@
 package frc.robot.constants
 
+import com.pathplanner.lib.path.PathConstraints
+import edu.wpi.first.math.util.Units
+
 object DriveConstants {
     //Code (virtual) constants
     const val TELEOP_DEADZONE_X: Double = .15
@@ -62,4 +65,7 @@ object DriveConstants {
     const val FRONT_RIGHT_ANGLE_OFFSET: Double = 86.63661193847656
     const val BACK_RIGHT_ANGLE_OFFSET: Double = 234.6
     const val BACK_LEFT_ANGLE_OFFSET: Double = 45.0
+
+    val PATHPLANNER_CONSTRAINTS =
+        PathConstraints(3.0, 3.0, Units.degreesToRadians(540.0), Units.degreesToRadians(720.0))
 }
