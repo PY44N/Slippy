@@ -11,7 +11,8 @@
       "/SmartDashboard/Pigeon 2 (v6) [30]": "Gyro",
       "/SmartDashboard/Position PID": "ProfiledPIDController",
       "/SmartDashboard/Robot Action": "String Chooser",
-      "/SmartDashboard/Trunk Mechanism": "Mechanism2d"
+      "/SmartDashboard/Trunk Mechanism": "Mechanism2d",
+      "/SmartDashboard/Twist PID Controller": "ProfiledPIDController"
     },
     "windows": {
       "/SmartDashboard/Field": {

@@ -1,10 +1,12 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
@@ -30,7 +32,11 @@ class Robot : LoggedRobot() {
 
     val robotPosePublisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", Pose2d.struct).publish();
 
-    override fun robotInit() {
+    lateinit var autoChooser: SendableChooser<Command>
+
+    override
+
+    fun robotInit() {
 
         SmartDashboard.putNumber("g", 11.0)
 
@@ -53,6 +59,10 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Amp Position", TrunkConstants.AMP_POSITION)
         SmartDashboard.putNumber("Safe To Move Angle", TrunkConstants.SAFE_TO_MOVE_ANGLE)
 
+        autoChooser =
+            AutoBuilder.buildAutoChooser()
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
 
         RobotContainer
     }
@@ -188,8 +198,7 @@ class Robot : LoggedRobot() {
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
         RobotContainer.swerveSystem.setGyroRotation(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
-
-        RobotContainer.swerveSystem.getAutoPath("Amp Side 3 Piece").schedule()
+        autoChooser.selected.schedule()
 
 //        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
 
