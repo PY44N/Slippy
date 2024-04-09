@@ -2,6 +2,8 @@ package frc.robot.commands.automatic
 
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.controller.ProfiledPIDController
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.DriveState
 import frc.robot.NoteState
@@ -21,7 +23,8 @@ class AutoAimDumbTwistAndShoot : Command() {
 
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
-    val twistPIDController: PIDController = PIDController(10.0, 0.0, 0.1)
+    val twistPIDController =
+        ProfiledPIDController(1.0, 0.0, 0.1, TrapezoidProfile.Constraints(540.0, 720.0))
 
     val timer = Timer()
 
@@ -39,7 +42,7 @@ class AutoAimDumbTwistAndShoot : Command() {
     override fun execute() {
         val shotSetup = RobotContainer.targetingSystem.getShotNoVelocity()
 
-        println("Shooter Angle: ${shotSetup.shooterAngle}")
+//        println("Shooter Angle: ${shotSetup.shooterAngle}")
 
         //Handle the cannon aiming component
         val shooterAngle = clamp(shotSetup.shooterAngle, TrunkConstants.MIN_SHOOT_ANGLE, TrunkConstants.MAX_SHOOT_ANGLE)
@@ -48,9 +51,9 @@ class AutoAimDumbTwistAndShoot : Command() {
         trunkCommand.desiredAngle = shooterAngle
 
         //Handle the twisting component
-        val driveTwist = twistPIDController.calculate(
-            RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-            shotSetup.robotAngle
+        val driveTwistPIDOutRadians = twistPIDController.calculate(
+            RobotContainer.swerveSystem.getSwervePose().rotation.radians,
+            Math.toRadians(shotSetup.robotAngle)
         )
 
         val driveTranslation = ControllerUtil.calculateJoyTranslation(
@@ -63,7 +66,7 @@ class AutoAimDumbTwistAndShoot : Command() {
         RobotContainer.swerveSystem.applyDriveRequest(
             driveTranslation.x,
             driveTranslation.y,
-            Math.toRadians(driveTwist)
+            driveTwistPIDOutRadians
         ).execute()
 
         //Can we shoot?

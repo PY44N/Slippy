@@ -76,11 +76,11 @@ class CannonIOReal : CannonIO {
     }
 
     override fun setLeftShooter(percent: Double) {
-        //leftShooterMotor.set(percent)
+        leftShooterMotor.set(percent)
     }
 
     override fun setRightShooter(percent: Double) {
-        //rightShooterMotor.set(percent)
+        rightShooterMotor.set(percent)
     }
 
     override fun setInnerIntakePercent(percent: Double) {

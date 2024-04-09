@@ -71,16 +71,16 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
     //Shooter up to speed
     fun shooterReady() =
-//        MiscCalculations.appxEqual(
-//            desiredRightShooterVel,
-//            io.getRightShooterVel(),
-//            CannonConstants.SHOOTER_VELOCITY_DEADZONE
-//        ) &&
         MiscCalculations.appxEqual(
-            desiredLeftShooterVel,
-            io.getLeftShooterVel(),
+            desiredRightShooterVel,
+            io.getRightShooterVel(),
             CannonConstants.SHOOTER_VELOCITY_DEADZONE
-        )
+        ) &&
+                MiscCalculations.appxEqual(
+                    desiredLeftShooterVel,
+                    io.getLeftShooterVel(),
+                    CannonConstants.SHOOTER_VELOCITY_DEADZONE
+                )
                 && desiredRightShooterVel != 0.0 && desiredLeftShooterVel != 0.0 && RobotContainer.stateMachine.shooterState == ShooterState.Shooting
 
     override fun periodic() {

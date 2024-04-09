@@ -26,7 +26,7 @@ class TeleopAimDumbTwistAndShoot : Command() {
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
     val twistPIDController =
-        ProfiledPIDController(5.0, 0.0, 0.1, TrapezoidProfile.Constraints(300.0, 600.0))
+        ProfiledPIDController(1.0, 0.0, 0.1, TrapezoidProfile.Constraints(540.0, 720.0))
 
     init {
         SmartDashboard.putData("Twist PID Controller", twistPIDController)
@@ -45,7 +45,7 @@ class TeleopAimDumbTwistAndShoot : Command() {
     override fun execute() {
         val shotSetup = RobotContainer.targetingSystem.getShotVelocityRobotNoVelocityShooter()
 
-        println("Shot Angle: ${shotSetup.shooterAngle}")
+//        println("Shot Angle: ${shotSetup.shooterAngle}")
 
         SmartDashboard.putNumber("Swerve Twist PID Velocity Error", twistPIDController.velocityError)
 
@@ -56,14 +56,13 @@ class TeleopAimDumbTwistAndShoot : Command() {
         trunkCommand.desiredAngle = shooterAngle
 
         //Handle the twisting component
-        val driveTwist = MathUtil.clamp(
+        val driveTwistPIDOutRadians =
             twistPIDController.calculate(
-                RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
-                shotSetup.robotAngle
-            ), -400.0, 400.0
-        )
+                RobotContainer.swerveSystem.getSwervePose().rotation.radians,
+                Math.toRadians(shotSetup.robotAngle)
+            )
 
-        SmartDashboard.putNumber("Drive Twist", driveTwist)
+        SmartDashboard.putNumber("Drive Twist", driveTwistPIDOutRadians)
 
         val driveTranslation = ControllerUtil.calculateJoyTranslation(
             RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
@@ -75,7 +74,7 @@ class TeleopAimDumbTwistAndShoot : Command() {
         RobotContainer.swerveSystem.applyDriveRequest(
             driveTranslation.x,
             driveTranslation.y,
-            Math.toRadians(driveTwist)
+            driveTwistPIDOutRadians
         ).execute()
 
         //Can we shoot?
