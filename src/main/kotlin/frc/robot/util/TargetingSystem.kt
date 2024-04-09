@@ -113,6 +113,23 @@ class TargetingSystem {
         )
     )
 
+    fun getMortarShot(
+        robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
+        robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds
+    ): ShotSetup {
+        val vars = TargetingVariables(robotPose, robotVelocity)
+        val shooterAngle = Math.toDegrees(
+            atan2(
+                shootingVelocity.pow(2) + sqrt(
+                    shootingVelocity.pow(4) - 2 * real_g * vars.z * shootingVelocity.pow(2) - real_g.pow(
+                        2
+                    ) * vars.r.pow(2)
+                ), real_g * vars.r
+            )
+        )
+        return ShotSetup(velocityRobotAngle(vars), shooterAngle)
+    }
+
     fun getShotVelocityRobotNoVelocityShooter(
         robotPose: Pose2d = RobotContainer.swerveSystem.getSwervePose(),
         robotVelocity: ChassisSpeeds = RobotContainer.swerveSystem.currentRobotChassisSpeeds,

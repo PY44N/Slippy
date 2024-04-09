@@ -30,6 +30,7 @@ class AutoDriveToPose(private val pose: Pose2d) : Command() {
     }
 
     override fun isFinished(): Boolean {
+        println("Pathing Finished: ${pathingCommand.isFinished}")
         return pathingCommand.isFinished
     }
 

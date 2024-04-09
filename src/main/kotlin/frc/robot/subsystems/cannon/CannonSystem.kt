@@ -49,6 +49,10 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
         println("called cannonsystem.shoot")
     }
 
+    fun morter() {
+        RobotContainer.stateMachine.shooterState = ShooterState.Mortering
+    }
+
     fun ampSpit() {
         RobotContainer.stateMachine.intakeState = IntakeState.AmpSpitting
     }
@@ -81,7 +85,7 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
                     io.getLeftShooterVel(),
                     CannonConstants.SHOOTER_VELOCITY_DEADZONE
                 )
-                && desiredRightShooterVel != 0.0 && desiredLeftShooterVel != 0.0 && RobotContainer.stateMachine.shooterState == ShooterState.Shooting
+                && desiredRightShooterVel != 0.0 && desiredLeftShooterVel != 0.0 && (RobotContainer.stateMachine.shooterState == ShooterState.Shooting || RobotContainer.stateMachine.shooterState == ShooterState.Mortering)
 
     override fun periodic() {
         RobotContainer.telemetry.cannonTelemetry =

@@ -21,6 +21,7 @@ enum class ShooterState(val rightShooterVel: Double, val leftShooterVel: Double)
     Stopped(0.0, 0.0),
     Prepped(3200.0, 3200.0),
     Shooting(3250.0, 4000.0),
+    Mortering(2250.0, 2750.0)
 }
 
 //this represents the CURRENT note state

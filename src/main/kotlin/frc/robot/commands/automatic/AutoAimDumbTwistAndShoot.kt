@@ -1,9 +1,11 @@
 package frc.robot.commands.automatic
 
+import MiscCalculations
 import edu.wpi.first.math.MathUtil.clamp
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.DriveState
 import frc.robot.NoteState
@@ -24,7 +26,8 @@ class AutoAimDumbTwistAndShoot : Command() {
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
     val twistPIDController =
-        ProfiledPIDController(1.0, 0.0, 0.1, TrapezoidProfile.Constraints(540.0, 720.0))
+        //        ProfiledPIDController(1.0, 0.0, 0.1, TrapezoidProfile.Constraints(540.0, 720.0))
+        PIDController(8.0, 0.0, 0.15)
 
     val timer = Timer()
 
@@ -33,6 +36,7 @@ class AutoAimDumbTwistAndShoot : Command() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting
         RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
 
+//        twistPIDController.reset(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
         twistPIDController.enableContinuousInput(0.0, 360.0);
 
         timer.reset()
@@ -56,6 +60,8 @@ class AutoAimDumbTwistAndShoot : Command() {
             Math.toRadians(shotSetup.robotAngle)
         )
 
+        SmartDashboard.putNumber("Drive Twist PID Out Rad", driveTwistPIDOutRadians)
+
         val driveTranslation = ControllerUtil.calculateJoyTranslation(
             RobotContainer.rightJoystick.x, RobotContainer.rightJoystick.y,
             ControllerUtil.calculateJoyThrottle(RobotContainer.leftJoystick.throttle),
@@ -78,8 +84,14 @@ class AutoAimDumbTwistAndShoot : Command() {
 //        ) {
 //            autoShoot.schedule()
 //        }
-        if (timer.hasElapsed(1.5) && !autoShoot.isScheduled)
+        if (MiscCalculations.appxEqual(
+                RobotContainer.swerveSystem.getSwervePose().rotation.degrees,
+                shotSetup.robotAngle,
+                2.5
+            )
+        ) {
             autoShoot.schedule()
+        }
     }
 
     override fun isFinished() = autoShoot.isFinished || RobotContainer.stateMachine.noteState == NoteState.Empty

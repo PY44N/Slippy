@@ -165,16 +165,17 @@ object RobotContainer {
         xboxController.a().betterToggleOnTrue(AutoAmp())
 
         xboxController.y().betterToggleOnTrue(TeleopAimDumbTwistAndShoot())
+//        xboxController.y().betterToggleOnTrue(AutoAimDumbTwistAndShoot())
         xboxController.povUp().onTrue(Commands.runOnce({ TargetingConstants.endpointZ += .01 }))
         xboxController.povDown().onTrue(Commands.runOnce({ TargetingConstants.endpointZ -= .01 }))
-        xboxController.x()
-            .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
+        xboxController.x().betterToggleOnTrue(TeleopMorterShoot())
         xboxController.rightBumper().onTrue(AutoSpit())
         xboxController.leftTrigger().betterToggleOnTrue(AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({
             actuallyDoClimb = true
         }))
-        xboxController.back().whileTrue(KillTrunk())
+        xboxController.back()
+            .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
 //        leftJoystick.button(10).toggleOnTrue(KillTrunk())
     }
 
@@ -188,6 +189,7 @@ object RobotContainer {
         )
         NamedCommands.registerCommand("AutoAimAndShootPrep", AutoAimAndShootPrep())
         NamedCommands.registerCommand("CalibrateTrunk", CalibrateTrunk())
+        NamedCommands.registerCommand("AutoSpinUpShooter", AutoSpinUpShooter())
     }
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
