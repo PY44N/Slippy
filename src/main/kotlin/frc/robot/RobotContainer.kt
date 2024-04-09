@@ -17,6 +17,7 @@ import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
 import frc.robot.commands.trunk.HoldPoseTrunk
+import frc.robot.constants.DriveConstants
 import frc.robot.constants.TargetingConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.subsystems.VisionSystem
@@ -25,6 +26,7 @@ import frc.robot.subsystems.cannon.CannonSystem
 import frc.robot.subsystems.swerve.GenericSwerveSystem
 import frc.robot.subsystems.swerve.SwerveSystemReal
 import frc.robot.subsystems.swerve.SwerveSystemSim
+import frc.robot.subsystems.swerve.SwerveTelemetry
 import frc.robot.subsystems.trunk.TrunkIOReal
 import frc.robot.subsystems.trunk.TrunkIOSim
 import frc.robot.subsystems.trunk.TrunkSystem
@@ -69,6 +71,9 @@ object RobotContainer {
     var actuallyDoShoot: Boolean = false
     var actuallyDoAmp: Boolean = false
     var actuallyDoClimb: Boolean = false
+
+    val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
+
 
 //    val autoChooser: SendableChooser<Command> = AutoBuilder.buildAutoChooser()
 

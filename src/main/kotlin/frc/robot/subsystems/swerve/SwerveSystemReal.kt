@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve
 
 import MiscCalculations
+import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest
 import edu.wpi.first.math.Matrix
@@ -24,6 +25,8 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
 
     var inputRotation: Double = 0.0
 
+    var gyroOffset = 0.0
+
     private val xPID: PIDController = PIDController(.1, 0.0, 0.01)
     private val yPID: PIDController = PIDController(.1, 0.0, 0.01)
 
@@ -40,7 +43,7 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
     private val drive: SwerveRequest.FieldCentric = SwerveRequest.FieldCentric()
         .withDeadband(DriveConstants.MAX_SPEED * 0.1)
         .withRotationalDeadband(DriveConstants.MAX_ANGLE_SPEED * 0.1) // Add a 10% deadband
-        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
+        .withDriveRequestType(SwerveModule.DriveRequestType.Velocity); // I want field-centric
 
     // driving in open loop
     val brake: SwerveRequest.SwerveDriveBrake = SwerveRequest.SwerveDriveBrake();
@@ -51,13 +54,22 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
     /* Path follower */
 //    val runAuto: Command = driveTrain.getAutoPath("Tests");
 
-    private val logger: SwerveTelemetry = SwerveTelemetry(DriveConstants.MAX_SPEED);
 
     val autoTwistController: AutoTwistController = AutoTwistController()
 
     override fun getSwervePose() = driveTrain.state.Pose ?: Pose2d()
 
     override fun zeroGyro() = driveTrain.seedFieldRelative()
+
+    override fun getGyroRotation(): Double = MiscCalculations.clampAngleTo180(-driveTrain.pigeon2.angle - gyroOffset)
+
+    override fun swerveState(): SwerveDrivetrain.SwerveDriveState {
+        return driveTrain.state
+    }
+
+    override fun setGyroRotation(rotation: Double) {
+        gyroOffset = -driveTrain.pigeon2.angle - rotation
+    }
 
     //Updates the swerve drive position zone in the state machine
     fun updateGlobalZone() {
@@ -137,6 +149,5 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
 
     init {
         driveTrain.daqThread.setThreadPriority(99)
-        logger.telemeterize(driveTrain.state)
     }
 }

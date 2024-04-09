@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain
 import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.Nat
 import edu.wpi.first.math.Vector
@@ -29,6 +30,18 @@ class SwerveSystemSim(private var robotPose: Pose2d = Pose2d()) : SubsystemBase(
 
     override fun zeroGyro() {
         robotPose = robotPose.rotateBy(robotPose.rotation.unaryMinus())
+    }
+
+    override fun getGyroRotation(): Double {
+        TODO("Not yet implemented")
+    }
+
+    override fun setGyroRotation(rotation: Double) {
+        TODO("Not yet implemented")
+    }
+
+    override fun swerveState(): SwerveDrivetrain.SwerveDriveState {
+        TODO("Not yet implemented")
     }
 
     override fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {

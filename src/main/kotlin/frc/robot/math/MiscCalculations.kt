@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.util.WPIUtilJNI
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.sign
 
 /** Miscellaneous calculations. */
 object MiscCalculations {
@@ -96,4 +97,14 @@ object MiscCalculations {
     // (rpm) * 2pi (rad/r) * r (r units/rad) * 1/60 (min/s)
     fun rpm2ups(r: Double): Double = PI * r / 30.0
     fun ups2rpm(r: Double): Double = 30.0 / (PI * r)
+
+    fun clampAngleTo180(angle: Double): Double {
+        var angle = angle % 360
+
+        if (abs(angle) >= 180.0) {
+            angle -= 360 * sign(angle)
+        }
+
+        return angle
+    }
 }

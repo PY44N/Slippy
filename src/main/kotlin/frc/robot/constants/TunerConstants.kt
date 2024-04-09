@@ -16,13 +16,13 @@ object TunerConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private val steerGains: Slot0Configs = Slot0Configs()
-        .withKP(100.0).withKI(0.0).withKD(0.2)
-        .withKS(0.0).withKV(1.5).withKA(0.0)
+        .withKP(80.0).withKI(0.0).withKD(0.0)
+        .withKS(0.0).withKV(0.0).withKA(0.0)
 
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private val driveGains: Slot0Configs = Slot0Configs()
-        .withKP(3.0).withKI(0.0).withKD(0.0)
+        .withKP(0.3).withKI(0.0).withKD(0.001)
         .withKS(0.0).withKV(0.0).withKA(0.0)
 
     // The closed-loop output type to use for the steer motors;

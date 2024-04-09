@@ -76,8 +76,8 @@ class Robot : LoggedRobot() {
         }
 
         if (!DriverStation.isDisabled() && !RobotContainer.stateMachine.limelightReset) {
-//            RobotContainer.visionSystem.updateOdometry(1, true)
-            RobotContainer.visionSystem.updateOdometry(1, false)
+//            RobotContainer.visionSystem.updateOdometry(1, false)
+            RobotContainer.visionSystem.updateOdometry(1, true)
 
         } else {
 //            RobotContainer.visionSystem.updateOdometry(1, false)
@@ -105,6 +105,8 @@ class Robot : LoggedRobot() {
             RobotContainer.telemetry.cannonTelemetry
         )
 
+
+        RobotContainer.logger.telemeterize(RobotContainer.swerveSystem.swerveState())
 
         SmartDashboard.putNumber("Robot X", RobotContainer.swerveSystem.getSwervePose().x)
         SmartDashboard.putNumber("Robot Y", RobotContainer.swerveSystem.getSwervePose().y)
@@ -207,6 +209,7 @@ class Robot : LoggedRobot() {
 
 //        RobotContainer.trunkSystem.brakeMotors()
 
+        RobotContainer.swerveSystem.setGyroRotation(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
         RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
         RobotContainer.stateMachine.currentTrunkCommand.schedule()
