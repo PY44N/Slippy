@@ -12,9 +12,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "Amp Side to Shooting Position"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoAimAndShootPrep"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Side to Shooting Position"
+                }
+              }
+            ]
           }
         },
         {
@@ -40,7 +53,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.5
+                        "waitTime": 1.5
                       }
                     },
                     {
@@ -58,7 +71,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.1
           }
         },
         {

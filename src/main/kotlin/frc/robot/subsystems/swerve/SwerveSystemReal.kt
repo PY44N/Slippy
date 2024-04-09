@@ -68,9 +68,9 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
     }
 
     override fun setGyroRotation(rotation: Double) {
-        if (gyroOffset == 0.0) {
-            gyroOffset = -driveTrain.pigeon2.angle - rotation
-        }
+//        if (gyroOffset == 0.0) {
+        gyroOffset = -driveTrain.pigeon2.angle - rotation
+//        }
     }
 
     //Updates the swerve drive position zone in the state machine
