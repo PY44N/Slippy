@@ -153,7 +153,7 @@ object RobotContainer {
         xboxController.start().onTrue(Commands.runOnce({
             actuallyDoAmp = true
         }))
-        rightJoystick.button(4).betterToggleOnTrue(FloorIntakeAndSeek())
+        rightJoystick.button(4).whileTrue(FloorIntakeAndSeek())
 
         // Align to amp
         rightJoystick.button(5).betterToggleOnTrue(AutoDriveToPose(Pose2d(1.82, 7.6, Rotation2d.fromDegrees(-90.0))))
@@ -168,7 +168,7 @@ object RobotContainer {
 //        xboxController.y().betterToggleOnTrue(AutoAimDumbTwistAndShoot())
         xboxController.povUp().onTrue(Commands.runOnce({ TargetingConstants.endpointZ += .01 }))
         xboxController.povDown().onTrue(Commands.runOnce({ TargetingConstants.endpointZ -= .01 }))
-        xboxController.x().betterToggleOnTrue(TeleopMorterShoot())
+        xboxController.x().betterToggleOnTrue(TeleopMortarShoot())
         xboxController.rightBumper().onTrue(AutoSpit())
         xboxController.leftTrigger().betterToggleOnTrue(AutoClimbCommand())
         xboxController.rightTrigger().onTrue(Commands.runOnce({

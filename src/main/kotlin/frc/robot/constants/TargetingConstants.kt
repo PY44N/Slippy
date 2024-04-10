@@ -6,12 +6,14 @@ import kotlin.math.PI
 
 object TargetingConstants {
     // shooter velocity transfer proportion
-    var velocityMultiplier = 1.0
+    var velocityMultiplier = .85
+
+    var leadTime = 0.0 // .6
 
     // coords of point we're aiming at relative to center of base of the speaker board (board with the fiducials)
-    var endpointX = 0.125
+    var endpointX = 0.2
     var endpointY = 0.0
-    var endpointZ = if (AllianceFlip.isRed()) 2.05 else 2.05
+    var endpointZ = 2.08
 
     // coords of center of speaker backboard
     var speakerX = 0.0

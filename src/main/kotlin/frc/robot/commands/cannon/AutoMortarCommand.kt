@@ -6,12 +6,12 @@ import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.util.Timer
 
-class AutoMorterCommand() : Command() {
+class AutoMortarCommand() : Command() {
     val timer = Timer()
 
 
     override fun initialize() {
-        RobotContainer.cannonSystem.morter()
+        RobotContainer.cannonSystem.mortar()
         timer.reset()
     }
 

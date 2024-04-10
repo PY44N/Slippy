@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.*
-import frc.robot.commands.cannon.AutoMorterCommand
+import frc.robot.commands.cannon.AutoMortarCommand
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
@@ -16,9 +16,9 @@ import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.ControllerUtil
 
-class TeleopMorterShoot() : Command() {
+class TeleopMortarShoot() : Command() {
 
-    val autoShoot = AutoMorterCommand()
+    val autoShoot = AutoMortarCommand()
 
     val trunkCommand: HoldPositionGoToAngleTrunk = HoldPositionGoToAngleTrunk(TrunkPose.SPEAKER)
 
@@ -27,12 +27,12 @@ class TeleopMorterShoot() : Command() {
         PIDController(8.0, 0.0, 0.15)
 
     init {
-        SmartDashboard.putData("Twist PID Controller", twistPIDController)
+//        SmartDashboard.putData("Twist PID Controller", twistPIDController)
     }
 
     override fun initialize() {
         RobotContainer.stateMachine.driveState = DriveState.TranslationTeleop
-        RobotContainer.stateMachine.shooterState = ShooterState.Mortering
+        RobotContainer.stateMachine.shooterState = ShooterState.Mortaring
         RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
         RobotContainer.actuallyDoShoot = false
 

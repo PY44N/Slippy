@@ -48,6 +48,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("shooter endpoint z", TargetingConstants.endpointZ)
         SmartDashboard.putNumber("shooter height", TargetingConstants.shooterZ)
         SmartDashboard.putNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
+        SmartDashboard.putNumber("shooter lead time", TargetingConstants.leadTime)
+
         SmartDashboard.putNumber("Current Target Angle", 0.0)
 //        RobotContainer.swerveSystem.driveTrain.getDaqThread().setThreadPriority(99);
 
@@ -73,7 +75,12 @@ class Robot : LoggedRobot() {
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
 
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
-        SmartDashboard.putNumber("shooter endpoint z", TargetingConstants.endpointZ)
+        TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
+        TargetingConstants.shooterZ = SmartDashboard.getNumber("shooter height", TargetingConstants.shooterZ)
+        TargetingConstants.velocityMultiplier =
+            SmartDashboard.getNumber("shooter velocity transfer multiplier", TargetingConstants.velocityMultiplier)
+        TargetingConstants.leadTime = SmartDashboard.getNumber("shooter lead time", TargetingConstants.leadTime)
+
 
         CommandScheduler.getInstance().run()
         RobotContainer.stateMachine.logStates()

@@ -29,15 +29,15 @@ class TargetingVariables(
     private val red =
         DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
+    val vx: Double = robotVelocity.vxMetersPerSecond * if (red) -1 else 1
+    val vy: Double = robotVelocity.vyMetersPerSecond
+
     val x: Double =
-        (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x) * if (red) -1 else 1
+        (TargetingConstants.speakerX + TargetingConstants.endpointX - flippedRobotPose.x - TargetingConstants.leadTime * vx) * if (red) -1 else 1
     val y: Double =
-        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y)
+        (TargetingConstants.speakerY + TargetingConstants.endpointY - flippedRobotPose.y - TargetingConstants.leadTime * vy)
     val z = TargetingConstants.endpointZ - TargetingConstants.shooterZ
     // + .02 * r.pow(1.5)
-
-    val vx: Double = robotVelocity.vxMetersPerSecond
-    val vy: Double = robotVelocity.vyMetersPerSecond
 
     val r: Double = sqrt(x * x + y * y)
 
@@ -140,7 +140,7 @@ class TargetingSystem {
         SmartDashboard.putNumber("Robot Speaker Y:", vars.y)
         SmartDashboard.putNumber("Robot Speaker Z:", vars.z)
 
-        return ShotSetup(velocityRobotAngle(vars), noVelocityShooterAngle(vars))
+        return ShotSetup(noVelocityRobotAngle(vars), noVelocityShooterAngle(vars))
     }
 
     fun test(robotPose: Pose2d, robotVelocity: ChassisSpeeds) {

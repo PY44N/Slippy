@@ -41,7 +41,7 @@ class FloorIntakeAndSeek : Command() {
             SmartDashboard.putNumber("Limelight X Offset", xOffset)
             SmartDashboard.putNumber("Limelight Rotation Speed", fudgedLLOffset)
             //Milan - everything needs to be negated bc the front is STUPID "sHoOtTeR sHoUlD be FrONt"
-            RobotContainer.swerveSystem.applyRobotRelativeDriveRequest(1.0, 0.0, -fudgedLLOffset)
+            RobotContainer.swerveSystem.applyRobotRelativeDriveRequest(1.0, 0.0, -fudgedLLOffset).execute()
         }
     }
 
