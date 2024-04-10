@@ -11,9 +11,9 @@ object TargetingConstants {
     var leadTime = 0.0 // .6
 
     // coords of point we're aiming at relative to center of base of the speaker board (board with the fiducials)
-    var endpointX = 0.2
+    var endpointX = 0.18
     var endpointY = 0.0
-    var endpointZ = 2.08
+    var endpointZ = 2.03
 
     // coords of center of speaker backboard
     var speakerX = 0.0
