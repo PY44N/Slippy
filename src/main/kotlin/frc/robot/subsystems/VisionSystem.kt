@@ -19,7 +19,7 @@ class VisionSystem {
 //        arrayOf("limelight-left", "limelight-right", "limelight-rightsi", "limelight-leftsi", "limelight-center")
 
     val limelightNames: Array<String> =
-        arrayOf("limelight-right", "limelight-left", "limelight-rightsi", "limelight-leftsi")
+        arrayOf("limelight-center", "limelight-rightsi", "limelight-leftsi")
     //  arrayOf("limelight-left", "limelight-right")
 
 
