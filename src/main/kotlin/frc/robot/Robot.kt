@@ -208,9 +208,11 @@ class Robot : LoggedRobot() {
 
 //        autoChooser.selected.schedule()
 
-//            RobotContainer.swerveSystem.getAutoPath("Amp Side 3 Piece").schedule()
+//        RobotContainer.swerveSystem.getAutoPath("Amp Side 3 Piece").schedule()
+        RobotContainer.swerveSystem.getAutoPath("Source Side 3 Note Center").schedule()
 //            RobotContainer.swerveSystem.getAutoPath("4 Note Close").schedule()
-        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
+//        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
+//        RobotContainer.swerveSystem.getAutoPath("Amp Side Sneak").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()
 

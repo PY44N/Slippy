@@ -16,55 +16,60 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Source Side to side shooting"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "AutoAimAndShootPrep"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAimDumbTwistAndShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.05
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Bottom Shot to center bottom"
+                  "pathName": "Amp Side to Shooting Position"
                 }
               }
             ]
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutoAimDumbTwistAndShoot"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.2
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp side shot to sneak"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp side sneak to top"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "AutoAimDumbTwistAndShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow"
           }
         }
       ]

@@ -37,7 +37,7 @@ class AutoAimDumbTwistAndShoot : Command() {
         RobotContainer.stateMachine.currentTrunkCommand = trunkCommand;
 
 //        twistPIDController.reset(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
-        twistPIDController.enableContinuousInput(0.0, 360.0);
+        twistPIDController.enableContinuousInput(0.0, Math.PI * 2.0)
 
         timer.reset()
         timer.start()

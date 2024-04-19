@@ -40,7 +40,7 @@ class TeleopAimDumbTwistAndShoot : Command() {
         RobotContainer.actuallyDoShoot = false
 
 //        twistPIDController.reset(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
-        twistPIDController.enableContinuousInput(0.0, 360.0);
+        twistPIDController.enableContinuousInput(0.0, Math.PI * 2.0);
     }
 
     override fun execute() {

@@ -177,6 +177,13 @@ object RobotContainer {
         xboxController.back()
             .onTrue(Commands.runOnce({ stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.STOW) }))
 //        leftJoystick.button(10).toggleOnTrue(KillTrunk())
+
+//        leftJoystick.button(2).onTrue(Commands.runOnce({
+//            stateMachine.currentTrunkCommand = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)
+//        }))
+//        rightJoystick.button(2).onTrue(Commands.runOnce({
+//            stateMachine.intakeState = IntakeState.Spitting
+//        }))
     }
 
     private fun configureAutoCommands() {

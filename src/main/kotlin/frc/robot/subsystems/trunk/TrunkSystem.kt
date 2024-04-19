@@ -184,13 +184,13 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Desired Rot", trunkDesiredRotation)
 //        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID Rot", getFalconRotation())
 //        SmartDashboard.putNumber("SOMETHING STUPID Trunk PID TB Rot", getThroughboreRotation())
-        val rotationPIDOut = if (climb) {
-            climbRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
+        val rotationPIDOut = //if (climb) {
+//            climbRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
 //        } else if (trunkDesiredRotation > 100.0) {// || getThroughboreRotation() > 100.0) {
 //            highRotationPIDController.calculate(getFalconRotation(), trunkDesiredRotation)
-        } else {
+//        } else {
             lowRotationPIDController.calculate(getThroughboreRotation())
-        }
+//        }
 //        SmartDashboard.putNumber("Trunk Trapezoid Velocity Error", `lowRotationPIDController`.velocityError)
 
 //        println("rotation PID out: " + rotationPIDOut)

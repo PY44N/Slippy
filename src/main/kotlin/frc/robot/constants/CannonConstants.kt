@@ -12,8 +12,8 @@ object CannonConstants {
     val OUTER_FEED_PERCENT: Double = -.8
     val INNER_FEED_PERCENT: Double = .8
 
-    val OUTER_SPIT_PERCENT: Double = .8
-    val INNER_SPIT_PERCENT: Double = -.8
+    val OUTER_SPIT_PERCENT: Double = 1.0
+    val INNER_SPIT_PERCENT: Double = -1.0
 
     var OUTER_AMP_PERCENT: Double = -.7
     var INNER_AMP_PERCENT: Double = -.7

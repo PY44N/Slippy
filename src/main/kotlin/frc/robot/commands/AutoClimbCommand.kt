@@ -11,7 +11,9 @@ import frc.robot.commands.trunk.*
 import frc.robot.constants.TrunkConstants
 
 class AutoClimbCommand : Command() {
+//    var holdCommand = HoldPoseTrunk(TrunkPose.CLIMB)
     var climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(HoldPoseTrunk(TrunkPose.CLIMB))
+    var holdEndCommand = HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL)
 //    val climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(holdCommand)
 
     var climbed = false
@@ -26,20 +28,21 @@ class AutoClimbCommand : Command() {
     // Position to .31
 
     override fun initialize() {
+        climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(HoldPoseTrunk(TrunkPose.CLIMB))
         RobotContainer.stateMachine.currentTrunkCommand = climbCommand
         RobotContainer.stateMachine.currentTrunkCommandLocked = true
         RobotContainer.actuallyDoClimb = false
         climbed = false
         TrunkConstants.MIN_ROT_VOLTS = -4.0
-        climbCommand = GoToClimbPoseTrunk(TrunkPose.CLIMB).andThen(HoldPoseTrunk(TrunkPose.CLIMB))
+        holdEndCommand = HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL)
     }
 
     override fun execute() {
-        val positionSpeed = -MiscCalculations.calculateDeadzone(RobotContainer.xboxController.rightX, 0.1) / 1000.0
-        val rotationSpeed = -MiscCalculations.calculateDeadzone(RobotContainer.xboxController.leftX, 0.1)
+//        val positionSpeed = -MiscCalculations.calculateDeadzone(RobotContainer.xboxController.rightX, 0.1) / 1000.0
+//        val rotationSpeed = -MiscCalculations.calculateDeadzone(RobotContainer.xboxController.leftX, 0.1)
         //        climbCommand.goToPose.currentTargetPosition += speed
 //        holdCommand.currentTargetPosition += positionSpeed
-//        holdCommand.currentTargetRotation += rotationSpeed
+//        holdEndCommand.currentTargetRotation += rotationSpeed
 
         if (RobotContainer.actuallyDoClimb && !climbed) {
             RobotContainer.stateMachine.currentTrunkCommandLocked = false
@@ -50,7 +53,7 @@ class AutoClimbCommand : Command() {
                 LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_2, 2.0)
             )/*.andThen(ParallelRaceGroup(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_2), WaitCommand(1.0)))*/
                 .andThen(LerpToPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL, 0.5))
-                .andThen(HoldPoseTrunk(TrunkPose.CLIMB_STAGE_FINAL))
+                .andThen(holdEndCommand)
             RobotContainer.stateMachine.currentTrunkCommandLocked = true
 
 
