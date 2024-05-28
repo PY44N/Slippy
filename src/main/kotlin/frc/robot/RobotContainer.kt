@@ -15,6 +15,7 @@ import frc.robot.commands.*
 import frc.robot.commands.automatic.*
 import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.cannon.AutoSpit
+import frc.robot.commands.simulation.SimTeleopSwerveDriveCommand
 import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
@@ -37,7 +38,7 @@ import frc.robot.util.TelemetryToggles
 import frc.robot.util.betterToggleOnTrue
 
 object RobotContainer {
-    val robotType = RobotType.Real
+    val robotType = RobotType.Simulated
 
     val leftJoystick: CommandJoystick = CommandJoystick(0)
     val rightJoystick: CommandJoystick = CommandJoystick(1)
@@ -60,7 +61,10 @@ object RobotContainer {
 
     val autonomousCommand: Command = Commands.run({})
 
-    var teleopSwerveCommand: Command = TeleopSwerveDriveCommand()
+    var teleopSwerveCommand: Command = when (robotType) {
+        RobotType.Real -> TeleopSwerveDriveCommand()
+        RobotType.Simulated -> SimTeleopSwerveDriveCommand()
+    }
 
 //    val climbCommand: Command = GoToPoseTrunk(TrunkPose.CLIMB).andThen(GoToPoseTrunk(TrunkPose.CLIMB_DOWN)).andThen({
 //        //climbLatch.angle = 90.0 // tune before testing
@@ -94,7 +98,10 @@ object RobotContainer {
     val intakeLimelight = "limelight-back"
 
     init {
-        configureBindings()
+        when (robotType) {
+            RobotType.Real -> configureBindingsRobot()
+            RobotType.Simulated -> configureBindingsSimulation()
+        }
         configureAutoCommands()
 
         RobotAction.entries.forEach {
@@ -113,7 +120,7 @@ object RobotContainer {
         SmartDashboard.putData("Robot Action", robotActionSendable)
     }
 
-    private fun configureBindings() {
+    private fun configureBindingsRobot() {
         rightJoystick.button(3).onTrue(Commands.runOnce({
             when (stateMachine.robotAction) {
                 RobotAction.Speaker -> TeleopAimTwistAndShoot().schedule()
@@ -184,6 +191,10 @@ object RobotContainer {
 //        rightJoystick.button(2).onTrue(Commands.runOnce({
 //            stateMachine.intakeState = IntakeState.Spitting
 //        }))
+    }
+
+    fun configureBindingsSimulation() {
+
     }
 
     private fun configureAutoCommands() {
