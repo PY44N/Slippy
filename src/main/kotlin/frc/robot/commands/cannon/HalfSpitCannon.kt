@@ -22,7 +22,7 @@ class HalfSpitCannon() : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return timer.hasElapsed(.02)
+        return timer.hasElapsed(.0175)
     }
 
     override fun end(interrupted: Boolean) {

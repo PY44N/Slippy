@@ -17,12 +17,13 @@ class AutoShootCommand : Command() {
 
     override fun execute() {
         if (RobotContainer.stateMachine.shooterReady && !timer.isRunning) {
-            timer.start()
-        }
-
-        if (timer.hasElapsed(.15)) {
+//            timer.start()
             RobotContainer.cannonSystem.feed()
         }
+
+//        if (timer.hasElapsed(.15)) {
+//            RobotContainer.cannonSystem.feed()
+//        }
 
         SmartDashboard.putBoolean("shooter ready", RobotContainer.stateMachine.shooterReady)
     }

@@ -10,13 +10,13 @@ object DriveConstants {
     const val TELEOP_DEADZONE_TWIST_ONE_JOY: Double = .15
     const val TELEOP_DEADZONE_TWIST_TWO_JOY: Double = .3
 
-    const val MAX_SPEED: Double = 4.7
+    const val MAX_SPEED: Double = 6.0
 
     //degrees
     const val TELEOP_TRANSLATION_AUTOTWIST_DEADZONE = 2.0
 
-    const val MAX_ANGLE_SPEED: Double = 4.0
-    const val MAX_ANGLE_ACCEL: Double = 3.0
+    const val MAX_ANGLE_SPEED: Double = 9.0
+    const val MAX_ANGLE_ACCEL: Double = 5.0
 
     //Physical (hardware & physics0 constants
 

@@ -23,7 +23,7 @@ object CannonConstants {
 
     var SHOOTER_PREP_VELOCITY: Double = .8 * SHOOTER_SHOOT_VELOCITY
 
-    const val SHOOTER_VELOCITY_DEADZONE: Double = 150.0
+    const val SHOOTER_VELOCITY_DEADZONE: Double = 300.0
     val SHOOTER_YAW_DEADZONE: Double = 1.0
     val SHOOTER_PITCH_DEADZONE: Double = 1.0
 
