@@ -19,6 +19,7 @@ import frc.robot.constants.TrunkConstants
 import frc.robot.util.AllianceFlip
 import frc.robot.util.Math
 import frc.robot.util.Telemetry
+import frc.robot.util.visualiztion.Field2d
 import org.littletonrobotics.junction.LoggedRobot
 
 class Robot : LoggedRobot() {
@@ -32,6 +33,7 @@ class Robot : LoggedRobot() {
     private var calibrateTrunkAuto: CalibrateTrunk = CalibrateTrunk()
 
     val robotPosePublisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose", Pose2d.struct).publish();
+    val field2d = Field2d()
 
 //    lateinit var autoChooser: SendableChooser<Command>
 
@@ -62,6 +64,8 @@ class Robot : LoggedRobot() {
         SmartDashboard.putNumber("Amp Position", TrunkConstants.AMP_POSITION)
         SmartDashboard.putNumber("Safe To Move Angle", TrunkConstants.SAFE_TO_MOVE_ANGLE)
 
+        SmartDashboard.putData("Field", field2d);
+
 //        autoChooser =
 //            AutoBuilder.buildAutoChooser()
 //
@@ -73,6 +77,8 @@ class Robot : LoggedRobot() {
     override fun robotPeriodic() {
 
         SmartDashboard.putBoolean("Is trunk ready?", RobotContainer.trunkSystem.isAtPose)
+
+        SmartDashboard.putString("Alliance", DriverStation.getAlliance().toString())
 
         TargetingConstants.endpointX = SmartDashboard.getNumber("shooter endpoint x", TargetingConstants.endpointX)
         TargetingConstants.endpointZ = SmartDashboard.getNumber("shooter endpoint z", TargetingConstants.endpointZ)
@@ -178,6 +184,7 @@ class Robot : LoggedRobot() {
 //        SmartDashboard.putNumber("Servo Angle", RobotContainer.trunkSystem.io.getServoAngle())
 
         robotPosePublisher.set(RobotContainer.swerveSystem.getSwervePose())
+        field2d.robotPose = RobotContainer.swerveSystem.getSwervePose()
 //        SmartDashboard.putBoolean("Top Beam Break", RobotContainer.trunkSystem.io.atTopLimit())
 
         TrunkConstants.SAFE_TO_MOVE_ANGLE =
@@ -204,7 +211,7 @@ class Robot : LoggedRobot() {
 //        calibrateTrunkAuto.schedule()
 
 //        RobotContainer.swerveSystem.driveTrain.getAutoPath("Source Side 2 Note").schedule()
-        RobotContainer.swerveSystem.setGyroRotation(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
+        RobotContainer.swerveSystem.setGyroRotationDegrees(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
 //        autoChooser.selected.schedule()
 
@@ -233,7 +240,7 @@ class Robot : LoggedRobot() {
 
 //        RobotContainer.trunkSystem.brakeMotors()
 
-        RobotContainer.swerveSystem.setGyroRotation(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
+        RobotContainer.swerveSystem.setGyroRotationDegrees(RobotContainer.swerveSystem.getSwervePose().rotation.degrees)
 
         RobotContainer.stateMachine.currentTrunkCommand = CalibrateTrunk()
         RobotContainer.stateMachine.currentTrunkCommand.schedule()
