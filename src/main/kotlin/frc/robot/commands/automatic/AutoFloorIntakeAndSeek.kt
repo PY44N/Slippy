@@ -6,9 +6,7 @@ import frc.robot.DriveState
 import frc.robot.LimelightHelpers
 import frc.robot.NoteState
 import frc.robot.RobotContainer
-import frc.robot.commands.AutoIntake
-import frc.robot.constants.AutoConstants
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 import kotlin.math.abs
 
 class AutoFloorIntakeAndSeek : Command() {

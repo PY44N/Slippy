@@ -1,7 +1,7 @@
 package frc.robot.subsystems.trunk
 
 import frc.robot.constants.TrunkConstants
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class TrunkIOSim() : TrunkIO {
     private var rotation = TrunkConstants.STOW_ANGLE

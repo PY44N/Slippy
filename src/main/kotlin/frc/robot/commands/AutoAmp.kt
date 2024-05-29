@@ -6,7 +6,7 @@ import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class AutoAmp : Command() {
     val startTimer = Timer()

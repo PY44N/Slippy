@@ -1,4 +1,4 @@
-package frc.robot.util
+package cshcyberhawks.lib.math
 
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController

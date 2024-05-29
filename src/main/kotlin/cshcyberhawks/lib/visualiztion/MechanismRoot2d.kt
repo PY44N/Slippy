@@ -15,7 +15,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.util.visualization
+package cshcyberhawks.lib.visualiztion
 
 import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTable

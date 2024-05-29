@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class AutoMortarCommand() : Command() {
     val timer = Timer()
