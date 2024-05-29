@@ -3,8 +3,6 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -13,16 +11,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.commands.*
 import frc.robot.commands.automatic.*
-import frc.robot.commands.cannon.AutoShootCommand
 import frc.robot.commands.cannon.AutoSpit
 import frc.robot.commands.simulation.SimTeleopSwerveDriveCommand
 import frc.robot.commands.trunk.CalibrateTrunk
 import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
-import frc.robot.commands.trunk.GoToPoseTrunk
-import frc.robot.commands.trunk.HoldPoseTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TargetingConstants
-import frc.robot.constants.TrunkConstants
 import frc.robot.subsystems.VisionSystem
 import frc.robot.subsystems.cannon.CannonIOReal
 import frc.robot.subsystems.cannon.CannonSystem
@@ -30,9 +24,8 @@ import frc.robot.subsystems.swerve.GenericSwerveSystem
 import frc.robot.subsystems.swerve.SwerveSystemReal
 import frc.robot.subsystems.swerve.SwerveSystemSim
 import frc.robot.subsystems.swerve.SwerveTelemetry
-import frc.robot.subsystems.trunk.TrunkIOReal
-import frc.robot.subsystems.trunk.TrunkIOSim
-import frc.robot.subsystems.trunk.TrunkSystem
+import frc.robot.subsystems.oldtrunk.OldTrunkIOReal
+import frc.robot.subsystems.oldtrunk.OldTrunkSystem
 import frc.robot.util.TargetingSystem
 import frc.robot.util.TelemetryToggles
 import frc.robot.util.betterToggleOnTrue
@@ -46,10 +39,10 @@ object RobotContainer {
 
     val telemetry = TelemetryToggles()
 
-    val trunkSystem = TrunkSystem(
+    val trunkSystem = OldTrunkSystem(
         when (robotType) {
-            RobotType.Real -> TrunkIOReal()
-            RobotType.Simulated -> TrunkIOReal()
+            RobotType.Real -> OldTrunkIOReal()
+            RobotType.Simulated -> OldTrunkIOReal()
         }
     )
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.trunk
+package frc.robot.subsystems.oldtrunk
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
@@ -8,19 +8,15 @@ import com.ctre.phoenix6.controls.NeutralOut
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
-import com.revrobotics.CANSparkBase
-import com.revrobotics.CANSparkLowLevel
-import com.revrobotics.CANSparkMax
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.DutyCycleEncoder
-import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.EmptyMotorController
 
-class TrunkIOReal : TrunkIO {
+class OldTrunkIOReal : OldTrunkIO {
     private val masterElevatorMotor =
         TalonFX(TrunkConstants.MASTER_ELEVATOR_MOTOR_ID)
     private val followerElevatorMotor =
