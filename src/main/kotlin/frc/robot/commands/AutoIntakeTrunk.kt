@@ -26,7 +26,7 @@ class AutoIntakeTrunk : Command() {
 
     override fun initialize() {
         RobotContainer.cannonSystem.killShooter()
-        intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.36)
+        intakeOutCommand = GoToPoseAndCoast(TrunkPose.INTAKE, 0.37)
 
 
 //        intakePrepCommand = GoToPoseTrunk(TrunkPose.INTAKE_PREP)

@@ -219,7 +219,9 @@ class Robot : LoggedRobot() {
 //        RobotContainer.swerveSystem.getAutoPath("Source Side 3 Note Center").schedule()
 //            RobotContainer.swerveSystem.getAutoPath("4 Note Close").schedule()
 //        RobotContainer.swerveSystem.getAutoPath("Source Side 2 Note Center").schedule()
-        //        RobotContainer.swerveSystem.getAutoPath("Amp Side Sneak").schedule()
+
+       // RobotContainer.swerveSystem.getAutoPath("Amp Side Sneak").schedule()
+     //        RobotContainer.swerveSystem.getAutoPath("Amp Side Sneak").schedule()
         RobotContainer.swerveSystem.getAutoPath("Testing").schedule()
 
         //        RobotContainer.stateMachine.currentTrunkCommand.schedule()

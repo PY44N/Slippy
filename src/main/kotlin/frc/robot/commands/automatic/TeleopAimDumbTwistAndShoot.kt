@@ -27,7 +27,7 @@ class TeleopAimDumbTwistAndShoot : Command() {
 
     val twistPIDController =
 //        ProfiledPIDController(1.0, 0.0, 0.1, TrapezoidProfile.Constraints(540.0, 720.0))
-        PIDController(9.5, 0.0, 0.2)
+        PIDController(9.0, 0.0, 0.2)
 
     init {
         SmartDashboard.putData("random garbage", twistPIDController)

@@ -12,6 +12,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
@@ -43,16 +49,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Bottom Shot to center bottom"
-                }
-              }
-            ]
+            "pathName": "Bottom Shot to center bottom"
           }
         },
         {

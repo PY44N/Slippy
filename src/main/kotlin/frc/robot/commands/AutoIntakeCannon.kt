@@ -22,7 +22,7 @@ class AutoIntakeCannon : Command() {
         IntakeCannon(),
         HalfSpitCannon(),
         WaitCommand(.05),
-        intakeCannonCommand,
+        intakeCannonCommand
     )
 
     override fun initialize() {
