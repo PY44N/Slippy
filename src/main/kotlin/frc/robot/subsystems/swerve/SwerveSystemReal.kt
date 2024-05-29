@@ -61,13 +61,14 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
 
     override fun zeroGyro() = driveTrain.seedFieldRelative()
 
-    override fun getGyroRotation(): Double = MiscCalculations.clampAngleTo180(-driveTrain.pigeon2.angle - gyroOffset)
+    override fun getGyroRotationDegrees(): Double =
+        MiscCalculations.clampAngleTo180(-driveTrain.pigeon2.angle - gyroOffset)
 
     override fun swerveState(): SwerveDrivetrain.SwerveDriveState {
         return driveTrain.state
     }
 
-    override fun setGyroRotation(rotation: Double) {
+    override fun setGyroRotationDegrees(rotation: Double) {
 //        if (gyroOffset == 0.0) {
         gyroOffset = -driveTrain.pigeon2.angle - rotation
 //        }
@@ -116,19 +117,19 @@ class SwerveSystemReal() : SubsystemBase(), GenericSwerveSystem {
     }
      */
 
-    override fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command {
+    override fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotationRadians: Double): Command {
         return driveTrain.applyRequest {
-            driveRobotRelative.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotation)
+            driveRobotRelative.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotationRadians)
         }
     }
 
-    override fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command {
+    override fun applyDriveRequest(x: Double, y: Double, rotationRadians: Double): Command {
         return if (DriverStation.getAlliance().isPresent && DriverStation.getAlliance()
                 .get() == DriverStation.Alliance.Red
         ) {
-            driveTrain.applyRequest { drive.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotation) }
+            driveTrain.applyRequest { drive.withVelocityX(-x).withVelocityY(-y).withRotationalRate(rotationRadians) }
         } else {
-            driveTrain.applyRequest { drive.withVelocityX(x).withVelocityY(y).withRotationalRate(rotation) }
+            driveTrain.applyRequest { drive.withVelocityX(x).withVelocityY(y).withRotationalRate(rotationRadians) }
 
         }
     }

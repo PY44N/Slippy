@@ -136,12 +136,12 @@ class VisionSystem {
 
             SmartDashboard.putNumber(
                 "Gyro Rotation $llName",
-                RobotContainer.swerveSystem.getGyroRotation()
+                RobotContainer.swerveSystem.getGyroRotationDegrees()
             )
 
             LimelightHelpers.SetRobotOrientation(
                 llName,
-                RobotContainer.swerveSystem.getGyroRotation(),
+                RobotContainer.swerveSystem.getGyroRotationDegrees(),
                 0.0,
                 0.0,
                 0.0,

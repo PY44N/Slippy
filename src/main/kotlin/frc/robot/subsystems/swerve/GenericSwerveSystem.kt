@@ -16,13 +16,13 @@ interface GenericSwerveSystem {
     fun getSwervePose(): Pose2d
 
     fun zeroGyro()
-    fun getGyroRotation(): Double
+    fun getGyroRotationDegrees(): Double
     fun swerveState(): SwerveDriveState
 
-    fun setGyroRotation(rotation: Double)
+    fun setGyroRotationDegrees(rotation: Double)
 
-    fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotation: Double): Command
-    fun applyDriveRequest(x: Double, y: Double, rotation: Double): Command
+    fun applyRobotRelativeDriveRequest(x: Double, y: Double, rotationRadians: Double): Command
+    fun applyDriveRequest(x: Double, y: Double, rotationRadians: Double): Command
 
     fun addVisionMeasurement(visionRobotPoseMeters: Pose2d, timestampSeconds: Double)
     fun setVisionMeasurementStdDevs(visionMeasurementStdDevs: Matrix<N3, N1>)
