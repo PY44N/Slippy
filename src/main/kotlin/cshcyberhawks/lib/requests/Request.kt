@@ -4,6 +4,14 @@ package cshcyberhawks.lib.requests
     Requests system inspired by the one in Citrus Circuits' 2024 Robot Code 
  */
 abstract class Request {
+    companion object {
+        fun withAction(action: () -> Unit) = object : Request() {
+            override fun execute() {
+                action()
+            }
+        }
+    }
+
     abstract fun execute()
 
     open fun isFinished(): Boolean = true
