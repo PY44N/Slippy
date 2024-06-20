@@ -15,11 +15,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.util.visualiztion
+package cshcyberhawks.lib.visualiztion
 
 import edu.wpi.first.networktables.*
 import edu.wpi.first.wpilibj.util.Color8Bit
-import frc.robot.util.visualization.MechanismRoot2d
 import org.littletonrobotics.junction.LogTable
 
 /**

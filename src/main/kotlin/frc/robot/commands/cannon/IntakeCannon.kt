@@ -1,10 +1,9 @@
 package frc.robot.commands.cannon
 
-import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class IntakeCannon() : Command() {
 

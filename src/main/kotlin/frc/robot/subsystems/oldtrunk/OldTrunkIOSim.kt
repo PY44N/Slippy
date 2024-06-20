@@ -1,9 +1,9 @@
-package frc.robot.subsystems.trunk
+package frc.robot.subsystems.oldtrunk
 
 import frc.robot.constants.TrunkConstants
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
-class TrunkIOSim() : TrunkIO {
+class OldTrunkIOSim() : OldTrunkIO {
     private var rotation = TrunkConstants.STOW_ANGLE
     private var position = TrunkConstants.TOP_BREAK_BEAM_POSITION
 

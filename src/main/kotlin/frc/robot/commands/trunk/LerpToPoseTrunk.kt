@@ -3,7 +3,7 @@ package frc.robot.commands.trunk
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class LerpToPoseTrunk(val pose: TrunkPose, val LERP_TIME: Double = 3.0) : Command() {
     var startPosition = RobotContainer.trunkSystem.getPosition()

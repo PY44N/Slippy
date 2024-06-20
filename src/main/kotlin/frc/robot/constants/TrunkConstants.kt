@@ -1,5 +1,7 @@
 package frc.robot.constants
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile
+
 object TrunkConstants {
 
     const val MASTER_ELEVATOR_MOTOR_ID = 20
@@ -113,4 +115,9 @@ object TrunkConstants {
     var MIN_ROT_VOLTS = -10.0
 
     val MAX_ROT_VOLTS = 10.0
+
+    val ROTATION_TRAP_CONSTRAINTS =
+        TrapezoidProfile.Constraints(lowRotationMaxVelo, lowRotationMaxAcceleration)
+    val POSITION_TRAP_CONSTRAINTS =
+        TrapezoidProfile.Constraints(1.5, 3.0)
 }

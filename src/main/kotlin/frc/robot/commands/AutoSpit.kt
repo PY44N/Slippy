@@ -3,12 +3,8 @@ package frc.robot.commands.cannon
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.NoteState
 import frc.robot.RobotContainer
-import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
-import frc.robot.commands.trunk.CalibrateTrunk
-import frc.robot.TrunkPose
-import frc.robot.Robot
 import frc.robot.IntakeState
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class AutoSpit : Command() {
     //    val goToSpitPose = GoToPoseAndHoldTrunk(TrunkPose.CalibrationAngle)

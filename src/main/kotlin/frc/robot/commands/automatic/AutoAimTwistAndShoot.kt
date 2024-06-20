@@ -9,12 +9,11 @@ import frc.robot.RobotContainer
 import frc.robot.ShooterState
 import frc.robot.TrunkPose
 import frc.robot.commands.cannon.AutoShootCommand
-import frc.robot.commands.trunk.GoToPoseAndHoldTrunk
 import frc.robot.commands.trunk.HoldPositionGoToAngleTrunk
 import frc.robot.constants.DriveConstants
 import frc.robot.constants.TrunkConstants
 import frc.robot.util.ControllerUtil
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class AutoAimTwistAndShoot : Command() {
     val autoShoot: AutoShootCommand = AutoShootCommand()

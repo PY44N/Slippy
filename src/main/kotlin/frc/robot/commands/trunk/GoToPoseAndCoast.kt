@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.RobotContainer
 import frc.robot.TrunkPose
 import frc.robot.constants.TrunkConstants
-import frc.robot.util.Timer
+import cshcyberhawks.lib.math.Timer
 
 class GoToPoseAndCoast(val desiredPose: TrunkPose, val coastPos: Double) : Command() {
     var currentTargetAngle: Double = TrunkConstants.SAFE_TRAVEL_ANGLE

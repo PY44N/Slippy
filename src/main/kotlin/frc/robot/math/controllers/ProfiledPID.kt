@@ -1,12 +1,12 @@
 package frc.robot.util
 
+import cshcyberhawks.lib.math.Timer
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import java.util.function.DoubleSupplier
 
 class ProfiledPID(val p: Double, val i: Double, val d: Double, var trapConstraints: TrapezoidProfile.Constraints) :
     Sendable {

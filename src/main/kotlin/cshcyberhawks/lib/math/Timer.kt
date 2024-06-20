@@ -1,4 +1,4 @@
-package frc.robot.util
+package cshcyberhawks.lib.math
 
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
@@ -44,7 +44,7 @@ class Timer {
          */
         fun delay(seconds: Double) {
             try {
-                Thread.sleep((seconds * 1e3) as Long);
+                Thread.sleep((seconds * 1e3).toLong());
             } catch (ex: InterruptedException) {
                 Thread.currentThread().interrupt();
             }
@@ -54,6 +54,7 @@ class Timer {
     var m_startTime: Double = getMsClock();
     var m_accumulatedTime: Double = 0.0;
     var isRunning: Boolean = false
+    var started: Boolean = false // Has the timer ever been started
 
     /** Timer constructor. */
     init {
@@ -88,6 +89,7 @@ class Timer {
         isRunning = false
         m_accumulatedTime = 0.0;
         m_startTime = getMsClock();
+        started = true
     }
 
     /**
@@ -99,6 +101,7 @@ class Timer {
         if (!isRunning) {
             m_startTime = getMsClock();
             isRunning = true;
+            started = true
         }
     }
 
