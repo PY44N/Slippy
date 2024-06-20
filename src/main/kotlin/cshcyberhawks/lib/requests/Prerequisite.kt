@@ -8,4 +8,8 @@ abstract class Prerequisite {
     }
 
     abstract fun met(): Boolean
+
+    val booleanSupplier: () -> Boolean
+        get() =
+            { met() }
 }

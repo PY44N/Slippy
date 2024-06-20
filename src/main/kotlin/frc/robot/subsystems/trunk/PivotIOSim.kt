@@ -9,6 +9,10 @@ class PivotIOSim() : PivotIO {
         TODO("Not yet implemented")
     }
 
+    override fun setCoast(coast: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun update() {
         TODO("Not yet implemented")
     }

@@ -15,7 +15,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private fun atPosition(pos: Double): Boolean =
         MiscCalculations.appxEqual(pos, io.getPosition(), TrunkConstants.ELEVATOR_DEADZONE)
 
-    fun elevatorBelow(position: Double) = Prerequisite.withCondition { io.getPosition() <= position }
+    fun positionAbove(position: Double) = Prerequisite.withCondition { io.getPosition() >= position }
+    fun positionBelow(position: Double) = Prerequisite.withCondition { io.getPosition() <= position }
 
     fun stowRequest() = object : Request() {
         override fun execute() {
