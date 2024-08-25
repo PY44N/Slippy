@@ -1,4 +1,4 @@
-package frc.robot.subsystems.cannon
+package frc.robot.subsystems.oldcannon
 
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.constants.CannonConstants
+import frc.robot.subsystems.oldcannon.OldCannonIO
 
-class CannonIOReal : CannonIO {
+class OldCannonIOReal : OldCannonIO {
 
     private val leftShooterMotor: CANSparkMax =
         CANSparkMax(CannonConstants.LEFT_SHOOTER_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless)

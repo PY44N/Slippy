@@ -1,6 +1,6 @@
-package frc.robot.subsystems.cannon
+package frc.robot.subsystems.oldcannon
 
-interface CannonIO {
+interface OldCannonIO {
     fun setLeftShooter(vel: Double)
     fun setRightShooter(vel: Double)
     fun getLeftShooterVel(): Double

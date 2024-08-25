@@ -1,4 +1,4 @@
-package frc.robot.subsystems.cannon
+package frc.robot.subsystems.oldcannon
 
 import MiscCalculations
 import edu.wpi.first.math.controller.PIDController
@@ -10,9 +10,10 @@ import frc.robot.NoteState
 import frc.robot.RobotContainer
 import frc.robot.ShooterState
 import frc.robot.constants.CannonConstants
+import frc.robot.subsystems.oldcannon.OldCannonIO
 import frc.robot.util.Telemetry
 
-class CannonSystem(val io: CannonIO) : SubsystemBase() {
+class OldCannonSystem(val io: OldCannonIO) : SubsystemBase() {
     //Desired shooter velocities
     private var desiredRightShooterVel = 0.0
     private var desiredLeftShooterVel = 0.0
@@ -79,12 +80,12 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
             io.getRightShooterVel(),
             CannonConstants.SHOOTER_VELOCITY_DEADZONE
         ) &&
-                MiscCalculations.appxEqual(
-                    desiredLeftShooterVel,
-                    io.getLeftShooterVel(),
-                    CannonConstants.SHOOTER_VELOCITY_DEADZONE
-                )
-                && desiredRightShooterVel != 0.0 && desiredLeftShooterVel != 0.0 && (RobotContainer.stateMachine.shooterState == ShooterState.Shooting || RobotContainer.stateMachine.shooterState == ShooterState.Mortaring)
+            MiscCalculations.appxEqual(
+                desiredLeftShooterVel,
+                io.getLeftShooterVel(),
+                CannonConstants.SHOOTER_VELOCITY_DEADZONE
+            )
+            && desiredRightShooterVel != 0.0 && desiredLeftShooterVel != 0.0 && (RobotContainer.stateMachine.shooterState == ShooterState.Shooting || RobotContainer.stateMachine.shooterState == ShooterState.Mortaring)
 
     override fun periodic() {
         RobotContainer.telemetry.cannonTelemetry =

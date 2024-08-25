@@ -1,6 +1,6 @@
-package frc.robot.subsystems.trunk
+package frc.robot.subsystems.oldtrunk
 
-interface TrunkIO {
+interface OldTrunkIO {
     fun directlySetPercentElevatorFollower(percent: Double)
 
     fun directlySetPercentElevatorMaster(percent: Double)

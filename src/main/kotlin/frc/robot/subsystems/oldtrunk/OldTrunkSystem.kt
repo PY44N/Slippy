@@ -1,20 +1,18 @@
-package frc.robot.subsystems.trunk
+package frc.robot.subsystems.oldtrunk
 
 import MiscCalculations
-import com.ctre.phoenix6.controls.NeutralOut
-import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.ArmFeedforward
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.constants.TrunkConstants
+import frc.robot.subsystems.oldtrunk.OldTrunkIO
 import frc.robot.util.ProfiledPID
 import frc.robot.util.Timer
 
-class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
+class OldTrunkSystem(val io: OldTrunkIO) : SubsystemBase() {
 
     val lowRotationPIDController = ProfiledPIDController(
         TrunkConstants.lowRotationKP,
@@ -205,7 +203,7 @@ class TrunkSystem(val io: TrunkIO) : SubsystemBase() {
         SmartDashboard.putNumber("SOMETHING STUPID Uncapped rotation voltage: ", rotationPIDOut + rotationFFOut)
         return MathUtil.clamp(
             rotationPIDOut
-                    + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS
+                + rotationFFOut, TrunkConstants.MIN_ROT_VOLTS, TrunkConstants.MAX_ROT_VOLTS
         )
     }
 
