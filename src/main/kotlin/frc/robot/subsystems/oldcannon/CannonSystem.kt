@@ -46,7 +46,6 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
 
     fun shoot() {
         RobotContainer.stateMachine.shooterState = ShooterState.Shooting;
-        println("called cannonsystem.shoot")
     }
 
     fun mortar() {
@@ -203,5 +202,21 @@ class CannonSystem(val io: CannonIO) : SubsystemBase() {
             io.setLeftShooter(0.0)
             io.setRightShooter(0.0)
         }
+    }
+
+    private fun setShooterStateRequest(state: ShooterState) = object : Request() {
+        override fun execute() {
+            RobotContainer.stateMachine.shooterState = state
+        }
+
+        override fun isFinished(): Boolean = true
+    }
+
+    private fun setIntakeStateRequest(state: IntakeState) = object : Request() {
+        override fun execute() {
+            RobotContainer.stateMachine.intakeState = state
+        }
+
+        override fun isFinished(): Boolean = true
     }
 }
